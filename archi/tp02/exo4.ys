@@ -1,0 +1,31 @@
+.pos 0
+
+irmovl t,%esi # table
+xorl %ecx,%ecx # n = 0 (pour n de 0 a 4 au lieu de 4 a 0
+
+again:
+
+mrmovl n,%eax # get 4 from n
+
+subl %ecx, %eax # 4 -n
+jle fin # n <= 0 (inverse de n > 0)
+
+# (*p) ++ ;
+mrmovl (%esi),%eax
+iaddl 1, %eax
+rmmovl %eax, (%esi)
+
+# p++, n--
+iaddl 4,%esi # passe a la case suivente du tableaux
+iaddl 1,%ecx # ajoute 1 au lieu de retire 1
+jmp again
+
+fin: halt
+
+.pos 0x100
+t:  .long 1
+    .long 2
+    .long 3
+    .long 4
+n:  .long 4
+

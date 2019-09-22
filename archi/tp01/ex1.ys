@@ -1,0 +1,26 @@
+.pos 0
+
+irmovl 5, %eax
+irmovl 22, %ebx
+addl %eax, %ecx
+addl %ebx, %ecx
+
+halt
+
+# correction :
+# c = a + b
+.pos 0x0
+
+mrmovl a,%eax
+mrmovl b,%ebx
+addl   %ebx,%eax
+rmmovl %eax,c
+halt
+ 
+.pos 0x40
+a:      
+    .long 2
+b:     
+    .long 3
+c:     
+    .long 0

@@ -1,0 +1,8 @@
+.pos 0
+
+irmovl 3, %eax
+irmovl 2, %ebx
+addl %eax, %ecx
+xorl %ebx, %ecx # met dans %ecx le résultat de %eax xor %ebx. ex : 3 and 2 donne 011 xor 010 => 001
+
+halt

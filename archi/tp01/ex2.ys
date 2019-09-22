@@ -1,0 +1,54 @@
+.pos 0x0
+
+mrmovl a,%eax
+mrmovl b,%ebx
+subl   %eax,%ebx
+jg else
+
+irmovl 1,%ecx
+rmmovl %ecx,c
+halt
+
+else:
+irmovl 2,%ecx
+rmmovl %ecx,c
+halt
+
+.pos 0x40
+a:
+    .long 2
+b:
+    .long 3
+c:
+    .long 0.pos 0x0
+
+mrmovl a,%eax
+mrmovl b,%ebx
+subl   %eax,%ebx
+jg else
+
+irmovl 1,%ecx
+rmmovl %ecx,c
+halt
+
+else:
+irmovl 2,%ecx
+rmmovl %ecx,c
+halt
+
+.pos 0x40
+a:
+    .long 2
+b:
+    .long 3
+c:
+    .long 0
+
+# notes
+
+a -  b     a est
+3 - 1 = 2  >
+1 - 1 = 0  =
+1 - 3 = -2 <
+# 0 ou - = a <= b
+# + = a > b
