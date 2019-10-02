@@ -12,18 +12,25 @@ void showCells(game g)
     }
 }
 
+void initGameCells(game g)
+{
+    for (int x = 0; x < SIZE; x++)
+    {
+        for (int y = 0; y < SIZE; y++)
+        {
+            int color = rand()%NB_COLORS;
+            game_set_cell_init(g, x, y, color); // defini la coule d'une case
+        }
+    }
+}
+
 int main(void) {
     bool over = false;
-    int nbMaxHit = 4;
+    int nbMaxHit = 12;
 
-    //*
     game g = game_new_empty(); // crée une partie vide
     game_set_max_moves(g, nbMaxHit); // iniciamise le nombre de coup max
-    game_set_cell_init(g, 11, 11, GREEN); // defini la coule d'une case  */
-
-    /* crée une partie a partire d'a tableu
-    int cells[12][12] = {{0, 2, 3, 1, 2, 3, 2, 3, 1, 0, 2, 3}, {0, 2, 3, 1, 2, 3, 2, 3, 1, 0, 2, 3}, {0, 2, 3, 1, 2, 3, 2, 3, 1, 0, 2, 3}, {0, 2, 3, 1, 2, 3, 2, 3, 1, 0, 2, 3}, {0, 2, 3, 1, 2, 3, 2, 3, 1, 0, 2, 3}, {0, 2, 3, 1, 2, 3, 2, 3, 1, 0, 2, 3}, {0, 2, 3, 1, 2, 3, 2, 3, 1, 0, 2, 3}, {0, 2, 3, 1, 2, 3, 2, 3, 1, 0, 2, 3}, {0, 2, 3, 1, 2, 3, 2, 3, 1, 0, 2, 3}, {0, 2, 3, 1, 2, 3, 2, 3, 1, 0, 2, 3}, {0, 2, 3, 1, 2, 3, 2, 3, 1, 0, 2, 3}, {0, 2, 3, 1, 2, 3, 2, 3, 1, 0, 2, 3}};
-    game g = game_new(cells, nbMaxHit);//*/
+    initGameCells(g); // inicialise la grille
 
     char choice;
     int input;
