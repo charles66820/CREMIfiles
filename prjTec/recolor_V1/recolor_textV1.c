@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "game.h"
 
 void showCells(game g)
@@ -12,25 +13,31 @@ void showCells(game g)
     }
 }
 
+void initGameCells(game g)
+{
+    for (int x = 0; x < SIZE; x++)
+    {
+        for (int y = 0; y < SIZE; y++)
+        {
+            int color = rand()%NB_COLORS;
+            game_set_cell_init(g, x, y, color); // defini la coule d'une case
+        }
+    }
+}
+
 int main(void) {
     bool over = false;
+
     int nbMaxHit = 12;
 
-    color cells[SIZE*SIZE] = {
-        0, 0, 0, 2, 0, 2, 1, 0, 1, 0, 3, 0,
-        0, 3, 3, 1, 1, 1, 1, 3, 2, 0, 1, 0,
-        1, 0, 1, 2, 3, 2, 3, 2, 0, 3, 3, 2,
-        2, 3, 1, 0, 3, 2, 1, 1, 1, 2, 2, 0,
-        2, 1, 2, 3, 3, 3, 3, 2, 0, 1, 0, 0,
-        0, 3, 3, 0, 1, 1, 2, 3, 3, 2, 1, 3,
-        1, 1, 2, 2, 2, 0, 0, 1, 3, 1, 1, 2,
-        1, 3, 1, 3, 1, 0, 1, 0, 1, 3, 3, 3,
-        0, 3, 0, 1, 0, 0, 2, 1, 1, 1, 3, 0,
-        1, 3, 1, 0, 0, 0, 3, 2, 3, 1, 0, 0,
-        1, 3, 3, 1, 1, 2, 2, 3, 2, 0, 0, 2,
-        2, 0, 2, 3, 0, 1, 1, 1, 2, 3, 0, 1};
+    srand(time(NULL));
 
-    game g = game_new(cells, 12);
+    game g = game_new_empty();       // crée une partie vide
+    game_set_max_moves(g, nbMaxHit); // iniciamise le nombre de coup max
+    initGameCells(g);                // inicialise la grille
+
+    char choice;
+    int input;
 
     while (!over)
     {
@@ -40,18 +47,17 @@ int main(void) {
         showCells(g); // affiche la grille
 
         printf("Jouer un coup: (0,1,2,3,r ou q ; r pour redémarrer ou q pour quitter)\n");
-
-        int input;
-        char choice;
-
-        while ((input = getchar()) != '\n' && input != EOF)
+        input = getchar();
+        if (input != EOF)
         {
-            choice = (char)input;
+            choice = (char) input;
         }
 
         // client inputs
-        if (choice == 'r')
+        if (choice == 'r') {
             game_restart(g);
+            initGameCells(g); // inicialise la grille
+        }
         else if (choice == 'q') {
             game_delete(g);
             exit(EXIT_SUCCESS);

@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -g -Wall -std=c99
-CPPFLAGS =
+CPPFLAGS = -I .
 LDFLAGS = -lm
 SOURCES = $(wildcard *.c)
 OBJETS = $(SOURCES:.c=.o)
