@@ -1,18 +1,1 @@
-.pos 0
-mrmovl sum, %eax
-xorl %ebx, %ebx
-again: 
-iaddl 1, %ebx
-addl %ebx, %eax
-
-irmovl 10, %ecx
-subl %ebx, %ecx 
-jg again 
-rmmovl %eax, sum
-
-halt
-
-.pos 0x40
-
-sum:    .long 0
- 
+k
