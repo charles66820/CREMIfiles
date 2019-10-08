@@ -4,12 +4,16 @@
 
 void showCells(game g)
 {
-    for (int x = 0; x < SIZE; x++)
+    for (int y = 0; y < SIZE; y++)
     {
-        for (int y = 0; y < SIZE; y++)
+        for (int x = 0; x < SIZE; x++)
             printf("%d", game_cell_current_color(g, x, y));
         printf("\n");
     }
+}
+
+int charToInt(char c) {
+    return c-'0';
 }
 
 int main(void) {
@@ -34,20 +38,18 @@ int main(void) {
 
     while (!over)
     {
-        printf("\n");
+
         printf("nb coups joués: %d ; nb coups max : %d\n", game_nb_moves_cur(g), nbMaxHit);
 
         showCells(g); // affiche la grille
 
         printf("Jouer un coup: (0,1,2,3,r ou q ; r pour redémarrer ou q pour quitter)\n");
 
-        int input;
-        char choice;
+        int input = getchar();
+        char choice = (char)input;
 
-        while ((input = getchar()) != '\n' && input != EOF)
-        {
-            choice = (char)input;
-        }
+        if (choice == '\n' || choice == EOF)
+            continue;
 
         // client inputs
         if (choice == 'r')
@@ -56,14 +58,13 @@ int main(void) {
             game_delete(g);
             exit(EXIT_SUCCESS);
         }
-        else if (choice - '0' >= 0 && choice - '0' < NB_COLORS)
-        {
-            game_play_one_move(g, (color)choice - '0');
-        }
+        else if (charToInt(choice) >= 0 && charToInt(choice) < NB_COLORS)
+            game_play_one_move(g, (color)charToInt(choice));
 
         // si la partie est fini
-        if (game_nb_moves_cur(g) > game_nb_moves_max(g)) {
+        if (game_nb_moves_cur(g) >= game_nb_moves_max(g) && !game_is_over(g)) {
             printf("DOMMAGE\n");
+            game_delete(g);
             exit(EXIT_SUCCESS);
         }
         else
@@ -71,6 +72,9 @@ int main(void) {
     }
 
     printf("BRAVO\n");
+    showCells(g);
+
+    game_delete(g);
 
     return EXIT_SUCCESS;
 }
