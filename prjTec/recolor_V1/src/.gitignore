@@ -1,0 +1,5 @@
+depends.txt
+libgame.a
+recolor_text
+recolor_text.o
+
