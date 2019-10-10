@@ -1,3 +1,4 @@
+.vscode/
 depends.txt
 libgame.a
 recolor_text
