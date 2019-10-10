@@ -1,3 +1,7 @@
+/**
+ * Author: Arthur BLONDEAU, Charles GOEDEFROIT, Victor ANDRAULT
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "game.h"
