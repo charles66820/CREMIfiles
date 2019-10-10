@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -g -Wall -std=c99
 CPPFLAGS = -I .
-LDFLAGS = -lm
+LDFLAGS = -lm -L. -lgame
 SOURCES = $(wildcard *.c)
 OBJETS = $(SOURCES:.c=.o)
 EXEC = recolor_text
@@ -15,7 +15,7 @@ libgame.a : game.o game_io.o
 
 # crée les exécutables
 recolor_text : recolor_text.o libgame.a
-	$(CC) $< $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -L. -lgame -o $@
+	$(CC) $< $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@
 
 # crée les fichier obj
 include depends.txt

@@ -61,6 +61,7 @@ int main(void) {
             printGame(g);
         }
         else if (choice == 'q') {
+            printf("DOMMAGE\n");
             game_delete(g);
             exit(EXIT_SUCCESS);
         }
