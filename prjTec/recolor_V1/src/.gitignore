@@ -3,4 +3,9 @@ depends.txt
 libgame.a
 recolor_text
 recolor_text.o
-
+test_game_cgoedefroit
+test_game_cgoedefroit.o
+test_game_arblondeau
+test_game_arblondeau.o
+test_game_vandrault
+test_game_vandrault.o
