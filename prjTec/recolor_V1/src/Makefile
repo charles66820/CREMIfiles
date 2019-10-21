@@ -17,6 +17,12 @@ libgame.a : game.o game_io.o
 recolor_text : recolor_text.o libgame.a
 	$(CC) $< $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@
 
+test_game_arblondeau : test_game_arblondeau.o libgame.a
+	$(CC) $< $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@
+
+test_game_cgoedefroit : test_game_cgoedefroit.o libgame.a
+	$(CC) $< $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@
+
 # crée les fichier obj
 include depends.txt
 
@@ -24,6 +30,27 @@ include depends.txt
 .PHONY : clean
 clean :
 	rm -f $(OBJETS) *.a $(EXEC) depends.txt
+
+.PHONY : test test_arblondeau test_vandrault test_cgoedefroit test_azeraouli
+test : test_arblondeau test_vandrault test_cgoedefroit test_azeraouli
+
+test_vandrault : test_game_vandrault
+	./test_game_vandrault new
+	./test_game_vandrault new_empty
+	./test_game_vandrault set_cell_init
+	./test_game_vandrault set_max_move
+
+test_arblondeau : test_game_arblondeau
+	./test_game_arblondeau game_nb_moves_max
+	./test_game_arblondeau game_nb_moves_cur
+	./test_game_arblondeau game_cell_current_color
+	./test_game_arblondeau game_play_one_move
+
+test_cgoedefroit : test_game_cgoedefroit
+	./test_game_cgoedefroit copy
+	./test_game_cgoedefroit delete
+	./test_game_cgoedefroit is_over
+	./test_game_cgoedefroit restart
 
 # défini les dépendance pour les fichier obj
 depends.txt : $(SOURCES)

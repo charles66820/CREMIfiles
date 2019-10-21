@@ -1,20 +1,18 @@
 # repartition des fonctions de teste a coder
 
-> Arthur BLONDEAU
-
 > Victor ANDRAULT
-
-> Charles GOEDEFROIT
-
-
 game_new
 game_new_empty
 game_set_cell_init
 game_set_max_moves
+
+> Arthur BLONDEAU
 game_nb_moves_max
 game_cell_current_color
 game_nb_moves_cur
 game_play_one_move
+
+> Charles GOEDEFROIT
 game_copy
 game_delete
 game_is_over
