@@ -5,6 +5,7 @@ LDFLAGS = -lm
 SOURCES = $(wildcard *.c)
 OBJETS = $(SOURCES:.c=.o)
 
+.PHONY : all
 all : solve-TSP convert-2D-to-full
 
 # crée la library tsp
