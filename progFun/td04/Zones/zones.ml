@@ -24,7 +24,7 @@ let c_exp c = C(exp realpart c, exp imagpart c)
 let nowhere = fun point -> false
 
 (*  To determine whether a point is in a zone, just call this function. *)
-let point_in_zone_p point zone = zone point (* NS *)
+let point_in_zone_p point zone = zone point
 
 (* Create a circular zone with center in (0,0) with the indicated radius. *)
 let make_disk0 radius = fun point -> c_abs point <= radius
@@ -64,12 +64,12 @@ let make_disk radius center =
 (* point_in_zone_p (C(2., 2.)) (make_disk 1. (C((1.5, 1.5))) *)
 
 (* Scale a zone in two dimensions *)
-let scale_zone0 zone coeff = c_scal zone coeff (* NS *)
+let scale_zone0 zone coeff = c_scal (zone c_origin) coeff (* NS *)
 
 (* Test scale_zone *)
 (* point_in_zone_p (C(5., 5.)) (scale_zone0 (make_disk0 2.) (10., 10.)) *)
 
-let scale_zone zone coeff origin =
+let scale_zone zone coeff origin = c_scal (zone origin) coeff (* NS *)
 
 let _ = point_in_zone_p (C(6.0, 0.5)) (scale_zone0 (make_disk 1. (C(4.0, 4.0))) (C(6.0, 4.0)))
 
