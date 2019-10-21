@@ -68,16 +68,16 @@ let scale_zone0 zone coeff = fun point -> point_in_zone_p (c_sca coeff point) zo
 (* Test scale_zone *)
 (* point_in_zone_p (C(5., 5.)) (scale_zone0 (make_disk0 2.) (10., 10.)) *)
 
-let scale_zone zone coeff origin = fun point -> point_in_zone_p (c_dif (c_sca coeff point) vector) zone
+let scale_zone zone coeff origin = fun point -> point_in_zone_p (c_dif (c_sca coeff point) origin) zone
 
 let _ = point_in_zone_p (C(6.0, 0.5)) (scale_zone0 (make_disk 1. (C(4.0, 4.0))) (C(6.0, 4.0)))
 
 let c_i = C(0., -1.)
 
-let rotate_zone0 zone angle =
+let rotate_zone0 zone angle = fun point -> point_in_zone_p (c_mul point angle) zone
 
 (* point_in_zone_p (C(0.5, 8.)) (rotate_zone0 (make_rectangle 10. 2.) (3.1416 /. 2.)) *)
 
-let rotate_zone zone angle center =
+let rotate_zone zone angle center = fun point -> point_in_zone_p (c_dif (c_mul point angle) center) zone
 
 
