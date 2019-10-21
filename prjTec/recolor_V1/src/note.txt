@@ -1,4 +1,4 @@
-# repartition des fonction de teste a coder
+# repartition des fonctions de teste a coder
 
 > Arthur BLONDEAU
 
