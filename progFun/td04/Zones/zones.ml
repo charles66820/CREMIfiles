@@ -6,13 +6,13 @@ let imagpart c = match c with C(_,y) -> y
 let c_origin = C(0.,0.)
 let p_12 = C(1.,2.)
 
-let square x = x * x
+let square x = x *. x
 
 let c_abs c = sqrt (square (realpart c) +. square (imagpart c))
 let c_sum c1 c2 = C(realpart c1 +. realpart c2, imagpart c1 +. imagpart c2)
-let c_dif c1 c2 = C(realpart c1 -. realpart c2, imgpart c1 -. imgpart c2)
+let c_dif c1 c2 = C(realpart c1 -. realpart c2, imagpart c1 -. imagpart c2)
 let c_mul c1 c2 = C(realpart c1 *. realpart c2 -. imagpart c1 *. imagpart c2, imagpart c2 *. realpart c2 +. realpart c1*. imagpart c2)
-let c_sca lambda c = C(realpart c *. lambda, imgpart c *. lambda)
+let c_sca lambda c = C(realpart c *. lambda, imagpart c *. lambda)
 let c_exp c = C(exp (realpart c) *. cos (imagpart c), exp (realpart c) *. sin (imagpart c))
 
 (* A zone is represented as a function that takes a point in 2-dimensional
@@ -56,14 +56,14 @@ let test =
 let zone_union zone1 zone2 = fun point -> zone1 point || zone2 point
 
 (* Given a zone, create a zone that contains every point not in zone. *)
-let zone_complement zone = fun point -> not (zone1 point)
+let zone_complement zone = fun point -> not (zone point)
 
 let make_disk radius center = fun p -> (c_abs (c_dif center p)) <= radius
 
 (* point_in_zone_p (C(2., 2.)) (make_disk 1. (C((1.5, 1.5))) *)
 
 (* Scale a zone in two dimensions *)
-let scale_zone0 zone coeff = fun point -> point_in_zone_p (c_sca coeff point) zone
+let scale_zone0 zone coeff = fun point -> point_in_zone_p (c_sca (c_abs coeff) point) zone
 
 (* Test scale_zone *)
 (* point_in_zone_p (C(5., 5.)) (scale_zone0 (make_disk0 2.) (10., 10.)) *)
