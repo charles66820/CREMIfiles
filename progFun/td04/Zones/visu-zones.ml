@@ -5,7 +5,7 @@
 
 open Graphics
 open Images
-       
+
 let nb_pixels_per_unit = 10
 
 let int_to_nb_pixels n = nb_pixels_per_unit * n
@@ -26,7 +26,7 @@ let zone_to_pixels zone n =
   pixels
 
 let pixels_to_png pixels filename = sauver_image pixels filename
-    
+
 let zone_to_png zone n filename = pixels_to_png (zone_to_pixels zone n) filename
 
 let random_point z = C(Random.float z, Random.float z)
@@ -46,7 +46,7 @@ let uname () =
   close_out outchannel;
   name
 
-let viewer = 
+let viewer =
   let uname = uname() in
   if uname = "Linux" then "eog "
   else if uname = "Darwin" then "open "
@@ -54,7 +54,7 @@ let viewer =
 
 let view_file file =
   Unix.system (viewer ^ file ^ "&")
-   
+
    (* zone_to_png (gruyere 5) 50 "monimage.png" *)
 
 let view_zone_size zone pixel_size =
@@ -63,7 +63,7 @@ let view_zone_size zone pixel_size =
     zone_to_png zone pixel_size filename;
     view_file filename;
   end
-  
+
 let view_zone zone = view_zone_size zone 50
 
 (*
