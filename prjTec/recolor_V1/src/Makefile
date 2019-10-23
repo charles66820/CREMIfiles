@@ -17,6 +17,9 @@ libgame.a : game.o game_io.o
 recolor_text : recolor_text.o libgame.a
 	$(CC) $< $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@
 
+test_game_vandrault : test_game_vandrault.o libgame.a
+	$(CC) $< $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@
+
 test_game_arblondeau : test_game_arblondeau.o libgame.a
 	$(CC) $< $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@
 
@@ -29,7 +32,7 @@ include depends.txt
 # nettoie le dossier des fichiers créés
 .PHONY : clean
 clean :
-	rm -f $(OBJETS) *.a $(EXEC) depends.txt
+	rm -f $(OBJETS) *.a $(EXEC) depends.txt test_game_vandrault test_game_arblondeau test_game_cgoedefroit
 
 .PHONY : test test_arblondeau test_vandrault test_cgoedefroit test_azeraouli
 test : test_arblondeau test_vandrault test_cgoedefroit test_azeraouli
@@ -38,7 +41,7 @@ test_vandrault : test_game_vandrault
 	./test_game_vandrault new
 	./test_game_vandrault new_empty
 	./test_game_vandrault set_cell_init
-	./test_game_vandrault set_max_move
+	./test_game_vandrault set_max_moves
 
 test_arblondeau : test_game_arblondeau
 	./test_game_arblondeau game_nb_moves_max
