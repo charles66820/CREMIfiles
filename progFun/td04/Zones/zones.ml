@@ -58,17 +58,17 @@ let zone_union zone1 zone2 = fun point -> zone1 point || zone2 point
 (* Given a zone, create a zone that contains every point not in zone. *)
 let zone_complement zone = fun point -> not (zone point)
 
-let make_disk radius center = fun p -> (c_abs (c_dif center p)) <= radius
+let make_disk radius center = move_zone (make_disk0 radius) center (* fun p -> (c_abs (c_dif p center )) <= radius *)
 
 (* point_in_zone_p (C(2., 2.)) (make_disk 1. (C((1.5, 1.5))) *)
 
 (* Scale a zone in two dimensions *)
-let scale_zone0 zone coeff = fun point -> point_in_zone_p (c_sca (c_abs coeff) point) zone
+let scale_zone0 zone coeff = fun point -> point_in_zone_p (C(((realpart point) /. (realpart coeff)), ((imagpart point) /. (imagpart coeff)))) zone
 
 (* Test scale_zone *)
 (* point_in_zone_p (C(5., 5.)) (scale_zone0 (make_disk0 2.) (10., 10.)) *)
 
-let scale_zone zone coeff origin = fun point -> point_in_zone_p (c_dif (c_sca coeff point) origin) zone
+let scale_zone zone coeff origin = move_zone (scale_zone0 (move_zone zone (c_dif c_origin origin)) coeff) origin
 
 let _ = point_in_zone_p (C(6.0, 0.5)) (scale_zone0 (make_disk 1. (C(4.0, 4.0))) (C(6.0, 4.0)))
 
