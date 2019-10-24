@@ -7,7 +7,7 @@
 
 
 bool test_game_copy() {
-    int nbMaxHit = 12;
+    uint nbMaxHit = 13;
 
     color cells[SIZE * SIZE] = {
         0, 0, 0, 2, 0, 2, 1, 0, 1, 0, 3, 0,
@@ -38,7 +38,20 @@ bool test_game_copy() {
         return false;
     }
 
-    // change one cells of game
+    // test if set nb max move work
+    game_set_max_moves(g, 15);
+    if (game_nb_moves_max(g) != 15) {
+      fprintf(stderr, "Error: invalid game nb max moves!\n");
+      return false;
+    }
+
+    // test if current move has initilised to 0
+    if (game_nb_moves_cur(g) != 0) {
+      fprintf(stderr, "Error: invalid game nb curent move!\n");
+      return false;
+    }
+
+    // change one cell of game
     game_play_one_move(g, GREEN);
 
     if (game_cell_current_color(g, 0, 0) != GREEN) {
@@ -81,6 +94,21 @@ bool test_game_copy() {
           return false;
         }
 
+    // test of change table cell
+    game_set_cell_init(g, 4, 4, BLUE);
+
+    if (game_cell_current_color(g, 4, 4) != BLUE) {
+      fprintf(stderr, "Error: invalid game set cell init!\n");
+      return false;
+    }
+
+    // test if cells has been copyed
+    if (game_cell_current_color(gc, 4, 4) == game_cell_current_color(g, 4, 4)) {
+      fprintf(stderr, "Error: game and copy game cells are not equal!\n");
+      return false;
+    }
+
+
     // TODO : test if game parameter is null
     /*g = NULL;
     game gN = game_copy(g);
@@ -117,7 +145,7 @@ bool test_game_delete() {
 }
 
 bool test_game_is_over() {
-    int nbMaxHit = 12;
+    uint nbMaxHit = 12;
 
     color cells[SIZE * SIZE] = {
         0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
@@ -146,6 +174,12 @@ bool test_game_is_over() {
     if (game_nb_moves_max(g) != nbMaxHit) {
         fprintf(stderr, "Error: invalid game nb max moves!\n");
         return false;
+    }
+
+    // test if current move has initilised to 0
+    if (game_nb_moves_cur(g) != 0) {
+      fprintf(stderr, "Error: invalid game nb curent move!\n");
+      return false;
     }
 
     // change one cells of game
@@ -185,7 +219,7 @@ bool test_game_is_over() {
 }
 
 bool test_game_restart() {
-    int nbMaxHit = 12;
+    uint nbMaxHit = 12;
 
     color cells[SIZE * SIZE] = {
         0, 0, 0, 2, 0, 2, 1, 0, 1, 0, 3, 0,
