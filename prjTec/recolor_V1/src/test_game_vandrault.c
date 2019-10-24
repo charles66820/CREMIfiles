@@ -25,8 +25,10 @@ bool test_game_new(){
     if (g1==NULL){
         return false;
     }
-    game_play_one_move(g1, 0);
     if (game_nb_moves_max(g1)!=12){
+        return false;
+    }
+    if (sizeof(cells)!=SIZE*SIZE*sizeof(int)){
         return false;
     }
     for (int i=0; i<SIZE*SIZE; i+=1){
@@ -34,7 +36,8 @@ bool test_game_new(){
             return false;
         }
     }
-    /*game g2 = game_new(cells, 0); // test of game_new on unvalid parameters
+     // test of game_new on unvalid parameters
+    /*game g2 = game_new(cells, 0);
     if (g2==NULL){
         return false;
     }
@@ -57,13 +60,18 @@ bool test_game_new_empty(){
     if (g==NULL){
         return false;
     }
+    if (game_nb_moves_max(g)!=0){
+        return false;
+    }
     game_play_one_move(g, 0);
     for (int i=0; i<SIZE*SIZE; i++){
         if (game_cell_current_color(g,i%12,i/12)!=0){
             return false;
         }
     }
+    game_delete(g);
     return true;
+
 }
 
 bool test_game_set_cell_init(){
@@ -86,8 +94,8 @@ bool test_game_set_cell_init(){
         return false;
     }
     game_play_one_move(g1, 2);
-    game_set_cell_init(g1,0,0,1);
-    if (game_cell_current_color(g1,0,0)!=1){
+    game_set_cell_init(g1,5,8,1);
+    if (game_cell_current_color(g1,5,8)!=1){
         return false;
     }
     /*game g2 = game_new(cells, 12); //test of game_set_cell_init on unvalid x parameter
@@ -96,7 +104,13 @@ bool test_game_set_cell_init(){
     }
     game_play_one_move(g2, 2);
     game_set_cell_init(g2,SIZE,0,1);
-    for (int i=0;i<SIZE*SIZE;i++){
+    if (g2!=NULL){
+        return true;
+    }
+    else {
+        return false;
+    }*/
+    /*for (int i=0;i<SIZE*SIZE;i++){
         if (cells[i]!=game_cell_current_color(g2,i%12,i/12)){
             return false;
         }
@@ -149,9 +163,11 @@ bool test_game_set_max_moves(){
     if (g1==NULL){
         return false;
     }
-    game_play_one_move(g1, 3 );
-    game_set_max_moves(g1,11);
-    if (game_nb_moves_max(g1)!=11){
+    game_set_max_moves(g1,14);
+    if (g1==NULL){
+        return false;
+    }
+    if (game_nb_moves_max(g1)!=14){
         return false;
     }
     /*game g2 = game_new(cells, 12); // test of game_set_max_moves on unvalide max_moves parameter
