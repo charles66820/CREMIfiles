@@ -81,4 +81,3 @@ let rotate_zone0 zone angle = fun point -> point_in_zone_p (c_mul point angle) z
 let rotate_zone zone angle center = fun point -> point_in_zone_p (c_dif (c_mul point angle) center) zone
 
 let zone_difference z1 z2 = fun point -> point_in_zone_p point (zone_union z1 z2) && not (point_in_zone_p point (zone_intersection z1 z2))
-
