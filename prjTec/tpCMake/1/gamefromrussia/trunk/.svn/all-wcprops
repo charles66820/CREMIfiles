@@ -1,0 +1,431 @@
+K 25
+svn:wc:ra_dav:version-url
+V 22
+/svn/!svn/ver/14/trunk
+END
+Game.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 30
+/svn/!svn/ver/2/trunk/Game.cpp
+END
+Cursor.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/2/trunk/Cursor.cpp
+END
+titlescreen.xcf
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/2/trunk/titlescreen.xcf
+END
+GameState.h
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/!svn/ver/2/trunk/GameState.h
+END
+DropPieceState.h
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/2/trunk/DropPieceState.h
+END
+PieceReverseLShape.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/2/trunk/PieceReverseLShape.h
+END
+Piece.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/10/trunk/Piece.cpp
+END
+PieceReverseSShape.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/PieceReverseSShape.cpp
+END
+enums.h
+K 25
+svn:wc:ra_dav:version-url
+V 29
+/svn/!svn/ver/2/trunk/enums.h
+END
+TextPrinter.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/2/trunk/TextPrinter.h
+END
+Block.h
+K 25
+svn:wc:ra_dav:version-url
+V 29
+/svn/!svn/ver/7/trunk/Block.h
+END
+GameStateFactory.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/2/trunk/GameStateFactory.cpp
+END
+InitGameState.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/2/trunk/InitGameState.h
+END
+SetNextPieceState.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/2/trunk/SetNextPieceState.h
+END
+BlockLine.h
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/!svn/ver/2/trunk/BlockLine.h
+END
+SoundPlayer.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/2/trunk/SoundPlayer.h
+END
+GameState.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/2/trunk/GameState.cpp
+END
+PieceFactory.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/4/trunk/PieceFactory.cpp
+END
+Game.h
+K 25
+svn:wc:ra_dav:version-url
+V 28
+/svn/!svn/ver/2/trunk/Game.h
+END
+PieceReverseLShape.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/PieceReverseLShape.cpp
+END
+Cursor.h
+K 25
+svn:wc:ra_dav:version-url
+V 30
+/svn/!svn/ver/2/trunk/Cursor.h
+END
+PauseState.h
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/2/trunk/PauseState.h
+END
+cursor_left.xcf
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/2/trunk/cursor_left.xcf
+END
+TitleScreenState.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/2/trunk/TitleScreenState.h
+END
+Board.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/2/trunk/Board.cpp
+END
+PieceLShape.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/2/trunk/PieceLShape.h
+END
+TextPrinter.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/2/trunk/TextPrinter.cpp
+END
+PieceSShape.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/7/trunk/PieceSShape.cpp
+END
+RemoveLinesState.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/2/trunk/RemoveLinesState.cpp
+END
+Piece.h
+K 25
+svn:wc:ra_dav:version-url
+V 29
+/svn/!svn/ver/9/trunk/Piece.h
+END
+PieceReverseSShape.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/2/trunk/PieceReverseSShape.h
+END
+Block.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/7/trunk/Block.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/2/trunk/CMakeLists.txt
+END
+GameFromRussia.sln
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/14/trunk/GameFromRussia.sln
+END
+InitGameState.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/2/trunk/InitGameState.cpp
+END
+PieceTShape.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/2/trunk/PieceTShape.h
+END
+GameStateMachine.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/2/trunk/GameStateMachine.cpp
+END
+SetupState.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/2/trunk/SetupState.cpp
+END
+BlockLine.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/2/trunk/BlockLine.cpp
+END
+gameover.xcf
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/2/trunk/gameover.xcf
+END
+GameStatesDiagram.odg
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/2/trunk/GameStatesDiagram.odg
+END
+PauseState.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/2/trunk/PauseState.cpp
+END
+PieceLShape.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/7/trunk/PieceLShape.cpp
+END
+TitleScreenState.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/2/trunk/TitleScreenState.cpp
+END
+PieceFactory.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/4/trunk/PieceFactory.h
+END
+LinesRemoveAnimationState.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/2/trunk/LinesRemoveAnimationState.cpp
+END
+PieceTShape.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/7/trunk/PieceTShape.cpp
+END
+Board.h
+K 25
+svn:wc:ra_dav:version-url
+V 29
+/svn/!svn/ver/2/trunk/Board.h
+END
+RemoveLinesState.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/2/trunk/RemoveLinesState.h
+END
+PieceSShape.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/2/trunk/PieceSShape.h
+END
+PieceLongBar.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/2/trunk/PieceLongBar.h
+END
+BlockSurfaceManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/8/trunk/BlockSurfaceManager.h
+END
+GameStateMachine.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/2/trunk/GameStateMachine.h
+END
+GameFromRussia.vcproj
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/12/trunk/GameFromRussia.vcproj
+END
+SetupState.h
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/2/trunk/SetupState.h
+END
+GameData.h
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/2/trunk/GameData.h
+END
+GameOverState.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/2/trunk/GameOverState.h
+END
+PieceSquare.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/2/trunk/PieceSquare.h
+END
+pause.xcf
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/2/trunk/pause.xcf
+END
+DropPieceState.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/5/trunk/DropPieceState.cpp
+END
+consts.h
+K 25
+svn:wc:ra_dav:version-url
+V 30
+/svn/!svn/ver/2/trunk/consts.h
+END
+main.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 30
+/svn/!svn/ver/2/trunk/main.cpp
+END
+PieceLongBar.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/7/trunk/PieceLongBar.cpp
+END
+setup.xcf
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/2/trunk/setup.xcf
+END
+BlockSurfaceManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/8/trunk/BlockSurfaceManager.cpp
+END
+LinesRemoveAnimationState.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/2/trunk/LinesRemoveAnimationState.h
+END
+SetNextPieceState.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/2/trunk/SetNextPieceState.cpp
+END
+SoundPlayer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/13/trunk/SoundPlayer.cpp
+END
+GameOverState.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/2/trunk/GameOverState.cpp
+END
+PieceSquare.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/7/trunk/PieceSquare.cpp
+END
+GameStateFactory.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/2/trunk/GameStateFactory.h
+END
