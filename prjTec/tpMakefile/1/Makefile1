@@ -1,7 +1,7 @@
 all : main
 	./helloWorld
 
-main.o :  main.c
+main.o : main.c
 	gcc -c main.c
 
 bar.o : bar.c bar.h
