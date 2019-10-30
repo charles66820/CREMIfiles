@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameFromRussia", "GameFromRussia.vcproj", "{E5F875CA-5F9F-43F6-85DC-1E4AC5CA653E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{62D8111F-DD2D-4BA2-A6E9-9C8466A6BA61} = {62D8111F-DD2D-4BA2-A6E9-9C8466A6BA61}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameFromRussiaCore", "GameFromRussiaCore\GameFromRussiaCore.vcproj", "{62D8111F-DD2D-4BA2-A6E9-9C8466A6BA61}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E5F875CA-5F9F-43F6-85DC-1E4AC5CA653E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E5F875CA-5F9F-43F6-85DC-1E4AC5CA653E}.Debug|Win32.Build.0 = Debug|Win32
+		{E5F875CA-5F9F-43F6-85DC-1E4AC5CA653E}.Release|Win32.ActiveCfg = Release|Win32
+		{E5F875CA-5F9F-43F6-85DC-1E4AC5CA653E}.Release|Win32.Build.0 = Release|Win32
+		{62D8111F-DD2D-4BA2-A6E9-9C8466A6BA61}.Debug|Win32.ActiveCfg = Debug|Win32
+		{62D8111F-DD2D-4BA2-A6E9-9C8466A6BA61}.Debug|Win32.Build.0 = Debug|Win32
+		{62D8111F-DD2D-4BA2-A6E9-9C8466A6BA61}.Release|Win32.ActiveCfg = Release|Win32
+		{62D8111F-DD2D-4BA2-A6E9-9C8466A6BA61}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
