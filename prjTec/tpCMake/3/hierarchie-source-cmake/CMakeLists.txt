@@ -4,7 +4,7 @@ project(magasin C)
 
 option(ENABLE_DEBUG ON)
 
-set(CMAKE_INSTALL_PREFIX /net/cremi/cgoedefroit/espaces/travail/apps)
+set(CMAKE_INSTALL_PREFIX OUTPUT)
 
 if(ENABLE_DEBUG)
     set(CMAKE_C_FLAGS "-g -Wall -std=c99")
@@ -14,7 +14,7 @@ endif()
 
 include_directories(bcb/chaine bcb/memoire magasin sdd/file sdd/paire sdd/vext)
 
-#install(FILES bcb/chaine/chaine.h bcb/memoire/memoire.h magasin sdd/file/file.h sdd/paire/paire.h sdd/vex/vex.h DESTINATION include)
+install(FILES bcb/chaine/chaine.h bcb/memoire/memoire.h magasin/client.h sdd/file/file.h sdd/paire/paire.h sdd/vext/vext.h DESTINATION include)
 
 enable_testing()
 
