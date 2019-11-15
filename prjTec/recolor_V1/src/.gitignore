@@ -9,3 +9,9 @@ test_game_arblondeau
 test_game_arblondeau.o
 test_game_vandrault
 test_game_vandrault.o
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Testing/
+CTestTestfile.cmake
+Makefile

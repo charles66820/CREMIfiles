@@ -1,19 +1,19 @@
 # repartition des fonctions de teste a coder
 
 > Victor ANDRAULT
-game_new
+game_copy
 game_new_empty
-game_set_cell_init
-game_set_max_moves
+game_cell_current_color
+game_is_over
 
 > Arthur BLONDEAU
+game_delete
 game_nb_moves_max
-game_cell_current_color
 game_nb_moves_cur
-game_play_one_move
+game_set_max_moves
 
 > Charles GOEDEFROIT
-game_copy
-game_delete
-game_is_over
+game_play_one_move
+game_new
 game_restart
+game_set_cell_init
