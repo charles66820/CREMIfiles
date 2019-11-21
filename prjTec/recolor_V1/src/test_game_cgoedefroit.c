@@ -74,6 +74,9 @@ game createGame(color *cells, uint nbMaxHit) {
     return false;
   }
 
+  // reset game
+  game_restart(g);
+
   return g;
 }
 
