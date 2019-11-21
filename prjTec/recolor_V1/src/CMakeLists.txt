@@ -19,7 +19,7 @@ enable_testing()
 # Implémentation des executables
 #   Création de la librairie game
 add_library (game game.c game_io.c)
-target_link_libraries (game m)
+target_link_libraries(game m)
 
 #   executable du jeu
 add_executable (recolor_text recolor_text.c)

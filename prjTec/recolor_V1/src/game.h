@@ -16,7 +16,8 @@
  *  indicates the column.
  *
  * The goal of the game is to color the whole grid with the same color
- * in less than the number of allowed steps. Initially, the cells of the grid have a
+ * in less than the number of allowed steps. Initially, the cells of the grid
+have a
  * random color. After each move, the player can fill the top left
  * cell in a color of his choice. Then any cell currently forming a
  * contiguous region with the top left cell (i.e.every cell
@@ -25,7 +26,8 @@
  * amount of moves left will be decreased by 1.
  *
  * For further details on the rules, see <a
- * href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/doc/flood.html">here</a>.
+ *
+href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/doc/flood.html">here</a>.
  *
  * *
  * Here is an example of a game and its solution.
@@ -61,12 +63,13 @@ typedef unsigned int uint;
 /**
  * @brief Different colors (red=0, green=1, blue=2 or yellow=3) used in the game
  **/
-typedef enum color_e {RED, GREEN, BLUE, YELLOW, NB_COLORS} color;
+typedef enum color_e { RED, GREEN, BLUE, YELLOW, NB_COLORS } color;
 
 /**
- * @brief The structure pointer that stores the game. To create a game, you can proceed in two ways:
- * just call game_new(),
- * or first create an empty game with game_new_empty(), and then initialize it with game_set_cell_init() and game_set_max_moves().
+ * @brief The structure pointer that stores the game. To create a game, you can
+ *proceed in two ways: just call game_new(), or first create an empty game with
+ *game_new_empty(), and then initialize it with game_set_cell_init() and
+ *game_set_max_moves().
  **/
 typedef struct game_s *game;
 
@@ -81,7 +84,8 @@ typedef const struct game_s *cgame;
 
 /**
  * @brief Creates a new game and initializes it in one call.
- * @param cells 1D array describing the color of each cell of the game. The storage is row by row
+ * @param cells 1D array describing the color of each cell of the game. The
+ *storage is row by row
  * @param nb_max_moves the value of the maximum number of moves
  * @return the created game
  * @pre @p cells is an initialized array of size SIZE*SIZE.
@@ -89,17 +93,18 @@ typedef const struct game_s *cgame;
  **/
 game game_new(color *cells, uint nb_moves_max);
 
-
 /**
  * @brief Creates an empty game.
- * @details Creates an empty game having SIZE rows and SIZE columns. All the cells will have the default color
- * (whose value is RED). The maximum number of moves is set to 0.
+ * @details Creates an empty game having SIZE rows and SIZE columns. All the
+ *cells will have the default color (whose value is RED). The maximum number of
+ *moves is set to 0.
  * @return The created game
  **/
 game game_new_empty();
 
 /**
- * @brief Sets the initial color (and the current color) of the cell located at given coordinates.
+ * @brief Sets the initial color (and the current color) of the cell located at
+ *given coordinates.
  * @param g the game
  * @param x the first coordinate of the cell
  * @param y the second coordinate of the cell
