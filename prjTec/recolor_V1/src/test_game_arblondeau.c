@@ -5,10 +5,15 @@
 #include "game.h"
 
 /**
- * First of all, it will try if the game g created work properly
- * and after it will try if the nbMax chosen is the one implemented,
- * if not it return an error case.
- **/
+ * @brief test if nb_moves_max is properly created
+ *
+ * @param cells tab of colors
+ * @param nb_moves_max number of max hit
+ * @param g is test if NULL
+ * @param nbMax is test if equal to nb_moves_max
+ * @return false + an error message in case of error
+ * @return true if no bug was found
+ */
 bool test_game_nb_moves_max() {
   uint nbMax = 12;
   color cells[SIZE * SIZE] = {
@@ -35,12 +40,14 @@ bool test_game_nb_moves_max() {
 }
 
 /**
- * First of all, it will try if the game g created work properly
- * and after it will try if the nb_moves_cur match the real one,
- * if not it returns an error case.
- * It will test if : 'nb_moves_cur does not start at 0'
- *                   'Does not increment properly (it suppose to add 1 not anything else'
- *                   'Is he over nbMax'
+ * @brief test if nb_moves_cur start at 0 and increment 1 by 1
+ *
+ * @param cells tab of colors
+ * @param nb_moves_max number of max hit
+ * @param g is test if NULL
+ * @param nb_moves_cur is test if it start at 0 or not, and test if it increment properly
+ * @return false + an error message in case of error
+ * @return true if no bug was found
  */
 bool test_game_nb_moves_cur() {
   uint nbMax = 12;
@@ -81,9 +88,14 @@ bool test_game_nb_moves_cur() {
 }
 
 /**
- * First of all, it will try if the game g created work properly
- * If the cells colors does not match the one initialize it return an error case.
- * And if the cells does not change properly after one move it return an error case.
+ * @brief test if the cells are properly created, and change properly
+ *
+ * @param cells tab of colors
+ * @param nb_moves_max number of max hit
+ * @param g is test if NULL
+ * @param cell_current_color is test if it was properly created and change properly
+ * @return false + an error message in case of error
+ * @return true if no bug was found
  */
 bool test_game_cell_current_color() {
   uint nbMax = 12;
@@ -124,10 +136,14 @@ bool test_game_cell_current_color() {
 }
 
 /**
- * First of all, it will try if the game g created work properly
- * We also create a copy of the game, and test if it's properly created
- * After, it will test if the game and the copy are the same, if not it return an error case.
- * The game need to change after one move, so if the copy and the game are still the same it return an error case.
+ * @brief test if the play change the game properly
+ *
+ * @param cells tab of colors
+ * @param nb_moves_max number of max hit
+ * @param g is test if NULL
+ * @param gc is test if NULL
+ * @return false + an error message in case of error
+ * @return true if no bug was found
  */
 bool test_game_play_one_move() {
   uint nbMax = 12;
@@ -176,9 +192,11 @@ bool test_game_play_one_move() {
 }
 
 /**
- * The function main, will take the args to try each function previously created
- * It return an error case if no test was found (like by putting a false args or by not putting one)
- * else it try the args and return SUCCES if no bug was found or FAILURE + the good error case if a bug was found.
+ * @brief main fuction will call other functions to test bugs
+ *
+ * @param argv[1] wait for one of the fourth good parameter
+ * @return EXIT_FAILURE + an error message in case of error
+ * @return EXIT_SUCCESS if no bug was found
  */
 int main(int argc, char const *argv[]) {
   if (argc == 1) {
