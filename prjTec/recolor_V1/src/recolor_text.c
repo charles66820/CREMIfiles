@@ -66,6 +66,7 @@ int main(void) {
       game_restart(g);
       printGame(g);
     } else if (choice == 'q') {  // For quit game
+      printGame(g);
       printf("DOMMAGE\n");
       game_delete(g);
       exit(EXIT_SUCCESS);
