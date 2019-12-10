@@ -24,16 +24,20 @@ bool test_game_new(){
 
     game g1 = game_new(cells, 12);
     if (g1==NULL){                  //testing if g1 is a valid pointer
+        game_delete(g1);
         return false;
     }
     if (game_nb_moves_max(g1)!=12){ //testing if the number of max moves is the same as the one we entered
+        game_delete(g1);
         return false;
     }
     if (sizeof(cells)!=SIZE*SIZE*sizeof(int)){ //testing if the table is of the right size
+        game_delete(g1);
         return false;
     }
     for (int i=0; i<SIZE*SIZE; i+=1){ //testing if the cells of the game are the same as the ones of the table
         if (game_cell_current_color(g1,i%12,i/12)!=cells[i]){
+            game_delete(g1);
             return false;
         }
     }
@@ -45,14 +49,17 @@ bool test_game_new(){
 bool test_game_new_empty(){
     game g = game_new_empty();
     if (g==NULL){                  //testing if g1 is a valid pointer
+        game_delete(g);
         return false;
     }
     if (game_nb_moves_max(g)!=0){ //testing if the number of max moves is 0
+        game_delete(g);
         return false;
     }
     game_play_one_move(g, 0);
     for (int i=0; i<SIZE*SIZE; i++){ //testing if each cell of the game is equal to 0
         if (game_cell_current_color(g,i%12,i/12)!=0){
+            game_delete(g);
             return false;
         }
     }
@@ -79,11 +86,13 @@ bool test_game_set_cell_init(){
 
     game g1 = game_new(cells, 12);
     if (g1==NULL){                  //testing if g1 is a valid pointer
+        game_delete(g1);
         return false;
     }
     game_play_one_move(g1, 2);
     game_set_cell_init(g1,5,8,1);
     if (game_cell_current_color(g1,5,8)!=1){ //testing if the color of the cell has been changed
+        game_delete(g1);
         return false;
     }
     game_delete(g1);               //deleting g1 to free the memory
@@ -108,13 +117,16 @@ bool test_game_set_max_moves(){
 
     game g1 = game_new(cells, 12);
     if (g1==NULL){                  //testing if g1 is a valid pointer
+        game_delete(g1);
         return false;
     }
     game_set_max_moves(g1,14);
     if (g1==NULL){                  //testing if g1 is still a valid pointer after changing the number of max moves
+        game_delete(g1);
         return false;
     }
     if (game_nb_moves_max(g1)!=14){ //testing if the number of max moves is changed
+        game_delete(g1);
         return false;
     }
     game_delete(g1);               //deleting g1 to free the memory

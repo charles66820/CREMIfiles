@@ -159,11 +159,13 @@ bool test_game_play_one_move() {
   if (g == NULL) {
     fprintf(stderr, "Error : invalid new game \n");
     game_delete(g);
+    game_delete(gc);
     return false;
   }
   if (gc == NULL) {
     fprintf(stderr, "Error : invalid new game copy \n");
     game_delete(gc);
+    game_delete(g);
     return false;
   }
 

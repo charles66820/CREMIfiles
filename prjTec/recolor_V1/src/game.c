@@ -37,12 +37,14 @@ game game_new(color *cells, uint nb_moves_max) {
   g->tab = malloc((SIZE * SIZE) * sizeof(color));
   if (g->tab == NULL) {
     fprintf(stderr, "Not enough memory");
+    game_delete(g);
     exit(EXIT_FAILURE);
   }
 
   g->tab_init = malloc((SIZE * SIZE) * sizeof(color));
   if (g->tab_init == NULL) {
     fprintf(stderr, "Not enough memory");
+    game_delete(g);
     exit(EXIT_FAILURE);
   }
 
@@ -56,10 +58,16 @@ game game_new(color *cells, uint nb_moves_max) {
 
 game game_new_empty() {
   color *tab = (color *)malloc(SIZE * SIZE * sizeof(color));
+  if (tab == NULL){
+    exit(EXIT_FAILURE);
+  }
   for (int i = 0; i < SIZE * SIZE; i++) {
     tab[i] = 0;
   }
   game game_empty = (game)malloc(sizeof(game));
+  if (game_empty == NULL){
+    exit(EXIT_FAILURE);
+  }
   game_empty->tab = tab;
   game_empty->nb_moves_max = 0;
   game_empty->current_moves = 0;
@@ -79,6 +87,7 @@ game game_new_empty() {
 void game_set_cell_init(game g, uint x, uint y, color c) {
   if (g == NULL || c >= NB_COLORS || x >= g->size || y >= g->size) {
     fprintf(stderr, "Bad parameter");
+    if (g != NULL) game_delete(g);
     exit(EXIT_FAILURE);
   }
 
@@ -121,6 +130,7 @@ uint game_nb_moves_cur(cgame g) {
 void ff(game g, uint x, uint y, color tc, color c) {
   if (g == NULL || tc >= NB_COLORS || c >= NB_COLORS) {
     fprintf(stderr, "Bad parameter");
+    if (g != NULL) game_delete(g);
     exit(EXIT_FAILURE);
   }
 
@@ -148,6 +158,7 @@ void ff(game g, uint x, uint y, color tc, color c) {
 void game_play_one_move(game g, color c) {
   if (g == NULL || c >= NB_COLORS) {
     fprintf(stderr, "Bad parameter");
+    if (g != NULL) game_delete(g);
     exit(EXIT_FAILURE);
   }
 
@@ -169,6 +180,7 @@ game game_copy(cgame g) {
   game_copy->tab = malloc(SIZE * SIZE * sizeof(color));
   game_copy->tab_init = malloc(SIZE * SIZE * sizeof(color));
   if (game_copy->tab == NULL || game_copy->tab_init == NULL) {
+    game_delete(game_copy);
     exit(EXIT_FAILURE);
   }
   for (int i = 0; i < (g->size) * (g->size); i++) {
