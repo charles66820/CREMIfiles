@@ -1,4 +1,2 @@
 #include <stdlib.h>
-int main() {
-    while(1) malloc(1);
-}
+int main(){a:malloc(1);goto a;}
