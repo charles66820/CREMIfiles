@@ -61,9 +61,15 @@ Solution: 3 1 3 1 0 3 1 0 1 3 2 0
 typedef unsigned int uint;
 
 /**
- * @brief Different colors (red=0, green=1, blue=2 or yellow=3) used in the game
+ * @brief Different colors used in the game
  **/
-typedef enum color_e { RED, GREEN, BLUE, YELLOW, NB_COLORS } color;
+typedef uint color;
+
+#define RED 0
+#define GREEN 1      // deprecated
+#define BLUE 2       // deprecated
+#define YELLOW 3     // deprecated
+#define NB_COLORS 4  // deprecated
 
 /**
  * @brief The structure pointer that stores the game. To create a game, you can
@@ -195,5 +201,59 @@ bool game_is_over(cgame g);
  * @pre @p g is a valid pointer toward a game structure
  **/
 void game_restart(game g);
+
+///////////////////////// V2 /////////////////////////
+
+/**
+ * @brief Checks if the game is wrapping
+ * @return true, if the game is wrapping, false otherwise, false otherwise
+ * @pre @p g is a valid pointer toward a cgame structure
+ **/
+bool game_is_wrapping(cgame g);
+
+/**
+ * @brief Creates a new empty game having height rows and width
+ * columns. All the cells will have the default color (whose value is
+ * 0). The maximum number of moves is set to 0
+ * @param width the width of the grid
+ * @param height the height of the grid
+ * @param wrapping whether or not the game is wrapping
+ * @return the created game
+ * @pre @p width > 0
+ * @pre @p height > 0
+ **/
+game game_new_empty_ext(uint width, uint height, bool wrapping);
+
+/**
+ * @brief Creates a new game and initialize it in one call
+ * @param width the width of the grid
+ * @param height the height of the grid
+ * @param cells 1D array describing the color of each cell of the game. The
+ *storage is row by row
+ * @param wrapping whether or not the game is wrapping
+ * @return the created game
+ * @pre @p width > 0
+ * @pre @p height > 0
+ * @pre @p cells != NULL
+ * @pre @p nb_moves_max > 0
+ **/
+game game_new_ext(uint width, uint height, color *cells, uint nb_moves_max,
+                  bool wrapping);
+
+/**
+ * @brief Returns the number of rows on the grid
+ * @param game the game
+ * @return the height of the game
+ * @pre @p g is a valid pointer toward a cgame structure
+ **/
+uint game_height(cgame game);
+
+/**
+ * @brief Returns the number of columns on the game
+ * @param game the game
+ * @return the width of the game
+ * @pre @p g is a valid pointer toward a cgame structure
+ **/
+uint game_width(cgame game);
 
 #endif  // __GAME_H__
