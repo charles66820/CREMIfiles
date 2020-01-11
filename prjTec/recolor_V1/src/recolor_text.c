@@ -55,7 +55,7 @@ int main(void) {
 
   // Show the game for the first time
   printGame(g);
-
+  printf("\n");
   // Game loop
   while (!over) {
     int input = getchar();
@@ -65,6 +65,7 @@ int main(void) {
     if (choice == 'r') {  // For game restart
       game_restart(g);
       printGame(g);
+      printf("\n");
     } else if (choice == 'q') {  // For quit game
       printGame(g);
       printf("DOMMAGE\n");
@@ -74,6 +75,7 @@ int main(void) {
                charToInt(choice) < NB_COLORS) {  // For play shot
       game_play_one_move(g, (color)charToInt(choice));
       printGame(g);
+      printf("\n");
     }
 
     // If the game is lost

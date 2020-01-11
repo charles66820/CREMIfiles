@@ -1,19 +1,25 @@
 # repartition des fonctions de teste a coder
 
+## implémentation
 > Victor ANDRAULT
-game_copy
-game_new_empty
-game_cell_current_color
-game_is_over
+game_is_wrapping
+game_height
 
 > Arthur BLONDEAU
-game_delete
-game_nb_moves_max
-game_nb_moves_cur
-game_set_max_moves
+game_new_empty_ext
+game_width
 
 > Charles GOEDEFROIT
-game_play_one_move
-game_new
-game_restart
-game_set_cell_init
+game_new_ext
+
+## tests
+> Victor ANDRAULT
+test_game_is_wrapping
+test_game_height
+
+> Arthur BLONDEAU
+test_game_new_empty_ext
+test_game_width
+
+> Charles GOEDEFROIT
+test_game_new_ext

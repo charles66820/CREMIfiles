@@ -1,31 +1,31 @@
-# C'est la version minimal du cmake à utilisé
+# Minimal require version of CMake needed
 cmake_minimum_required (VERSION 2.6)
 
 option(ENABLE_DEBUG ON)
 
-# C'est le nom du projet et le langage de programmation utilisé
+# The project name followed by the programming language use
 project (recolor_text C)
 
-# Pour la compilation, -std=c99 pour compiler sous la norme c99, -g pour le debuggage, -Wall pour afficher les erreurs de compilation
+# for the compilation, -std=c99 to compile under the standard c99, -g for the debuggage, -Wall to show compilation bug, --coverage to check if all the test go in all the code
 if(ENABLE_DEBUG)
-    set(CMAKE_C_FLAGS "-g -Wall -std=c99")
+    set(CMAKE_C_FLAGS "-g -Wall -std=c99 --coverage") # mode debug
 else()
-    set(CMAKE_C_FLAGS "-O3 -std=c99") # -03 pour optimier la compilation
+    set(CMAKE_C_FLAGS "-O3 -std=c99") # mode -03 to optimise the compilation
 endif()
 
-
+include(CTest)
 enable_testing()
 
-# Implémentation des executables
-#   Création de la librairie game
+### Implementation of all executable
+# Creation of the library game
 add_library (game game.c game_io.c)
 target_link_libraries(game m)
 
-#   executable du jeu
+# executable of the game
 add_executable (recolor_text recolor_text.c)
 target_link_libraries (recolor_text game)
 
-#   executable des tests de bug
+# executable of the bug finder
 add_executable (test_game_arblondeau test_game_arblondeau.c)
 target_link_libraries (test_game_arblondeau game)
 
@@ -35,7 +35,7 @@ target_link_libraries (test_game_cgoedefroit game)
 add_executable (test_game_vandrault test_game_vandrault.c)
 target_link_libraries (test_game_vandrault game)
 
-# Permet de lancer les tests
+# Those line launch the test to find the bug
 add_test(test_vandrault test_game_vandrault new)
 add_test(test_vandrault test_game_vandrault new_empty)
 add_test(test_vandrault test_game_vandrault set_cell_init)

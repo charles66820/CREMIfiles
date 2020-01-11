@@ -26,7 +26,6 @@ bool test_game_nb_moves_max() {
   game g = game_new(cells, nbMax);
   if (g == NULL) {
     fprintf(stderr, "Error : invalid new game \n");
-    game_delete(g);
     return false;
   }
 
@@ -61,7 +60,6 @@ bool test_game_nb_moves_cur() {
   game g = game_new(cells, nbMax);
   if (g == NULL) {
     fprintf(stderr, "Error : invalid new game \n");
-    game_delete(g);
     return false;
   }
 
@@ -109,7 +107,6 @@ bool test_game_cell_current_color() {
   game g = game_new(cells, nbMax);
   if (g == NULL) {
     fprintf(stderr, "Error : invalid new game \n");
-    game_delete(g);
     return false;
   }
 
@@ -158,13 +155,11 @@ bool test_game_play_one_move() {
   game gc = game_copy(g);
   if (g == NULL) {
     fprintf(stderr, "Error : invalid new game \n");
-    game_delete(g);
     game_delete(gc);
     return false;
   }
   if (gc == NULL) {
     fprintf(stderr, "Error : invalid new game copy \n");
-    game_delete(gc);
     game_delete(g);
     return false;
   }
@@ -188,8 +183,88 @@ bool test_game_play_one_move() {
     game_delete(gc);
     return false;
   }
+
+  // test if current move has change
+  if (game_nb_moves_cur(g) != 1) {
+    fprintf(stderr, "Error: invalid game nb curent move!\n");
+    game_delete(g);
+    return false;
+  }
+
   game_delete(g);
   game_delete(gc);
+  return true;
+}
+
+/**
+ * @brief test if the play change the game properly
+ *
+ * @param cells tab of colors
+ * @param nb_moves_max number of max hit
+ * @param g is test if NULL
+ * @param width is test if NULL or less than 1
+ * @return false + an error message in case of error
+ * @return true if no bug was found
+ */
+bool test_game_width(){
+  uint nbMax = 12;
+  color cells[SIZE * SIZE] = {
+      0, 0, 0, 2, 0, 2, 1, 0, 1, 0, 3, 0, 0, 3, 3, 1, 1, 1, 1, 3, 2, 0, 1, 0,
+      1, 0, 1, 2, 3, 2, 3, 2, 0, 3, 3, 2, 2, 3, 1, 0, 3, 2, 1, 1, 1, 2, 2, 0,
+      2, 1, 2, 3, 3, 3, 3, 2, 0, 1, 0, 0, 0, 3, 3, 0, 1, 1, 2, 3, 3, 2, 1, 3,
+      1, 1, 2, 2, 2, 0, 0, 1, 3, 1, 1, 2, 1, 3, 1, 3, 1, 0, 1, 0, 1, 3, 3, 3,
+      0, 3, 0, 1, 0, 0, 2, 1, 1, 1, 3, 0, 1, 3, 1, 0, 0, 0, 3, 2, 3, 1, 0, 0,
+      1, 3, 3, 1, 1, 2, 2, 3, 2, 0, 0, 2, 2, 0, 2, 3, 0, 1, 1, 1, 2, 3, 0, 1};
+  game g = game_new(cells, nbMax);
+  if (g == NULL){
+    fprintf(stderr, "Error : invalid new game \n");
+    return false;
+  }
+  if (game_width(g) < 1){
+    fprintf(stderr, "g->width is an invalid parameter.\n");
+    game_delete(g);
+    return false;
+  }
+  return true;
+}
+
+/**
+ * @brief test if the play change the game properly
+ *
+ * @param cells tab of colors
+ * @param nb_moves_max number of max hit
+ * @param g is test if NULL
+ * @param width is test if NULL or less than 1
+ * @param height is test if NULL or less than 1
+ * @param wrapping is test if NULL
+ * @return false + an error message in case of error
+ * @return true if no bug was found
+ */
+bool test_game_new_empty_ext(){
+  uint nbMax = 12;
+  color cells[SIZE * SIZE] = {
+      0, 0, 0, 2, 0, 2, 1, 0, 1, 0, 3, 0, 0, 3, 3, 1, 1, 1, 1, 3, 2, 0, 1, 0,
+      1, 0, 1, 2, 3, 2, 3, 2, 0, 3, 3, 2, 2, 3, 1, 0, 3, 2, 1, 1, 1, 2, 2, 0,
+      2, 1, 2, 3, 3, 3, 3, 2, 0, 1, 0, 0, 0, 3, 3, 0, 1, 1, 2, 3, 3, 2, 1, 3,
+      1, 1, 2, 2, 2, 0, 0, 1, 3, 1, 1, 2, 1, 3, 1, 3, 1, 0, 1, 0, 1, 3, 3, 3,
+      0, 3, 0, 1, 0, 0, 2, 1, 1, 1, 3, 0, 1, 3, 1, 0, 0, 0, 3, 2, 3, 1, 0, 0,
+      1, 3, 3, 1, 1, 2, 2, 3, 2, 0, 0, 2, 2, 0, 2, 3, 0, 1, 1, 1, 2, 3, 0, 1};
+  game g = game_new(cells, nbMax);
+  if (g == NULL){
+    fprintf(stderr, "Error : invalid new game \n");
+    return false;
+  }
+  test_game_width();
+  if (game_height(g) < 1){
+    fprintf(stderr, "g->height is an invalid parameter.\n");
+    game_delete(g);
+    return false;
+  }
+  if (game_is_wrapping(g) != true && game_is_wrapping(g) != false){
+    fprintf(stderr, "g->wrapping is an invalid parameter.\n");
+    game_delete(g);
+    return false;
+  }
   return true;
 }
 
@@ -216,6 +291,10 @@ int main(int argc, char const *argv[]) {
     ok = test_game_cell_current_color();
   else if (!strcmp(argv[1], "game_play_one_move"))
     ok = test_game_play_one_move();
+  else if (!strcmp(argv[1], "game_width"))
+    ok = test_game_width();
+  else if (!strcmp(argv[1], "game_new_empty_ext"))
+    ok = test_game_new_empty_ext();
   else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
     exit(EXIT_FAILURE);
