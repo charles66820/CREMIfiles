@@ -1,5 +1,0 @@
-avant de commencer à travailler compiler la bibliotèque Images en faisant dans
-une fenêtre terminal et dans le répertoire Zones les deux commandes suivantes:
-
-ocamlc -c images.mli
-ocamlc -c images.ml
