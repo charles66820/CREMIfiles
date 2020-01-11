@@ -23,68 +23,16 @@ struct game_s {
  * @pre @p nb_moves_max > 0
  */
 game game_new(color *cells, uint nb_moves_max) {
-  if (cells == NULL || nb_moves_max <= 0) {
-    fprintf(stderr, "Invalid parameter");
-    exit(EXIT_FAILURE);
-  }
-
-  game g = malloc(sizeof(struct game_s));
-  if (g == NULL) {
-    fprintf(stderr, "Not enough memory");
-    exit(EXIT_FAILURE);
-  }
-
-  g->nb_moves_max = nb_moves_max;
-  g->current_moves = 0;
-  g->width = SIZE;
-  g->height = SIZE;
-  g->wrapping = false;
-
-  g->tab = malloc((g->width * g->height) * sizeof(color));
-  if (g->tab == NULL) {
-    fprintf(stderr, "Not enough memory");
-    game_delete(g);
-    exit(EXIT_FAILURE);
-  }
-
-  g->tab_init = malloc((g->width * g->height) * sizeof(color));
-  if (g->tab_init == NULL) {
-    fprintf(stderr, "Not enough memory");
-    game_delete(g);
-    exit(EXIT_FAILURE);
-  }
-
-  for (uint i = 0; i < g->width * g->height; i++) {
-    g->tab[i] = cells[i];
-    g->tab_init[i] = cells[i];
-  }
-
-  return g;
+  return game_new_ext(SIZE, SIZE, cells, nb_moves_max, false);
 }
 
+/**
+ * @brief create new empty game
+ *
+ * @return game new empty game
+ */
 game game_new_empty() {
-  game game_empty = (game)malloc(sizeof(game));
-  if (game_empty == NULL) {
-    exit(EXIT_FAILURE);
-  }
-  game_empty->width = SIZE;
-  game_empty->height = SIZE;
-
-  color *tab =
-      (color *)malloc(game_empty->width * game_empty->height * sizeof(color));
-  if (tab == NULL) {
-    exit(EXIT_FAILURE);
-  }
-  for (int i = 0; i < game_empty->width * game_empty->height; i++) {
-    tab[i] = 0;
-  }
-
-  game_empty->tab = tab;
-  game_empty->nb_moves_max = 0;
-  game_empty->current_moves = 0;
-  game_empty->tab_init = tab;
-  game_empty->wrapping = false;
-  return game_empty;
+  return game_new_empty_ext(SIZE, SIZE, false);
 }
 
 /**
@@ -94,6 +42,10 @@ game game_new_empty() {
  * @param x coordinate x
  * @param y coordinate y
  * @param c new color
+ * @pre @p g != NULL
+ * @pre @p x >= 0
+ * @pre @p y >= 0
+ * @pre @p c > 0 && c < NB_COLORS
  */
 void game_set_cell_init(game g, uint x, uint y, color c) {
   if (g == NULL || c >= NB_COLORS || x >= g->width || y >= g->height) {
@@ -106,7 +58,7 @@ void game_set_cell_init(game g, uint x, uint y, color c) {
   g->tab_init[(y * g->width) + x] = c;
 }
 
-/**heigwidthht
+/**
  * @brief Set the maximum amount of move
  *
  * @param g The data of the game
@@ -178,6 +130,11 @@ uint game_nb_moves_cur(cgame g) {
  * @param y ordinate
  * @param tc target color
  * @param c color
+ * @pre @p g != NULL
+ * @pre @p x >= 0
+ * @pre @p y >= 0
+ * @pre @p tc > 0 && tc < NB_COLORS
+ * @pre @p c > 0 && c < NB_COLORS
  */
 void ff(game g, uint x, uint y, color tc, color c) {
   if (g == NULL || tc >= NB_COLORS || c >= NB_COLORS) {
@@ -216,6 +173,8 @@ void ff(game g, uint x, uint y, color tc, color c) {
  *
  * @param g game to play one move
  * @param c color played
+ * @pre @p g != NULL
+ * @pre @p c > 0 && c < NB_COLORS
  */
 void game_play_one_move(game g, color c) {
   if (g == NULL || c >= NB_COLORS) {
@@ -231,6 +190,13 @@ void game_play_one_move(game g, color c) {
   }
 }
 
+/**
+ * @brief copy game in parameter
+ *
+ * @param g game for copy
+ * @return game new game copy from game in parameter
+ * @pre @p g != NULL
+ */
 game game_copy(cgame g) {
   if (g == NULL || g->tab == NULL || g->tab_init == NULL) {
     exit(EXIT_FAILURE);
@@ -275,6 +241,7 @@ void game_delete(game g) {
  *
  * @param g The data of the game
  * @return a boolean, false if game is over, true otherwise
+ * @pre @p g != NULL
  */
 bool game_is_over(cgame g) {
   if (g == NULL) {
@@ -297,6 +264,7 @@ bool game_is_over(cgame g) {
  * @brief Reinit game
  *
  * @param g game for restart
+ * @pre @p g != NULL
  */
 void game_restart(game g) {
   if (g == NULL) {
@@ -322,6 +290,7 @@ void game_restart(game g) {
  * @return the created game
  * @pre @p width > 0
  * @pre @p height > 0
+ * @pre @p wrapping == false || true
  **/
 game game_new_empty_ext(uint width, uint height, bool wrapping) {
   if (width < 1 || height < 1) {
@@ -367,6 +336,7 @@ uint game_width(cgame game) {
  * @pre @p height > 0
  * @pre @p cells != NULL
  * @pre @p nb_moves_max > 0
+ * @pre @p wrapping == false || true
  **/
 game game_new_ext(uint width, uint height, color *cells, uint nb_moves_max,
                   bool wrapping) {
