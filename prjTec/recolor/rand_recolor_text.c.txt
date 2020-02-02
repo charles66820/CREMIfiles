@@ -9,12 +9,7 @@ for (int i = 0; i < SIZE * SIZE; i++) {
     cells[i] = rand() % NB_COLORS;
 }
 
-
-// V1
-game g = game_new_empty(); // crée une partie vide
-for (int y = 0; y < SIZE; y++) {
-    for (int x = 0; x < SIZE; x++) {
-        int color = rand()%NB_COLORS;
-        game_set_cell_init(g, x, y, color); // defini la coule d'une case
-    }
+// for run program in program
+else if (choice == 'c') {  // Run bin for create new game
+    system(argv[0]);
 }
