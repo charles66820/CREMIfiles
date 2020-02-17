@@ -1,7 +1,10 @@
+# TP 01
+
 ## 1 Interfaces réseau et Adresse IP
 
 - Résultat de la command `ifconfig` :
-  ```
+
+  ```bash
   eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 9000
           inet 10.0.206.15  netmask 255.255.255.0  broadcast 10.0.206.255
           inet6 fe80::da9e:f3ff:fe10:a82a  prefixlen 64  scopeid 0x20<link>
@@ -24,7 +27,8 @@
   ```
 
 - resultat de la commande `ipcalc 10.0.206.16/24` :
-  ```
+
+  ```bash
   Address:   10.0.206.16          00001010.00000000.11001110. 00010000
   Netmask:   255.255.255.0 = 24   11111111.11111111.11111111. 00000000
   Wildcard:  0.0.0.255            00000000.00000000.00000000. 11111111
@@ -40,25 +44,28 @@
 
 - Le MTU c'est la tailles maximales des paquets il est limiter à 9000 pour eth0 car 'est la limitation du réseau. Et il est à 65536 pour lo car'est la taille maximum possible pour notre machine local.
 
-
 - `ping -4 10.0.206.16` et `ping -6 2001:660:6101:800:206::16` fonctionne et me retourne un temps de latance.
 
 ## 2 Netcat & Netstat
+
 - résultat de la commande `ss -Ainet -a | grep 12345` :
-    ```
+
+    ```bash
     cgoedefroit@dwar:~$ ss -Ainet -a | grep 12345
     tcp    LISTEN     0      128     *:12345                 *:*
     tcp    LISTEN     0      128    :::12345                 :::*
     ```
 
-
 - résultat de la commande `ss -Ainet -ap | grep 12345` :
-  ```
+
+  ```bash
   tcp    LISTEN     0      128     *:12345                 *:*                     users:(("nc",pid=21787,fd=4))
   tcp    LISTEN     0      128    :::12345                 :::*                     users:(("nc",pid=21787,fd=3))
   ```
+
 - lors ce que la connexion est établie la command `ss -Ainet -ap | grep 12345` nous permet de voire cette connexion.
-  ```
+
+  ```bash
   tcp    LISTEN     0      128     *:12345                 *:*
   tcp    ESTAB      0      0      10.0.206.15:35616        10.0.206.16:12345
   tcp    LISTEN     0      128    :::12345                 :::*
@@ -73,14 +80,17 @@
 - **xeyes** s'erxecute sur la machine distante l'option -X permet de faire du X11 forwarding pour que le rendu graphic ce face sur notre machine local. -Y existe égalemnt est est plus récent.
 
 ## 4 Configuration d’un réseau local
+
 - je me suis bien connecté en root
 
 - j'utilise la command `ifconfig -a -s` pour voir les interfaces réseaux :
-  ```
+
+  ```bash
   Iface      MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
   eth0      1500        0      0      0 0             0      0      0      0 BM
   lo       65536      896      0      0 0           896      0      0      0 LRU
   ```
+
 - ce réseau à
   - pour adresse : 192.168.0.0
   - pour masque : 255.255.255.0 (/24)
@@ -96,7 +106,8 @@
 - J'ai les machine sont bien configurée et dans le même réseau, elles peuve toute ce ping entre elles. La commande ping utilise le protocole **icmp**.
 
 - Lors ce que sur la machine opeth le lanche tcpdump sur l'interface eth0 (`tcpdump -i eth0`) et que je ping avec la machine immortal (`ping -c 4 192.168.0.4`) on vois le fonctionnement de la command ping notamant qu'il utilise le protocole ICMP. On vois si c'est une requête ou une réponce, la taille du pacquet, l'adresse source et l'adresse destination...
-  ```
+
+  ```bash
   [ 1995.801415] device eth0 entered promiscuous mode
   16:45:07.868220 IP 192.168.0.1 > 192.168.0.4: ICMP echo request, id 1363, seq 1, length 64
   16:45:07.868233 IP 192.168.0.4 > 192.168.0.1: ICMP echo reply, id 1363, seq 1, length 64
@@ -115,28 +126,35 @@ Lors ce que j'executer la commande `sysctl net.ipv4.icmp_echo_ignore_broadcasts=
 
 - La configuration des l'interfaces est :
   - immortal :
-    ```
+
+    ```bash
     auto eth0
     iface eth0 inet static
         address 192.168.0.1
         netmask 255.255.255.0
     ```
+
   - grave :
-    ```
+
+    ```bash
     auto eth0
     iface eth0 inet static
         address 192.168.0.2
         netmask 255.255.255.0
     ```
+
   - syl :
-    ```
+
+    ```bash
     auto eth0
     iface eth0 inet static
         address 192.168.0.3
         netmask 255.255.255.0
     ```
+
   - opeth :
-    ```
+
+    ```bash
     auto eth0
     iface eth0 inet static
         address 192.168.0.4
@@ -145,28 +163,41 @@ Lors ce que j'executer la commande `sysctl net.ipv4.icmp_echo_ignore_broadcasts=
 
 - J'ai fermer ma session QemuNet aprés avoir configurer les machine en IPv6.
 
-- Configuration des machine en IPv6 :
+- Configuration des machines en IPv6 (Bonus) :
   - immortal :
-    ```
+
+    ```bash
     iface eth0 inet6 static
         address 2001:db8::1
         netmask 48
     ```
+
   - grave :
-    ```
+
+    ```bash
     iface eth0 inet6 static
         address 2001:db8::2
         netmask 48
     ```
+
   - syl :
-    ```
+
+    ```bash
     iface eth0 inet6 static
         address 2001:db8::3
         netmask 48
     ```
+
   - opeth :
-    ```
+
+    ```bash
     iface eth0 inet6 static
         address 2001:db8::4
         netmask 48
     ```
+
+- Configuration des machines avec la commande `ip` :
+  - immortal : ip a flush dev eth0 && ip a a 192.168.0.1/24 brd + dev eth0
+  - grave : ip a flush dev eth0 && ip a a 192.168.0.2/24 brd + dev eth0
+  - syl : ip a flush dev eth0 && ip a a 192.168.0.3/24 brd + dev eth0
+  - opeth : ip a flush dev eth0 && ip a a 192.168.0.4/24 brd + dev eth0
