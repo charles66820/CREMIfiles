@@ -66,3 +66,7 @@
   ```
 
 - 
+
+`cat /etc/services | grep nfs`
+nfs             2049/tcp                        # Network File System
+nfs             2049/udp                        # Network File System
