@@ -197,7 +197,7 @@ Lors ce que j'executer la commande `sysctl net.ipv4.icmp_echo_ignore_broadcasts=
     ```
 
 - Configuration des machines avec la commande `ip` :
-  - immortal : ip a flush dev eth0 && ip a a 192.168.0.1/24 brd + dev eth0
-  - grave : ip a flush dev eth0 && ip a a 192.168.0.2/24 brd + dev eth0
-  - syl : ip a flush dev eth0 && ip a a 192.168.0.3/24 brd + dev eth0
-  - opeth : ip a flush dev eth0 && ip a a 192.168.0.4/24 brd + dev eth0
+  - immortal : `ip a flush dev eth0 && ip a a 192.168.0.1/24 brd + dev eth0`
+  - grave : `ip a flush dev eth0 && ip a a 192.168.0.2/24 brd + dev eth0`
+  - syl : `ip a flush dev eth0 && ip a a 192.168.0.3/24 brd + dev eth0`
+  - opeth : `ip a flush dev eth0 && ip a a 192.168.0.4/24 brd + dev eth0`
