@@ -63,21 +63,29 @@ def Consecutifs(t):
 # On donne la liste pour éviter de la calculer une fois pour chaque k
 def CompteConsecutifs(L,k):
   seq = ToutesSequencesBinaires(k)
-  seqlen = len(seq)
-  res = 0;
-  for i in range(0, seqlen):
+  res = 0
+  for i in range(0, len(seq)):
     x = Consecutifs(seq[i])
-    if x == L:
-      if res < seqlen/2:
+    if x >= L:
         res += 1
   return res
+
+print (CompteConsecutifs(3,4)) # donne 3 car 1110 et 0111 et 1111
 
 # Pour chaque valeur k de 1 à m: affiche combien de séquences binaires
 # de longueur n ont au moins k 1 consécutifs
 def Comptages(n,m):
   for k in range(1, m):
-    print("On trouve", CompteConsecutifs(n, k), "séquences binaires consécutive de 1 de longeur", n, "pour la valeur", k)
-Comptages(3,20)
+    seq = ToutesSequencesBinaires(k)
+    res = 0
+    for i in range(0, len(seq)):
+      x = Consecutifs(seq[i])
+      if x == n:
+        res += 1
+    print("On trouve", res, "séquences binaires consécutive de 1 de longeur", n, "pour la valeur", k)
+
+Comptages(3,20) # donne 2 pour le 4 (n=3,k=4) car 1110 et 0111
+
 # Version récursive de ToutesSequencesBinaires
 def ToutesSequencesBinairesRec(n):
     def aux(v):
