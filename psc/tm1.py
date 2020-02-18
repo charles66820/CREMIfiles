@@ -14,47 +14,44 @@
 # (il faut que python arrive à trier... pas des choses trop inhomogènes donc)
 # Des listes ou tuples d'entiers sont triés dans l'ordre lexicographique
 def TousDifferents(L):
-    LL = sorted(L)
-    m = len(LL)
-    for i in range(m-1):
-        if LL[i]==LL[i+1]:
-            return False
+  LL = sorted(L)
+  m = len(LL)
+  for i in range(m-1):
+    if LL[i]==LL[i+1]:
+      return False
     return True
 
 # Exercice 1
-
 def EntierVersBinaire(k,n):
-    if n >= 2**k:
-        return None
-    def aux(k, n, acc):
-        if k <= 0:
-            return acc
-        if n - (2**(k-1)) >= 0 and n > 0:
-            return aux(k-1, n - 2**(k-1), acc + (1,))
-        else:
-            return aux(k-1, n, acc + (0,))
-    return aux(k, n, ())
+  if n >= 2**k:
+    return None
+  def aux(k, n, acc):
+    if k <= 0:
+      return acc
+    if n - (2**(k-1)) >= 0 and n > 0:
+      return aux(k-1, n - 2**(k-1), acc + (1,))
+    return aux(k-1, n, acc + (0,))
+  return aux(k, n, ())
 
 def BinaireVersEntier(t):
-    def aux(k, t, acc):
-        if t == ():
-            return acc
-        return aux(k-1, t[1:], acc + (t[0] * 2**k))
-
-    return aux(len(t)-1, t, 0)
+  def aux(k, t, acc):
+    if t == ():
+      return acc
+    return aux(k-1, t[1:], acc + (t[0] * 2**k))
+  return aux(len(t)-1, t, 0)
 
 def ToutesSequencesBinaires(k):
-    acc = ()
-    for v in range(2**k-1, 0, -1):
-        acc += (EntierVersBinaire(k, v),)
-    return acc
+  acc = ()
+  for v in range(2**k-1, 0, -1):
+    acc += (EntierVersBinaire(k, v),)
+  return acc
 
 def Consecutifs(t):
   def aux(t, tc, mc):
     if t == ():
       return mc
     if t[0] == 1:
-      if tc+1 > mc :
+      if tc+1 > mc:
         return aux(t[1:], tc+1, tc+1)
       else:
         return aux(t[1:], tc+1, mc)
@@ -65,23 +62,22 @@ def Consecutifs(t):
 # Nombre de séquences sans k 1 consecutifs
 # On donne la liste pour éviter de la calculer une fois pour chaque k
 def CompteConsecutifs(L,k):
-    seq = ToutesSequencesBinaires(k)
-    seqlen = len(seq)
-    res = 0;
-    for i in range(0, seqlen):
-        x = Consecutifs(seq[i])
-        if x == L:
-            if res < seqlen/2:
-                res += 1
-    return res
-
+  seq = ToutesSequencesBinaires(k)
+  seqlen = len(seq)
+  res = 0;
+  for i in range(0, seqlen):
+    x = Consecutifs(seq[i])
+    if x == L:
+      if res < seqlen/2:
+        res += 1
+  return res
 
 # Pour chaque valeur k de 1 à m: affiche combien de séquences binaires
 # de longueur n ont au moins k 1 consécutifs
 def Comptages(n,m):
-    for k in range(1, m):
-        print("On trouve", CompteConsecutifs(n, k), "séquences binaires consécutive de 1 de longeur", n, "pour la valeur", k)
-Comptages(3,20)# TODO: test
+  for k in range(1, m):
+    print("On trouve", CompteConsecutifs(n, k), "séquences binaires consécutive de 1 de longeur", n, "pour la valeur", k)
+Comptages(3,20)
 # Version récursive de ToutesSequencesBinaires
 def ToutesSequencesBinairesRec(n):
     def aux(v):
