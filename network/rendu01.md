@@ -2,7 +2,7 @@
 
 ## 1 Interfaces réseau et Adresse IP
 
-- Résultat de la command `ifconfig` :
+- Résultat de la commande `ifconfig` :
 
   ```bash
   eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 9000
@@ -26,7 +26,7 @@
           TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
   ```
 
-- resultat de la commande `ipcalc 10.0.206.16/24` :
+- Résultat de la commande `ipcalc 10.0.206.16/24` :
 
   ```bash
   Address:   10.0.206.16          00001010.00000000.11001110. 00010000
@@ -40,15 +40,15 @@
   Hosts/Net: 254                   Class A, Private Internet
   ```
 
-- L'interface lo c'est l'interface loopback cette interface correspond à notre propre machine.
+- L'interface `lo` c'est l'interface loopback cette interface correspond à notre propre machine.
 
-- Le MTU c'est la tailles maximales des paquets il est limiter à 9000 pour eth0 car 'est la limitation du réseau. Et il est à 65536 pour lo car'est la taille maximum possible pour notre machine local.
+- Le MTU c'est la taille maximale des paquets, il est limité à 9000 pour eth0 car c'est la limitation du réseau. Et il est à 65536 pour lo car c'est la taille maximum possible pour notre machine locale.
 
-- `ping -4 10.0.206.16` et `ping -6 2001:660:6101:800:206::16` fonctionne et me retourne un temps de latance.
+- `ping -4 10.0.206.16` et `ping -6 2001:660:6101:800:206::16` fonctionne et retourne un temps de latence.
 
 ## 2 Netcat & Netstat
 
-- résultat de la commande `ss -Ainet -a | grep 12345` :
+- Résultat de la commande `ss -Ainet -a | grep 12345` :
 
     ```bash
     cgoedefroit@dwar:~$ ss -Ainet -a | grep 12345
@@ -56,14 +56,14 @@
     tcp    LISTEN     0      128    :::12345                 :::*
     ```
 
-- résultat de la commande `ss -Ainet -ap | grep 12345` :
+- Résultat de la commande `ss -Ainet -ap | grep 12345` :
 
   ```bash
   tcp    LISTEN     0      128     *:12345                 *:*                     users:(("nc",pid=21787,fd=4))
   tcp    LISTEN     0      128    :::12345                 :::*                     users:(("nc",pid=21787,fd=3))
   ```
 
-- lors ce que la connexion est établie la command `ss -Ainet -ap | grep 12345` nous permet de voire cette connexion.
+- Lorsque la connexion est établie la commande `ss -Ainet -ap | grep 12345` nous permet de voir cette connexion :
 
   ```bash
   tcp    LISTEN     0      128     *:12345                 *:*
@@ -71,19 +71,19 @@
   tcp    LISTEN     0      128    :::12345                 :::*
   ```
 
-- Quand on tape des lignes de code d'un des deux côté ces lignes son bien transmis de l'autre côté.
+- Quand on tape des lignes de code d'un des deux côté ces lignes sont bien transmis de l'autre côté.
 
-- Si on met --send-only du côté de l'émetteur on ne resois plus ce qeu le reseveur envois
+- Si on met `--send-only` du côté de *l'émetteur* on ne reçoit plus ce que *le receveur* envoit.
 
 ## 3 Connexion à une machine distante avec SSH
 
-- **xeyes** s'erxecute sur la machine distante l'option -X permet de faire du X11 forwarding pour que le rendu graphic ce face sur notre machine local. -Y existe égalemnt est est plus récent.
+- **xeyes** s'exécute sur la machine distante l'option -X permet de faire du X11 forwarding pour que le rendu graphique se fasse sur notre machine local. -Y existe également et elle est plus récente.
 
 ## 4 Configuration d’un réseau local
 
-- je me suis bien connecté en root
+- Je me suis bien connecté en root.
 
-- j'utilise la command `ifconfig -a -s` pour voir les interfaces réseaux :
+- J'utilise la commande `ifconfig -a -s` pour voir les interfaces réseaux de ma machine :
 
   ```bash
   Iface      MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
@@ -91,21 +91,21 @@
   lo       65536      896      0      0 0           896      0      0      0 LRU
   ```
 
-- ce réseau à
+- Ce réseau a
   - pour adresse : 192.168.0.0
   - pour masque : 255.255.255.0 (/24)
   - pour plage d'adresse de 192.168.0.1 à 192.168.0.254
   - pour adresse de broadcast 192.168.0.255
 
-- J'ai configurée immortal avec la command suivant `ifconfig eth0 192.168.0.1/24` puis les 3 autre machine avec les ip suivant :
+- J'ai configuré la VM immortal avec la commande `ifconfig eth0 192.168.0.1/24` puis les 3 autres VMs avec les ip suivantes :
   - immortal : 192.168.0.1/24
   - grave : 192.168.0.2/24
   - syl : 192.168.0.3/24
   - opeth : 192.168.0.4/24
 
-- J'ai les machine sont bien configurée et dans le même réseau, elles peuve toute ce ping entre elles. La commande ping utilise le protocole **icmp**.
+- Les VMs sont bien configurées et elles sont dans le même réseau. Elles peuvent toutes communiquer entre elles (avec `ping` par exemple). La commande `ping` utilise le protocole **icmp**.
 
-- Lors ce que sur la machine opeth le lanche tcpdump sur l'interface eth0 (`tcpdump -i eth0`) et que je ping avec la machine immortal (`ping -c 4 192.168.0.4`) on vois le fonctionnement de la command ping notamant qu'il utilise le protocole ICMP. On vois si c'est une requête ou une réponce, la taille du pacquet, l'adresse source et l'adresse destination...
+- Lorsque je lance `tcpdump` sur l'interface eth0 de la VM opeth (`tcpdump -i eth0`) et que je la ping avec la VM immortal (`ping -c 4 192.168.0.4`) on voit le fonctionnement de la commande `ping` notamant qu'elle utilise le protocole ICMP. On voit également si c'est une requête ou une réponse, la taille du paquet, l'adresse source et l'adresse destination...
 
   ```bash
   [ 1995.801415] device eth0 entered promiscuous mode
@@ -121,10 +121,10 @@
   16:45:12.872061 ARP, Reply 192.168.0.1 is-at aa:aa:aa:aa:00:00 (oui Unknown), length 46
   ```
 
-- La machine où est exécuter la commande `ping -c 4 -b 192.168.0.255` envois un packet ICMP à toute les autre. Les autre machine resoive le packet parcontre elle ne réponde pas.
-Lors ce que j'executer la commande `sysctl net.ipv4.icmp_echo_ignore_broadcasts=0` sur des machines elles répnde au ping en broadcast. Si plusieur machine réponde un `(DUP!)` apparée a la fin.
+- La VM où est exécutée la commande `ping -c 4 -b 192.168.0.255` envoit un paquet ICMP à toutes les autres (en broadcast). Les autres VMs reçoivent le paquet par contre elles ne répondent pas.
+Lorsque j'exécutais la commande `sysctl net.ipv4.icmp_echo_ignore_broadcasts=0` sur des VMs elles répondent au ping en broadcast. Si plusieurs VMs répondent un `(DUP!)` apparé à la fin des réponses.
 
-- La configuration des l'interfaces est :
+- La configuration de l'interface des VMs sont :
   - immortal :
 
     ```bash
@@ -161,9 +161,9 @@ Lors ce que j'executer la commande `sysctl net.ipv4.icmp_echo_ignore_broadcasts=
         netmask 255.255.255.0
     ```
 
-- J'ai fermer ma session QemuNet aprés avoir configurer les machine en IPv6.
+- J'ai fermé ma session QemuNet après avoir configuré les VMs en IPv6.
 
-- Configuration des machines en IPv6 (Bonus) :
+- Configuration des VMs en IPv6 (Bonus) :
   - immortal :
 
     ```bash
@@ -196,7 +196,7 @@ Lors ce que j'executer la commande `sysctl net.ipv4.icmp_echo_ignore_broadcasts=
         netmask 48
     ```
 
-- Configuration des machines avec la commande `ip` :
+- Configuration des VMs avec la commande `ip` (Bonus) :
   - immortal : `ip a flush dev eth0 && ip a a 192.168.0.1/24 brd + dev eth0`
   - grave : `ip a flush dev eth0 && ip a a 192.168.0.2/24 brd + dev eth0`
   - syl : `ip a flush dev eth0 && ip a a 192.168.0.3/24 brd + dev eth0`
