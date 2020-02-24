@@ -4,27 +4,27 @@
 
 - Lorsque je tape la commande `arp -n` j'obtiens bien l'adresse MAC du routeur :
 
-  ```bash
-  Address                  HWtype  HWaddress           Flags Mask            Iface
-  10.0.206.254             ether   58:20:b1:b1:23:00   C                     eth0
-  ```
+```bash
+Address          HWtype  HWaddress           Flags Mask      Iface
+10.0.206.254     ether   58:20:b1:b1:23:00   C               eth0
+```
 
 - Lorsque j'effectue un ping vers la machine de mon voisin, je constate bien que son adresse MAC est dans ma table ARP :
 
-    ```bash
-    Address                  HWtype  HWaddress           Flags Mask            Iface
-    10.0.206.6               ether   d8:9e:f3:10:4a:1c   C                     eth0
-    10.0.206.254             ether   58:20:b1:b1:23:00   C                     eth0
-    ```
+```bash
+Address          HWtype  HWaddress           Flags Mask      Iface
+10.0.206.6       ether   d8:9e:f3:10:4a:1c   C               eth0
+10.0.206.254     ether   58:20:b1:b1:23:00   C               eth0
+```
 
 - Je constate bien que la commande `ip neigh ls` affiche la même chose que la commande `arp -n` et affiche en plus les adresses ipv6 :
 
-  ```bash
-  10.0.206.6 dev eth0 lladdr d8:9e:f3:10:4a:1c STALE
-  10.0.206.254 dev eth0 lladdr 58:20:b1:b1:23:00 REACHABLE
-  2001:660:6101:800:206::ffff dev eth0 lladdr 58:20:b1:b1:23:00 router STALE
-  fe80::5a20:b1ff:feb1:2300 dev eth0 lladdr 58:20:b1:b1:23:00 router STALE
-  ```
+```bash
+10.0.206.6 dev eth0 lladdr d8:9e:f3:10:4a:1c STALE
+10.0.206.254 dev eth0 lladdr 58:20:b1:b1:23:00 REACHABLE
+2001:660:6101:800:206::ffff dev eth0 lladdr 58:20:b1:b1:23:00 router STALE
+fe80::5a20:b1ff:feb1:2300 dev eth0 lladdr 58:20:b1:b1:23:00 router STALE
+```
 
 - Leurs adresses MAC n'apparaissent pas dans la table ARP car ces 2 adresses ne sont pas dans mon réseau local.
 
@@ -36,20 +36,20 @@
 
 - Il y a plusieurs adresses IP car il y a plusieurs serveurs. Le résultat est différent car ça dépend de quel serveur répond en premier.
 
-  ```bash
-  yahoo.com has address 72.30.35.10
-  yahoo.com has address 98.137.246.7
-  yahoo.com has address 98.137.246.8
-  yahoo.com has address 98.138.219.231
-  yahoo.com has address 98.138.219.232
-  yahoo.com has address 72.30.35.9
-  yahoo.com has IPv6 address 2001:4998:58:1836::11
-  yahoo.com has IPv6 address 2001:4998:c:1023::4
-  yahoo.com has IPv6 address 2001:4998:c:1023::5
-  yahoo.com has IPv6 address 2001:4998:44:41d::3
-  yahoo.com has IPv6 address 2001:4998:44:41d::4
-  yahoo.com has IPv6 address 2001:4998:58:1836::10
-  ```
+```bash
+yahoo.com has address 72.30.35.10
+yahoo.com has address 98.137.246.7
+yahoo.com has address 98.137.246.8
+yahoo.com has address 98.138.219.231
+yahoo.com has address 98.138.219.232
+yahoo.com has address 72.30.35.9
+yahoo.com has IPv6 address 2001:4998:58:1836::11
+yahoo.com has IPv6 address 2001:4998:c:1023::4
+yahoo.com has IPv6 address 2001:4998:c:1023::5
+yahoo.com has IPv6 address 2001:4998:44:41d::3
+yahoo.com has IPv6 address 2001:4998:44:41d::4
+yahoo.com has IPv6 address 2001:4998:58:1836::10
+```
 
 - ✓
 
@@ -57,23 +57,27 @@
 
 - Il y a plusieurs serveurs pour s'adapter au nombre d'utilisateurs et également en cas de problèmes il y a des serveurs de secours. Le numéro de port est le 389 (636 pour ldpa en SSL). J'obtiens ces ports avec la commande `cat /etc/services | grep ldap` :
 
-  ```bash
-  ldap    389/tcp    # Lightweight Directory Access Protocol
-  ldap    389/udp
-  ldaps   636/tcp    # LDAP over SSL
-  ldaps   636/udp
-  ```
+```bash
+ldap    389/tcp    # Lightweight Directory Access Protocol
+ldap    389/udp
+ldaps   636/tcp    # LDAP over SSL
+ldaps   636/udp
+```
 
 - Le résultat de la commande `df ~` est :
 
-  ```bash
-  Filesystem            1K-blocks   Used Available Use% Mounted on
-  unityaccount:/account   4194304 773632   3420672  19% /autofs/unityaccount/cremi
-  ```
+```bash
+Filesystem          1K-blocks   Used Available Use% Mounted on
+unityaccount:/account 4194304 773632   3420672  19% /autofs/unityaccount
+/cremi
+```
 
-  `cat /etc/services | grep nfs`
-  nfs             2049/tcp                        # Network File System
-  nfs             2049/udp                        # Network File System
+`cat /etc/services | grep nfs` :
+
+```bash
+nfs             2049/tcp                        # Network File System
+nfs             2049/udp                        # Network File System
+```
 
 ## 4 Analyse de Trames avec Wireshark
 
@@ -113,83 +117,88 @@
 - Oui je vois le code HTML de la page.
 - Quant on fait "clic droit" sur un des paquets TCP puis "Follow" on voit la requête est la réponse HTTP :
 
-  ```HTTP
-  GET / HTTP/1.1
-  User-Agent: Wget/1.20.1 (linux-gnu)
-  Accept: */*
-  Accept-Encoding: identity
-  Host: perdu.com
-  Connection: Close
+```HTTP
+GET / HTTP/1.1
+User-Agent: Wget/1.20.1 (linux-gnu)
+Accept: */*
+Accept-Encoding: identity
+Host: perdu.com
+Connection: Close
 
-  HTTP/1.1 200 OK
-  Date: Wed, 19 Feb 2020 18:44:39 GMT
-  Server: Apache
-  Upgrade: h2
-  Connection: Upgrade, close
-  Last-Modified: Thu, 02 Jun 2016 06:01:08 GMT
-  ETag: "cc-5344555136fe9"
-  Accept-Ranges: bytes
-  Content-Length: 204
-  Vary: Accept-Encoding
-  Content-Type: text/html
+HTTP/1.1 200 OK
+Date: Wed, 19 Feb 2020 18:44:39 GMT
+Server: Apache
+Upgrade: h2
+Connection: Upgrade, close
+Last-Modified: Thu, 02 Jun 2016 06:01:08 GMT
+ETag: "cc-5344555136fe9"
+Accept-Ranges: bytes
+Content-Length: 204
+Vary: Accept-Encoding
+Content-Type: text/html
 
-  <html><head><title>Vous Etes Perdu ?</title></head><body><h1>Perdu sur l'Internet ?</h1><h2>Pas de panique, on va vous aider</h2><strong><pre>    * <----- vous &ecirc;tes ici</pre></strong></body></html>
-  ```
+<html><head><title>Vous Etes Perdu ?</title></head><body><h1>Perdu sur l
+'Internet ?</h1><h2>Pas de panique, on va vous aider</h2><strong><pre>
+* <----- vous &ecirc;tes ici</pre></strong></body></html>
+```
 
 ## 5 Capture de Trames avec Wireshark
 
 - Résultat de la commande `nmap syl` :
 
-  ```bash
-  PORT   STATE SERVICE
-    21/tcp open  ftp
-    22/tcp open  ssh
-    23/tcp open  telnet
-    80/tcp open  http
-    ```
+```bash
+PORT   STATE SERVICE
+  21/tcp open  ftp
+  22/tcp open  ssh
+  23/tcp open  telnet
+  80/tcp open  http
+  ```
 
 - ✓.
 - ✓.
 - je teste tous les ports avec la commande `nc` :
   - `nc syl 21` donne :
 
-    ```bash
-    220 syl.qemunet.org FTP server (Version 6.4/OpenBSD/Linux-ftpd-0.17) ready.
-    ```
+  ```bash
+  220 syl.qemunet.org FTP server (Version 6.4/OpenBSD/Linux-ftpd-0.17
+  ) ready.
+  ```
 
   - `nc syl 22` donne :
 
-    ```bash
-    SSH-2.0-OpenSSH_7.6p1 Debian-3
-    ```
+  ```bash
+  SSH-2.0-OpenSSH_7.6p1 Debian-3
+  ```
 
   - `nc syl 23` donne :
 
-    ```md
-    ÿýÿý ÿý#ÿý'
-    ```
+  ```md
+  ÿýÿý ÿý#ÿý'
+  ```
 
   - `nc syl 80` donne :
 
-    ```http
-    HTTP/1.1 400 Bad Request
-    Date: Mon, 24 Feb 2020 19:45:53 GMT
-    Server: Apache/2.4.38 (Debian)
-    Content-Length: 307
-    Connection: close
-    Content-Type: text/html; charset=iso-8859-1
+  ```http
+  HTTP/1.1 400 Bad Request
+  Date: Mon, 24 Feb 2020 19:45:53 GMT
+  Server: Apache/2.4.38 (Debian)
+  Content-Length: 307
+  Connection: close
+  Content-Type: text/html; charset=iso-8859-1
 
-    <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-    <html><head>
-    <title>400 Bad Request</title>
-    </head><body>
-    <h1>Bad Request</h1>
-    <p>Your browser sent a request that this server could not understand.<br />
-    </p>
-    <hr>
-    <address>Apache/2.4.38 (Debian) Server at syl.qemunet.org Port 80</address>
-    </body></html>
-    ```
+  <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+  <html><head>
+  <title>400 Bad Request</title>
+  </head><body>
+  <h1>Bad Request</h1>
+  <p>Your browser sent a request that this server could not understan
+  d.<br />
+  </p>
+  <hr>
+  <address>Apache/2.4.38 (Debian) Server at syl.qemunet.org Port 80</
+  address>
+  </body></html>
+  ```
 
 - Lorsque je me connecte avec l'utilisateur toto en utilisant la commande `telnet syl` je peux lire le mot de passe dans les requêtes en utilisant Follow TCP stream :
   ![Capture d'écrant de Wireshark](TP2_5.1.png)
@@ -198,7 +207,8 @@
 - J'utilise la commande `curl http://syl`. Cette commande permet d'obtenir le contenu de la page web comme avec google par exemple. Il s'agie de la page web par défaut du serveur Web `Apache 2.0` comme vous pouvez le voir ci-dessous :
 
 ```html
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://w
+ww.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
