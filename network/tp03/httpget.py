@@ -13,8 +13,18 @@ request = "GET / HTTP/1.1\r\n"  \
     "Host: " + host + "\r\n"    \
     "Connection: close\r\n\r\n"
 
-port = 13
-s.connect((host, port))
-data = s.recv(1024)
-print(data)
+port = 80
+try :
+    s.connect((host, port))
+
+    s.sendall(request.encode("utf-8"))
+
+    while True :
+        data = s.recv(1024)
+        if data.decode("utf -8") == "" : break
+        print (data.decode("utf -8"), end ="")
+
+except Exception as e :
+    print("Erreur avec la connexion : ", e)
+
 s.close()
