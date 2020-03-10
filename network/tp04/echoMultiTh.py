@@ -4,7 +4,7 @@ import socket
 import sys
 import threading
 
-def handle (sclient):
+def handle (sclient) :
     while True :
         data = sclient.recv(1500)
         if data == b"" : break

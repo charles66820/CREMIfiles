@@ -31,9 +31,10 @@ try:
                             soc.close()
                             l.remove(soc)
                         else :
+                            # Envois le message a tous le monde sauf au serveur et au l'emeteur
                             for sc in l :
-                                if s != sc:
-                                    sclient.sendall(data)
+                                if soc != sc and s != sc:
+                                    sc.sendall(data)
 
         except Exception as e :
             print("Error with accept : ", e)
