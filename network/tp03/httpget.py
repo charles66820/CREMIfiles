@@ -21,8 +21,8 @@ try :
 
     while True :
         data = s.recv(1024)
-        if data.decode("utf -8") == "" : break
-        print (data.decode("utf -8"), end ="")
+        if data.decode("utf-8") == "" : break
+        print (data.decode("utf-8"), end ="")
 
 except Exception as e :
     print("Erreur avec la connexion : ", e)
