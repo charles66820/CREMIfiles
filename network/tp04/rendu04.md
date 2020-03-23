@@ -42,8 +42,8 @@ try:
 
         except Exception as e :
             print("Error with accept : ", e)
+            s.close()
 
-        s.close()
     except Exception as e :
         print("Error on bind the socket : ", e)
 
@@ -110,8 +110,8 @@ try:
 
         except Exception as e :
             print("Error with accept : ", e)
+            s.close()
 
-        s.close()
     except Exception as e :
         print("Error on bind the socket : ", e)
 
@@ -181,8 +181,8 @@ try:
 
         except Exception as e :
             print("Error with accept : ", e)
+            s.close()
 
-        s.close()
     except Exception as e :
         print("Error on bind the socket : ", e)
 
@@ -197,4 +197,15 @@ except KeyboardInterrupt:
 
 ### 2.2 A propos d’une version thread
 
-- Si on utilise la version thread on pour ce retrouver avec 2 message traiter en meme temps et des elements qui ne sont pas a jour dans la liste des client connecter. 
+- Si on utilise la version thread il peut se passer que 2 messages soit traiter en meme temps sur 2 thread differant. IL peut y avoire aussi des elements qui ne sont pas a jour dans la liste des client connecter.
+
+### 2.3 Extensions du serveur de chat
+
+- MSG fait !
+- Invalid command fait !
+- Notif fait !
+- NICK fait !
+- Modifs fait !
+- WHO fait !
+- QUIT fait !
+- KILL fait !

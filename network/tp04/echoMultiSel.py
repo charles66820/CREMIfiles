@@ -35,8 +35,8 @@ try:
 
         except Exception as e :
             print("Error with accept : ", e)
+            s.close()
 
-        s.close()
     except Exception as e :
         print("Error on bind the socket : ", e)
 
