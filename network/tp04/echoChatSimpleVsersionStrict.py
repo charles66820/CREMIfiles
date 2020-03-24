@@ -56,7 +56,6 @@ def sendall(scSender, msg) :
 
 def disconnect(scClient) :
     if settings['notifs']['deconnexion'] : sendall(scClient, '[' + nicks[scServer] + '] ' + nicks[scClient] + " is disconnected")
-    if settings['notifs']['deconnexionM'] : sendall(scNewClient, 'client disconnected "' + nicks[scNewClient] + '"')
     if logs : print('client disconnected "' + nicks[scClient] + '"')
     del nicks[scClient]
     scList.remove(scClient)
@@ -66,12 +65,10 @@ try:
     logs = True
     settings = {
         "notifs": {
-            "connection": False,
-            "connectionM": True,
-            "deconnexion": False,
-            "deconnexionM": True,
-            "invalidCommand": False,
-            "motd": False
+            "connection": True,
+            "deconnexion": True,
+            "invalidCommand": True,
+            "motd": True
         }
     }
 
@@ -105,7 +102,6 @@ try:
                         nicks[scNewClient] = getScHost(scNewClient)
                         if settings['notifs']['motd'] : scNewClient.sendall(('[' + nicks[scServer] + '] ' + 'Welcome to Chat Server !\n').encode("utf-8"))
                         if settings['notifs']['connection'] : sendall(scNewClient, '[' + nicks[scServer] + '] ' + nicks[scNewClient] + " is connected")
-                        if settings['notifs']['connectionM'] : sendall(scNewClient, 'client connected "' + nicks[scNewClient] + '"')
                         if logs : print('client connected "' + nicks[scNewClient] + '"')
                     else :
                         data = scSelected.recv(2008).decode("utf-8") #8 + 2000 + 10
