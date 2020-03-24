@@ -66,44 +66,44 @@ try:
     port = 7777
 
     scServer = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
-    # try :
+    try :
 
-    scServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    scServer.bind((host, port))
-    scServer.listen(1)
-    if logs :
-        print("Chat server is running in verbose mode")
-    else :
-        print("Chat server is running")
+        scServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        scServer.bind((host, port))
+        scServer.listen(1)
+        if logs :
+            print("Chat server is running in verbose mode")
+        else :
+            print("Chat server is running")
 
-    # try :
-    scList = []
-    nicks = {scServer: 'server'}
-    while True :
-        (rl, wl, xl) = select.select(scList+[scServer], [], [])
-        for scSelected in rl :
-            if scSelected == scServer :
-                # Get client socket and ip address
-                scNewClient, a = scServer.accept()
+        try :
+            scList = []
+            nicks = {scServer: 'server'}
+            while True :
+                (rl, wl, xl) = select.select(scList+[scServer], [], [])
+                for scSelected in rl :
+                    if scSelected == scServer :
+                        # Get client socket and ip address
+                        scNewClient, a = scServer.accept()
 
-                # Connect
-                scList.append(scNewClient)
-                nicks[scNewClient] = getScHost(scNewClient)
-                scNewClient.sendall(('[' + nicks[scServer] + '] ' + 'Welcome to Chat Server !\n').encode("utf-8"))
-                sendall(scNewClient, '[' + nicks[scServer] + '] ' + nicks[scNewClient] + " is connected")
-                if logs : print('client connected "' + nicks[scNewClient] + '"')
-            else :
-                data = scSelected.recv(2008).decode("utf-8") #8 + 2000 + 10
-                if data == "" :
-                    disconnect(scSelected)
-                else :
-                    commands(scSelected, data)
-        # except Exception as e :
-        #     print("Error with accept : ", e)
-        #     scServer.close()
+                        # Connect
+                        scList.append(scNewClient)
+                        nicks[scNewClient] = getScHost(scNewClient)
+                        scNewClient.sendall(('[' + nicks[scServer] + '] ' + 'Welcome to Chat Server !\n').encode("utf-8"))
+                        sendall(scNewClient, '[' + nicks[scServer] + '] ' + nicks[scNewClient] + " is connected")
+                        if logs : print('client connected "' + nicks[scNewClient] + '"')
+                    else :
+                        data = scSelected.recv(2008).decode("utf-8") #8 + 2000 + 10
+                        if data == "" :
+                            disconnect(scSelected)
+                        else :
+                            commands(scSelected, data)
+        except Exception as e :
+            print("Error with accept : ", e)
+            scServer.close()
 
-    # except Exception as e :
-    #     print("Error on bind the socket : ", e)
+    except Exception as e :
+        print("Error on bind the socket : ", e)
 
 except KeyboardInterrupt:
     print('Interrupted')
