@@ -10,43 +10,43 @@ def getScHost(sc) :
     return sc.getpeername()[0] + ':' + str(sc.getpeername()[1])
 
 # get selecte comment and execut it
-def commands(scSender, data) :
-    m = re.match(r"^KILL\s([^\s]+)\s(.+)$", data)
-    if m :
-        for sc, nick in nicks.items() :
-            if nick == m[1] :
-                sc.sendall(('[' + nicks[scSender] + '] ' + m[2] + '\n').encode("utf-8"))
-                disconnect(sc)
-                break
-    else :
-        m = re.match(r"^NICK\s([^\s]+)$", data)
+def commands(scSender, cmd, msg) :
+    if cmd == 'MSG' or cmd == 'QUIT':
+        if msg == '' :
+            if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid message !\n').encode("utf-8"))
+            if logs : print('invalid command')
+        else :
+            sendall(scSender, '[' + nicks[scSender] + '] ' + msg)
+            if cmd == 'QUIT': disconnect(scSender)
+    elif cmd == 'NICK' :
+        m = re.match(r"^([^\s]+)$", msg)
         if m :
             if logs : print('client "' + nicks[scSender] + '" => "' + m[1] + '"')
             nicks[scSender] = m[1]
         else :
-            m = re.match(r"^WHO$", data)
-            if m :
-                online = ''
-                for scClient in scList :
-                    if scClient != scServer :
-                        online += ' ' + nicks[scClient]
-                scSender.sendall(('[' + nicks[scServer] + ']' + online + '\n').encode("utf-8"))
-            else :
-                m = re.match(r"^([A-Z]+)\s(.+)$", data)
-                if m : # RegEx au lieu de split
-                    if m[1] == 'MSG' or m[1] == 'QUIT':
-                        if len(m[2]) > 2000 :
-                            scSender.sendall('The message must be less than 2000 characters !\n'.encode("utf-8"))
-                        else :
-                            sendall(scSender, '[' + nicks[scSender] + '] ' + m[2])
-                        if m[1] == 'QUIT' :
-                            disconnect(scSender)
-                    else :
-                        if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
-                        if logs : print('invalid command')
-                else :
-                    if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
-                    if logs : print('invalid command')
+            if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid nickname !\n').encode("utf-8"))
+            if logs : print('invalid command')
+    elif cmd == 'WHO':
+        online = ''
+        for scClient in scList :
+            if scClient != scServer :
+                online += ' ' + nicks[scClient]
+        scSender.sendall(('[' + nicks[scServer] + ']' + online + '\n').encode("utf-8"))
+        del online
+    elif cmd == 'KILL' :
+        m = re.match(r"^([^\s]+)\s(.+)", msg)
+        if m :
+            for sc, nick in nicks.items() :
+                if nick == m[1] :
+                    sc.sendall(('[' + nicks[scSender] + '] ' + m[2] + '\n').encode("utf-8"))
+                    disconnect(sc)
+                    break
+        else :
+            if settings['notifs']['invalidCommand'] : scSelected.sendall(('[' + nicks[scServer] + '] ' + 'Invalid nickname !\n').encode("utf-8"))
+            if logs : print('invalid command')
+    else :
+        if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
+        if logs : print('invalid command')
 
 # Semd all messate to everybody without sever and sender
 def sendall(scSender, msg) :
@@ -55,8 +55,7 @@ def sendall(scSender, msg) :
             scClient.sendall((msg + "\n").encode("utf-8"))
 
 def disconnect(scClient) :
-    if settings['notifs']['deconnexion'] : sendall(scClient, '[' + nicks[scServer] + '] ' + nicks[scClient] + " is disconnected")
-    if settings['notifs']['deconnexionM'] : sendall(scNewClient, 'client disconnected "' + nicks[scNewClient] + '"')
+    sendall(scClient, '[' + nicks[scServer] + '] ' + nicks[scClient] + " is disconnected")
     if logs : print('client disconnected "' + nicks[scClient] + '"')
     del nicks[scClient]
     scList.remove(scClient)
@@ -112,7 +111,19 @@ try:
                         if data == "" :
                             disconnect(scSelected)
                         else :
-                            commands(scSelected, data)
+                            m = re.match(r"^([A-Z]+)\s(.+)|^([A-Z]+)\s?", data) # RegEx au lieu de split
+                            if m != None :
+                                if m[3] == None and len(m[2]) > 2000 :
+                                    scSelected.sendall('The message must be less than 2000 characters !\n'.encode("utf-8"))
+                                else :
+                                    if m[3] :
+                                        commands(scSelected, m[3], '')
+                                    else :
+                                        commands(scSelected, m[1], m[2])
+                            else :
+                                if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
+                                if logs : print('invalid command')
+
         except Exception as e :
             print("Error with accept : ", e)
             scServer.close()
@@ -127,4 +138,3 @@ except KeyboardInterrupt:
         sys.exit(0)
     except SystemExit:
         os._exit(0)
-
