@@ -12,17 +12,23 @@ def getScHost(sc) :
 # get selecte comment and execut it
 def commands(scSender, cmd, msg) :
     if cmd == 'MSG' :
-        sendall(scSender, '[' + nicks[scSender] + '] ' + msg)
+        if msg == '' :
+            scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid message !\n').encode("utf-8"))
+        else :
+            sendall(scSender, '[' + nicks[scSender] + '] ' + msg)
     elif cmd == 'NICK' :
-        if logs : print('client "' + nicks[scSelected] + '" => "' + msg + '"')
-        nicks[scSender] = msg
+        if msg == '' :
+            scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid nickname !\n').encode("utf-8"))
+        else :
+            if logs : print('client "' + nicks[scSelected] + '" => "' + msg + '"')
+            nicks[scSender] = msg
     elif cmd == 'WHO':
         online = ''
         for scClient in scList :
             if scClient != scServer :
                 if online != '' :
                     online += ','
-                online += ' ' + nicks[scSelected]
+                online += ' ' + nicks[scClient]
         scSender.sendall(('[' + nicks[scServer] + '] ' + 'Online :' + online + '\n').encode("utf-8"))
         del online
     elif cmd == 'QUIT' :
