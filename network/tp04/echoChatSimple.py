@@ -21,8 +21,8 @@ def commands(scSender, cmd, msg) :
     elif cmd == 'NICK' :
         m = re.match(r"^([^\s]+)$", msg)
         if m :
-            if logs : print('client "' + nicks[scSender] + '" => "' + m[1] + '"')
-            nicks[scSender] = m[1]
+            if logs : print('client "' + nicks[scSender] + '" => "' + m.group(1) + '"')
+            nicks[scSender] = m.group(1)
         else :
             if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid nickname !\n').encode("utf-8"))
             if logs : print('invalid command')
@@ -37,8 +37,8 @@ def commands(scSender, cmd, msg) :
         m = re.match(r"^([^\s]+)\s(.+)", msg)
         if m :
             for sc, nick in nicks.items() :
-                if nick == m[1] :
-                    sc.sendall(('[' + nicks[scSender] + '] ' + m[2] + '\n').encode("utf-8"))
+                if nick == m.group(1) :
+                    sc.sendall(('[' + nicks[scSender] + '] ' + m.group(2) + '\n').encode("utf-8"))
                     disconnect(sc)
                     break
         else :
@@ -113,13 +113,13 @@ try:
                         else :
                             m = re.match(r"^([A-Z]+)\s(.+)|^([A-Z]+)\s?", data) # RegEx au lieu de split
                             if m != None :
-                                if m[3] == None and len(m[2]) > 2000 :
+                                if m.group(3) == None and len(m.group(2)) > 2000 :
                                     scSelected.sendall('The message must be less than 2000 characters !\n'.encode("utf-8"))
                                 else :
-                                    if m[3] :
-                                        commands(scSelected, m[3], '')
+                                    if m.group(3) :
+                                        commands(scSelected, m.group(3), '')
                                     else :
-                                        commands(scSelected, m[1], m[2])
+                                        commands(scSelected, m.group(1), m.group(2))
                             else :
                                 if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
                                 if logs : print('invalid command')
