@@ -14,15 +14,15 @@ def commands(scSender, data) :
     m = re.match(r"^KILL\s([^\s]+)\s(.+)$", data)
     if m :
         for sc, nick in nicks.items() :
-            if nick == m[1] :
-                sc.sendall(('[' + nicks[scSender] + '] ' + m[2] + '\n').encode("utf-8"))
+            if nick == m.group(1) :
+                sc.sendall(('[' + nicks[scSender] + '] ' + m.group(2) + '\n').encode("utf-8"))
                 disconnect(sc)
                 break
     else :
         m = re.match(r"^NICK\s([^\s]+)$", data)
         if m :
-            if logs : print('client "' + nicks[scSender] + '" => "' + m[1] + '"')
-            nicks[scSender] = m[1]
+            if logs : print('client "' + nicks[scSender] + '" => "' + m.group(1) + '"')
+            nicks[scSender] = m.group(1)
         else :
             m = re.match(r"^WHO$", data)
             if m :
@@ -34,12 +34,12 @@ def commands(scSender, data) :
             else :
                 m = re.match(r"^([A-Z]+)\s(.+)$", data)
                 if m : # RegEx au lieu de split
-                    if m[1] == 'MSG' or m[1] == 'QUIT':
-                        if len(m[2]) > 2000 :
+                    if m.group(1) == 'MSG' or m.group(1) == 'QUIT':
+                        if len(m.group(2)) > 2000 :
                             scSender.sendall('The message must be less than 2000 characters !\n'.encode("utf-8"))
                         else :
-                            sendall(scSender, '[' + nicks[scSender] + '] ' + m[2])
-                        if m[1] == 'QUIT' :
+                            sendall(scSender, '[' + nicks[scSender] + '] ' + m.group(2))
+                        if m.group(1) == 'QUIT' :
                             disconnect(scSender)
                     else :
                         if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
