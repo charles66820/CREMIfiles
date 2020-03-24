@@ -11,41 +11,42 @@ def getScHost(sc) :
 
 # get selecte comment and execut it
 def commands(scSender, cmd, msg) :
-    if cmd == 'MSG' :
+    if cmd == 'MSG' or cmd == 'QUIT':
         if msg == '' :
-            scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid message !\n').encode("utf-8"))
+            if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid message !\n').encode("utf-8"))
+            if logs : print('invalid command')
         else :
             sendall(scSender, '[' + nicks[scSender] + '] ' + msg)
+            if cmd == 'QUIT': disconnect(scSender)
     elif cmd == 'NICK' :
-        if msg == '' :
-            scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid nickname !\n').encode("utf-8"))
+        m = re.match(r"^([^\s]+)$", msg)
+        if m :
+            if logs : print('client "' + nicks[scSender] + '" => "' + m[1] + '"')
+            nicks[scSender] = m[1]
         else :
-            if logs : print('client "' + nicks[scSender] + '" => "' + msg + '"')
-            nicks[scSender] = msg
+            if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid nickname !\n').encode("utf-8"))
+            if logs : print('invalid command')
     elif cmd == 'WHO':
         online = ''
         for scClient in scList :
             if scClient != scServer :
-                if online != '' :
-                    online += ','
                 online += ' ' + nicks[scClient]
-        scSender.sendall(('[' + nicks[scServer] + '] ' + 'Online :' + online + '\n').encode("utf-8"))
+        scSender.sendall(('[' + nicks[scServer] + ']' + online + '\n').encode("utf-8"))
         del online
-    elif cmd == 'QUIT' :
-        if msg != '' : sendall(scSender, '[' + nicks[scSender] + '] ' + msg)
-        disconnect(scSender)
     elif cmd == 'KILL' :
-        m = re.match(r"^\[(.*)\](\s(.*))?|\s?$", msg) # r"^([^\s]+)\s?(.*)?" if we want to splite name without [name]
-        if m != None :
+        m = re.match(r"^([^\s]+)\s(.+)", msg)
+        if m :
             for sc, nick in nicks.items() :
                 if nick == m[1] :
-                    if m[3] : sc.sendall(('[' + nicks[scSender] + '] ' + m[3] + '\n').encode("utf-8"))
+                    sc.sendall(('[' + nicks[scSender] + '] ' + m[2] + '\n').encode("utf-8"))
                     disconnect(sc)
                     break
         else :
-            scSelected.sendall(('[' + nicks[scServer] + '] ' + 'Invalid nickname !\n').encode("utf-8"))
+            if settings['notifs']['invalidCommand'] : scSelected.sendall(('[' + nicks[scServer] + '] ' + 'Invalid nickname !\n').encode("utf-8"))
+            if logs : print('invalid command')
     else :
-        scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
+        if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
+        if logs : print('invalid command')
 
 # Semd all messate to everybody without sever and sender
 def sendall(scSender, msg) :
@@ -62,6 +63,16 @@ def disconnect(scClient) :
 
 try:
     logs = True
+    settings = {
+        "notifs": {
+            "connection": False,
+            "connectionM": True,
+            "deconnexion": False,
+            "deconnexionM": True,
+            "invalidCommand": False,
+            "motd": False
+        }
+    }
 
     host = ""
     port = 7777
@@ -73,7 +84,8 @@ try:
         scServer.bind((host, port))
         scServer.listen(1)
         if logs :
-            print("Chat server is running in verbose mode")
+            # Chat server is running in verbose mode
+            print("Welcome to Chat Server")
         else :
             print("Chat server is running")
 
@@ -90,8 +102,9 @@ try:
                         # Connect
                         scList.append(scNewClient)
                         nicks[scNewClient] = getScHost(scNewClient)
-                        scNewClient.sendall(('[' + nicks[scServer] + '] ' + 'Welcome to Chat Server !\n').encode("utf-8"))
-                        sendall(scNewClient, '[' + nicks[scServer] + '] ' + nicks[scNewClient] + " is connected")
+                        if settings['notifs']['motd'] : scNewClient.sendall(('[' + nicks[scServer] + '] ' + 'Welcome to Chat Server !\n').encode("utf-8"))
+                        if settings['notifs']['connection'] : sendall(scNewClient, '[' + nicks[scServer] + '] ' + nicks[scNewClient] + " is connected")
+                        if settings['notifs']['connectionM'] : sendall(scNewClient, 'client connected "' + nicks[scNewClient] + '"')
                         if logs : print('client connected "' + nicks[scNewClient] + '"')
                     else :
                         data = scSelected.recv(2008).decode("utf-8") #8 + 2000 + 10
@@ -108,7 +121,9 @@ try:
                                     else :
                                         commands(scSelected, m[1], m[2])
                             else :
-                                scSelected.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
+                                if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
+                                if logs : print('invalid command')
+
         except Exception as e :
             print("Error with accept : ", e)
             scServer.close()

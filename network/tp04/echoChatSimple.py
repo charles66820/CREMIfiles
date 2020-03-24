@@ -42,9 +42,11 @@ def commands(scSender, data) :
                         if m[1] == 'QUIT' :
                             disconnect(scSender)
                     else :
-                        scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
+                        if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
+                        if logs : print('invalid command')
                 else :
-                    scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
+                    if settings['notifs']['invalidCommand'] : scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid command !\n').encode("utf-8"))
+                    if logs : print('invalid command')
 
 # Semd all messate to everybody without sever and sender
 def sendall(scSender, msg) :
@@ -53,7 +55,8 @@ def sendall(scSender, msg) :
             scClient.sendall((msg + "\n").encode("utf-8"))
 
 def disconnect(scClient) :
-    sendall(scClient, '[' + nicks[scServer] + '] ' + nicks[scClient] + " is disconnected")
+    if settings['notifs']['deconnexion'] : sendall(scClient, '[' + nicks[scServer] + '] ' + nicks[scClient] + " is disconnected")
+    if settings['notifs']['deconnexionM'] : sendall(scNewClient, 'client disconnected "' + nicks[scNewClient] + '"')
     if logs : print('client disconnected "' + nicks[scClient] + '"')
     del nicks[scClient]
     scList.remove(scClient)
@@ -61,6 +64,16 @@ def disconnect(scClient) :
 
 try:
     logs = True
+    settings = {
+        "notifs": {
+            "connection": False,
+            "connectionM": True,
+            "deconnexion": False,
+            "deconnexionM": True,
+            "invalidCommand": False,
+            "motd": False
+        }
+    }
 
     host = ""
     port = 7777
@@ -72,7 +85,8 @@ try:
         scServer.bind((host, port))
         scServer.listen(1)
         if logs :
-            print("Chat server is running in verbose mode")
+            # Chat server is running in verbose mode
+            print("Welcome to Chat Server")
         else :
             print("Chat server is running")
 
@@ -89,8 +103,9 @@ try:
                         # Connect
                         scList.append(scNewClient)
                         nicks[scNewClient] = getScHost(scNewClient)
-                        scNewClient.sendall(('[' + nicks[scServer] + '] ' + 'Welcome to Chat Server !\n').encode("utf-8"))
-                        sendall(scNewClient, '[' + nicks[scServer] + '] ' + nicks[scNewClient] + " is connected")
+                        if settings['notifs']['motd'] : scNewClient.sendall(('[' + nicks[scServer] + '] ' + 'Welcome to Chat Server !\n').encode("utf-8"))
+                        if settings['notifs']['connection'] : sendall(scNewClient, '[' + nicks[scServer] + '] ' + nicks[scNewClient] + " is connected")
+                        if settings['notifs']['connectionM'] : sendall(scNewClient, 'client connected "' + nicks[scNewClient] + '"')
                         if logs : print('client connected "' + nicks[scNewClient] + '"')
                     else :
                         data = scSelected.recv(2008).decode("utf-8") #8 + 2000 + 10
