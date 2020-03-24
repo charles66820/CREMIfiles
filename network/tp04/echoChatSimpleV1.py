@@ -39,7 +39,7 @@ def commands(scSender, cmd, msg) :
         if m != None :
             for sc, nick in nicks.items() :
                 if nick == m[1] :
-                    if m[3] : sc.sendall(('[' + nicks[scSender] + '] ' + m[2] + '\n').encode("utf-8"))
+                    if m[3] : sc.sendall(('[' + nicks[scSender] + '] ' + m[3] + '\n').encode("utf-8"))
                     disconnect(sc)
                     break
         else :
