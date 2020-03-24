@@ -20,7 +20,7 @@ def commands(scSender, cmd, msg) :
         if msg == '' :
             scSender.sendall(('[' + nicks[scServer] + '] ' + 'Invalid nickname !\n').encode("utf-8"))
         else :
-            if logs : print('client "' + nicks[scSelected] + '" => "' + msg + '"')
+            if logs : print('client "' + nicks[scSender] + '" => "' + msg + '"')
             nicks[scSender] = msg
     elif cmd == 'WHO':
         online = ''
