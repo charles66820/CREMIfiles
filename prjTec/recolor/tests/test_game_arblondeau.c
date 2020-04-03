@@ -186,7 +186,7 @@ bool test_game_play_one_move() {
  * @return false + an error message in case of error
  * @return true if no bug was found
  */
-bool test_game_width(){
+bool test_game_width() {
   uint nbMax = 12;
   color cells[SIZE * SIZE] = {
       0, 0, 0, 2, 0, 2, 1, 0, 1, 0, 3, 0, 0, 3, 3, 1, 1, 1, 1, 3, 2, 0, 1, 0,
@@ -196,11 +196,11 @@ bool test_game_width(){
       0, 3, 0, 1, 0, 0, 2, 1, 1, 1, 3, 0, 1, 3, 1, 0, 0, 0, 3, 2, 3, 1, 0, 0,
       1, 3, 3, 1, 1, 2, 2, 3, 2, 0, 0, 2, 2, 0, 2, 3, 0, 1, 1, 1, 2, 3, 0, 1};
   game g = game_new(cells, nbMax);
-  if (g == NULL){
+  if (g == NULL) {
     fprintf(stderr, "Error : invalid new game.\n");
     return false;
   }
-  if (game_width(g) < 1){
+  if (game_width(g) < 1) {
     fprintf(stderr, "Error : g->width is an invalid parameter.\n");
     game_delete(g);
     return false;
@@ -215,7 +215,7 @@ bool test_game_width(){
  * @return false + an error message in case of error
  * @return true if no bug was found
  */
-bool test_game_new_empty_ext(){
+bool test_game_new_empty_ext() {
   uint nbMax = 12;
   color cells[SIZE * SIZE] = {
       0, 0, 0, 2, 0, 2, 1, 0, 1, 0, 3, 0, 0, 3, 3, 1, 1, 1, 1, 3, 2, 0, 1, 0,
@@ -225,7 +225,7 @@ bool test_game_new_empty_ext(){
       0, 3, 0, 1, 0, 0, 2, 1, 1, 1, 3, 0, 1, 3, 1, 0, 0, 0, 3, 2, 3, 1, 0, 0,
       1, 3, 3, 1, 1, 2, 2, 3, 2, 0, 0, 2, 2, 0, 2, 3, 0, 1, 1, 1, 2, 3, 0, 1};
   game g = game_new(cells, nbMax);
-  if (g == NULL){
+  if (g == NULL) {
     fprintf(stderr, "Error : invalid new game.\n");
     return false;
   }
@@ -234,12 +234,12 @@ bool test_game_new_empty_ext(){
     game_delete(g);
     return false;
   }
-  if (game_height(g) < 1){
+  if (game_height(g) < 1) {
     fprintf(stderr, "Error : g->height is an invalid parameter.\n");
     game_delete(g);
     return false;
   }
-  if (game_is_wrapping(g) != true && game_is_wrapping(g) != false){
+  if (game_is_wrapping(g) != true && game_is_wrapping(g) != false) {
     fprintf(stderr, "Error : g->wrapping is an invalid parameter.\n");
     game_delete(g);
     return false;

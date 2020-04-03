@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="recolor" default="help">
+
+  <property name="target" value="android-23" />
+
+  <property environment="env" />
+  <property name="sdk.dir" value="${env.ANDROID_HOME}" />
+
+  <import file="${sdk.dir}/tools/ant/build.xml" />
+
+</project>

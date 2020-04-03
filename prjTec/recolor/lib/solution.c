@@ -45,7 +45,7 @@ static char int_to_char(int x) { return x + '0'; }
 
 char* string_solution(solution sol) {
   check_solution(sol, "sol parameter on the function string_solution is null.");
-  char* string = calloc((sol->tab_len * 2)+1, sizeof(char));
+  char* string = calloc((sol->tab_len * 2) + 1, sizeof(char));
   check_pointer(
       string, "not enough memory for string on the function string_solution.");
 
