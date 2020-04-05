@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Probabilités, Statistiques, Combinatoire (Licence 2)
+# "Probabilités, Statistiques, Combinatoire (Licence 2)
 # TM1: génération exhaustive
 
 # Page du cours: www.labri.fr/perso/duchon/Enseignements/Probas/
@@ -12,7 +12,7 @@
 
 # pour vérifier qu'une liste ne contient pas de doublons
 # (il faut que python arrive à trier... pas des choses trop inhomogènes donc)
-# Des listes ou tuples d'entiers sont triés dans l'ordre lexicographique
+# Des listes ou tuples d'entiers sont triés dans l'ordre lexicographique"
 def TousDifferents(L):
   LL = sorted(L)
   m = len(LL)
@@ -144,18 +144,18 @@ def ToutesSeqSousDiagoRec(n):
 def ToutesSeqSousDiago(n):
     return None
 
-# Conversion d'une sequence sous-diagonale en permutation
-# S'inspirer de l'ex. 1.8 feuille TD1
+# "Conversion d'une sequence sous-diagonale en permutation
+# S'inspirer de l'ex. 1.8 feuille TD1"
 def SeqVersPerm(s):
     return None
 
-# Toutes les permutations: par conversion depuis les séquences
-# sous-diagonales
+# "Toutes les permutations: par conversion depuis les séquences
+# sous-diagonales"
 def ToutesPermutations(n):
     L = [SeqVersPerm(s) for s in ToutesSeqSousDiago(n)]
     return L
 
-# Nombre de points fixe d'une permutation s
+# "Nombre de points fixe d'une permutation s"
 def PointsFixes(s):
     return None
 

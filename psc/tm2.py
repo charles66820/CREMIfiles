@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Probabilités, Statistiques, Combinatoire (Licence 2)
+# "Probabilités, Statistiques, Combinatoire (Licence 2)
 # TM2: génération exhaustive, générateurs Python
 
 # Page du cours: www.labri.fr/perso/duchon/Enseignements/Probas/
@@ -12,7 +12,7 @@
 
 # pour vérifier qu'une liste ne contient pas de doublons
 # (il faut que python arrive à trier... pas des choses trop inhomogènes donc)
-# Des listes ou tuples d'entiers sont triés dans l'ordre lexicographique
+# Des listes ou tuples d'entiers sont triés dans l'ordre lexicographique"
 def TousDifferents(L):
     LL = sorted(L)
     m = len(LL)
@@ -72,14 +72,14 @@ def PartiesRec(n,k):
     L=PartiesRec(n-1,k)
     M=PartiesRec(n-1,k-1)
     for s in M:
-        # s+(n,), c'est la partie s (k-1 éléments parmi n-1) avec n à la fin
+        # "s+(n,), c'est la partie s (k-1 éléments parmi n-1) avec n à la fin"
         L.append(s+(n,))
     return L
 
 
-# Permutations
+# "Permutations
 
-# Toutes les séquences sous-diagonales, version récursive
+# Toutes les séquences sous-diagonales, version récursive"
 def ToutesSeqSousDiagoRec(n):
     if n<=0:
         return [()]
@@ -94,8 +94,8 @@ def ToutesSeqSousDiagoRec(n):
 def ToutesSeqSousDiago(n):
     return None
 
-# Conversion d'une sequence sous-diagonale en permutation
-# S'inspirer de l'ex. 1.8 feuille TD1
+# "Conversion d'une sequence sous-diagonale en permutation
+# S'inspirer de l'ex. 1.8 feuille TD1"
 def SeqVersPerm(s):
     return None
 
@@ -105,7 +105,7 @@ def ToutesPermutations(n):
     L = [SeqVersPerm(s) for s in ToutesSeqSousDiago(n)]
     return L
 
-# Nombre de points fixe d'une permutation s
+# "Nombre de points fixe d'une permutation s"
 def PointsFixes(s):
     return None
 
@@ -190,7 +190,7 @@ def genPositifRec(m,k):
         pass #pas de mots possibles
     else:
         if m>0 and k>=0:
-        # deux facons possibles d'obtenir un mot:
+        # "deux facons possibles d'obtenir un mot:"
         # - ajouter un b (0) à un mot de longueur m-1 finissant à hauteur k+1
         # - ajouter un a (1) à un mot de longueur m-1 finissant à hauteur k-1
             return None # A remplacer...
