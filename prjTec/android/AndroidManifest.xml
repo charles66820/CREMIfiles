@@ -20,7 +20,7 @@
                android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                android:hardwareAccelerated="true" >
 
-    <activity android:name="SDLActivity"
+    <activity android:name="RecolorActivity"
               android:configChanges="keyboardHidden|orientation">
 
       <intent-filter>
