@@ -9,11 +9,13 @@
 typedef struct Env_t Env;
 
 #ifdef __ANDROID__
-#define PRINT(STR, ...) do { SDL_Log(STR, ##__VA_ARGS__);  } while(0)
+#define PRINTLOG(STR, ...) do { SDL_Log(STR, ##__VA_ARGS__);  } while(0)
+#define PRINT(TITLE, STR, ...) do { char MSG[2000]; sprintf(MSG, STR, ##__VA_ARGS__); SDL_ShowSimpleMessageBox(0, TITLE, MSG, NULL); PRINTLOG(STR, ##__VA_ARGS__); } while (0)
 #define ERRORLOG(STR, ...) do { SDL_LogError(STR, ##__VA_ARGS__); exit(EXIT_FAILURE); } while(0)
 #define ERROR(TITLE, STR, ...) do { char MSG[2000]; sprintf(MSG, STR, ##__VA_ARGS__); SDL_ShowSimpleMessageBox(0, TITLE, NSG, NULL); ERRORLOG(STR, ##__VA_ARGS__); } while (0)
 #else
-#define PRINT(STR, ...) do { printf(STR, ##__VA_ARGS__); } while(0)
+#define PRINTLOG(STR, ...) do { printf(STR, ##__VA_ARGS__); } while(0)
+#define PRINT(TITLE, STR, ...) do { char MSG[2000]; sprintf(MSG, STR, ##__VA_ARGS__); SDL_ShowSimpleMessageBox(0, TITLE, MSG, NULL); PRINTLOG(STR, ##__VA_ARGS__); } while (0)
 #define ERRORLOG(STR, ...) do { fprintf(stderr, STR, ##__VA_ARGS__); exit(EXIT_FAILURE); } while(0)
 #define ERROR(TITLE, STR, ...) do { char MSG[2000]; sprintf(MSG, STR, ##__VA_ARGS__); SDL_ShowSimpleMessageBox(0, TITLE, MSG, NULL); ERRORLOG(STR, ##__VA_ARGS__); } while (0)
 #endif

@@ -55,10 +55,8 @@ endif()
 # Creation of the library game
 add_library (game lib/game.c lib/game_io.c lib/game_rand.c)
 IF (WIN32)
-    add_library (gl lib/getline.c)
-  target_link_libraries(game m gl)
-ELSE()
-  target_link_libraries(game m)
+  add_library (gl lib/getline.c)
+  target_link_libraries(game gl)
 ENDIF()
 
 add_library (sol lib/solution.c)
