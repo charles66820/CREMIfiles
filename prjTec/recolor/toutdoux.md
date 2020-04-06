@@ -4,15 +4,15 @@
 
 > Victor ANDRAULT
 
-- Tester la demo pour le portage sous Android & Integration Android
+- nothing
 
 > Arthur BLONDEAU
 
-- Tester la demo pour le portage sous Android & Integration Android
+- nothing
 
 > Charles GOEDEFROIT
 
-- Integration Android
+- nothing
 
 ## Tests
 
@@ -31,4 +31,3 @@
 ## Todo
 
 - see "branch and bound algorithm" for optimize solver
-- not play color on grid after play

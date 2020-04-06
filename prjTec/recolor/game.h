@@ -218,6 +218,8 @@ bool game_is_wrapping(cgame g);
  *@pre @p g is a valid pointer toward a cgame structure
  **/
 
+//void game_set_wrapping (game game, bool new_wrap)
+
 /**
  * @brief Creates a new empty game having height rows and width
  * columns. All the cells will have the default color (whose value is

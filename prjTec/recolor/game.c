@@ -4,8 +4,7 @@
 #include <stdlib.h>
 
 struct game_s {
-  color
-      *tab;  // The tab that contains the game cells in a single dimensional tab
+  color *tab;          // The tab that contains the game cells in a single dimensional tab
   uint nb_moves_max;   // The Maximum amount of move
   uint current_moves;  // The actual amount of move
   color *tab_init;     // The tab_init that contains the copy of game cells in a
@@ -21,12 +20,10 @@ struct game_s {
  * @param p pointer will be check
  * @param msg message will print if pointer is null
  */
-static void check_pointer(const void *p, char *msg) {
+static void check_pointer(const void* p, char *msg) {
   if (p == NULL) {
-    if (msg == NULL)
-      fprintf(stderr, "Null pointer error.\n");
-    else
-      fprintf(stderr, "%s\n", msg);
+    if (msg == NULL) fprintf(stderr, "Null pointer error.\n");
+    else fprintf(stderr, "%s\n", msg);
     exit(EXIT_FAILURE);
   }
 }
@@ -35,7 +32,9 @@ game game_new(color *cells, uint nb_moves_max) {
   return game_new_ext(SIZE, SIZE, cells, nb_moves_max, false);
 }
 
-game game_new_empty() { return game_new_empty_ext(SIZE, SIZE, false); }
+game game_new_empty() {
+  return game_new_empty_ext(SIZE, SIZE, false);
+}
 
 void game_set_cell_init(game g, uint x, uint y, color c) {
   check_pointer(g, "g parameter on the function game_set_cell_init is null.");
@@ -65,7 +64,7 @@ color game_cell_current_color(cgame g, uint x, uint y) {
   if (x >= g->width || y >= g->height) {
     exit(EXIT_FAILURE);
   }
-  return (color)g->tab[x + y * g->width];
+  return (color) g->tab[x + y * g->width];
 }
 
 uint game_nb_moves_cur(cgame g) {
@@ -90,7 +89,8 @@ uint game_nb_moves_cur(cgame g) {
 static void ff(game g, uint x, uint y, color tc, color c) {
   check_pointer(g, "g parameter on the function ff is null.\n");
 
-  if (x >= g->width || y >= g->height || g->tab[y * g->width + x] == c) return;
+  if (x >= g->width || y >= g->height || g->tab[y * g->width + x] == c)
+    return;
   if (g->tab[y * g->width + x] != tc) return;
 
   g->tab[y * g->width + x] = c;  // replace target color by color
@@ -101,11 +101,11 @@ static void ff(game g, uint x, uint y, color tc, color c) {
     if (x != 0)
       ff(g, x - 1, y, tc, c);  // spread to left
     else
-      ff(g, g->width - 1, y, tc, c);
-    if (y != 0)  // spread to up
+      ff(g, g->width-1, y, tc, c);
+    if (y != 0)                            // spread to up
       ff(g, x, y - 1, tc, c);
     else
-      ff(g, x, g->height - 1, tc, c);
+      ff(g, x, g->height-1, tc, c);
   } else {
     ff(g, x + 1, y, tc, c);              // spread to right
     ff(g, x, y + 1, tc, c);              // spread to down
@@ -117,7 +117,7 @@ static void ff(game g, uint x, uint y, color tc, color c) {
 void game_play_one_move(game g, color c) {
   check_pointer(g, "g parameter on the function game_play_one_move is null.\n");
 
-  ff(g, 0, 0, (color)g->tab[0], c);
+  ff(g, 0, 0, (color) g->tab[0], c);
 
   g->current_moves++;
 }
@@ -190,13 +190,13 @@ uint game_width(cgame game) {
   return game->width;
 }
 
-uint game_height(cgame game) {
+uint game_height(cgame game){
   check_pointer(game, "g parameter on the function game_height is null.\n");
 
   return game->height;
 }
 
-bool game_is_wrapping(cgame game) {
+bool game_is_wrapping(cgame game){
   check_pointer(game,
                 "g parameter on the function game_is_wrapping is null.\n");
 
@@ -213,9 +213,7 @@ game game_new_ext(uint width, uint height, color *cells, uint nb_moves_max,
   }
 
   game g = malloc(sizeof(struct game_s));
-  check_pointer(g,
-                "Not enough memory for game g allocation on the function "
-                "game_new_ext is null.\n");
+  check_pointer(g, "Not enough memory for game g allocation on the function game_new_ext is null.\n");
 
   g->nb_moves_max = nb_moves_max;
   g->current_moves = 0;
@@ -225,17 +223,14 @@ game game_new_ext(uint width, uint height, color *cells, uint nb_moves_max,
 
   g->tab = malloc((g->width * g->height) * sizeof(color));
   if (g->tab == NULL) {
-    fprintf(stderr,
-            "Not enough memory for g->tab in the function game_new_ext.\n");
+    fprintf(stderr, "Not enough memory for g->tab in the function game_new_ext.\n");
     game_delete(g);
     exit(EXIT_FAILURE);
   }
 
   g->tab_init = malloc((g->width * g->height) * sizeof(color));
   if (g->tab_init == NULL) {
-    fprintf(
-        stderr,
-        "Not enough memory for g->tab_init in the function game_new_ext.\n");
+    fprintf(stderr, "Not enough memory for g->tab_init in the function game_new_ext.\n");
     game_delete(g);
     exit(EXIT_FAILURE);
   }

@@ -277,8 +277,7 @@ bool test_game_new_empty() {
     game_delete(g);
     return false;
   }
-  if (game_nb_moves_cur(g) !=
-      0) {  // testing if the number of current moves is 0
+  if (game_nb_moves_cur(g) != 0) {  // testing if the number of current moves is 0
     game_delete(g);
     return false;
   }
@@ -369,7 +368,7 @@ bool test_game_set_max_moves() {
  *
  * @return bool
  */
-bool test_game_height() {
+bool test_game_height(){
   uint nbMax = 12;
   color cells[SIZE * SIZE] = {
       0, 0, 0, 2, 0, 2, 1, 0, 1, 0, 3, 0, 0, 3, 3, 1, 1, 1, 1, 3, 2, 0, 1, 0,
@@ -382,8 +381,8 @@ bool test_game_height() {
   if (g == NULL) {  // testing if g1 is a valid pointer
     return false;
   }
-  if (game_height(g) < 1) {
-    fprintf(stderr, "invalid height in g\n");
+  if (game_height(g)<1){
+    fprintf(stderr,"invalid height in g\n");
     game_delete(g);
     return false;
   }
@@ -396,7 +395,7 @@ bool test_game_height() {
  *
  * @return bool
  */
-bool test_game_wrapping() {
+bool test_game_wrapping(){
   uint nbMax = 12;
   color cells[SIZE * SIZE] = {
       0, 0, 0, 2, 0, 2, 1, 0, 1, 0, 3, 0, 0, 3, 3, 1, 1, 1, 1, 3, 2, 0, 1, 0,
@@ -409,8 +408,8 @@ bool test_game_wrapping() {
   if (g == NULL) {  // testing if g1 is a valid pointer
     return false;
   }
-  if (game_is_wrapping(g) != false) {
-    fprintf(stderr, "invalid wrapping in g\n");
+  if (game_is_wrapping(g) != false){
+    fprintf(stderr,"invalid wrapping in g\n");
     game_delete(g);
     return false;
   }

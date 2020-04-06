@@ -7,7 +7,6 @@
 #include <string.h>
 #include "game.h"
 #include "game_io.h"
-#include "game_rand.h"
 
 /**
  * @brief Print cells in stdout
@@ -51,48 +50,12 @@ int charToInt(char c) { return c - '0'; }
 
 int main(int argc, char* argv[]) {
   // Init game vars
-  bool pl = true;  // lose
+  bool pl = true;
   game g = NULL;
 
-  if (argc == 2) {
+  if (argc > 1) {
     g = game_load(argv[1]);
-    if (!g) fprintf(stderr, "Error on game load : The default game as load\n");
-  }
-
-  if (argc == 3 || argc > 6)
-    fprintf(stderr, "Invalid parameters. Loading default game...\n");
-
-  if (argc >= 4 && argc <= 6) {
-    int width = atoi(argv[1]);
-    int height = atoi(argv[2]);
-    int nb_moves_max = atoi(argv[3]);
-    int nb_colors = 4;
-    bool wrapping = false;
-
-    if (width <= 0 || height <= 0 || nb_moves_max <= 0)
-      fprintf(stderr, "Invalid parameters. Loading default game...\n");
-    else if (argc == 4)
-      g = game_random_ext(width, height, nb_moves_max, nb_colors, wrapping);
-    else if (argc == 5) {
-      if (argv[4][0] == 'N')
-        wrapping = false;
-      else if (argv[4][0] == 'S')
-        wrapping = true;
-      else
-        nb_colors = atoi(argv[4]);
-      if (nb_colors >= 2 && nb_colors < 17)
-        g = game_random_ext(width, height, nb_moves_max, nb_colors, wrapping);
-      else
-        fprintf(stderr, "Invalid parameters. Loading default game...\n");
-    } else if (argc == 6) {
-      nb_colors = atoi(argv[4]);
-      if (nb_colors >= 2 && nb_colors < 17 &&
-          (argv[5][0] == 'N' || argv[5][0] == 'S'))
-        g = game_random_ext(width, height, nb_moves_max, nb_colors,
-                            argv[5][0] == 'S');
-      else
-        fprintf(stderr, "Invalid parameters. Loading default game...\n");
-    }
+    if (g == NULL) printf("Error on game load : The default game as load\n");
   }
 
   if (argc == 1 || g == NULL) {  // if game is launch without arguments or if
@@ -150,7 +113,7 @@ int main(int argc, char* argv[]) {
       printf("\n");
     }
 
-    // If the game is lose
+    // If the game is lost
     if (game_nb_moves_cur(g) >= game_nb_moves_max(g) && !game_is_over(g) &&
         pl) {
       printf("DOMMAGE\n");
