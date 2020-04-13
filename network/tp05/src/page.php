@@ -5,7 +5,7 @@
 $str = "Minecraft;Pokemon;Zelda;The Witcher;Kerbal space program";
 $t = explode(";", $str);
 
-$text = $t[mt_rand(0, 4)];
+$text = $t[mt_rand(0,  count($t))];
 ?>
 
 <!DOCTYPE html>
