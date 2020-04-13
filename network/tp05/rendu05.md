@@ -316,6 +316,9 @@ test-redir       [   <=>                                 ] 166,90K   369KB/s    
 
 - Lors ce que je fait cette commande `telnet bruno.pinaud.emi.u-bordeaux.fr 80` avec la requête `GET / HTTP/1.0\n\n` je n'obtien pas la même page que dans le navigateur. La cause de cette differance est du au fait qu'il y a un seul serveur qui s'occupe des requete a destination des hosts `<prenom>.<nom>.emi.u-bordeaux.fr` ce qui a pour effect si on ne presise pas le champ `Host:...` de nous rediriger sur la page par defaut. Dans le navigateur le champ `Host:...` est completter automatiquement ce qui fait que le serveur permet l'accer aux resources de l'host `bruno.pinaud.emi.u-bordeaux.fr`. Pour en arriver a cette conclusion j'ai effectuer la commande `telnet` avec l'host `charles.goedefroit.emi.u-bordeaux.fr` ce qui mas donner la même page.
 
+> Avec la commande `telnet`
+
+```http
 GET / HTTP/1.0
 
 HTTP/1.1 200 OK
@@ -328,3 +331,198 @@ Content-Length: 8021
 Vary: Accept-Encoding
 Connection: close
 Content-Type: text/html
+[...]
+```
+
+### 1.5 HTTP + SSL = HTTPS
+
+Je test la commande `openssl s_client -crlf -connect home.magicorp.fr:https` avec la requete `http` suivante :
+
+```http
+GET / HTTP/1.0
+User-Agent: openssl
+Host: home.magicorp.fr
+
+
+```
+
+Si je test sur mon site `home.magicorp.fr` en `https` j'obtient l'echange ci-dessous (noter que la reponse me redirige vers la page login) :
+
+```http
+CONNECTED(00000005)
+depth=2 O = Digital Signature Trust Co., CN = DST Root CA X3
+verify return:1
+depth=1 C = US, O = Let's Encrypt, CN = Let's Encrypt Authority X3
+verify return:1
+depth=0 CN = home.magicorp.fr
+verify return:1
+---
+Certificate chain
+ 0 s:CN = home.magicorp.fr
+   i:C = US, O = Let's Encrypt, CN = Let's Encrypt Authority X3
+ 1 s:C = US, O = Let's Encrypt, CN = Let's Encrypt Authority X3
+   i:O = Digital Signature Trust Co., CN = DST Root CA X3
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIFfjCCBGagAwIBAgISBMftMDMkEcgnDjhAfS98R2waMA0GCSqGSIb3DQEBCwUA
+MEoxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MSMwIQYDVQQD
+ExpMZXQncyBFbmNyeXB0IEF1dGhvcml0eSBYMzAeFw0yMDA0MDgxMTA1MTlaFw0y
+MDA3MDcxMTA1MTlaMBsxGTAXBgNVBAMTEGhvbWUubWFnaWNvcnAuZnIwggEiMA0G
+CSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQD0qC7GpySYddvO1flQMeWMgjEkWv/N
+KetlYMnygViH/LTSkwCbaDLA5rbUuNX0yobeUJzdjEnEEB5GfDRzKLIHR0/rkcCm
+wbfAE/BolZC4gbZedygiAQ2N4XXozkiMGehZXpVSeu10OWlC2AsA9kJZjbS8M79k
+yZZIAJzOYeW16ZdWE5NlXVUeyRN/3T9NHSoMSzWClSMA407gWuK/3pJGhfkGJe0O
+cc/NGqyhTLE1TgU5ttvGXkMwbHh6zYqnK94gY5H5CKp7Oo6734Sa66Qni/Z9ViAZ
+exRSfpxk/MOZcc+BZtp0bSpHOHzqPpRj8k2w/aZDl+I4m5WHCDdd1IlpAgMBAAGj
+ggKLMIIChzAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsG
+AQUFBwMCMAwGA1UdEwEB/wQCMAAwHQYDVR0OBBYEFNm5e5/SR73n0FsTfbji9O+o
+DCjjMB8GA1UdIwQYMBaAFKhKamMEfd265tE5t6ZFZe/zqOyhMG8GCCsGAQUFBwEB
+BGMwYTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AuaW50LXgzLmxldHNlbmNyeXB0
+Lm9yZzAvBggrBgEFBQcwAoYjaHR0cDovL2NlcnQuaW50LXgzLmxldHNlbmNyeXB0
+Lm9yZy8wQQYDVR0RBDowOIIQaG9tZS5tYWdpY29ycC5mcoISb2N0YXZlLm1hZ2lj
+b3JwLmZyghB0bzBhLm1hZ2ljb3JwLmZyMEwGA1UdIARFMEMwCAYGZ4EMAQIBMDcG
+CysGAQQBgt8TAQEBMCgwJgYIKwYBBQUHAgEWGmh0dHA6Ly9jcHMubGV0c2VuY3J5
+cHQub3JnMIIBBAYKKwYBBAHWeQIEAgSB9QSB8gDwAHYA5xLysDd+GmL7jskMYYTx
+6ns3y1YdESZb8+DzS/JBVG4AAAFxWa4wTwAABAMARzBFAiEAsN2XWlmf0a/towfx
+BfNXX0d5+woJHn3Bafsn61iev4UCIDx0/rXNEtqRat8hJnC62OAWKoZE/fvNIE38
+vL/4OAHfAHYAsh4FzIuizYogTodm+Su5iiUgZ2va+nDnsklTLe+LkF4AAAFxWa4w
+UAAABAMARzBFAiAiZY8YORslS7L6YGNBEb0649i9a2qpic/kP2MhwExFRwIhAMfP
+CJCQuZziTkmT4xwnzB/XNJwXUdZoQOXeOXTh93+vMA0GCSqGSIb3DQEBCwUAA4IB
+AQCcl3uKLwgiPGKFtAcqhD+5Ous8e05L/BLOZHuJ3AXum3RtUzOpTcbkmiDx6rBP
+AtmQ4sCQaRlbtdyQuMmZwK/9Asxt8HoZFQHCRszgNLy5ycGrWO7+Ly5SV23MOutD
+2klIElM6jTX8R6F+PM5HOwLmdgxrXpm504gJfUIW1abmHAHPZ2Gm8COY6hYPtOgs
+wtU9bjj2YBGFYR+hePZfI71j9EuOtdD5zO7TfUB4foDFCCdI6UBdauVs+s3mmErO
+B2qcvpIG0mYN6FMhPH8Mb8kixwAoB4iIWsR1hFiyxGWNnzgjgjdeYdqyVzlvqZ0c
+w3lTOaSjhKD0oZfI24FikvAh
+-----END CERTIFICATE-----
+subject=CN = home.magicorp.fr
+
+issuer=C = US, O = Let's Encrypt, CN = Let's Encrypt Authority X3
+
+---
+No client certificate CA names sent
+Peer signing digest: SHA256
+Peer signature type: RSA
+Server Temp Key: ECDH, P-256, 256 bits
+---
+SSL handshake has read 3293 bytes and written 444 bytes
+Verification: OK
+---
+New, TLSv1.2, Cipher is ECDHE-RSA-AES256-GCM-SHA384
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1.2
+    Cipher    : ECDHE-RSA-AES256-GCM-SHA384
+    Session-ID: 25A6A0D88E300869A6409EC247CCD3FAE2330913733FDCCC8A48466855089FF3
+    Session-ID-ctx: 
+    Master-Key: CB6F8F0340093B53C3BEF5A154F9CC1CBE3EBB1E645700FB059696647AE9A419BFB3C26ACAB91E46B07EE6853A12393C
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 300 (seconds)
+    TLS session ticket:
+    0000 - d4 8f be 00 c9 fe 5e 29-0b 40 83 57 87 f1 8f 9c   ......^).@.W....
+    0010 - 6c c8 01 64 82 06 f9 15-8c f5 cd 52 f5 70 9c cc   l..d.......R.p..
+    0020 - 66 44 a4 e6 86 59 d5 c2-5d eb 3d e6 38 7a 13 07   fD...Y..].=.8z..
+    0030 - 14 c8 10 81 3a 70 f3 d9-81 9a dd 81 81 f4 e1 79   ....:p.........y
+    0040 - 84 13 67 ae 8c f2 b9 32-5a 94 ef cd 31 10 ee cf   ..g....2Z...1...
+    0050 - cf de 24 97 ba 04 02 04-b7 90 bb 31 30 32 27 7e   ..$........102'~
+    0060 - 39 50 7e bd 08 e6 b8 b4-e1 b7 18 09 18 47 5e 83   9P~..........G^.
+    0070 - 3b fc 81 e4 37 01 cc 5b-5b 8b ca eb de b0 52 68   ;...7..[[.....Rh
+    0080 - 1b c4 65 1d fc 42 65 fd-9c 17 d3 f0 73 79 62 f7   ..e..Be.....syb.
+    0090 - 0e e7 04 07 67 ae 95 f5-27 e2 a0 5f b1 ab c7 63   ....g...'.._...c
+    00a0 - 32 ea 52 eb fd 28 b5 6b-7a 52 71 e3 38 fa 99 e3   2.R..(.kzRq.8...
+    00b0 - f4 c2 c5 d2 d5 f1 95 0b-06 d9 bb 9c e0 60 55 b5   .............`U.
+    00c0 - 08 25 ef 80 18 04 9d 40-7a 18 52 a5 17 70 96 b9   .%.....@z.R..p..
+
+    Start Time: 1586421747
+    Timeout   : 7200 (sec)
+    Verify return code: 0 (ok)
+    Extended master secret: no
+---
+GET / HTTP/1.0
+User-Agent: openssl
+Host: home.magicorp.fr
+
+
+HTTP/1.0 302 Found
+Date: Thu, 09 Apr 2020 08:42:28 GMT
+Server: Apache/2.4.25 (Debian)
+Set-Cookie: PHPSESSID=j7f110fii6b78t6rp1ssohbibe; path=/; secure; HttpOnly; SameSite=lax
+Cache-Control: max-age=0, must-revalidate, private
+Location: https://home.magicorp.fr/login
+pragma: no-cache
+expires: -1
+Content-Length: 364
+Connection: close
+Content-Type: text/html; charset=UTF-8
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="refresh" content="0;url=https://home.magicorp.fr/login" />
+
+        <title>Redirecting to https://home.magicorp.fr/login</title>
+    </head>
+    <body>
+        Redirecting to <a href="https://home.magicorp.fr/login">https://home.magicorp.fr/login</a>.
+    </body>
+</html>closed
+```
+
+## 2 Vos traces
+
+- Ma machine n'as pas eter identifer. Seul mon forniseur d'acces internet (FAI), l'adresse ip du router (Adresse ip publique) et le noeud reseau rattache. La localite n'est pas bonne et le nom d'hote est remplacer par l'adresse ip car il n'est pas disponible
+  - ADRESSE IP LOCALE : …
+  - ADRESSE IP PUBLIQUE : 37.167.199.127
+  - NOM D'HÔTE : 37.167.199.127
+  - FAI FREEM
+  - NŒUD RÉSEAU RATTACHÉ : AS51207 Free Mobile SAS
+  - LOCALITÉ : Ville Vic-Fezensac Région Occitanie Pays France
+
+## 3 Cookies et formulaires
+
+Pour google chrome le fchier `Cookies` ce trouve a cette adresse `~/.config/google-chrome/Profile 1/Cookies`.
+
+Lorce que je soumet le formulaire le serveur me repond avec cest deux ligne dans l'entete de la reponce :
+
+```http
+Set-Cookie: nom=charles; expires=Sun, 12-Apr-2020 13:30:16 GMT; Max-Age=60
+Set-Cookie: fruit=bannane; expires=Sun, 12-Apr-2020 13:30:16 GMT; Max-Age=60
+```
+
+Dans la base de donner sqlite constat que les cookies expirent au bout de 60 scondes. De plus on vois aussi que les cookies son enregistrer en temps univercel (UTC).
+
+## 4 Les langages du world wide web
+
+Toute les question suivante son faite dans le dossier src
+
+## 4.1 Une page statique
+
+## 4.1.1 En-tête et métadonnées
+
+## 4.1.2 Structure du document
+
+## 4.2 Un coup de peinture
+
+## 4.2.1 Inclusion de CSS
+
+## 4.2.2 Mise en pratique
+
+## 4.2.3 Bonus
+
+## 4.3 Contenu dynamique, côté client
+
+## 4.3.1 Masquage de contenu
+
+## 4.3.2 Bonus : Un coup de peinture, phase II
+
+## 4.4 Contenu dynamique, côté serveur
+
+## 4.4.1 Fortune PHP

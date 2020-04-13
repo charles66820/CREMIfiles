@@ -1,0 +1,58 @@
+#view {
+    height: 100px;
+    width: 100px;
+    display: inline-block;
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-size: auto 670px;
+    background-position: 0px 0px;
+}
+
+/* em {
+    color: purple;
+} */
+
+h1 {
+    color: red;
+}
+
+h2 {
+    color: green;
+}
+
+h3 {
+    color: blue;
+}
+
+a {
+    color: red;
+}
+
+a:visited {
+    color: gray;
+}
+
+a:hover {
+    background-color: lightgray;
+}
+
+#sectionStyle p {
+    font-style: normal;
+}
+
+#sectionStyle p.avecEmphase em{
+    font-style: normal;
+}
+
+.warning {
+    color: red;
+}
+
+.waldo:hover {
+    background-color: orange;
+}
+
+#bonusBordure {
+    border: 2px dashed magenta;
+    padding: 8px;
+}
