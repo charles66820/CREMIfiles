@@ -381,7 +381,13 @@ bool test_game_save() {
   }
 
   char filecontent[49];
-  fscanf(file, "%49c", filecontent);  // load file content
+  if (!fscanf(file, "%49c", filecontent)) {  // load file content
+    fprintf(stderr, "Error: unknown!\n");
+    // close and remove file
+    fclose(file);
+    remove("data/savetest.rec");
+    return false;
+  }
   filecontent[48] = '\0';
 
   // close and remove file
@@ -404,7 +410,10 @@ bool test_game_save() {
  */
 bool test_game_load() {
   // create data folder
-  system("mkdir -p data");
+  if (system("mkdir -p data") == -1) {
+    fprintf(stderr, "The folder (data) can not be create.\n");
+    return false;
+  }
 
   // open new file for test
   FILE *file;
@@ -672,7 +681,13 @@ bool test_game_load_save() {
   }
 
   char filecontent[49];
-  fscanf(file, "%49c", filecontent);  // load file content
+  if (!fscanf(file, "%49c", filecontent)) {  // load file content
+    fprintf(stderr, "Error: unknown!\n");
+    // close and remove file
+    fclose(file);
+    remove("data/savetest.rec");
+    return false;
+  }
   filecontent[48] = '\0';
 
   // close and remove file

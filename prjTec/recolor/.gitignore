@@ -1,8 +1,21 @@
 /.vscode/*
 !/.vscode/launch.json
 !/.vscode/tasks.json
+!/.vscode/c_cpp_properties.json
 
 /build/
 
-report.xml
-report/
+/report.xml
+/report/
+
+/android/bin
+/android/gen
+/android/libs
+/android/obj
+
+/android/jni/SDL*
+/android/jni/src/*.o
+/android/jni/src/*.a
+/android/jni/src/*.gcno
+/android/jni/src/*.gcda
+/android/jni/src/recolor_sdl

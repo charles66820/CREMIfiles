@@ -7,6 +7,8 @@
 #include <string.h>
 #include "game.h"
 #include "game_io.h"
+#include "game_rand.h"
+#include "load_game.h"
 
 /**
  * @brief Print cells in stdout
@@ -50,29 +52,10 @@ int charToInt(char c) { return c - '0'; }
 
 int main(int argc, char* argv[]) {
   // Init game vars
-  bool pl = true;
+  bool pl = true;  // lose
   game g = NULL;
 
-  if (argc > 1) {
-    g = game_load(argv[1]);
-    if (g == NULL) printf("Error on game load : The default game as load\n");
-  }
-
-  if (argc == 1 || g == NULL) {  // if game is launch without arguments or if
-                                 // game is null we create new game
-    int nbMaxHit = 12;
-
-    color cells[SIZE * SIZE] = {
-        0, 0, 0, 2, 0, 2, 1, 0, 1, 0, 3, 0, 0, 3, 3, 1, 1, 1, 1, 3, 2, 0, 1, 0,
-        1, 0, 1, 2, 3, 2, 3, 2, 0, 3, 3, 2, 2, 3, 1, 0, 3, 2, 1, 1, 1, 2, 2, 0,
-        2, 1, 2, 3, 3, 3, 3, 2, 0, 1, 0, 0, 0, 3, 3, 0, 1, 1, 2, 3, 3, 2, 1, 3,
-        1, 1, 2, 2, 2, 0, 0, 1, 3, 1, 1, 2, 1, 3, 1, 3, 1, 0, 1, 0, 1, 3, 3, 3,
-        0, 3, 0, 1, 0, 0, 2, 1, 1, 1, 3, 0, 1, 3, 1, 0, 0, 0, 3, 2, 3, 1, 0, 0,
-        1, 3, 3, 1, 1, 2, 2, 3, 2, 0, 0, 2, 2, 0, 2, 3, 0, 1, 1, 1, 2, 3, 0, 1};
-
-    // Create new game
-    g = game_new(cells, nbMaxHit);
-  }
+  g = load_game(argc, argv);
 
   // Show the game for the first time
   printGame(g);
@@ -98,10 +81,12 @@ int main(int argc, char* argv[]) {
     } else if (choice == 's') {  // For save game
       char fileName[251];
       printf("Saisiser le nom du fichier où sera enregistré le jeu : ");
-      scanf("%250s", fileName);
-      strcat(fileName, ".rec");
-      game_save(g, fileName);
-      printf("Partie enregistré dans le fichier %s!\n", fileName);
+      if (scanf("%250s", fileName)) {
+        strcat(fileName, ".rec");
+        game_save(g, fileName);
+        printf("Partie enregistré dans le fichier %s!\n", fileName);
+      } else
+        printf("Erreur lors de l'enregistrement de la partie!\n");
     } else if (charToInt(choice) >= 0 &&
                charToInt(choice) <= 9) {  // For play shot
       game_play_one_move(g, (color)charToInt(choice));
@@ -113,7 +98,7 @@ int main(int argc, char* argv[]) {
       printf("\n");
     }
 
-    // If the game is lost
+    // If the game is lose
     if (game_nb_moves_cur(g) >= game_nb_moves_max(g) && !game_is_over(g) &&
         pl) {
       printf("DOMMAGE\n");

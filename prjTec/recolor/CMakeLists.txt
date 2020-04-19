@@ -4,7 +4,7 @@ cmake_minimum_required (VERSION 2.6)
 option(ENABLE_DEBUG "debug options" ON)
 
 # The project name followed by the programming language use
-project (recolor_text C)
+project("Recolor" LANGUAGES C)
 
 # Compile all the files without any particular specification
 set(CMAKE_C_FLAGS "-std=c99 -Wall")
@@ -13,49 +13,94 @@ set(CMAKE_C_FLAGS_DEBUG "-g -DDEBUG --coverage")
 # Compile all the file on the release mode (optimise version of the compilation faster than the normal version)
 set(CMAKE_C_FLAGS_RELEASE "-O3")
 
+# for SDL2
+IF(WIN32)
+    set(SDL2_ALL_LIBS mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
+    set(SDL2_ALL_INC C:/TDM-GCC-32/include/SDL2)
+
+ELSE()
+    # pkg-config --list-all  | grep -i sdl2
+    include(FindPkgConfig)
+    pkg_search_module(SDL2 REQUIRED sdl2)
+    pkg_search_module(SDL2_IMG REQUIRED SDL2_image)
+    pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
+    set(SDL2_ALL_LIBS ${SDL2_LIBRARIES} ${SDL2_IMG_LIBRARIES} ${SDL2_TTF_LIBRARIES})
+    set(SDL2_ALL_INC ${SDL2_INCLUDE_DIRS} ${SDL2_IMG_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
+ENDIF()
+
+include_directories(${SDL2_ALL_INC} include)
+
 # for generate bin and lib files in generated folder
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "generated")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "generated")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "generated")
 set(EXECUTABLE_OUTPUT_PATH "generated")
 
-# copy data folder to generated folder
+# copy data and assets folders to generated folder
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-
-include(CTest)
-enable_testing()
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${EXECUTABLE_OUTPUT_PATH})
 
 ### Implementation of all executable
 # Creation of the library game
-add_library (game game.c game_io.c)
+add_library (game lib/game.c lib/game_io.c)
 IF (WIN32)
-    add_library (gl getline.c)
-  target_link_libraries(game m gl)
-ELSE()
-  target_link_libraries(game m)
+  add_library (gl lib/getline.c)
+  target_link_libraries(game gl)
 ENDIF()
 
-add_library (sol solution.c)
+add_library (sol lib/solution.c)
 
 # executable of the game
-add_executable (recolor_text recolor_text.c)
+add_executable (recolor_text src/recolor_text.c src/game_rand.c src/load_game.c)
 target_link_libraries (recolor_text game)
 
-add_executable(recolor_solve recolor_solve.c)
+add_executable(recolor_solve src/recolor_solve.c)
 target_link_libraries (recolor_solve pthread game m sol)
 
+IF(WIN32)
+  add_executable(recolor_sdl WIN32 src/main_sdl.c src/fun_sdl.c src/game_rand.c src/load_game.c src/recolor_sdl.c assets/ressourses.rc)
+  target_compile_options(recolor_sdl INTERFACE "-mwindows -DSDL")
+ELSE()
+  add_executable(recolor_sdl src/main_sdl.c src/fun_sdl.c src/game_rand.c src/load_game.c src/recolor_sdl.c assets/ressourses.rc)
+  target_compile_options(recolor_sdl INTERFACE "-DSDL")
+ENDIF()
+target_link_libraries(recolor_sdl ${SDL2_ALL_LIBS} game m)
+
 # executable of the bug finder
-add_executable (test_game_arblondeau test_game_arblondeau.c)
+add_executable (test_game_arblondeau tests/test_game_arblondeau.c)
 target_link_libraries (test_game_arblondeau game)
 
-add_executable (test_game_cgoedefroit test_game_cgoedefroit.c)
+add_executable (test_game_cgoedefroit tests/test_game_cgoedefroit.c)
 target_link_libraries (test_game_cgoedefroit game)
 
-add_executable (test_game_vandrault test_game_vandrault.c)
+add_executable (test_game_vandrault tests/test_game_vandrault.c)
 target_link_libraries (test_game_vandrault game)
 
-add_executable(test_solution_arblondeau test_solution_arblondeau.c)
+add_executable(test_solution_arblondeau tests/test_solution_arblondeau.c)
 target_link_libraries (test_solution_arblondeau game sol)
+
+### Install
+install(TARGETS recolor_text recolor_solve recolor_sdl CONFIGURATIONS Release RUNTIME DESTINATION bin)
+install(DIRECTORY assets/ CONFIGURATIONS Release DESTINATION bin/assets)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    install(FILES assets/Recolor.desktop CONFIGURATIONS Release DESTINATION /usr/share/applications )
+    install(FILES assets/recolor.svg CONFIGURATIONS Release DESTINATION /usr/share/icons/hicolor/scalable/apps)
+endif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
+### Uninstall
+if(NOT TARGET uninstall)
+  configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
+
+  add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+endif()
+
+### Tests
+include(CTest)
+enable_testing()
 
 # Those line launch the test to find the bug
 add_test(test_vandrault_new generated/test_game_vandrault new)

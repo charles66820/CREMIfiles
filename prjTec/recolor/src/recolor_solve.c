@@ -35,29 +35,29 @@ nb_color nb_colors(game g) {
     bool exist = false;
     for (uint y = 0; y < cpt && y < 16; y++)  // (1)
       if (colors_tab[y] ==
-          game_cell_current_color(g, i % game_width(g), i / game_width(g))){
+          game_cell_current_color(g, i % game_width(g), i / game_width(g))) {
         exist = true;
-        colors_ordre[y]+=1;
-        }
+        colors_ordre[y] += 1;
+      }
 
     // if the color isn't in the tab, we add it and we increment the cpt
     if (!exist) {
       colors_tab[cpt] =
           game_cell_current_color(g, i % game_width(g), i / game_width(g));
       cpt++;
-      colors_ordre[cpt]=1;
+      colors_ordre[cpt] = 1;
     }  // We should do a realloc but It is not necessary in this exercise (1)
   }
-  for(uint i=0;i<cpt;i++){
-    for(uint j=i+1;j<cpt;j++){
-        if ( colors_ordre[i] < colors_ordre[j] ) {
-            uint c = colors_ordre[i];
-            colors_ordre[i] = colors_ordre[j];
-            colors_ordre[j] = c;
-            c = colors_tab[i];
-            colors_tab[i] = colors_tab[j];
-            colors_tab[j] = c;
-        }
+  for (uint i = 0; i < cpt; i++) {
+    for (uint j = i + 1; j < cpt; j++) {
+      if (colors_ordre[i] < colors_ordre[j]) {
+        uint c = colors_ordre[i];
+        colors_ordre[i] = colors_ordre[j];
+        colors_ordre[j] = c;
+        c = colors_tab[i];
+        colors_tab[i] = colors_tab[j];
+        colors_tab[j] = c;
+      }
     }
   }
   free(colors_ordre);
@@ -161,7 +161,7 @@ bool find_one_solution(nb_color nb_colors, uint size_sol, game g,
 
     // try next move
     if (k != 0)
-      if (find_one_solution(nb_colors, size_sol, gc, solution, k - 1)){
+      if (find_one_solution(nb_colors, size_sol, gc, solution, k - 1)) {
         game_delete(gc);
         return true;
       }
@@ -225,7 +225,12 @@ void save_sol_in_file(char* filename, char* responce) {
       exit(EXIT_FAILURE);
     }
     sprintf(mkcmd, "mkdir -p %s", dir);
-    system(mkcmd);
+    if (system(mkcmd) == -1) {
+      fprintf(stderr, "The folder (%s) can not be create.\n", dir);
+      free(mkcmd);
+      free(dir);
+      exit(EXIT_FAILURE);
+    }
     free(mkcmd);
   }
   free(dir);
@@ -270,7 +275,7 @@ solution find_one(game g) {
   #pragma endregion */
 
   if (find_one_solution(nb_col, nb_move, g, sol, nb_move))
-  the_solution = create_solution(sol, nb_move);
+    the_solution = create_solution(sol, nb_move);
 
   free(nb_col->tab);
   free(nb_col);
@@ -325,13 +330,13 @@ solution find_min(game g) {
   nb_color nb_col = nb_colors(g);
   uint nb_move = game_nb_moves_max(g);
 
- /*  #pragma region reverse color for fun
-  uint* tmp = malloc(nb_col->tab_len * sizeof(uint));
-  for (uint i = 0; i < nb_col->tab_len; i++) tmp[i] = nb_col->tab[i];
-  for (uint i = 0; i < nb_col->tab_len; i++)
-    nb_col->tab[i] = tmp[nb_col->tab_len - 1 - i];
-  free(tmp);
-  #pragma endregion */
+  /*  #pragma region reverse color for fun
+   uint* tmp = malloc(nb_col->tab_len * sizeof(uint));
+   for (uint i = 0; i < nb_col->tab_len; i++) tmp[i] = nb_col->tab[i];
+   for (uint i = 0; i < nb_col->tab_len; i++)
+     nb_col->tab[i] = tmp[nb_col->tab_len - 1 - i];
+   free(tmp);
+   #pragma endregion */
 
   uint* sol = malloc(sizeof(uint) * nb_move);
   if (sol == NULL) {
@@ -339,7 +344,7 @@ solution find_min(game g) {
   }
   for (uint i = 0; i < nb_move; i++)
     if (find_min_solution(nb_col, i, g, sol, i)) {
-      the_solution = create_solution(sol, i+1);
+      the_solution = create_solution(sol, i + 1);
       break;
     }
 
