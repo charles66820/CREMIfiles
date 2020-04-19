@@ -31,3 +31,4 @@
 ## Todo
 
 - see "branch and bound algorithm" for optimize solver
+- not play color on grid after play

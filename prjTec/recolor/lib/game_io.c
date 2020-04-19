@@ -12,7 +12,8 @@
  * @param arr_s size of array
  */
 void delete_arr(char** arr, uint arr_s) {
-  if (arr != NULL) for (uint i = 0; i < arr_s; i++) free(arr[i]);
+  if (arr != NULL)
+    for (uint i = 0; i < arr_s; i++) free(arr[i]);
   free(arr);
 }
 
@@ -33,8 +34,8 @@ char** convert_line(char* line, size_t* p_size) {
   while (token != NULL) {
     iarr = malloc((strlen(token) + 1) * sizeof(char));
     if (iarr == NULL) {
-      nem: fprintf(stderr,
-                  "Error : Not enough memory on the fun convert_line.\n");
+    nem:
+      fprintf(stderr, "Error : Not enough memory on the fun convert_line.\n");
       delete_arr(arr, arr_s);
       return NULL;
     }
@@ -168,7 +169,7 @@ void game_save(cgame g, char* filename) {
   // if file path contain folder
   char* dir = malloc(sizeof(char) * filenamelen);
   if (dir == NULL) {
-    printf("Not enough memory!\n");
+    fprintf(stderr, "Not enough memory!\n");
     exit(EXIT_FAILURE);
   }
   strcpy(dir, filename);
@@ -177,12 +178,17 @@ void game_save(cgame g, char* filename) {
   if (strcmp(".", dir) && strcmp(filename, dir)) {
     char* mkcmd = malloc(sizeof(char) * filenamelen);
     if (mkcmd == NULL) {
-      printf("Not enough memory!\n");
+      fprintf(stderr, "Not enough memory!\n");
       free(dir);
       exit(EXIT_FAILURE);
     }
     sprintf(mkcmd, "mkdir -p %s", dir);
-    system(mkcmd);
+    if (system(mkcmd) == -1) {
+      fprintf(stderr, "The folder (%s) can not be create.\n", dir);
+      free(mkcmd);
+      free(dir);
+      exit(EXIT_FAILURE);
+    }
     free(mkcmd);
   }
   free(dir);
@@ -190,7 +196,7 @@ void game_save(cgame g, char* filename) {
   FILE* savefile;
   savefile = fopen(filename, "w");
   if (savefile == NULL) {
-    printf("The file couldn't be created\n");
+    fprintf(stderr, "The file couldn't be created\n");
     exit(EXIT_FAILURE);
   }
 
