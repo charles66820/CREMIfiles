@@ -2,14 +2,14 @@
 
 ## 1 Protocole HTTP
 
-- Le port du protocol `HTTP` est le port `80` (notez que pour le https le port est le 443).
+- Le port du protocol `HTTP` est le port `80` (notez que pour le `https` le port est le 443).
 
 ### 1.1 Méthode `HEAD`
 
-- Pour chaque domains vous troverez si dessous sur quelle machine est implanté le serveur, quel est le type de ce serveur et quelle est la classe de réponse :
+- Pour chaque domaine vous trouverez ci-dessous sur quelle machine est implanté le serveur, quel est le type de ce serveur et quelle est la classe de réponse :
 
   - Pour www.emi.u-bordeaux.fr :
-    - Avec la commande `telnet www.emi.u-bordeaux.fr 80` et la requéte suivant :
+    - Avec la commande `telnet www.emi.u-bordeaux.fr 80` et la requête suivante :
 
         ```http
         HEAD / HTTP/1.0
@@ -34,11 +34,20 @@
         Connection closed by foreign host.
         ```
 
-    - Machine où est implanté le serveur : `Linux` avec la distrbution `Debian`.
+    - Machine où est implantée le serveur : `Linux` avec la distrbution `Debian`.
     - Type du serveur : `Apache 2.2.22`.
     - Classe de réponse : `2xx successful` car le code http est 200.
+
+    &nbsp;
+
+    &nbsp;
+
+    &nbsp;
+
+    &nbsp;
+
   - Pour www.labri.fr :
-    - Avec la commande `telnet www.labri.fr 80` et la requéte suivant :
+    - Avec la commande `telnet www.labri.fr 80` et la requête suivante :
 
         ```http
         HEAD / HTTP/1.0
@@ -60,11 +69,11 @@
         Connection closed by foreign host.
         ```
 
-    - Machine où est implanté le serveur : `Linux`.
+    - Machine où est implantée le serveur : `Linux`.
     - Type du serveur : `Apache`.
     - Classe de réponse : `3xx redirection` car le code http est 301.
   - Pour www.archlinux.org :
-    - Avec la commande `telnet www.archlinux.org 80` et la requéte suivant :
+    - Avec la commande `telnet www.archlinux.org 80` et la requête suivante :
 
         ```http
         HEAD / HTTP/1.0
@@ -86,11 +95,11 @@
         Connection closed by foreign host.
         ```
 
-    - Machine où est implanté le serveur : `Linux` certainement la distribution `Archlinux`.
+    - Machine où est implantée le serveur : `Linux` certainement la distribution `Archlinux`.
     - Type du serveur : `nginx 1.16.1`.
     - Classe de réponse : `3xx redirection` car le code http est 301.
   - Pour www.perdu.com :
-    - Avec la commande `telnet www.perdu.com 80` et la requéte suivant :
+    - Avec la commande `telnet www.perdu.com 80` et la requête suivante :
 
         ```http
         HEAD / HTTP/1.0
@@ -118,14 +127,26 @@
         Connection closed by foreign host.
         ```
 
-    - Machine où est implanté le serveur : `Linux`.
+    - Machine où est implantée le serveur : `Linux`.
     - Type du serveur : `Apache`.
     - Classe de réponse : `2xx successful` car le code http est 200.
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
 
 ### 1.2 Classes de réponse
 
 - Succès :
-  - Avec la commande `telnet magicorp.fr 80` et la requéte si dessous j'obtien la classe 2xx :
+  - Avec la commande `telnet magicorp.fr 80` et la requête ci-dessous j'obtiens la classe 2xx :
 
     ```http
     HEAD / HTTP/1.0
@@ -148,8 +169,12 @@
     Connection closed by foreign host.
     ```
 
+&nbsp;
+
+&nbsp;
+
 - Erreur client :
-  - Avec la commande `telnet magicorp.fr 80` et la requéte si dessous j'obtien la classe 4xx :
+  - Avec la commande `telnet magicorp.fr 80` et la requête ci-dessous j'obtiens la classe 4xx :
 
     ```http
     HEAD /toto HTTP/1.0
@@ -158,6 +183,16 @@
 
 
     ```
+
+  &nbsp;
+
+  &nbsp;
+
+  &nbsp;
+
+  &nbsp;
+
+  &nbsp;
 
     ```http
     HTTP/1.1 404 Not Found
@@ -173,7 +208,7 @@
     ```
 
 - Inchangé :
-  - Avec la commande `telnet www.perdu.com 80` et la requéte si dessous j'obtien la classe 3xx :
+  - Avec la commande `telnet www.perdu.com 80` et la requête ci-dessous j'obtiens la classe 3xx :
 
     ```http
     HEAD / HTTP/1.0
@@ -198,7 +233,7 @@
     ```
 
 - Redirection :
-  - Avec la commande `telnet magicorp.fr 80` et la requéte si dessous j'obtien la classe 3xx :
+  - Avec la commande `telnet magicorp.fr 80` et la requête ci-dessous j'obtiens la classe 3xx :
 
     ```http
     HEAD / HTTP/1.0
@@ -222,11 +257,15 @@
     Connection closed by foreign host.
     ```
 
-    ça nous redirige car la réponse a pour http code "301 Moved Permanently".
+    ça nous redirige car la réponse a pour code http "301 Moved Permanently".
+
+  &nbsp;
+
+  &nbsp;
 
 ### 1.3 Méthode `GET` simple et entêtes
 
-Avec la commande `telnet bruno.pinaud.emi.u-bordeaux.fr 80` et la requéte suivant :
+Avec la commande `telnet bruno.pinaud.emi.u-bordeaux.fr 80` et la requête suivante :
 
 ```http
 GET /test-redir HTTP/1.0
@@ -310,11 +349,11 @@ test-redir       [   <=>                                 ] 166,90K   369KB/s    
 
 ```
 
-- Dans un premier temps avec le client Chrome ou wget on obtien la même chose qu'avec le client telnet mais le client Chrome ou wget effectue la redireation automaticment et fait les requetes suivant.
+- Dans un premier temps avec le client Chrome ou wget on obtient la même chose qu'avec le client telnet mais le client Chrome ou wget effectue la redirection automatiquement et fait les requêtes suivantes.
 
 ### 1.4 Méthode `GET` avec ou sans `Host:`
 
-- Lors ce que je fait cette commande `telnet bruno.pinaud.emi.u-bordeaux.fr 80` avec la requête `GET / HTTP/1.0\n\n` je n'obtien pas la même page que dans le navigateur. La cause de cette differance est du au fait qu'il y a un seul serveur qui s'occupe des requete a destination des hosts `<prenom>.<nom>.emi.u-bordeaux.fr` ce qui a pour effect si on ne presise pas le champ `Host:...` de nous rediriger sur la page par defaut. Dans le navigateur le champ `Host:...` est completter automatiquement ce qui fait que le serveur permet l'accer aux resources de l'host `bruno.pinaud.emi.u-bordeaux.fr`. Pour en arriver a cette conclusion j'ai effectuer la commande `telnet` avec l'host `charles.goedefroit.emi.u-bordeaux.fr` ce qui mas donner la même page.
+- Lorsque je fait cette commande `telnet bruno.pinaud.emi.u-bordeaux.fr 80` avec la requête `GET / HTTP/1.0\n\n` je n'obtiens pas la même page que dans le navigateur. La cause de cette différence est du au fait qu'il y a un seul serveur qui s'occupe des requêtes à destination des hosts `<prenom>.<nom>.emi.u-bordeaux.fr` ce qui a pour effet, si on ne précise pas le champ `Host:...`, de nous rediriger sur la page par défaut. Dans le navigateur le champ `Host:...` est complété automatiquement ce qui fait que le serveur permet l'accès aux ressources de l'host `bruno.pinaud.emi.u-bordeaux.fr`. Pour en arriver à cette conclusion j'ai effectué la commande `telnet` avec l'host `charles.goedefroit.emi.u-bordeaux.fr` ce qui m'a donné la même page.
 
 > Avec la commande `telnet`
 
@@ -336,7 +375,7 @@ Content-Type: text/html
 
 ### 1.5 HTTP + SSL = HTTPS
 
-Je test la commande `openssl s_client -crlf -connect home.magicorp.fr:https` avec la requete `http` suivante :
+Je teste la commande `openssl s_client -crlf -connect home.magicorp.fr:https` avec la requête `http` suivante :
 
 ```http
 GET / HTTP/1.0
@@ -346,7 +385,7 @@ Host: home.magicorp.fr
 
 ```
 
-Si je test sur mon site `home.magicorp.fr` en `https` j'obtient l'echange ci-dessous (noter que la reponse me redirige vers la page login) :
+Si je teste sur mon site `home.magicorp.fr` en `https` j'obtiens l'échange ci-dessous (notez que la réponse me redirige vers la page login) :
 
 ```http
 CONNECTED(00000005)
@@ -478,7 +517,7 @@ Content-Type: text/html; charset=UTF-8
 
 ## 2 Vos traces
 
-- Ma machine n'as pas eter identifer. Seul mon forniseur d'acces internet (FAI), l'adresse ip du router (Adresse ip publique) et le noeud reseau rattache. La localite n'est pas bonne et le nom d'hote est remplacer par l'adresse ip car il n'est pas disponible
+- Ma machine n'a pas été identifiée. Seul mon fournisseur d'accès Internet (FAI), l'adresse ip du routeur (Adresse ip publique) et le noeud réseau rattaché. La localité n'est pas bonne et le nom d'hote est remplacé par l'adresse ip car il n'est pas disponible
   - ADRESSE IP LOCALE : …
   - ADRESSE IP PUBLIQUE : 37.167.199.127
   - NOM D'HÔTE : 37.167.199.127
@@ -488,20 +527,20 @@ Content-Type: text/html; charset=UTF-8
 
 ## 3 Cookies et formulaires
 
-Pour google chrome le fchier `Cookies` ce trouve a cette adresse `~/.config/google-chrome/Profile 1/Cookies`.
+Pour Google Chrome le fichier `Cookies` se trouve à cette adresse `~/.config/google-chrome/Profile 1/Cookies`.
 
-Lorce que je soumet le formulaire le serveur me repond avec cest deux ligne dans l'entete de la reponce :
+Lorsque je soumets le formulaire, le serveur me répond avec ces deux lignes dans l'entete de la réponse :
 
 ```http
 Set-Cookie: nom=charles; expires=Sun, 12-Apr-2020 13:30:16 GMT; Max-Age=60
 Set-Cookie: fruit=bannane; expires=Sun, 12-Apr-2020 13:30:16 GMT; Max-Age=60
 ```
 
-Dans la base de donner sqlite constat que les cookies expirent au bout de 60 scondes. De plus on vois aussi que les cookies son enregistrer en temps univercel (UTC).
+Dans la base de données sqlite je constate que les cookies expirent au bout de 60 secondes. De plus on voit aussi que les cookies sont enregistrés en temps universel (UTC).
+
+> Toutes les questions suivantes sont faites dans le dossier `src`
 
 ## 4 Les langages du world wide web
-
-Toute les question suivante son faite dans le dossier src
 
 ## 4.1 Une page statique
 

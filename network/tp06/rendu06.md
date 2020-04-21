@@ -6,7 +6,7 @@
 
 &nbsp;
 
-**Premier machine `ermengaud` :**
+**Première machine `ermengaud` :**
 
 Avec la commande `/sbin/route -n` :
 
@@ -44,11 +44,11 @@ default via 10.0.202.254 dev eth0 onlink
 
 - Les deux machines sont dans le même réseau local (10.0.202.0/24 Ligne 2 des commandes).
 - L'adresse de la passerelle de la route par défaut est `10.0.202.254`.
-- Le suffixe `24` correspond au `Genmask` qui est le masque du réseau de destination (`24` correspond aux 24 premiers bit ce qui donne le masque `255.255.255.0`).
-
-> en IPv6
+- Le suffixe `24` correspond au `Genmask` qui est le masque du réseau de destination (`24` correspond aux 24 premiers bits ce qui donne le masque `255.255.255.0`).
 
 &nbsp;
+
+> en IPv6
 
 **Avec la commande `ip -6 route ls` :**
 
@@ -70,7 +70,7 @@ fe80::/64 dev br0 proto kernel metric 256  pref medium
 default via fe80::5a20:b1ff:feb1:2300 dev eth0 proto ra metric 1024  expires 8965sec hoplimit 25 pref medium
 ```
 
-- La partie réseau de l'adresse IPv6 `2001:660:6101:800:202::/80` est `2001:660:6101:800:202` (c'est les `5` premier paquet séparé par `:` ; les `17` premier caractère hexadécimal sans le 0 non-significatif ou les `20` avec les 0). La partie hôte est sur `3` paquet (48 bits).
+- La partie réseau de l'adresse IPv6 `2001:660:6101:800:202::/80` est `2001:660:6101:800:202` (ce sont les `5` premiers paquets séparés par `:` ; les `17` premiers caractères hexadécimaux sans le 0 non-significatif ou les `20` avec les 0). La partie hôte est sur `3` paquets (48 bits).
 - ✓.
 - ✓ c'est `fe80::5a20:b1ff:feb1:2300`.
 
@@ -115,9 +115,9 @@ default via fe80::5a20:b1ff:feb1:2300 dev eth0 proto ra metric 1024  expires 896
 
 - Les machines peuvent communiquer dans leurs réseaux locaux respectifs :
   - `grave` peut ping `immortal` (sur eth0) et inversement.
-  - `immortal` (sur eth1), `opeth` et `syl` peuvent ce ping entre elles dans les deux sens.
+  - `immortal` (sur eth1), `opeth` et `syl` peuvent se ping entre-elles dans les deux sens.
 
-- Les tables de routage des machines, que j'obtient avec la commande `route -n` sont :
+- Les tables de routage des machines, que j'obtiens avec la commande `route -n` sont :
 
 `grave` :
 
@@ -146,7 +146,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 192.168.0.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
 ```
 
-- J'ai configuré la table de routage de `grave` avec la commande `route add default gw 147.210.0.1` pour que par défaut les paquets qui ne sont pas destiner à un réseau dans la table de routage passe par `immortal`. J'ai aussi configuré les tables de routage de `opeth` et `syl` avec la commande `route add default gw 192.168.0.1` pour la même raison. Et j'ai activé le relai des paquets sur `immortal` avec la commande `echo 1 > /proc/sys/net/ipv4/ip_forward`. Pour finir j'ai testé que toutes les machines sont capables de communiquer ensemble et c'est le cas.
+- J'ai configuré la table de routage de `grave` avec la commande `route add default gw 147.210.0.1` pour que par défaut les paquets qui ne sont pas destinés à un réseau dans la table de routage, passent par `immortal`. J'ai aussi configuré les tables de routage de `opeth` et `syl` avec la commande `route add default gw 192.168.0.1` pour la même raison. Et j'ai activé le relais des paquets sur `immortal` avec la commande `echo 1 > /proc/sys/net/ipv4/ip_forward`. Pour finir j'ai testé que toutes les machines sont capables de communiquer ensemble et c'est le cas.
 
 - Lorsque j'envoie un ping de `opeth` vers `grave` avec la commande `ping 147.210.0.2 -c 1` je peux voir que les paquets passent bien par `immortal` je peux aussi voir les requêtes arp de `immortal` sur les 2 réseaux pour faire la résolution ip.
 
@@ -181,12 +181,12 @@ Je configure la table de routage de `syl` et de toutes les machines du sous-rés
 
 Je configure la table de routage de `nile` et de toutes les machines du sous-réseau `147.210.15.0/24`, hormis la passerelle, avec la commande `route add default gw 147.210.15.1` pour que la passerelle par défaut soit `syl`.
 
-j'active le relai des paquets sur les 3 passerelles qui sont `immortal`, `grave` et `syl` avec la commande `echo 1 > /proc/sys/net/ipv4/ip_forward`.
+J'active le relais des paquets sur les 3 passerelles qui sont `immortal`, `grave` et `syl` avec la commande `echo 1 > /proc/sys/net/ipv4/ip_forward`.
 
 Pour finir, j'ajoute 4 routes à `grave` :
 
-- La première pour que les machines du sous-réseau `147.210.12.0/24` puisse communiquer avec celles des sous-réseaux `147.210.15.0/24` et pour que celles du sous-réseau `147.210.13.0/24` puisse répondre à celles du sous-réseau `147.210.15.0/24`. J'utilise la commande `route add -net 147.210.15.0/24 gw 147.210.14.2` pour ajouter la route.
-- La deuxième pour que les machines du sous-réseau `147.210.15.0/24` puisse communiquer avec celles des sous-réseaux `147.210.12.0/24` et pour que celles du sous-réseau `147.210.14.0/24` puisse répondre à celles du sous-réseau `147.210.12.0/24`. J'utilise la commande `route add -net 147.210.12.0/24 gw 147.210.13.1` pour ajouter la route.
+- La première pour que les machines du sous-réseau `147.210.12.0/24` puisse communiquer avec celles du sous-réseau `147.210.15.0/24` et pour que celles du sous-réseau `147.210.13.0/24` puisse répondre à celles du sous-réseau `147.210.15.0/24`. J'utilise la commande `route add -net 147.210.15.0/24 gw 147.210.14.2` pour ajouter la route.
+- La deuxième pour que les machines du sous-réseau `147.210.15.0/24` puisse communiquer avec celles du sous-réseau `147.210.12.0/24` et pour que celles du sous-réseau `147.210.14.0/24` puisse répondre à celles du sous-réseau `147.210.12.0/24`. J'utilise la commande `route add -net 147.210.12.0/24 gw 147.210.13.1` pour ajouter la route.
 
 &nbsp;
 
@@ -212,7 +212,7 @@ Pour finir, j'ajoute 4 routes à `grave` :
 
 ## 1 Firewall
 
-- La différence entre la DMZ (zone démilitarisée) et le réseau interne des employés et que les machines qui sont dans la DMZ sont accessibles depuis Internet, mais pas les machines des employés.
+- La différence entre la DMZ (zone démilitarisée) et le réseau interne des employés est que les machines qui sont dans la DMZ sont accessibles depuis Internet, mais pas les machines des employés.
 - C'est fait ✓.
 - Effectivement plus aucun trafic réseau n'est autorisé vers ou à travers `immortal` :
 
@@ -240,7 +240,7 @@ PING 192.168.1.2 (192.168.1.2) 56(84) bytes of data.
   - `iptables -A FORWARD -i eth2 -o eth0 -p icmp -j ACCEPT`
   - `iptables -A FORWARD -i eth2 -o eth1 -p icmp -j ACCEPT`
 
-- Je fais le teste avec la commande `ping 147.210.0.2 -c 4` sur `nile` :
+- Je fais le test avec la commande `ping 147.210.0.2 -c 4` sur `nile` :
 
 ```text
 PING 147.210.0.2 (147.210.0.2) 56(84) bytes of data.
@@ -261,7 +261,7 @@ PING 147.210.0.2 (147.210.0.2) 56(84) bytes of data.
 
 &nbsp;
 
-Après avoir taper la commande on remarque que les ping fonctionne du réseau interne à internet mais pas l'inverse :
+Après avoir tapé la commande on remarque que les ping fonctionnent du réseau interne à internet mais pas l'inverse :
 
 ```text
 PING 147.210.0.2 (147.210.0.2) 56(84) bytes of data.
@@ -303,11 +303,15 @@ index.html.1        100%[===================>]  10.45K  --.-KB/s    in 0s
 2020-04-19 20:36:20 (122 MB/s) - ‘index.html.1’ saved [10701/10701]
 ```
 
-- Pour autoriser `grave` à accéder au serveur ssh de `dt` je tape la commande `iptables -A FORWARD -s 172.16.0.2 -d 192.168.0.3 -p tcp --dport 22 -j ACCEPT`. Teste avec le compte toto (`ssh toto@192.168.0.3`) :
+- Pour autoriser `grave` à accéder au serveur ssh de `dt` je tape la commande `iptables -A FORWARD -s 172.16.0.2 -d 192.168.0.3 -p tcp --dport 22 -j ACCEPT`.
 
 &nbsp;
 
 &nbsp;
+
+&nbsp;
+
+Je teste avec le compte toto (`ssh toto@192.168.0.3`) :
 
 Sur `grave` :
 
@@ -329,7 +333,7 @@ permitted by applicable law.
 toto@dt:~$
 ```
 
-Sur `opeth` et sur `nule` :
+Sur `opeth` et sur `nile` :
 
 ```txt
 root@opeth:~# ssh toto@192.168.0.3
@@ -341,14 +345,11 @@ root@nile:~#  ssh toto@192.168.0.3
 ssh: connect to host 192.168.0.3 port 22: Connection timed out
 ```
 
-- Pour autoriser l'accès depuis n’importe où vers le serveur web de `syl` j'utilise la commande `iptables -A FORWARD -s 0.0.0.0 -d 192.168.0.2 -p tcp --dport 80 -j ACCEPT`. Je testes avec `wget` :
+- Pour autoriser l'accès depuis n’importe où vers le serveur web de `syl` j'utilise la commande `iptables -A FORWARD -s 0.0.0.0 -d 192.168.0.2 -p tcp --dport 80 -j ACCEPT`. Je teste avec `wget` :
 
-Teste avec une machine du réseau interne :
+Test avec une machine du réseau interne :
 
 ```txt
-root@nile:~# wget 192.168.0.2
---2020-04-19 21:00:37--  http://192.168.0.2/
-Connecting to 192.168.0.2:80... ^C
 root@nile:~# wget 192.168.0.2
 --2020-04-19 21:01:24--  http://192.168.0.2/
 Connecting to 192.168.0.2:80... connected.
@@ -361,7 +362,7 @@ index.html.2        100%[===================>]  10.45K  --.-KB/s    in 0s
 2020-04-19 21:01:24 (113 MB/s) - ‘index.html.2’ saved [10701/10701]
 ```
 
-Teste avec une machine du réseau externe :
+Test avec une machine du réseau externe :
 
 ```txt
 root@opeth:~#  wget 192.168.0.2
@@ -376,7 +377,7 @@ index.html          100%[===================>]  10.45K  --.-KB/s    in 0s
 2020-04-19 21:03:14 (192 MB/s) - ‘index.html’ saved [10701/10701]
 ```
 
-Teste avec une machine de la DMZ :
+Test avec une machine de la DMZ :
 
 ```txt
 root@dt:~#  wget 192.168.0.2
@@ -427,7 +428,7 @@ PORT   STATE SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 5.65 seconds
 ```
 
-Sur `opeth` je constate que j'ai également accès au port 80 en tcp sur le serveur `syl` et que je n'ai accè à aucun des ports du serveur `dt` :
+Sur `opeth` je constate que j'ai également accès au port 80 en tcp sur le serveur `syl` et que je n'ai accès à aucun des ports du serveur `dt` :
 
 ```txt
 root@opeth:~# nmap -Pn -F 192.168.0.2

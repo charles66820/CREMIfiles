@@ -38,7 +38,7 @@ $text = $t[mt_rand(0,  count($t))];
   <header>
     <nav id="li">
       <a class="nav-item icon" href="index.html">
-        <img src="img/icon.gif" height="60">
+        <img src="img/icon.gif" alt="site icon" height="60">
       </a>
       <a class="nav-item" href="index.html">Home</a>
       <a class="nav-item active" href="page.php">Page PHP</a>
@@ -65,7 +65,9 @@ $text = $t[mt_rand(0,  count($t))];
       </section>
     </article>
     <article>
+      <h1>Liens</h1>
       <section>
+        <h2>Actions</h2>
         <a href="#top">Aller en haut de la page</a>
       </section>
     </article>

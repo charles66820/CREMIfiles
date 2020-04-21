@@ -28,7 +28,7 @@
   <header>
     <nav id="li">
       <a class="nav-item icon" href="index.html">
-        <img src="img/icon.gif" height="60">
+        <img src="img/icon.gif" alt="site icon" height="60">
       </a>
       <a class="nav-item active" href="index.html">Home</a>
       <a class="nav-item" href="page.php">Page PHP</a>
@@ -61,7 +61,8 @@
       <section>
         <h2>La sous section des H1-H6 :</h2>
         <br>
-        <h1>Titre avec la balise H1</h1>
+        <h1>Titre avec la balise H1</h1><span>Ce titre de premier niveau (&lt;h1&gt;) ne fonctionne pas correctement car il y a deja un titre de premier niveau dans la
+          balise parente.</span>
         <h2>Titre avec la balise H2</h2>
         <h3>Titre avec la balise H3</h3>
         <h4>Titre avec la balise H4</h4>
@@ -74,6 +75,7 @@
       </section>
     </article>
     <article>
+      <h1>Les listes</h1>
       <section>
         <h2>List de point:</h2>
         <ul>
@@ -166,6 +168,7 @@
       </section>
     </article>
     <article>
+      <h1>Element dynamique</h1>
       <section>
         <h2 onclick="toggleList()">Masquage de contenu</h2>
         <ol id="listAMasque">
@@ -194,6 +197,7 @@
       </section>
     </article>
     <article>
+      <h1>Evenement</h1>
       <div>
         <!-- mettre du contenu -->
         <img src="img/kitten.jpg" alt="kitten" id="kitty">
@@ -206,7 +210,9 @@
       </div>
     </article>
     <article>
+      <h1>Liens</h1>
       <section>
+        <h2>Actions</h2>
         <a href="#top">Aller en haut de la page</a>
         <a href="#asuna">Aller voire asuna & kirito</a>
       </section>
