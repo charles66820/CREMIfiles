@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">Recolor</string>
-    <string name="edit_text_args">Argument du jeu</string>
-    <string name="button_start">Lancer le jeu</string>
-    <string name="switch_is_wrapping">Game wrapping</string>
-</resources>
