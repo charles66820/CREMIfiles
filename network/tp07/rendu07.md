@@ -13,10 +13,10 @@
 
 - SSH garanti la sécurité de la communication car :
   - La confidentialité est garantie du fait que les communications sont chiffrées.
-  - L'authentification est respectée, dans les deux sens, car seul le serveur et le client connaisse la clé de session ce qui fait que personne d'autre ne peut se faire passer pour l'un ou l'autre.
-  - L'intégrité des données échangées et garantie car seul le serveur et le client peuvent chiffrés et déchiffrés les messages avec la clé de session. Mais aussi car personne ne peut modifier les messages lors de leur envoient et il ne peut pas y avoir de perte de paquet car la connexion est en TCP.
+  - L'authentification est respectée, dans les deux sens, car seul le serveur et le client connaissent la clé de session ce qui fait que personne d'autre ne peut se faire passer pour l'un ou l'autre.
+  - L'intégrité des données échangées est garantie car seul le serveur et le client peuvent chiffrer et déchiffrer les messages avec la clé de session. Mais aussi car personne ne peut modifier les messages lors de leurs envois et il ne peut pas y avoir de perte de paquet car la connexion est en TCP.
 
-- Lorsqu'on se connecte pour la première fois à un serveur donné le client ssh nous demande si la clé publique récupérée est bien celle du serveur car un autre serveur pourrait répondre à la place du serveur à qui l'on a envoyé la requête de connexion. C'est pour cela que l'on nous demande si la clé publique est bien la bonne la première fois. Pour les fois suivante la clé publique est enregistrée dans le fichier `known_hosts`. Ensuite à chaque connexion la clé publique est comparée automatiquement (pour vérifier l'authenticité du serveur).
+- Lorsqu'on se connecte pour la première fois à un serveur donné le client ssh nous demande si la clé publique récupérée est bien celle du serveur car un autre serveur pourrait répondre à la place du serveur à qui l'on a envoyé la requête de connexion. C'est pour cela que l'on nous demande si la clé publique est bien la bonne la première fois. Pour les fois suivantes la clé publique est enregistrée dans le fichier `known_hosts`. Ensuite à chaque connexion la clé publique est comparée automatiquement (pour vérifier l'authenticité du serveur).
 La clé privée du serveur doit rester secrète car c'est la seule à pouvoir déchiffrer les messages chiffrés par la clé publique.
 - Le serveur écoute sur le port `22` par défaut.
 
@@ -70,7 +70,7 @@ La clé privée du serveur doit rester secrète car c'est la seule à pouvoir d�
   drwx--x--x    2 cgoedefroit grp30001   8192 May  7 00:45 .ssh
   ```
 
-- J'ai modifié les droits du fichier `~/.ssh/id_rsa` avec la commande `chmod 644 ~/.ssh/id_rsa`. Lorsque je tente de me connecter sur un serveur distant, qui a ma clé publique, le client ssh ne fait pas le challenge et me demande le mot de passe car ma clé privée n'est plus vraiment privé car tout le monde a la permission en lecture sur le fichier :
+- J'ai modifié les droits du fichier `~/.ssh/id_rsa` avec la commande `chmod 644 ~/.ssh/id_rsa`. Lorsque je tente de me connecter sur un serveur distant, qui a ma clé publique, le client ssh ne fait pas le challenge et me demande le mot de passe car ma clé privée n'est plus vraiment privée car tout le monde a la permission en lecture sur le fichier :
 
   ```txt
   cgoedefroit@leger:~$ ssh -Y trelawney
@@ -88,7 +88,7 @@ La clé privée du serveur doit rester secrète car c'est la seule à pouvoir d�
   -rw-r--r--  1 cgoedefroit grp30001  1679 May  7 00:39 id_rsa
   ```
 
-- C'est fait avec la commande `chmod 600 ~/.ssh/id_rsa`. J'ai modifié les droits du fichier `~/.ssh/authorized_keys` avec la commande `chmod 666 ~/.ssh/authorized_keys`. Lorsque je tente de me connecter au serveur distant, celui-ci ne m'envoie pas de challenge car tout le monde peut modifier le fichier `~/.ssh/authorized_keys` et potentiellement ajouté sa propre clé publique.
+- C'est fait avec la commande `chmod 600 ~/.ssh/id_rsa`. J'ai modifié les droits du fichier `~/.ssh/authorized_keys` avec la commande `chmod 666 ~/.ssh/authorized_keys`. Lorsque je tente de me connecter au serveur distant, celui-ci ne m'envoie pas de challenge car tout le monde peut modifier le fichier `~/.ssh/authorized_keys` et potentiellement ajouter sa propre clé publique.
 
   ```txt
   cgoedefroit@leger:~$ ssh -Y trelawney
@@ -98,13 +98,13 @@ La clé privée du serveur doit rester secrète car c'est la seule à pouvoir d�
   J'ai rétabli les droits d'origine du fichier avec la commande `chmod 644 ~/.ssh/authorized_keys`.
 - Il compare la clé publique dans le fichier authorized_keys avec la clé publique que je lui donne.
 
-La manière la plus sûre de procéder est de lui créer un utilisateur, qu'il fournisse sa clé publique (par mail, clé USB...) qu'il faut mettre dans son fichier `~/.ssh/authorized_keys` et lui donner la clé publique du serveur en plus de son identifiant et du nom d'hôte. Le fait de lui donner la clé publique du serveur lui permettra de comparer avec celle que le serveur lui enverra.
+La manière la plus sûre de procéder est de lui créer un utilisateur, qu'il fournisse sa clé publique (par mail, clé USB...) qu'il faut mettre dans son fichier `~/.ssh/authorized_keys` et lui donner la clé publique du serveur en plus de son identifiant et du nom de l'hôte. Le fait de lui donner la clé publique du serveur lui permettra de comparer avec celle que le serveur lui enverra.
 
 </br></br></br>
 
 ### 2.2 Mode paranoïaque
 
-On a quand même amélioré la sécurité car avec une passphrase seul le challenge passe par le réseau contrairement à un mot de passe qui passe par le réseau. Utiliser une passphrase sur un ordinateur et surtout un ordinateur portable renforce la sécurité car en cas de vole ou de piratage la clé privée n'est pas utilisable telle quelle.
+On a quand même amélioré la sécurité car avec une passphrase seul le challenge passe par le réseau contrairement à un mot de passe qui passe par le réseau. Utiliser une passphrase sur un ordinateur et surtout un ordinateur portable renforce la sécurité car en cas de vol ou de piratage la clé privée n'est pas utilisable telle quelle.
 
 - C'est fait tous les processus (ssh-agent) ont reçu là demande de suicide :wink: avec la commande `killall ssh-agent`.
 
@@ -598,7 +598,7 @@ On a quand même amélioré la sécurité car avec une passphrase seul le challe
   Chain verification output: Verified. The certificate is trusted.
   ```
 
-- Vérification de l'autorité qui e certifié le certificat du serveur :
+- Vérification de l'autorité qui a certifié le certificat du serveur :
 
   ```txt
   X.509 Certificate Information:
@@ -774,14 +774,14 @@ On a quand même amélioré la sécurité car avec une passphrase seul le challe
 - Effectivement ✓
 
 - Le navigateur web affiche un avertissement de sécurité car il ne connaît pas l'autorité de certification.
-- Le risque est que ce ne sois pas le bon certificat ce qui fait qu'une tierce personne aura accès aux échanges en clair.
+- Le risque est que ce ne soit pas le bon certificat ce qui fait qu'une tierce personne aura accès aux échanges en clair.
 - On constate que le navigateur ne nous affiche plus d'avertissement de sécurité.
 - Dans mon navigateur je vais dans les paramètres avec le lien suivant `chrome://settings/certificates` puis je clique sur `Authorities` et pour finir `Import` je choisis le fichier `ca.crt` et je coche `Trust this certificate for identidying websites` puis je clique sur `OK`.
 
 ### 3.6 Bilan
 
 - Les maillons faibles sont :
-  - Si des clients récupèrent des mauvais certificats racine.
+  - Si des clients récupèrent des mauvais certificats racines.
   - Si l’autorité de certification se fait voler sa clé privée.
 
 ## 4 Programmation Socket SSL en Python
