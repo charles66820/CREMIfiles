@@ -20,12 +20,12 @@
 &nbsp;
 
 - SSH garanti la sécurité de la communication car :
-  - La confidentialité est garantie du fait que les communication son chiffrées.
-  - L'authentification est respecter, dans les deux sens, car seul le serveur et le client conaisse la clè de session ce qui fait que personne d'autre ne peut ce faire passer pour l'un ou l'autre.
-  - L'intégrité des données échangées et garentie car seul le serveur et le client peuvent chiffrés et dechiffrés les messages avec la clè de session. Mais aussi car personne ne peut modifier les messages lors de leurs envoient et il ne peut pas y avoir de perte de packet car la connexion est en TCP.
+  - La confidentialité est garantie du fait que les communications sont chiffrées.
+  - L'authentification est respectée, dans les deux sens, car seul le serveur et le client connaisse la clé de session ce qui fait que personne d'autre ne peut se faire passer pour l'un ou l'autre.
+  - L'intégrité des données échangées et garantie car seul le serveur et le client peuvent chiffrés et déchiffrés les messages avec la clé de session. Mais aussi car personne ne peut modifier les messages lors de leur envoient et il ne peut pas y avoir de perte de paquet car la connexion est en TCP.
 
-- Lorsqu'on ce connecte pour la première fois à un serveur donné le client ssh nous demande si la clé publique récupérée est bien celle du serveur car un autre serveur pourrait repondre a la place du serveur a qui l'on a envoyer la requete de connexion. C'est pour cela que l'on nous demande si la clé publique est bien la bonne la première fois. Pour les fois suivant la clé publique est enregistrée dans le fichier `known_hosts`. Ensuite a chaque connexion la clé publique est comparée automatiquement (pour verifier l'authenticiter du serveur).
-La clé privé du serveur doit rester secrète car c'est la seul a pouvoire dechiffrée les messages chiffrés par la clé public.
+- Lorsqu'on se connecte pour la première fois à un serveur donné le client ssh nous demande si la clé publique récupérée est bien celle du serveur car un autre serveur pourrait répondre à la place du serveur à qui l'on a envoyé la requête de connexion. C'est pour cela que l'on nous demande si la clé publique est bien la bonne la première fois. Pour les fois suivante la clé publique est enregistrée dans le fichier `known_hosts`. Ensuite à chaque connexion la clé publique est comparée automatiquement (pour vérifier l'authenticité du serveur).
+La clé privée du serveur doit rester secrète car c'est la seule à pouvoir déchiffrer les messages chiffrés par la clé publique.
 - Le serveur écoute sur le port `22` par défaut.
 
 ## 2 Assez des mots de passe ?
@@ -78,7 +78,7 @@ La clé privé du serveur doit rester secrète car c'est la seul a pouvoire dech
   drwx--x--x    2 cgoedefroit grp30001   8192 May  7 00:45 .ssh
   ```
 
-- J'ai modifié les droits du fichier `~/.ssh/id_rsa` avec la commande `chmod 644 ~/.ssh/id_rsa`. Lorsque je tente de me connecté sur un serveur distant, qui a ma cle publique, le client ssh ne fait pas le challenge et me demande le mot de passe car ma clé privé n'ai plus vraimment privé car tous le monde a la permission en lecture sur le fichier :
+- J'ai modifié les droits du fichier `~/.ssh/id_rsa` avec la commande `chmod 644 ~/.ssh/id_rsa`. Lorsque je tente de me connecter sur un serveur distant, qui a ma clé publique, le client ssh ne fait pas le challenge et me demande le mot de passe car ma clé privée n'est plus vraiment privé car tout le monde a la permission en lecture sur le fichier :
 
   ```txt
   cgoedefroit@leger:~$ ssh -Y trelawney
@@ -96,17 +96,17 @@ La clé privé du serveur doit rester secrète car c'est la seul a pouvoire dech
   -rw-r--r--  1 cgoedefroit grp30001  1679 May  7 00:39 id_rsa
   ```
 
-- C'est fait avec la commande `chmod 600 ~/.ssh/id_rsa`. J'ai modifié les droits du fichier `~/.ssh/authorized_keys` avec la commande `chmod 666 ~/.ssh/authorized_keys`. Lorsque je tente de me connecté au serveur distant, celui si ne m'envoie pas de challenge car tous le monde peut modifié le fichier `~/.ssh/authorized_keys` et potentiellement ajouté sa propre clé publique.
+- C'est fait avec la commande `chmod 600 ~/.ssh/id_rsa`. J'ai modifié les droits du fichier `~/.ssh/authorized_keys` avec la commande `chmod 666 ~/.ssh/authorized_keys`. Lorsque je tente de me connecter au serveur distant, celui-ci ne m'envoie pas de challenge car tout le monde peut modifier le fichier `~/.ssh/authorized_keys` et potentiellement ajouté sa propre clé publique.
 
   ```txt
   cgoedefroit@leger:~$ ssh -Y trelawney
   cgoedefroit@trelawney's password:
   ```
 
-  J'ai rétablis les droits d'origine du fichier avec la commande `chmod 644 ~/.ssh/authorized_keys`.
+  J'ai rétabli les droits d'origine du fichier avec la commande `chmod 644 ~/.ssh/authorized_keys`.
 - Il compare la clé publique dans le fichier authorized_keys avec la clé publique que je lui donne.
 
-La manière la plus sûre de procéder est de lui créé un utilisateur, qu'il fournisse sa clé publique (par mail, clé USB...) qu'il faut mettre dans son fichier `~/.ssh/authorized_keys` et lui donner la clé publique du serveur en plus de son identifiant et du nom d'hote. Le fait de lui donner la clé publique du serveur lui permettra de comparer avec celle que le serveur lui enverra.
+La manière la plus sûre de procéder est de lui créer un utilisateur, qu'il fournisse sa clé publique (par mail, clé USB...) qu'il faut mettre dans son fichier `~/.ssh/authorized_keys` et lui donner la clé publique du serveur en plus de son identifiant et du nom d'hôte. Le fait de lui donner la clé publique du serveur lui permettra de comparer avec celle que le serveur lui enverra.
 
 &nbsp;
 
@@ -116,7 +116,7 @@ La manière la plus sûre de procéder est de lui créé un utilisateur, qu'il f
 
 ### 2.2 Mode paranoïaque
 
-On a quand même amélioré la sécurité car avec une parssphrase seul le challenge passe par le réseau contrairement à un mot de passe qui passe par le réseau. Utiliser une parssphrase sur un ordinateur et surtout un ordinateur portable renforce la securité car en cas de vole ou de piratage la clé privé n'est pas utilisable telle quelle.
+On a quand même amélioré la sécurité car avec une passphrase seul le challenge passe par le réseau contrairement à un mot de passe qui passe par le réseau. Utiliser une passphrase sur un ordinateur et surtout un ordinateur portable renforce la sécurité car en cas de vole ou de piratage la clé privée n'est pas utilisable telle quelle.
 
 - C'est fait tous les processus (ssh-agent) ont reçu là demande de suicide :wink: avec la commande `killall ssh-agent`.
 
@@ -129,21 +129,21 @@ On a quand même amélioré la sécurité car avec une parssphrase seul le chall
   ```
 
 - C'est fait ✓
-- Je n'ai pas eu à mettre ma parssphrase.
+- Je n'ai pas eu à mettre ma passphrase.
 - Il n'arrive pas à profiter de l'agent car l'agent n'est pas allumé.
-- Non car il faut reallumer l'agent à chaque fois. Pour eviter ceci on utilise l'option `-A` qui permet de transférer l'agent.
+- Non car il faut rallumer l'agent à chaque fois. Pour éviter ceci on utilise l'option `-A` qui permet de transférer l'agent.
 
 ## 3 Gestion de certificats x509
 
 ### 3.1 Autorité de certification
 
-- Creation de la clé privée de notre autorité :
+- Création de la clé privée de notre autorité :
 
   ```txt
   Generating a 3072 bit RSA private key...
   ```
 
-- Creation d'un certificat racine :
+- Création d'un certificat racine :
 
   ```txt
   Generating a self signed certificate...
@@ -381,13 +381,13 @@ On a quand même amélioré la sécurité car avec une parssphrase seul le chall
 
 ### 3.2 Requête du serveur : demande d’un certificat
 
-- Creation de la clé privée de notre serveur :
+- Création de la clé privée de notre serveur :
 
   ```txt
   Generating a 3072 bit RSA private key...
   ```
 
-- Creation d'une requête pour le serveur :
+- Création d'une requête pour le serveur :
 
   ```txt
   Generating a PKCS #10 certificate request...
@@ -500,7 +500,7 @@ On a quand même amélioré la sécurité car avec une parssphrase seul le chall
   -----END NEW CERTIFICATE REQUEST-----
   ```
 
-- Aprés avoir *vérifié* les informations je valide la requête du serveur :
+- Après avoir *vérifié* les informations je valide la requête du serveur :
 
   ```txt
   Generating a signed certificate...
@@ -599,7 +599,7 @@ On a quand même amélioré la sécurité car avec une parssphrase seul le chall
   Signing certificate...
   ```
 
-- Vérificaion cryptographique du certificat du serveur que l'on vien de créé :
+- Vérification cryptographique du certificat du serveur que l'on vient de créer :
 
   ```txt
   Loaded 1 certificates, 1 CAs and 0 CRLs
@@ -612,7 +612,7 @@ On a quand même amélioré la sécurité car avec une parssphrase seul le chall
   Chain verification output: Verified. The certificate is trusted.
   ```
 
-- Vérification de l'autorité qui à certifié le certificat du serveur :
+- Vérification de l'autorité qui e certifié le certificat du serveur :
 
   ```txt
   X.509 Certificate Information:
@@ -741,7 +741,7 @@ On a quand même amélioré la sécurité car avec une parssphrase seul le chall
 
 ### 3.4 Mise en oeuvre du certificat
 
-- Le serveur est lancer :
+- Le serveur est lancé :
 
   ```txt
   HTTP Server listening on IPv4 0.0.0.0 port 1234...done
@@ -787,17 +787,80 @@ On a quand même amélioré la sécurité car avec une parssphrase seul le chall
 - Effectivement ✓
 - Effectivement ✓
 
-- Le navigateur web affiche un avertissement de sécurité car il ne connais pas l'autorité de certification.
-- Le risque est que ce ne sois pas le bon certificat ce qui fait qu'une tierce personne aura accée au échange en claire.
+- Le navigateur web affiche un avertissement de sécurité car il ne connaît pas l'autorité de certification.
+- Le risque est que ce ne sois pas le bon certificat ce qui fait qu'une tierce personne aura accès aux échanges en clair.
 - On constate que le navigateur ne nous affiche plus d'avertissement de sécurité.
 - Dans mon navigateur je vais dans les paramètres avec le lien suivant `chrome://settings/certificates` puis je clique sur `Authorities` et pour finir `Import` je choisis le fichier `ca.crt` et je coche `Trust this certificate for identidying websites` puis je clique sur `OK`.
 
 ### 3.6 Bilan
 
 - Les maillons faibles sont :
-  - Si des clients récupèrent des mauvais certificat racine.
-  - Si l’autorité de certification ce fait volé sa clé privé.
+  - Si des clients récupèrent des mauvais certificats racine.
+  - Si l’autorité de certification se fait voler sa clé privée.
 
-## 4 Progammation Socket SSL en Python
+## 4 Programmation Socket SSL en Python
 
-- J'ai implementé l'utilisation du protocole SSL/TLS dans `server.py` et dans `client.py`.
+- J'ai implémenté l'utilisation du protocole SSL/TLS dans `server.py` et dans `client.py`.
+
+Contenu du fichier `server.py` :
+
+```py
+#!/usr/bin/python3
+import socket
+import ssl
+
+HOST= '127.0.0.1'
+PORT= 7777
+BUFSIZE= 1024
+
+# echo server
+def echo(conn):
+    while True:
+        data = conn.recv(BUFSIZE)
+        if data == b'' or data == b'\n' : break
+        print(data.decode())
+        conn.sendall(data)
+
+# main program
+srvsocket = socket.socket()
+srvsocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+srvsocket.bind((HOST, PORT))
+srvsocket.listen()
+
+# init ssl support
+context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+context.load_cert_chain('serveur/server.crt', 'serveur/server.key')
+
+srvsockets = context.wrap_socket(srvsocket, server_side=True)
+
+while True:
+    conn, fromaddr = srvsockets.accept()
+    echo(conn)
+    conn.close()
+
+srvsockets.close()
+```
+
+Contenu du fichier `client.py` :
+
+```py
+#!/usr/bin/python3
+import socket
+import ssl
+
+HOST="127.0.0.1"
+PORT=7777
+BUFSIZE= 1024
+
+# init ssl support
+context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
+context.load_verify_locations('client/ca.crt')
+conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sslconn = context.wrap_socket(conn, server_hostname=HOST, server_side=False)
+sslconn.connect((HOST, PORT))
+request = b"Hello World!"
+sslconn.sendall(request)
+answer = sslconn.recv(BUFSIZE)
+print(answer.decode())
+sslconn.close()
+```
