@@ -52,7 +52,7 @@ echo            4/ddp                   # AppleTalk Echo Protocol
 
 - ✓
 
-### 2.2 Programmons notre client web !
+### 2.2 Programmons notre client web !</br>
 
 - ✓
 - ✓

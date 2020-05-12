@@ -9,15 +9,7 @@
 - Schéma de l'établissement d'une connexion SSH :
 ![Schéma de l'établissement d'une connexion SSH](schematSSHConnexion.png)
 
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
+</br></br></br></br></br></br></br>
 
 - SSH garanti la sécurité de la communication car :
   - La confidentialité est garantie du fait que les communications sont chiffrées.
@@ -28,7 +20,7 @@
 La clé privée du serveur doit rester secrète car c'est la seule à pouvoir déchiffrer les messages chiffrés par la clé publique.
 - Le serveur écoute sur le port `22` par défaut.
 
-## 2 Assez des mots de passe ?
+## 2 Assez des mots de passe ?</br>
 
 ### 2.1 On oublie les mots de passe
 
@@ -108,11 +100,7 @@ La clé privée du serveur doit rester secrète car c'est la seule à pouvoir d�
 
 La manière la plus sûre de procéder est de lui créer un utilisateur, qu'il fournisse sa clé publique (par mail, clé USB...) qu'il faut mettre dans son fichier `~/.ssh/authorized_keys` et lui donner la clé publique du serveur en plus de son identifiant et du nom d'hôte. Le fait de lui donner la clé publique du serveur lui permettra de comparer avec celle que le serveur lui enverra.
 
-&nbsp;
-
-&nbsp;
-
-&nbsp;
+</br></br></br>
 
 ### 2.2 Mode paranoïaque
 
@@ -418,9 +406,7 @@ On a quand même amélioré la sécurité car avec une passphrase seul le challe
 
 - J'ai transmis le fichier `server.csr` à l’autorité de certification.
 
-&nbsp;
-
-&nbsp;
+</br></br></br>
 
 ### 3.3 Certification par l’autorité
 

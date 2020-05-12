@@ -38,13 +38,7 @@
     - Type du serveur : `Apache 2.2.22`.
     - Classe de réponse : `2xx successful` car le code http est 200.
 
-    &nbsp;
-
-    &nbsp;
-
-    &nbsp;
-
-    &nbsp;
+    </br></br></br></br></br></br></br>
 
   - Pour www.labri.fr :
     - Avec la commande `telnet www.labri.fr 80` et la requête suivante :
@@ -82,6 +76,8 @@
 
 
         ```
+
+        </br></br></br></br></br></br></br></br>
 
         ```http
         HTTP/1.1 301 Moved Permanently
@@ -131,18 +127,6 @@
     - Type du serveur : `Apache`.
     - Classe de réponse : `2xx successful` car le code http est 200.
 
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
 ### 1.2 Classes de réponse
 
 - Succès :
@@ -169,10 +153,6 @@
     Connection closed by foreign host.
     ```
 
-&nbsp;
-
-&nbsp;
-
 - Erreur client :
   - Avec la commande `telnet magicorp.fr 80` et la requête ci-dessous j'obtiens la classe 4xx :
 
@@ -184,15 +164,7 @@
 
     ```
 
-  &nbsp;
-
-  &nbsp;
-
-  &nbsp;
-
-  &nbsp;
-
-  &nbsp;
+  </br></br></br></br></br></br></br></br></br>
 
     ```http
     HTTP/1.1 404 Not Found
@@ -232,6 +204,8 @@
     Connection closed by foreign host.
     ```
 
+</br></br></br></br></br></br>
+
 - Redirection :
   - Avec la commande `telnet magicorp.fr 80` et la requête ci-dessous j'obtiens la classe 3xx :
 
@@ -259,9 +233,7 @@
 
     ça nous redirige car la réponse a pour code http "301 Moved Permanently".
 
-  &nbsp;
-
-  &nbsp;
+</br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
 
 ### 1.3 Méthode `GET` simple et entêtes
 
@@ -350,6 +322,8 @@ test-redir       [   <=>                                 ] 166,90K   369KB/s    
 ```
 
 - Dans un premier temps avec le client Chrome ou wget on obtient la même chose qu'avec le client telnet mais le client Chrome ou wget effectue la redirection automatiquement et fait les requêtes suivantes.
+
+</br></br></br></br></br></br></br></br></br>
 
 ### 1.4 Méthode `GET` avec ou sans `Host:`
 
@@ -458,7 +432,7 @@ SSL-Session:
     Protocol  : TLSv1.2
     Cipher    : ECDHE-RSA-AES256-GCM-SHA384
     Session-ID: 25A6A0D88E300869A6409EC247CCD3FAE2330913733FDCCC8A48466855089FF3
-    Session-ID-ctx: 
+    Session-ID-ctx:
     Master-Key: CB6F8F0340093B53C3BEF5A154F9CC1CBE3EBB1E645700FB059696647AE9A419BFB3C26ACAB91E46B07EE6853A12393C
     PSK identity: None
     PSK identity hint: None

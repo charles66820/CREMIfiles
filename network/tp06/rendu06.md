@@ -4,7 +4,7 @@
 
 ### 1.1 Préliminaires
 
-&nbsp;
+</br>
 
 **Première machine `ermengaud` :**
 
@@ -46,7 +46,7 @@ default via 10.0.202.254 dev eth0 onlink
 - L'adresse de la passerelle de la route par défaut est `10.0.202.254`.
 - Le suffixe `24` correspond au `Genmask` qui est le masque du réseau de destination (`24` correspond aux 24 premiers bits ce qui donne le masque `255.255.255.0`).
 
-&nbsp;
+</br>
 
 > en IPv6
 
@@ -74,31 +74,7 @@ default via fe80::5a20:b1ff:feb1:2300 dev eth0 proto ra metric 1024  expires 896
 - ✓.
 - ✓ c'est `fe80::5a20:b1ff:feb1:2300`.
 
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
+</br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
 
 ### 1.2 Routage Basique
 
@@ -127,7 +103,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 147.210.0.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
 ```
 
-&nbsp;
+</br></br></br>
 
 `immortal` :
 
@@ -165,11 +141,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 
 - Je l'ai déjà fait.
 
-&nbsp;
-
-&nbsp;
-
-&nbsp;
+</br></br></br></br></br>
 
 ### 1.3 Routage Avancé (Bonus)
 
@@ -188,27 +160,7 @@ Pour finir, j'ajoute 4 routes à `grave` :
 - La première pour que les machines du sous-réseau `147.210.12.0/24` puisse communiquer avec celles du sous-réseau `147.210.15.0/24` et pour que celles du sous-réseau `147.210.13.0/24` puisse répondre à celles du sous-réseau `147.210.15.0/24`. J'utilise la commande `route add -net 147.210.15.0/24 gw 147.210.14.2` pour ajouter la route.
 - La deuxième pour que les machines du sous-réseau `147.210.15.0/24` puisse communiquer avec celles du sous-réseau `147.210.12.0/24` et pour que celles du sous-réseau `147.210.14.0/24` puisse répondre à celles du sous-réseau `147.210.12.0/24`. J'utilise la commande `route add -net 147.210.12.0/24 gw 147.210.13.1` pour ajouter la route.
 
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
+</br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
 
 ## 1 Firewall
 
@@ -251,15 +203,7 @@ PING 147.210.0.2 (147.210.0.2) 56(84) bytes of data.
 
   Je tape donc la commande `iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT` sur `imortal`.
 
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
+</br></br></br></br></br></br>
 
 Après avoir tapé la commande on remarque que les ping fonctionnent du réseau interne à internet mais pas l'inverse :
 
@@ -305,11 +249,7 @@ index.html.1        100%[===================>]  10.45K  --.-KB/s    in 0s
 
 - Pour autoriser `grave` à accéder au serveur ssh de `dt` je tape la commande `iptables -A FORWARD -s 172.16.0.2 -d 192.168.0.3 -p tcp --dport 22 -j ACCEPT`.
 
-&nbsp;
-
-&nbsp;
-
-&nbsp;
+</br></br></br></br>
 
 Je teste avec le compte toto (`ssh toto@192.168.0.3`) :
 
@@ -409,11 +349,7 @@ PORT   STATE SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 3.86 seconds
 ```
 
-&nbsp;
-
-&nbsp;
-
-&nbsp;
+</br></br></br></br></br>
 
 ```txt
 root@grave:~#  nmap -Pn -F 192.168.0.3
