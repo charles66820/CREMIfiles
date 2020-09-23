@@ -21,8 +21,8 @@ class Geometry {
 		out.close();
   }
 
-  private static Point askPoint() {
-    Point p = new Point();
+  private static Point2D askPoint() {
+    Point2D p = new Point2D();
     System.out.println("Construction d'un nouveau point");
     System.out.println("Veuillez entrer x : ");
     p.setX(clavier.nextDouble());

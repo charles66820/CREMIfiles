@@ -1,13 +1,13 @@
 class Triangle {
-    private Point p1;
-    private Point p2;
-    private Point p3;
+    private Point2D p1;
+    private Point2D p2;
+    private Point2D p3;
 
     int r;
     int g;
     int b;
 
-    public Triangle(Point p1, Point p2, Point p3) {
+    public Triangle(Point2D p1, Point2D p2, Point2D p3) {
       this.p1 = p1;
       this.p2 = p2;
       this.p3 = p3;

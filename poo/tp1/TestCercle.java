@@ -3,10 +3,10 @@ import java.io.IOException;
 
 class TestCircle {
   public static void main(String[] args) throws IOException {
-    Circle c = new Circle(new Point(40.0, 30.0), 40);
+    Circle c = new Circle(new Point2D(40.0, 30.0), 40);
     System.out.println("Surface: " + c.surface());
-    System.out.println(c.isInside(new Point(20.0, 20.0)));
-    System.out.println(c.isInside(new Point(90.0, 80.0)));
+    System.out.println(c.isInside(new Point2D(20.0, 20.0)));
+    System.out.println(c.isInside(new Point2D(90.0, 80.0)));
     c.setR(250);
     c.setB(50);
 

@@ -1,12 +1,12 @@
 class Circle {
     private double rayon;
-    private Point centre;
+    private Point2D centre;
 
     int r;
     int g;
     int b;
 
-    public Circle(Point centre, double rayon) {
+    public Circle(Point2D centre, double rayon) {
         this.centre = centre;
         this.rayon = rayon;
     }
@@ -41,7 +41,7 @@ class Circle {
     }
 
     // teste si le point p passé en paramètre fait ou non partie du cercle (frontière comprise : disque fermé). La méthode retournera `true` si le test est positif, et `false` dans le cas contraire.
-    public boolean isInside(Point p) {
+    public boolean isInside(Point2D p) {
         return p.distance(this.centre) <= rayon;
     }
 
