@@ -1,4 +1,4 @@
-class Cercle {
+class Circle {
     private double rayon;
     private Point centre;
 
@@ -6,7 +6,7 @@ class Cercle {
     int g;
     int b;
 
-    public Cercle(Point centre, double rayon) {
+    public Circle(Point centre, double rayon) {
         this.centre = centre;
         this.rayon = rayon;
     }
@@ -35,13 +35,13 @@ class Cercle {
         this.b = v;
     }
 
-    // retourne la surface du cercle (pi fois le carré du rayon)
+    // retourne la surface du Circle (pi fois le carré du rayon)
     public double surface() {
         return Math.PI * Math.sqrt(this.rayon);
     }
 
     // teste si le point p passé en paramètre fait ou non partie du cercle (frontière comprise : disque fermé). La méthode retournera `true` si le test est positif, et `false` dans le cas contraire.
-    public boolean estInterieur(Point p) {
+    public boolean isInside(Point p) {
         return p.distance(this.centre) <= rayon;
     }
 

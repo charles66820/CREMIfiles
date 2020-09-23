@@ -4,3 +4,4 @@ node_modules/
 .env
 apps/
 other/a.out
+/poo/tp1/*.svg

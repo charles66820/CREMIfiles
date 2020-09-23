@@ -37,11 +37,11 @@ class Triangle {
         this.b = v;
     }
 
-    public double perimetre() {
+    public double perimeter() {
         return this.p1.distance(this.p2) + this.p2.distance(this.p3) + this.p3.distance(this.p1);
     }
 
-    public boolean estIsocele() {
+    public boolean isIsosceles() {
       return this.p1.distance(this.p2) == this.p2.distance(this.p3) || this.p1.distance(this.p2) == this.p3.distance(this.p1);
     }
 

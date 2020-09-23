@@ -2,14 +2,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-class Geometrie {
+class Geometry {
 
   public static Scanner clavier = new Scanner(System.in);
 
   public static void main(String[] args) throws IOException {
-    Triangle t = new Triangle(Geometrie.askPoint(), Geometrie.askPoint(), Geometrie.askPoint());
-    System.out.println("Périmètre : " +  t.perimetre());
-    System.out.println("Isocele : " + t.estIsocele());
+    Triangle t = new Triangle(Geometry.askPoint(), Geometry.askPoint(), Geometry.askPoint());
+    System.out.println("Perimeter : " +  t.perimeter());
+    System.out.println("Isosceles : " + t.isIsosceles());
     t.setR(255);
     t.setG(255);
 

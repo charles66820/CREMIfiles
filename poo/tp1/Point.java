@@ -25,16 +25,16 @@ public class Point {
         this.y = v;
     }
 
-    public void afficher() {
+    public void print() {
         System.out.println("x: " + this.x + " y: " + this.y);
     }
 
-    public void deplacement(double dx, double dy) {
+    public void move(double dx, double dy) {
         this.x += dx;
         this.y += dy;
     }
 
-    public void deplacement(double delta) {
+    public void move(double delta) {
         this.x += delta;
         this.y += delta;
     }
