@@ -1,10 +1,10 @@
-class Circle {
+public class Circle {
     private double rayon;
     private Point2D centre;
 
-    int r;
-    int g;
-    int b;
+    private int r;
+    private int g;
+    private int b;
 
     public Circle(Point2D centre, double rayon) {
         this.centre = centre;
