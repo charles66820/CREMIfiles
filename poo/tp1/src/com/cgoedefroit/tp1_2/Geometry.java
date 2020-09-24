@@ -1,3 +1,5 @@
+package com.cgoedefroit.tp1_2;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;

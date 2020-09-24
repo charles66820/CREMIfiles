@@ -1,16 +1,18 @@
+package com.cgoedefroit.tp1_2;
+
 public class Triangle {
-    private Point2D p1;
-    private Point2D p2;
-    private Point2D p3;
+    private final Point2D p1;
+    private final Point2D p2;
+    private final Point2D p3;
 
     private int r;
     private int g;
     private int b;
 
     public Triangle(Point2D p1, Point2D p2, Point2D p3) {
-      this.p1 = p1;
-      this.p2 = p2;
-      this.p3 = p3;
+        this.p1 = p1;
+        this.p2 = p2;
+        this.p3 = p3;
     }
 
     public int getR() {
@@ -42,13 +44,13 @@ public class Triangle {
     }
 
     public boolean isIsosceles() {
-      return this.p1.distance(this.p2) == this.p2.distance(this.p3) || this.p1.distance(this.p2) == this.p3.distance(this.p1);
+        return this.p1.distance(this.p2) == this.p2.distance(this.p3) || this.p1.distance(this.p2) == this.p3.distance(this.p1);
     }
 
 
     public String svg() {
         return "<line x1='" + this.p1.getX() + "' y1='" + this.p1.getY() + "' x2='" + this.p2.getX() + "' y2='" + this.p2.getY() + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' />" +
-        "<line x1='" + this.p2.getX() + "' y1='" + this.p2.getY() + "' x2='" + this.p3.getX() + "' y2='" + this.p3.getY() + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' />" +
-        "<line x1='" + this.p3.getX() + "' y1='" + this.p3.getY() + "' x2='" + this.p1.getX() + "' y2='" + this.p1.getY() + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' />";
+                "<line x1='" + this.p2.getX() + "' y1='" + this.p2.getY() + "' x2='" + this.p3.getX() + "' y2='" + this.p3.getY() + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' />" +
+                "<line x1='" + this.p3.getX() + "' y1='" + this.p3.getY() + "' x2='" + this.p1.getX() + "' y2='" + this.p1.getY() + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' />";
     }
 }

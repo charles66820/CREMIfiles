@@ -1,3 +1,5 @@
+package com.cgoedefroit.tp1_2;
+
 class TestPoint2D {
     public static void main(String[] args) {
         Point2D p = new Point2D(4.0, 3.0);
