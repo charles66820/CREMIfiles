@@ -29,7 +29,7 @@ public class Point2D {
     }
 
     public void print() {
-        System.out.println("x: " + this.x + " y: " + this.y);
+        System.out.println("Point: x: " + this.x + " y: " + this.y);
     }
 
     public void move(double dx, double dy) {

@@ -39,18 +39,44 @@ public class Triangle {
         this.b = v;
     }
 
+    public double surface() {
+        return (this.p1.distance(p2) * this.p1.distance(p3)) / 2;
+    }
+
+    public boolean isInside(Point2D p) {
+        return p1.distance(p) <= p1.distance(p2) &&
+        p1.distance(p) <= p1.distance(p3) &&
+        p2.distance(p) <= p2.distance(p1) &&
+        p2.distance(p) <= p2.distance(p3) &&
+        p3.distance(p) <= p3.distance(p1) &&
+        p3.distance(p) <= p3.distance(p2);
+    }
+
     public double perimeter() {
         return this.p1.distance(this.p2) + this.p2.distance(this.p3) + this.p3.distance(this.p1);
+    }
+
+    public void move(double dx, double dy) {
+        this.p1.move(dx, dy);
+        this.p2.move(dx, dy);
+        this.p3.move(dx, dy);
+    }
+
+    public void move(double delta) {
+        this.p1.move(delta);
+        this.p2.move(delta);
+        this.p3.move(delta);
+    }
+
+    public void print() {
+        System.out.println("Triangle: pos x:" + this.p1.getX() + ", pos y: " + this.p1.getY());
     }
 
     public boolean isIsosceles() {
         return this.p1.distance(this.p2) == this.p2.distance(this.p3) || this.p1.distance(this.p2) == this.p3.distance(this.p1);
     }
 
-
     public String svg() {
-        return "<line x1='" + this.p1.getX() + "' y1='" + this.p1.getY() + "' x2='" + this.p2.getX() + "' y2='" + this.p2.getY() + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' />" +
-                "<line x1='" + this.p2.getX() + "' y1='" + this.p2.getY() + "' x2='" + this.p3.getX() + "' y2='" + this.p3.getY() + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' />" +
-                "<line x1='" + this.p3.getX() + "' y1='" + this.p3.getY() + "' x2='" + this.p1.getX() + "' y2='" + this.p1.getY() + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' />";
+        return "<polygon points='" + this.p1.getX() + "," + this.p1.getY() + " " + this.p2.getX() + "," + this.p2.getY() + " " + this.p3.getX() + "," + this.p3.getY() + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' />";
     }
 }

@@ -50,14 +50,14 @@ public class Circle {
     }
 
     public void move(double dx, double dy) {
-        centre.move(dx, dy);
+        this.centre.move(dx, dy);
     }
 
     public void move(double delta) {
-        centre.move(delta);
+        this.centre.move(delta);
     }
 
-    public void print() { System.out.println("Circle : centre x:" + centre.getX() + ", centre y: " + centre.getY()); }
+    public void print() { System.out.println("Circle: centre x:" + this.centre.getX() + ", centre y: " + this.centre.getY()); }
 
     public String svg() {
         return "<circle cx='" + this.centre.getX() + "' cy='" + this.centre.getY() + "' r='" + this.radius + "' fill='rgb(" + this.r + "," + this.g + "," + this.b + ")' />";
