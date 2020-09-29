@@ -1,6 +1,6 @@
 package com.cgoedefroit.tp1_2;
 
-public class Square {
+public class AxesAlignedSquare {
 
     private Point2D pos;
     private int side;
@@ -9,7 +9,7 @@ public class Square {
     private int g;
     private int b;
 
-    Square(Point2D pos, int side) {
+    public AxesAlignedSquare(Point2D pos, int side) {
         this.pos = pos;
         this.side = side;
     }

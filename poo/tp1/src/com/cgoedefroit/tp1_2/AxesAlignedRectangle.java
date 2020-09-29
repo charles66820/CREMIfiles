@@ -1,6 +1,6 @@
 package com.cgoedefroit.tp1_2;
 
-public class Rectangle {
+public class AxesAlignedRectangle {
 
     private Point2D pos;
     private int height;
@@ -10,7 +10,7 @@ public class Rectangle {
     private int g;
     private int b;
 
-    Rectangle(Point2D pos, int height, int width) {
+    public AxesAlignedRectangle(Point2D pos, int height, int width) {
         this.pos = pos;
         this.height = height;
         this.width = width;

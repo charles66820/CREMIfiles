@@ -5,7 +5,7 @@ import java.io.IOException;
 
 class TestSquare {
     public static void main(String[] args) throws IOException {
-        Square s = new Square(new Point2D(10.0, 10.0), 20);
+        AxesAlignedSquare s = new AxesAlignedSquare(new Point2D(10.0, 10.0), 20);
         System.out.println("Surface: " + s.surface());
         System.out.println("Perimeter: " + s.perimeter());
         System.out.println("Test with point in x: 10 y: 20");

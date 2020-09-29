@@ -5,7 +5,7 @@ import java.io.IOException;
 
 class TestRectangle {
     public static void main(String[] args) throws IOException {
-        Rectangle r = new Rectangle(new Point2D(10.0, 10.0), 20, 40);
+        AxesAlignedRectangle r = new AxesAlignedRectangle(new Point2D(10.0, 10.0), 20, 40);
         System.out.println("Surface: " + r.surface());
         System.out.println("Perimeter: " + r.perimeter());
         System.out.println("Test with point in x: 10 y: 20");
