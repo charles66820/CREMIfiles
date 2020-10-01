@@ -15,10 +15,10 @@ int main(int argc, char* argv[]) {
   }
 
   // position
-  lseek(fdIn, atoi(argv[2]) * 2, SEEK_SET);
+  lseek(fdIn, atoi(argv[2]) * sizeof(u_int32_t), SEEK_SET);
 
   u_int32_t value;
-  int n = read(fdIn, &value, 2);
+  int n = read(fdIn, &value, sizeof(u_int32_t));
   close(fdIn);
   if (!n) return EXIT_FAILURE;
   // Si pm cherche à lire au-delà de la fin du fichier on ne peut pas lire

@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
   u_int32_t value = atoi(argv[3]);
 
   // position
-  lseek(fdOut, atoi(argv[2]) * 2, SEEK_SET);
+  lseek(fdOut, atoi(argv[2]) * sizeof(u_int32_t), SEEK_SET);
   // si on cherche à écrire au-delà de la fin du fichier le fichier s'agrandi mais ne complete pas l'intervale avec des 0 il compte juste l'espace comme utiliser
 
   write(fdOut, &value, sizeof(u_int32_t));
