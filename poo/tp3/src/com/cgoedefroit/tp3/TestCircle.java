@@ -16,6 +16,7 @@ class TestCircle {
         c.translate(-2.0);
         c.print();
 
+        c.setR(255);
         FileWriter out = new FileWriter("circle.svg");
         out.write("<?xml version='1.0' encoding='utf-8'?>\n");
         out.write("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100' height='100'>");

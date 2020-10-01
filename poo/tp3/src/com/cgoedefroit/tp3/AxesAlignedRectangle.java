@@ -68,6 +68,6 @@ public class AxesAlignedRectangle extends Shape2D {
     }
 
     public String svg() {
-        return "<rect x='" + this.pos.getX() + "' y='" + this.pos.getY() + "' width='" + this.width + "' height='" + this.height + "' stroke='rgb(" + super.r + "," + super.g + "," + super.b + ")' stroke-width='3' />";
+        return "<rect x='" + this.pos.getX() + "' y='" + this.pos.getY() + "' width='" + this.width + "' height='" + this.height + "' stroke='rgb(" + super.r + "," + super.g + "," + super.b + ")' stroke-width='3' fill='#000000' fill-opacity='0' />";
     }
 }

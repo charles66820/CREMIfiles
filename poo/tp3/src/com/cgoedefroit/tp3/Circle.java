@@ -40,6 +40,6 @@ public class Circle extends Shape2D {
     }
 
     public String svg() {
-        return "<circle cx='" + this.centre.getX() + "' cy='" + this.centre.getY() + "' r='" + this.radius + "' fill='rgb(" + this.r + "," + this.g + "," + this.b + ")' />";
+        return "<circle cx='" + this.centre.getX() + "' cy='" + this.centre.getY() + "' r='" + this.radius + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' fill='#000000' fill-opacity='0' />";
     }
 }

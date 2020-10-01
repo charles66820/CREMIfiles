@@ -22,6 +22,7 @@ class TestSquare {
         s.translate(-10);
         s.print();
 
+        s.setR(255);
         FileWriter out = new FileWriter("square.svg");
         out.write("<?xml version='1.0' encoding='utf-8'?>\n");
         out.write("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100' height='100'>");
