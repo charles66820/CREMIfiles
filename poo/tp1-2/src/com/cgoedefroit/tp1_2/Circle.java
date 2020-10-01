@@ -9,7 +9,7 @@ public class Circle {
     private int b;
 
     public Circle(Point2D centre, double radius) {
-        this.centre = centre;
+        this.centre = new Point2D(centre.getX(), centre.getY());
         this.radius = radius;
     }
 

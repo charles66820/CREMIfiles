@@ -11,7 +11,7 @@ public class AxesAlignedRectangle {
     private int b;
 
     public AxesAlignedRectangle(Point2D pos, int height, int width) {
-        this.pos = pos;
+        this.pos = new Point2D(pos.getX(), pos.getY());;
         this.height = height;
         this.width = width;
     }

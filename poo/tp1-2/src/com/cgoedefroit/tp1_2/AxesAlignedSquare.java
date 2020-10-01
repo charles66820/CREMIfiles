@@ -10,7 +10,7 @@ public class AxesAlignedSquare {
     private int b;
 
     public AxesAlignedSquare(Point2D pos, int side) {
-        this.pos = pos;
+        this.pos = new Point2D(pos.getX(), pos.getY());;
         this.side = side;
     }
 
