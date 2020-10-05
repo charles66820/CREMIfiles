@@ -48,6 +48,11 @@ public abstract class Shape2D {
     }
 
     public void print() {
-        System.out.println("Shape2D");
+        System.out.println(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Shape2D";
     }
 }

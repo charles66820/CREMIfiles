@@ -8,5 +8,6 @@ class TestShape2D {
         p.print();
         Point2D p2 = new Point2D(4, 4);
         System.out.println(p.distance(p2));
+        System.out.println("Le premier point est " + p + " et le deuxieme " + p2);
     }
 }

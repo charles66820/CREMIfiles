@@ -29,17 +29,17 @@ public class Circle extends Shape2D {
     public void translate(double delta) {
         this.centre.translate(delta);
     }
-
-    @Override
-    public void print() {
-        System.out.println("Circle (" + this.radius + ", Point2D (" + this.centre.getX() + ", "  + this.centre.getY() + ")" + ")");
-    }
-
+    
     public boolean isInside(Point2D p) {
         return p.distance(this.centre) <= radius;
     }
 
     public String svg() {
         return "<circle cx='" + this.centre.getX() + "' cy='" + this.centre.getY() + "' r='" + this.radius + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' fill='#000000' fill-opacity='0' />";
+    }
+
+    @Override
+    public String toString() {
+        return "Circle (" + this.radius + ", Point2D (" + this.centre.getX() + ", "  + this.centre.getY() + ")" + ")";
     }
 }

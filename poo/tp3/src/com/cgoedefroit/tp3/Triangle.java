@@ -36,11 +36,6 @@ public class Triangle extends Shape2D {
         this.p3.translate(delta);
     }
 
-    @Override
-    public void print() {
-        System.out.println("Triangle ( Point2D (" + this.p1.getX() + ", "  + this.p1.getY() + ")" + ", Point2D (" + this.p2.getX() + ", "  + this.p2.getY() + ")" + ", Point2D (" + this.p3.getX() + ", "  + this.p3.getY() + ")" + ")");
-    }
-
     public boolean isInside(Point2D p) {
         return p1.distance(p) <= p1.distance(p2) &&
         p1.distance(p) <= p1.distance(p3) &&
@@ -56,5 +51,10 @@ public class Triangle extends Shape2D {
 
     public String svg() {
         return "<polygon points='" + this.p1.getX() + "," + this.p1.getY() + " " + this.p2.getX() + "," + this.p2.getY() + " " + this.p3.getX() + "," + this.p3.getY() + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' fill='#000000' fill-opacity='0' />";
+    }
+
+    @Override
+    public String toString() {
+        return "Triangle ( Point2D (" + this.p1.getX() + ", "  + this.p1.getY() + ")" + ", Point2D (" + this.p2.getX() + ", "  + this.p2.getY() + ")" + ", Point2D (" + this.p3.getX() + ", "  + this.p3.getY() + ")" + ")";
     }
 }

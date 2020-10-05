@@ -12,6 +12,7 @@ public class Point2D extends Shape2D {
         this(p.x, p.y);
     }
 
+    // Get / set
     public double getX() {
         return this.x;
     }
@@ -28,19 +29,19 @@ public class Point2D extends Shape2D {
         this.y = v;
     }
 
+    // Methods
     @Override
     public void translate(double dx, double dy) {
         this.x += dx;
         this.y += dy;
     }
-
-    @Override
-    public void print() {
-        System.out.println( "Point2D (" + x + ", "  + y + ")");
-    }
-
+    
     public double distance(Point2D p) {
         return Math.sqrt(Math.pow(p.x - this.x, 2) + Math.pow(p.y - this.y, 2));
     }
 
+    @Override
+    public String toString() {
+        return "Point2D (" + x + ", "  + y + ")";
+    }
 }

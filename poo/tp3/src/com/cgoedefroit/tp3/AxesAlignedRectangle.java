@@ -56,12 +56,7 @@ public class AxesAlignedRectangle extends Shape2D {
     public void translate(double delta) {
         this.pos.translate(delta);
     }
-
-    @Override
-    public void print() {
-        System.out.println("Rectangle (" + this.height + ", " + this.width + ", Point2D (" + this.pos.getX() + ", "  + this.pos.getY() + ")" + ")");
-    }
-
+    
     public boolean isInside(Point2D p) {
         return (p.getX() >= this.pos.getX() && p.getX() < this.pos.getX() + this.width) &&
                 (p.getY() >= this.pos.getY() && p.getY() < this.pos.getY() + this.height);
@@ -69,5 +64,10 @@ public class AxesAlignedRectangle extends Shape2D {
 
     public String svg() {
         return "<rect x='" + this.pos.getX() + "' y='" + this.pos.getY() + "' width='" + this.width + "' height='" + this.height + "' stroke='rgb(" + super.r + "," + super.g + "," + super.b + ")' stroke-width='3' fill='#000000' fill-opacity='0' />";
+    }
+
+    @Override
+    public String toString() {
+        return "Rectangle (" + this.height + ", " + this.width + ", Point2D (" + this.pos.getX() + ", "  + this.pos.getY() + ")" + ")";
     }
 }
