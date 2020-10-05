@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
   if (argc > 1) {
     fdOut = open(argv[1], O_WRONLY | O_CREAT, 0664);
     if (fdOut == -1) {
-      printf("Cannot open %s file\n", argv[1]);
+      fprintf(stdout, "Cannot open %s file\n", argv[1]);
       return EXIT_FAILURE;
     }
   }

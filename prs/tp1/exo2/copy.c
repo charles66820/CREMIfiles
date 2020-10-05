@@ -10,13 +10,13 @@ int main(int argc, char* argv[]) {
 
   int fdIn = open(argv[1], O_RDONLY);
   if (fdIn == -1) {
-    printf("Cannot open %s file\n", argv[1]);
+    fprintf(stdout, "Cannot open %s file\n", argv[1]);
     return EXIT_FAILURE;
   }
 
   int fdOut = open(argv[2], O_WRONLY + O_CREAT, 0664); //O_SYNC
   if (fdOut == -1) {
-    printf("Cannot open %s file\n", argv[2]);
+    fprintf(stdout, "Cannot open %s file\n", argv[2]);
     close(fdIn);
     return EXIT_FAILURE;
   }

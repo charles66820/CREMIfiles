@@ -29,21 +29,21 @@ int main(int argc, char *argv[]){
   // Open file
   int fdIn = open(argv[1], O_RDONLY);
   if (fdIn == -1) {
-    printf("Cannot open %s file\n", argv[1]);
+    fprintf(stdout, "Cannot open %s file\n", argv[1]);
     return EXIT_FAILURE;
   }
 
   // Open index file
   int fdInd = open(idx_filename, O_RDONLY);
   if (fdInd == -1) {
-    printf("Cannot open %s file\n", idx_filename);
+    fprintf(stdout, "Cannot open %s file\n", idx_filename);
     close(fdIn);
     return EXIT_FAILURE;
   }
 
   int line = atoi(argv[2]);
-  if (line > 1) {
-    line -= 2;
+  if (line > 1) { // >= 1 if start at 0
+    line -= 2; // -= 1 if start at 0
 
     // go to ligne position in index file
     lseek(fdInd, line * sizeof(off_t), SEEK_SET);

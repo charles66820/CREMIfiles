@@ -29,14 +29,14 @@ int main(int argc, char *argv[]) {
   // Open file for index
   int fdIn = open(argv[1], O_RDONLY);
   if (fdIn == -1) {
-    printf("Cannot open %s file\n", argv[1]);
+    fprintf(stdout, "Cannot open %s file\n", argv[1]);
     return EXIT_FAILURE;
   }
 
   // Create index file
   int fdOut = open(idx_filename, O_WRONLY | O_CREAT, 0666);
   if (fdOut == -1) {
-    printf("Cannot open %s file\n", idx_filename);
+    fprintf(stdout, "Cannot open %s file\n", idx_filename);
     close(fdIn);
     return EXIT_FAILURE;
   }

@@ -1,3 +1,4 @@
 read-int
 write-int
 *.bin
+*.log

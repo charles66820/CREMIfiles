@@ -10,13 +10,13 @@ int main(int argc, char* argv[]) {
 
   FILE* fIn = fopen(argv[1], "r");
   if (!fIn) {
-    printf("Cannot open %s file\n", argv[1]);
+    fprintf(stdout, "Cannot open %s file\n", argv[1]);
     return EXIT_FAILURE;
   }
 
   FILE* fOut = fopen(argv[2], "w");
   if (!fOut) {
-    printf("Cannot open %s file\n", argv[2]);
+    fprintf(stdout, "Cannot open %s file\n", argv[2]);
     fclose(fIn);
     return EXIT_FAILURE;
   }
