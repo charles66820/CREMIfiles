@@ -23,7 +23,16 @@ void quelques_prints (void)
 
 void rediriger_vers (void (*f)(void), char *file)
 {
-  // A COMPLETER
+  int fdOut = open(file, O_WRONLY | O_CREAT, 0666);
+  if (fdOut == -1) {
+    fprintf(stdout, "Cannot create %s file\n", file);
+    exit(EXIT_FAILURE);
+  }
+
+  int oldFd = dup(STDOUT_FILENO);
+  dup2(fdOut, STDOUT_FILENO);
+  f();
+  dup2(oldFd, STDOUT_FILENO);
 }
 
 int main(int argc, char *argv[])
@@ -36,4 +45,4 @@ int main(int argc, char *argv[])
 
   return EXIT_SUCCESS;
 }
-  
+

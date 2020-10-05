@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
   }
 
   // redirect stderr to fdErr file
-  dup2(STDERR_FILENO, fdErr);
+  dup2(fdErr, STDERR_FILENO);
 
   if (argc != 3) {
     fprintf(stdout, "Usage : %s <filename> <position>\n", argv[0]);
