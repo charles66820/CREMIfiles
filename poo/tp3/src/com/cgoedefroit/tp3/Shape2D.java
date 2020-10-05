@@ -1,7 +1,5 @@
 package com.cgoedefroit.tp3;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public abstract class Shape2D {
     protected int r, g, b;
 
@@ -39,9 +37,7 @@ public abstract class Shape2D {
     }
 
     // Methods
-    public void translate(double dx, double dy) {
-        throw new NotImplementedException();
-    }
+    public void translate(double dx, double dy) { }
 
     public void translate(double delta) {
         translate(delta, delta);

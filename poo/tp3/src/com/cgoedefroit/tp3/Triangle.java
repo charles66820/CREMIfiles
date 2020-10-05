@@ -1,6 +1,13 @@
 package com.cgoedefroit.tp3;
 
-public class Triangle extends Shape2D {
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+
+import java.util.ArrayList;
+
+public class Triangle extends Polygone {
     private final Point2D p1;
     private final Point2D p2;
     private final Point2D p3;
@@ -49,8 +56,23 @@ public class Triangle extends Shape2D {
         return this.p1.distance(this.p2) == this.p2.distance(this.p3) || this.p1.distance(this.p2) == this.p3.distance(this.p1);
     }
 
+    @Override
+    public ArrayList<Point2D> vertices() {
+        ArrayList<Point2D> vList = new ArrayList<Point2D>();
+        vList.add(p1);
+        vList.add(p2);
+        vList.add(p3);
+        return vList;
+    }
+
     public String svg() {
         return "<polygon points='" + this.p1.getX() + "," + this.p1.getY() + " " + this.p2.getX() + "," + this.p2.getY() + " " + this.p3.getX() + "," + this.p3.getY() + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' fill='#000000' fill-opacity='0' />";
+    }
+
+    public Shape toShapeFX() {
+        Polygon polygon = new Polygon(this.p1.getX(), this.p1.getY(), this.p2.getX(), this.p2.getY(), this.p3.getX(), this.p3.getY());
+        polygon.setFill(Color.rgb(this.r,this.g,this.b,0.7));
+        return polygon;
     }
 
     @Override
