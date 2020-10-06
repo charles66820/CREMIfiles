@@ -1,16 +1,25 @@
-package com.cgoedefroit.tp3;
+package com.cgoedefroit.tp3.shape.sphere;
 
+import com.cgoedefroit.tp3.shape.elementary.Point2D;
+import com.cgoedefroit.tp3.shape.body.Polygone;
+import com.cgoedefroit.tp3.shape.Shape2D;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+
+import java.util.Objects;
 
 public class Circle extends Shape2D {
     private final double radius;
     private final Point2D centre;
 
     public Circle(Point2D centre, double radius) {
+        this(centre, radius, "undefine");
+    }
+
+    public Circle(Point2D centre, double radius, String name) {
         this.centre = new Point2D(centre);
         this.radius = radius;
+        this.name = name;
     }
 
     // Methods
@@ -57,11 +66,24 @@ public class Circle extends Shape2D {
     }
 
     public Shape toShapeFX() {
-        return new javafx.scene.shape.Circle(this.centre.getX(), this.centre.getY(), this.radius, Color.rgb(this.r,this.g,this.b,1.0));
+        return new javafx.scene.shape.Circle(this.centre.getX(), this.centre.getY(), this.radius, Color.rgb(this.r, this.g, this.b, 1.0));
     }
 
     @Override
     public String toString() {
-        return "Circle (" + this.radius + ", Point2D (" + this.centre.getX() + ", "  + this.centre.getY() + ")" + ")";
+        return "Circle ( " + this.name + ", " + this.radius + ", Point2D (" + this.centre.getX() + ", "  + this.centre.getY() + ")" + ")";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        Circle circle = (Circle) o;
+        return Double.compare(circle.radius, this.radius) == 0 &&
+                this.centre.equals(circle.centre) &&
+                this.r == circle.r &&
+                this.g == circle.g &&
+                this.b == circle.b;
+    }
+
 }

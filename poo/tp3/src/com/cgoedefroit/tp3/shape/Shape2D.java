@@ -1,6 +1,9 @@
-package com.cgoedefroit.tp3;
+package com.cgoedefroit.tp3.shape;
 
 public abstract class Shape2D {
+
+    protected String name;
+
     protected int r, g, b;
 
     public double area() {
@@ -37,7 +40,7 @@ public abstract class Shape2D {
     }
 
     // Methods
-    public void translate(double dx, double dy) { }
+    public abstract void translate(double dx, double dy);
 
     public void translate(double delta) {
         translate(delta, delta);
@@ -49,6 +52,6 @@ public abstract class Shape2D {
 
     @Override
     public String toString() {
-        return "Shape2D";
+        return "Shape2D ( " + this.name + " )";
     }
 }

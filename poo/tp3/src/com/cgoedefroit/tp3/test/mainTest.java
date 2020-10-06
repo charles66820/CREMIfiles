@@ -1,4 +1,8 @@
-package com.cgoedefroit.tp3;
+package com.cgoedefroit.tp3.test;
+
+import com.cgoedefroit.tp3.shape.*;
+import com.cgoedefroit.tp3.shape.elementary.Point2D;
+import com.cgoedefroit.tp3.shape.sphere.Circle;
 
 import java.util.ArrayList;
 

@@ -1,11 +1,13 @@
-package com.cgoedefroit.tp3;
+package com.cgoedefroit.tp3.shape;
 
+import com.cgoedefroit.tp3.shape.elementary.Point2D;
+import com.cgoedefroit.tp3.shape.body.Polygone;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Triangle extends Polygone {
     private final Point2D p1;
@@ -13,9 +15,14 @@ public class Triangle extends Polygone {
     private final Point2D p3;
 
     public Triangle(Point2D p1, Point2D p2, Point2D p3) {
+        this(p1, p2, p3, "undefine");
+    }
+
+    public Triangle(Point2D p1, Point2D p2, Point2D p3, String name) {
         this.p1 = new Point2D(p1);
         this.p2 = new Point2D(p2);
         this.p3 = new Point2D(p3);
+        this.name = name;
     }
 
     // Methods
@@ -71,12 +78,25 @@ public class Triangle extends Polygone {
 
     public Shape toShapeFX() {
         Polygon polygon = new Polygon(this.p1.getX(), this.p1.getY(), this.p2.getX(), this.p2.getY(), this.p3.getX(), this.p3.getY());
-        polygon.setFill(Color.rgb(this.r,this.g,this.b,0.7));
+        polygon.setFill(Color.rgb(this.r, this.g, this.b, 0.7));
         return polygon;
     }
 
     @Override
     public String toString() {
-        return "Triangle ( Point2D (" + this.p1.getX() + ", "  + this.p1.getY() + ")" + ", Point2D (" + this.p2.getX() + ", "  + this.p2.getY() + ")" + ", Point2D (" + this.p3.getX() + ", "  + this.p3.getY() + ")" + ")";
+        return "Triangle ( " + this.name + ", Point2D (" + this.p1.getX() + ", "  + this.p1.getY() + ")" + ", Point2D (" + this.p2.getX() + ", "  + this.p2.getY() + ")" + ", Point2D (" + this.p3.getX() + ", "  + this.p3.getY() + ")" + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Triangle triangle = (Triangle) o;
+        return this.p1.equals(triangle.p1) &&
+                this.p2.equals(triangle.p2) &&
+                this.p3.equals(triangle.p3) &&
+                this.r == triangle.r &&
+                this.g == triangle.g &&
+                this.b == triangle.b;
     }
 }

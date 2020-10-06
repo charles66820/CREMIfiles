@@ -1,8 +1,9 @@
 package com.cgoedefroit.tp3app;
 
-import com.cgoedefroit.tp3.AxesAlignedRectangle;
-import com.cgoedefroit.tp3.Point2D;
-import com.cgoedefroit.tp3.Triangle;
+import com.cgoedefroit.tp3.shape.AxesAlignedRectangle;
+import com.cgoedefroit.tp3.shape.elementary.Point2D;
+import com.cgoedefroit.tp3.shape.Triangle;
+import com.cgoedefroit.tp3.shape.sphere.Circle;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -15,7 +16,7 @@ public class tp3app extends Application {
         AxesAlignedRectangle rectangle = new AxesAlignedRectangle(new Point2D(40, 60), 50, 150);
         rectangle.setR(255);
 
-        com.cgoedefroit.tp3.Circle circle = new com.cgoedefroit.tp3.Circle(new Point2D(20, 40), 10);
+        Circle circle = new Circle(new Point2D(20, 40), 10);
         circle.setG(255);
 
         Triangle triangle = new Triangle(new Point2D(50, 50), new Point2D(10, 80), new Point2D(60, 80));

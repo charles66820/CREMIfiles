@@ -1,4 +1,7 @@
-package com.cgoedefroit.tp3;
+package com.cgoedefroit.tp3.test;
+
+import com.cgoedefroit.tp3.shape.AxesAlignedSquare;
+import com.cgoedefroit.tp3.shape.elementary.Point2D;
 
 import java.io.FileWriter;
 import java.io.IOException;

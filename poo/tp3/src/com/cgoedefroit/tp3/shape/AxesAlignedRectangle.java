@@ -1,20 +1,28 @@
-package com.cgoedefroit.tp3;
+package com.cgoedefroit.tp3.shape;
 
+import com.cgoedefroit.tp3.shape.elementary.Point2D;
+import com.cgoedefroit.tp3.shape.body.Polygone;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AxesAlignedRectangle extends Polygone {
 
-    private Point2D pos;
+    protected Point2D pos;
     private int height, width;
 
     public AxesAlignedRectangle(Point2D pos, int height, int width) {
+        this(pos, height, width, "undefine");
+    }
+
+    public AxesAlignedRectangle(Point2D pos, int height, int width, String name) {
         this.pos = new Point2D(pos);
         this.height = height;
         this.width = width;
+        this.name = name;
     }
 
     // Get / set
@@ -79,17 +87,30 @@ public class AxesAlignedRectangle extends Polygone {
     }
 
     public String svg() {
-        return "<rect x='" + this.pos.getX() + "' y='" + this.pos.getY() + "' width='" + this.width + "' height='" + this.height + "' stroke='rgb(" + super.r + "," + super.g + "," + super.b + ")' stroke-width='3' fill='#000000' fill-opacity='0' />";
+        return "<rect x='" + this.pos.getX() + "' y='" + this.pos.getY() + "' width='" + this.width + "' height='" + this.height + "' stroke='rgb(" + this.r + "," + this.g + "," + this.b + ")' stroke-width='3' fill='#000000' fill-opacity='0' />";
     }
 
     public Shape toShapeFX() {
         Rectangle rectangle = new Rectangle(this.pos.getX(), this.pos.getY(), this.pos.getX() + this.width, this.pos.getY() + this.height);
-        rectangle.setFill(Color.rgb(this.r,this.g,this.b,1.0));
+        rectangle.setFill(Color.rgb(this.r, this.g, this.b, 1.0));
         return rectangle;
     }
 
     @Override
     public String toString() {
-        return "Rectangle (" + this.height + ", " + this.width + ", Point2D (" + this.pos.getX() + ", "  + this.pos.getY() + ")" + ")";
+        return "Rectangle ( " + this.name + ", " + this.height + ", " + this.width + ", Point2D (" + this.pos.getX() + ", "  + this.pos.getY() + ")" + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        AxesAlignedRectangle that = (AxesAlignedRectangle) o;
+        return this.height == that.height &&
+                this.width == that.width &&
+                this.pos.equals(that.pos) &&
+                this.r == that.r &&
+                this.g == that.g &&
+                this.b == that.b;
     }
 }
