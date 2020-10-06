@@ -41,6 +41,8 @@ int main(int argc, char *argv[]){
     return EXIT_FAILURE;
   }
 
+  // if 0 or negative ignore else
+  // line -1
   int line = atoi(argv[2]);
   if (line > 1) { // >= 1 if start at 0
     line -= 2; // -= 1 if start at 0
