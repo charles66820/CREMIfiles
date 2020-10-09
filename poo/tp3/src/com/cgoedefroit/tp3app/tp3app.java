@@ -14,7 +14,7 @@ public class tp3app extends Application {
     public void start(Stage stage) throws Exception {
 
         Group root = new Group();
-        ArrayList<Shape2D> sList = tools.randShape2DList(10, 10, 200, 100, 400, 200);
+        ArrayList<Shape2D> sList = tools.randShape2DList(40, 80, 200, 100, 800, 450);
 
         for (Shape2D oneShape : sList) root.getChildren().add(oneShape.toShapeFX());
 

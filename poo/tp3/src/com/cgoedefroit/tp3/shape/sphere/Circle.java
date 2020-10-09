@@ -1,5 +1,8 @@
 package com.cgoedefroit.tp3.shape.sphere;
 
+import com.cgoedefroit.tp3.shape.AxesAlignedRectangle;
+import com.cgoedefroit.tp3.shape.AxesAlignedSquare;
+import com.cgoedefroit.tp3.shape.Triangle;
 import com.cgoedefroit.tp3.shape.elementary.Point2D;
 import com.cgoedefroit.tp3.shape.body.Polygone;
 import com.cgoedefroit.tp3.shape.Shape2D;
@@ -45,18 +48,54 @@ public class Circle extends Shape2D {
         return p.distance(this.centre) <= radius;
     }
 
-    boolean inside(Point2D p) {
-        // TODO: implement this
-        return false;
+    public boolean inside(Point2D p) {
+        return this.centre.equals(p);
     }
-    boolean inside(Polygone p) {
-        // TODO: implement this
-        // vertices and inside(Point2D p)
-        return false;
+
+    public boolean inside(Polygone p) {
+        if (p instanceof AxesAlignedSquare) {
+            AxesAlignedSquare s = (AxesAlignedSquare) p;
+            return // On top
+                    s.isInside(new Point2D(this.centre.getX(), this.centre.getY() + this.radius))
+                            // On bottom
+                            && s.isInside(new Point2D(this.centre.getX(), this.centre.getY() - this.radius))
+                            // On right
+                            && s.isInside(new Point2D(this.centre.getX() + this.radius, this.centre.getY()))
+                            // On left
+                            && s.isInside(new Point2D(this.centre.getX() - this.radius, this.centre.getY()));
+        } else if (p instanceof AxesAlignedRectangle) {
+            AxesAlignedRectangle r = (AxesAlignedRectangle) p;
+            return // On top
+                    r.isInside(new Point2D(this.centre.getX(), this.centre.getY() + this.radius))
+                            // On bottom
+                            && r.isInside(new Point2D(this.centre.getX(), this.centre.getY() - this.radius))
+                            // On right
+                            && r.isInside(new Point2D(this.centre.getX() + this.radius, this.centre.getY()))
+                            // On left
+                            && r.isInside(new Point2D(this.centre.getX() - this.radius, this.centre.getY()));
+        } else if (p instanceof Triangle) {
+            Triangle t = (Triangle) p;
+            return // On top
+                    t.isInside(new Point2D(this.centre.getX(), this.centre.getY() + this.radius))
+                            // On bottom
+                            && t.isInside(new Point2D(this.centre.getX(), this.centre.getY() - this.radius))
+                            // On right
+                            && t.isInside(new Point2D(this.centre.getX() + this.radius, this.centre.getY()))
+                            // On left
+                            && t.isInside(new Point2D(this.centre.getX() - this.radius, this.centre.getY()));
+        } else return false;
     }
-    boolean inside(Circle c) {
-        // TODO: implement this
-        return false;
+
+    public boolean inside(Circle c) {
+
+        return  // On top
+                c.isInside(new Point2D(this.centre.getX(), this.centre.getY() + this.radius))
+                        // On bottom
+                        && c.isInside(new Point2D(this.centre.getX(), this.centre.getY() - this.radius))
+                        // On right
+                        && c.isInside(new Point2D(this.centre.getX() + this.radius, this.centre.getY()))
+                        // On left
+                        && c.isInside(new Point2D(this.centre.getX() - this.radius, this.centre.getY()));
     }
 
     public String svg() {
