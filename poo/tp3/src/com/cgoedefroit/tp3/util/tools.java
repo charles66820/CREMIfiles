@@ -13,6 +13,7 @@ import java.util.Random;
 public class tools {
 
     private final static Random randomizer = new Random();
+
     public static ArrayList<Shape2D> randShape2DList(int nbMin, int nbMax, double startX, double startY, double stopX, double stopY) {
 
         ArrayList<Shape2D> sList = new ArrayList<>();
@@ -93,6 +94,36 @@ public class tools {
             }
         }
 
+        return sList;
+    }
+
+    public static ArrayList<Shape2D> circleInPolygoneList() {
+        ArrayList<Shape2D> sList = new ArrayList<>();
+        // Test with circle not inside square
+        AxesAlignedSquare s = new AxesAlignedSquare(new Point2D(30, 30), 60, "square ");
+        s.setB(255);
+        s.setA(0.7);
+        sList.add(s);
+
+        Circle c = new Circle(new Point2D(30, 30), 20, "circle ");
+        c.setA(0.7);
+        sList.add(c);
+
+        if (c.inside(s)) c.setG(255);
+        else c.setR(255);
+
+        // Test with circle inside square
+        AxesAlignedSquare s2 = new AxesAlignedSquare(new Point2D(30 + (s.getPos().getX() * 2) + 30, 30), s.getSide(), "square ");
+        s2.setB(255);
+        s2.setA(0.7);
+        sList.add(s2);
+
+        Circle c2 = new Circle(new Point2D(s2.getPos().getX() + (s2.getSide() / 2), 30 + (s2.getSide() / 2)), 20, "circle ");
+        c2.setA(0.7);
+        sList.add(c2);
+
+        if (c2.inside(s)) c2.setG(255);
+        else c2.setR(255);
         return sList;
     }
 }

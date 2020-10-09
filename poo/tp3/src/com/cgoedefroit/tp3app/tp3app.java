@@ -21,7 +21,20 @@ public class tp3app extends Application {
         Scene scene = new Scene(root, 800, 450);
 
         stage.setScene(scene);
+        stage.setTitle("Rand Shape2D List");
         stage.show();
+
+        Stage secondStage = new Stage();
+        Group root2 = new Group();
+        ArrayList<Shape2D> sList2 = tools.circleInPolygoneList();
+
+        for (Shape2D oneShape : sList2) root2.getChildren().add(oneShape.toShapeFX());
+
+        Scene scene2 = new Scene(root2, 800, 450);
+
+        secondStage.setScene(scene2);
+        secondStage.setTitle("Circle inside");
+        secondStage.show();
     }
 
     public static void main(String... args) {

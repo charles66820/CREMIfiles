@@ -90,7 +90,7 @@ public class AxesAlignedRectangle extends Polygone {
     }
 
     public Shape toShapeFX() {
-        Rectangle rectangle = new Rectangle(this.pos.getX(), this.pos.getY(), this.pos.getX() + this.width, this.pos.getY() + this.height);
+        Rectangle rectangle = new Rectangle(this.pos.getX(), this.pos.getY(), this.width, this.height);
         rectangle.setFill(Color.rgb(this.r, this.g, this.b, this.a));
         return rectangle;
     }
