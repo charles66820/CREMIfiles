@@ -7,7 +7,6 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Triangle extends Polygone {
     private final Point2D p1;

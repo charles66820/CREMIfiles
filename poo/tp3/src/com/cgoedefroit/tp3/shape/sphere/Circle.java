@@ -6,8 +6,6 @@ import com.cgoedefroit.tp3.shape.Shape2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
-import java.util.Objects;
-
 public class Circle extends Shape2D {
     private final double radius;
     private final Point2D centre;

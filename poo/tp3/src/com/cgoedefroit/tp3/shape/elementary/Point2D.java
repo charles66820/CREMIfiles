@@ -1,8 +1,8 @@
 package com.cgoedefroit.tp3.shape.elementary;
 
 import com.cgoedefroit.tp3.shape.Shape2D;
-
-import java.util.Objects;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 
 public class Point2D extends Shape2D {
     private double x, y;
@@ -47,6 +47,10 @@ public class Point2D extends Shape2D {
 
     public double distance(Point2D p) {
         return Math.sqrt(Math.pow(p.x - this.x, 2) + Math.pow(p.y - this.y, 2));
+    }
+
+    public Shape toShapeFX() {
+        return new javafx.scene.shape.Circle(this.x, this.y, 1, Color.rgb(this.r, this.g, this.b, this.a));
     }
 
     @Override

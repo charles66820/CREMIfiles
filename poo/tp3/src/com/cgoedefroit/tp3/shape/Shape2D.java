@@ -1,5 +1,7 @@
 package com.cgoedefroit.tp3.shape;
 
+import javafx.scene.shape.Shape;
+
 public abstract class Shape2D {
 
     protected String name;
@@ -63,4 +65,6 @@ public abstract class Shape2D {
     public String toString() {
         return "Shape2D ( " + this.name + " )";
     }
+
+    public abstract Shape toShapeFX();
 }

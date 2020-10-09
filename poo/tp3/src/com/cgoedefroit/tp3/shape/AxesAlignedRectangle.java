@@ -7,7 +7,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class AxesAlignedRectangle extends Polygone {
 

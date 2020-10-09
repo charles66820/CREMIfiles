@@ -1,6 +1,5 @@
 package com.cgoedefroit.tp3.shape.body;
 
-
 import com.cgoedefroit.tp3.shape.Shape2D;
 import com.cgoedefroit.tp3.shape.elementary.Point2D;
 
