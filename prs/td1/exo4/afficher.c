@@ -59,15 +59,13 @@ int main(int argc, char *argv[]){
     lseek(fdIn, value, SEEK_SET);
   }
 
-  while (1) {
-    char value;
+  char value;
+  while (value != '\n') {
     // read one char and move cursor
     int n = read(fdIn, &value, sizeof(char));
     if (!n) break;
 
     write(STDOUT_FILENO, &value, sizeof(char));
-
-    if (value == '\n') break;
   }
 
   close(fdIn);
