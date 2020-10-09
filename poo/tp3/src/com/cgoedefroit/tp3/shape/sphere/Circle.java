@@ -66,12 +66,12 @@ public class Circle extends Shape2D {
     }
 
     public Shape toShapeFX() {
-        return new javafx.scene.shape.Circle(this.centre.getX(), this.centre.getY(), this.radius, Color.rgb(this.r, this.g, this.b, 1.0));
+        return new javafx.scene.shape.Circle(this.centre.getX(), this.centre.getY(), this.radius, Color.rgb(this.r, this.g, this.b, this.a));
     }
 
     @Override
     public String toString() {
-        return "Circle ( " + this.name + ", " + this.radius + ", Point2D (" + this.centre.getX() + ", "  + this.centre.getY() + ")" + ")";
+        return "Circle ( " + this.name + ", " + this.radius + ", " + this.centre + ")";
     }
 
     @Override

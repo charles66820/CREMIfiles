@@ -78,13 +78,13 @@ public class Triangle extends Polygone {
 
     public Shape toShapeFX() {
         Polygon polygon = new Polygon(this.p1.getX(), this.p1.getY(), this.p2.getX(), this.p2.getY(), this.p3.getX(), this.p3.getY());
-        polygon.setFill(Color.rgb(this.r, this.g, this.b, 0.7));
+        polygon.setFill(Color.rgb(this.r, this.g, this.b, this.a));
         return polygon;
     }
 
     @Override
     public String toString() {
-        return "Triangle ( " + this.name + ", Point2D (" + this.p1.getX() + ", "  + this.p1.getY() + ")" + ", Point2D (" + this.p2.getX() + ", "  + this.p2.getY() + ")" + ", Point2D (" + this.p3.getX() + ", "  + this.p3.getY() + ")" + ")";
+        return "Triangle ( " + this.name + ", " + this.p1 + ", " +  this.p2 + ", " + this.p3 + ")";
     }
 
     @Override

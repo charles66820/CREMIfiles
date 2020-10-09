@@ -5,6 +5,7 @@ public abstract class Shape2D {
     protected String name;
 
     protected int r, g, b;
+    protected double a;
 
     public double area() {
         return 0;
@@ -37,6 +38,14 @@ public abstract class Shape2D {
 
     public void setB(int v) {
         this.b = v;
+    }
+
+    public double getA() {
+        return this.a;
+    }
+
+    public void setA(double v) {
+        this.a = v;
     }
 
     // Methods

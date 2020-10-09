@@ -4,31 +4,31 @@ import com.cgoedefroit.tp3.shape.elementary.Point2D;
 
 public class AxesAlignedSquare extends AxesAlignedRectangle {
 
-    private int side;
+    private double side;
 
-    public AxesAlignedSquare(Point2D pos, int side) {
+    public AxesAlignedSquare(Point2D pos, double side) {
         this(pos, side, "undefine");
     }
 
-    public AxesAlignedSquare(Point2D pos, int side, String name) {
+    public AxesAlignedSquare(Point2D pos, double side, String name) {
         super(pos, side, side);
         this.side = side;
         this.name = name;
     }
 
     // Get / set
-    public int getSide() {
+    public double getSide() {
         return side;
     }
 
-    public void setSide(int side) {
+    public void setSide(double side) {
         this.side = side;
     }
 
     // Methods
     @Override
     public String toString() {
-        return "Square ( " + this.name + ", " + this.side + ", Point2D (" + this.pos.getX() + ", "  + this.pos.getY() + ")" + ")";
+        return "Square ( " + this.name + ", " + this.side + ", " + this.pos + ")";
     }
 
     @Override

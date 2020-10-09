@@ -12,13 +12,13 @@ import java.util.Objects;
 public class AxesAlignedRectangle extends Polygone {
 
     protected Point2D pos;
-    private int height, width;
+    private double height, width;
 
-    public AxesAlignedRectangle(Point2D pos, int height, int width) {
+    public AxesAlignedRectangle(Point2D pos, double height, double width) {
         this(pos, height, width, "undefine");
     }
 
-    public AxesAlignedRectangle(Point2D pos, int height, int width, String name) {
+    public AxesAlignedRectangle(Point2D pos, double height, double width, String name) {
         this.pos = new Point2D(pos);
         this.height = height;
         this.width = width;
@@ -34,19 +34,19 @@ public class AxesAlignedRectangle extends Polygone {
         this.pos = pos;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(double width) {
         this.width = width;
     }
 
@@ -92,13 +92,13 @@ public class AxesAlignedRectangle extends Polygone {
 
     public Shape toShapeFX() {
         Rectangle rectangle = new Rectangle(this.pos.getX(), this.pos.getY(), this.pos.getX() + this.width, this.pos.getY() + this.height);
-        rectangle.setFill(Color.rgb(this.r, this.g, this.b, 1.0));
+        rectangle.setFill(Color.rgb(this.r, this.g, this.b, this.a));
         return rectangle;
     }
 
     @Override
     public String toString() {
-        return "Rectangle ( " + this.name + ", " + this.height + ", " + this.width + ", Point2D (" + this.pos.getX() + ", "  + this.pos.getY() + ")" + ")";
+        return "Rectangle ( " + this.name + ", " + this.height + ", " + this.width + ", " + this.pos + ")";
     }
 
     @Override
