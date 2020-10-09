@@ -70,6 +70,7 @@ public class AxesAlignedRectangle extends Polygone {
         this.pos.translate(delta);
     }
 
+    @Override
     public boolean isInside(Point2D p) {
         return (p.getX() >= this.pos.getX() && p.getX() < this.pos.getX() + this.width) &&
                 (p.getY() >= this.pos.getY() && p.getY() < this.pos.getY() + this.height);

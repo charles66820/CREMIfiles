@@ -45,6 +45,11 @@ public class Point2D extends Shape2D {
         this.y += dy;
     }
 
+    @Override
+    public boolean isInside(Point2D p) {
+        return this.equals(p);
+    }
+
     public double distance(Point2D p) {
         return Math.sqrt(Math.pow(p.x - this.x, 2) + Math.pow(p.y - this.y, 2));
     }

@@ -35,7 +35,7 @@ class TestShape2D {
         // Table of Shape2D
         System.out.println("======Test Table of Shape2D======");
         // Randowm ArrayList of Shape2D
-        ArrayList<Shape2D> sList = tools.randShape2DList(10, 20, 10, 10, 50, 50);
+        ArrayList<Shape2D> sList = tools.randShape2DList(20, 30, 10, 10, 50, 50);
 
         for (Shape2D oneShape : sList) oneShape.print();
 
@@ -48,8 +48,10 @@ class TestShape2D {
         }
 
         // One point
-        Point2D p = new Point2D(10, 20);
+        System.out.println("======Show shape with point inside======");
+        Point2D p = new Point2D(20, 25);
         // Find shape with p inside in sList
+        for (Shape2D oneShape : sList) if(oneShape.isInside(p)) oneShape.print();
 
     }
 }

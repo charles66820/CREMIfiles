@@ -49,6 +49,7 @@ public class Triangle extends Polygone {
         this.p3.translate(delta);
     }
 
+    @Override
     public boolean isInside(Point2D p) {
         return p1.distance(p) <= p1.distance(p2) &&
         p1.distance(p) <= p1.distance(p3) &&

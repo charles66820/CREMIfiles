@@ -1,5 +1,6 @@
 package com.cgoedefroit.tp3.shape;
 
+import com.cgoedefroit.tp3.shape.elementary.Point2D;
 import javafx.scene.shape.Shape;
 
 public abstract class Shape2D {
@@ -56,6 +57,8 @@ public abstract class Shape2D {
     public void translate(double delta) {
         translate(delta, delta);
     }
+
+    public abstract boolean isInside(Point2D p);
 
     public void print() {
         System.out.println(this);
