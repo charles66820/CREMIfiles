@@ -16,15 +16,19 @@ public class RLECompression implements ICompression {
         StringBuilder result = new StringBuilder("");
         while (data.length() != 0) {
             char c = data.charAt(0);
-            if (c == flag) throw new RLECompressionException("flag char ( " + flag + " ) is inside data string", result.toString(), data);
             int L = lengthOfSingleLetterPrefix(data);
             int t = L;
             while (t != 0)
                 if (t > 9) {
-                    result.append(c).append(flag).append('9');
+                    if (c != flag) result.append(c);
+                    result.append(flag).append('9');
                     t -= 9;
+                } else if (t > 3) {
+                    if (c != flag) result.append(c);
+                    result.append(flag).append(t);
+                    t -= t;
                 } else {
-                    result.append(c).append(flag).append(t);
+                    result.append(c);
                     t -= t;
                 }
             data = data.substring(L);

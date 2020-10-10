@@ -8,7 +8,7 @@ public class TestRLECompression {
         RLECompression bRleC = new RLECompression();
 
         // Create string for test compression
-        String d = "onnnneee ssstttrrrrriiiiiiiiiiiiiiiiiiiiiiinnnnnnnngggggg ffffoooorrrrrrr ttttteeesssteeee";
+        String d = "onnnneee ssstttrrrrriiiiiiiiiiiiiiiiiiiiiiinnnnnnnngggggg ffffoooorrrrrrr ttttteeesssteeee avec charlesssssss@@@@@magicorp.fr";
         System.out.println("String to be compressed : " + d);
 
         // Try compression
