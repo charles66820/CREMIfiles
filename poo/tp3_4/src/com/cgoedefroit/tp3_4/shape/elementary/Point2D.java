@@ -46,7 +46,7 @@ public class Point2D extends Shape2D {
     }
 
     @Override
-    public boolean isInside(Point2D p) {
+    public boolean inside(Point2D p) {
         return this.equals(p);
     }
 

@@ -12,13 +12,13 @@ class TestRectangle {
         System.out.println("Surface: " + r.area());
         System.out.println("Perimeter: " + r.perimeter());
         System.out.println("Test with point in x: 10 y: 20");
-        System.out.println(r.isInside(new Point2D(10.0, 20.0)));
+        System.out.println(r.inside(new Point2D(10.0, 20.0)));
         System.out.println("Test with point in x: 20 y: 20");
-        System.out.println(r.isInside(new Point2D(20.0, 20.0)));
+        System.out.println(r.inside(new Point2D(20.0, 20.0)));
         System.out.println("Test with point in x: 10 y: 10");
-        System.out.println(r.isInside(new Point2D(10.0, 30.0)));
+        System.out.println(r.inside(new Point2D(10.0, 30.0)));
         System.out.println("Test with point in x: -10 y: 10");
-        System.out.println(r.isInside(new Point2D(-10.0, 10.0)));
+        System.out.println(r.inside(new Point2D(-10.0, 10.0)));
         r.print();
         r.translate(20, 10);
         r.print();

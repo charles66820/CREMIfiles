@@ -12,13 +12,13 @@ class TestTriangle {
         System.out.println("Surface: " + t.area());
         System.out.println("Perimeter: " + t.perimeter());
         System.out.println("Test with point in x: 10 y: 20");
-        System.out.println(t.isInside(new Point2D(10.0, 20.0)));
+        System.out.println(t.inside(new Point2D(10.0, 20.0)));
         System.out.println("Test with point in x: 20 y: 20");
-        System.out.println(t.isInside(new Point2D(20.0, 20.0)));
+        System.out.println(t.inside(new Point2D(20.0, 20.0)));
         System.out.println("Test with point in x: 10 y: 10");
-        System.out.println(t.isInside(new Point2D(10.0, 30.0)));
+        System.out.println(t.inside(new Point2D(10.0, 30.0)));
         System.out.println("Test with point in x: -10 y: 10");
-        System.out.println(t.isInside(new Point2D(-10.0, 10.0)));
+        System.out.println(t.inside(new Point2D(-10.0, 10.0)));
         t.print();
         t.translate(20, 10);
         t.print();

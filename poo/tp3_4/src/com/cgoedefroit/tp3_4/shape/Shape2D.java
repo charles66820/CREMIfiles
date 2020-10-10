@@ -58,7 +58,7 @@ public abstract class Shape2D {
         translate(delta, delta);
     }
 
-    public abstract boolean isInside(Point2D p);
+    public abstract boolean inside(Point2D p);
 
     public void print() {
         System.out.println(this);

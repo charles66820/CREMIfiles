@@ -50,7 +50,7 @@ public class Triangle extends Polygone {
     }
 
     @Override
-    public boolean isInside(Point2D p) {
+    public boolean inside(Point2D p) {
         return p1.distance(p) <= p1.distance(p2) &&
         p1.distance(p) <= p1.distance(p3) &&
         p2.distance(p) <= p2.distance(p1) &&

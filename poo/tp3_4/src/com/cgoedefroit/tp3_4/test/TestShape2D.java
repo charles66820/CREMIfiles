@@ -51,7 +51,7 @@ class TestShape2D {
         System.out.println("======Show shape with point inside======");
         Point2D p = new Point2D(20, 25);
         // Find shape with p inside in sList
-        for (Shape2D oneShape : sList) if(oneShape.isInside(p)) oneShape.print();
+        for (Shape2D oneShape : sList) if(oneShape.inside(p)) oneShape.print();
 
     }
 }

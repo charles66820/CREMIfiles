@@ -1,8 +1,6 @@
-package com.cgoedefroit.BasicRLE;
+package com.cgoedefroit.RLE;
 
-import com.sun.xml.internal.ws.util.StringUtils;
-
-public class BasicRLECompression implements ICompression {
+public class RLECompression implements ICompression {
 
     private static final char flag = '@';
 
@@ -18,7 +16,7 @@ public class BasicRLECompression implements ICompression {
         StringBuilder result = new StringBuilder("");
         while (data.length() != 0) {
             char c = data.charAt(0);
-            if (c == flag) throw new BasicRLECompressionException("flag char ( " + flag + " ) is inside data string", result.toString(), data);
+            if (c == flag) throw new RLECompressionException("flag char ( " + flag + " ) is inside data string", result.toString(), data);
             int L = lengthOfSingleLetterPrefix(data);
             int t = L;
             while (t != 0)
@@ -38,8 +36,8 @@ public class BasicRLECompression implements ICompression {
     public String uncompress(String data) throws Exception {
         StringBuilder result = new StringBuilder();
         while (data.length() != 0) {
-            if (data.length() < 3) throw new BasicRLECompressionException("Invalide compress data string length", result.toString(), data);
-            if (data.charAt(1) != flag) throw new BasicRLECompressionException("Invalide compress data string flag", result.toString(), data);
+            if (data.length() < 3) throw new RLECompressionException("Invalide compress data string length", result.toString(), data);
+            if (data.charAt(1) != flag) throw new RLECompressionException("Invalide compress data string flag", result.toString(), data);
             char c = data.charAt(0);
             char L = data.charAt(2);
             int t = Integer.parseInt("" + L);

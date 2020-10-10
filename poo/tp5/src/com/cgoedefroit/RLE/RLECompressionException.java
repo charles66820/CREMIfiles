@@ -1,10 +1,10 @@
-package com.cgoedefroit.BasicRLE;
+package com.cgoedefroit.RLE;
 
-public class BasicRLECompressionException extends Exception {
+public class RLECompressionException extends Exception {
     private String processedData;
     private String unProcessedData;
 
-    public BasicRLECompressionException(String msg, String processedData, String unProcessedData) {
+    public RLECompressionException(String msg, String processedData, String unProcessedData) {
         super(msg);
         this.processedData = processedData;
         this.unProcessedData = unProcessedData;

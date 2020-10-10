@@ -38,7 +38,7 @@ public class tp3_4app extends Application {
 
         Point2D p = new Point2D(500, 300);
         // Find shape with p inside in sList
-        for (Shape2D oneShape : sList) if(oneShape.isInside(p)) root3.getChildren().add(oneShape.toShapeFX());
+        for (Shape2D oneShape : sList) if(oneShape.inside(p)) root3.getChildren().add(oneShape.toShapeFX());
 
         therdStage.setScene(new Scene(root3, 800, 450));
         therdStage.setTitle("Show shape with point inside");
