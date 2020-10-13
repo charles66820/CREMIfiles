@@ -8,8 +8,8 @@ int System(char *commande) {
   int pid = fork();
 
   if (!pid) {
-    int code = execl("/bin/bash", "bash", "-c", commande, (char *) NULL);
-    return code;
+    execl("/bin/bash", "bash", "-c", commande, (char *) NULL);
+    return EXIT_FAILURE;
   }
   wait(&pid);
 
