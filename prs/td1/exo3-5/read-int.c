@@ -42,11 +42,14 @@ int main(int argc, char* argv[]) {
   u_int32_t value;
   int n = read(fdIn, &value, sizeof(u_int32_t));
   close(fdIn);
-  if (!n) return EXIT_FAILURE;
+  if (!n) {
+   fprintf(stderr, "error on red value");
+   return EXIT_FAILURE;
+  }
   // Si pm cherche à lire au-delà de la fin du fichier on ne peut pas lire
 
   char buffer[n];
-  sprintf(buffer, "%d\n", value);
+  sprintf(buffer, "%u\n", value);
 
   write(STDOUT_FILENO, buffer, n);
 
