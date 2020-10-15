@@ -13,7 +13,8 @@ int main(int argc, char const *argv[]) {
     int childPid = fork();
     if (!childPid) {
       // If child exit
-      printf("je m'appelle %d et je suis le fils de %d le %d eme\n", getpid(), getppid(), i);
+      printf("je m'appelle %d et je suis le fils de %d le %d eme\n", getpid(),
+             getppid(), i);
       return EXIT_SUCCESS;
     } else {
       printf("je m'appelle %d et je suis le père de %d mon %d eme\n", getpid(),

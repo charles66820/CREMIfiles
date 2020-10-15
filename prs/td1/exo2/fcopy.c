@@ -1,11 +1,10 @@
-#include <sys/types.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 int main(int argc, char* argv[]) {
-
   if (argc != 3) return EXIT_FAILURE;
 
   FILE* fIn = fopen(argv[1], "r");

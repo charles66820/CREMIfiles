@@ -1,11 +1,10 @@
-#include <sys/types.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 int main(int argc, char* argv[]) {
-
   if (argc != 3 && argc != 4) return EXIT_FAILURE;
 
   int fdIn = open(argv[1], O_RDONLY);
@@ -14,7 +13,7 @@ int main(int argc, char* argv[]) {
     return EXIT_FAILURE;
   }
 
-  int fdOut = open(argv[2], O_WRONLY + O_CREAT, 0664); //O_SYNC
+  int fdOut = open(argv[2], O_WRONLY + O_CREAT, 0664);  // O_SYNC
   if (fdOut == -1) {
     fprintf(stdout, "Cannot open %s file\n", argv[2]);
     close(fdIn);

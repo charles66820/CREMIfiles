@@ -1,26 +1,26 @@
 #include <errno.h>
 #include <fcntl.h>
-#include <sys/types.h>
-#include <sys/uio.h>
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/uio.h>
+#include <unistd.h>
 
 #define SUFFIXE ".idx"
 
-void verifier(int cond, char *s){
-  if (!cond){
+void verifier(int cond, char *s) {
+  if (!cond) {
     perror(s);
     exit(EXIT_FAILURE);
   }
 }
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
   verifier(argc == 3, "il faut deux paramètres.");
 
   // construire le chemin au fichier index
-  int l = strlen(argv[1]) ;
+  int l = strlen(argv[1]);
   char idx_filename[l + strlen(SUFFIXE) + 1];
 
   strncpy(idx_filename, argv[1], l);
@@ -44,8 +44,8 @@ int main(int argc, char *argv[]){
   // if 0 or negative ignore else
   // line -1
   int line = atoi(argv[2]);
-  if (line > 1) { // >= 1 if start at 0
-    line -= 2; // -= 1 if start at 0
+  if (line > 1) {  // >= 1 if start at 0
+    line -= 2;     // -= 1 if start at 0
 
     // go to ligne position in index file
     lseek(fdInd, line * sizeof(off_t), SEEK_SET);

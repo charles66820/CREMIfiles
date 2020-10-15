@@ -1,11 +1,10 @@
-#include <sys/types.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 int main(int argc, char* argv[]) {
-
   int fdErr = open("ERREURS-LIRE.log", O_WRONLY | O_CREAT, 0666);
   if (fdErr == -1) {
     fprintf(stdout, "Cannot create ERREURS-LIRE.log file\n");
@@ -28,7 +27,8 @@ int main(int argc, char* argv[]) {
 
   // position
   int position;
-  if (argv[2][0] == '0') position = 0;
+  if (argv[2][0] == '0')
+    position = 0;
   else {
     position = atoi(argv[2]);
     if (position == 0) {
@@ -43,8 +43,8 @@ int main(int argc, char* argv[]) {
   int n = read(fdIn, &value, sizeof(u_int32_t));
   close(fdIn);
   if (!n) {
-   fprintf(stderr, "error on red value");
-   return EXIT_FAILURE;
+    fprintf(stderr, "error on red value");
+    return EXIT_FAILURE;
   }
   // Si pm cherche à lire au-delà de la fin du fichier on ne peut pas lire
 

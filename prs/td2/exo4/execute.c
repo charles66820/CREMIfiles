@@ -11,7 +11,6 @@ int main(int argc, char* argv[]) {
 
   printf("*** execution\n");
 
-
   int pid = fork();
 
   if (!pid) {
