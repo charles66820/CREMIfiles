@@ -1,7 +1,7 @@
 (* Raccourcis clavier de coqide *)
 (* CTRL-fl\u00e8che bas: avancer d'une commande *)
 (* CTRL-fl\u00e8che haut: revenir en arri\u00e8re d'une commande *)
-(* CTRL-fl\u00e8che droit: avancer ou revenir en arri\u00e8re jusqu'au curseur *) 
+(* CTRL-fl\u00e8che droit: avancer ou revenir en arri\u00e8re jusqu'au curseur *)
 
 (** premiers pas en Coq *)
 
@@ -15,7 +15,7 @@ Section Declarations.
      pour definir des hypotheses (et donc prouver des sequents avec hypotheses).
 
      Dans ce fichier, la section "Declarations" va jusqu'au bout \u2620\ufe0f *)
-  
+
   Lemma imp_dist: (P -> Q -> R) -> (P -> Q) -> P -> R.
   Proof.
     intro H.
@@ -61,7 +61,7 @@ Section Declarations.
      forme d'hypotheses supplementaires pour L2                         *)
   Check L2.
 
-  
+
   Section About_cuts.
     Hypothesis H : P -> Q.
     Hypothesis H0 : P -> Q -> R.
@@ -87,20 +87,37 @@ Section Declarations.
       apply H0.
       assumption.
       apply H;assumption.
+
+   Restart. (* DOHERE: add - + *)
+      intro p.
+      apply H2.
+      - apply H.
+        assumption.
+      - apply H0.
+        + assumption.
+        + apply H.
+          assumption.
+      - apply H1.
+        + apply H.
+          assumption.
+        + apply H0.
+          assumption.
+          apply H.
+          assumption.
     Qed.
-    (* R\u00e9\u00e9crivez le script ci-dessus en introduisant des tirets 
-       (-, *, +) \u00e0 chaque fois qu'une tactique engendre plus d'un 
+    (* R\u00e9\u00e9crivez le script ci-dessus en introduisant des tirets
+       (-, *, +) \u00e0 chaque fois qu'une tactique engendre plus d'un
        sous-but *)
-    
+
     (* preuve avec coupures: on prouve Q et R une seule fois chacun,
        puis on les utilise *)
 
      Lemma L'3 : P -> T.
      Proof.
        intro p.
-       assert (q: Q). { 
+       assert (q: Q). {
          apply H; assumption.
-         }   
+         }
        assert (r: R). {
          apply H0.
          - assumption.
@@ -116,7 +133,7 @@ Section Declarations.
      (* dans laquelle on se d\u00e9finit un nouveau but; c'est *)
      (* une coupure. Les accolades sont optionnelles mais *)
      (* facilitent la lecture humaine                     *)
-     
+
      Check L'3.
 
 (* remarquez la diff\u00e9rence entre les termes de preuves avec coupure et sans coupure. *)
@@ -126,34 +143,47 @@ Section Declarations.
   End About_cuts.
 
 
- (* Exercices 
+ (* Exercices
 
-    Reprendre les exemples vus en TD, en utilisant les tactiques 
+    Reprendre les exemples vus en TD, en utilisant les tactiques
     assumption, apply, assert et intro/intros.
 
     Remplacer chaque commande Admitted par un script correct de preuve,
     suivi de la commande Qed.
 
-  *)
+  *) (* TODO: HERE *)
 
   Lemma IdP : P -> P.
   Proof.
-  Admitted.
+  intro p.
+  assumption.
+  Qed.
 
   Lemma IdPP : (P -> P) -> P -> P.
   Proof.
-  Admitted.
+  intros H p.
+  apply H.
+  assumption.
+  Qed.
 
   (* sans regarder le fichier de demo, c'est de la triche *)
   Lemma imp_trans : (P -> Q) -> (Q -> R) -> P -> R.
   Proof.
-  Admitted.
+  intros Hq Hr p.
+  apply Hr.
+  - apply Hq.
+    assumption.
+  Qed.
 
   Section proof_of_hyp_switch.
     Hypothesis H : P -> Q -> R.
     Lemma hyp_switch : Q -> P -> R.
     Proof.
-    Admitted. 
+    intros q p.
+    apply H.
+    assumption.
+    assumption.
+    Qed.
 
   End proof_of_hyp_switch.
 
@@ -161,47 +191,101 @@ Section Declarations.
 
   Section proof_of_add_hypothesis.
     Hypothesis H : P -> R.
-
     Lemma add_hypothesis : P -> Q -> R.
     Proof.
-    Admitted.
+    intros p q.
+    apply H.
+    assumption.
+    Qed.
 
   End proof_of_add_hypothesis.
 
-  (* prouver le sequent (P -> P -> Q) |- P -> Q  
-     (il faut l'\u00e9noncer, et faire la preuve) 
+  (* prouver le sequent (P -> P -> Q) |- P -> Q
+     (il faut l'\u00e9noncer, et faire la preuve)
       *)
   Section proof_of_remove_dup_hypothesis.
+    Hypothesis H : P -> P -> Q.
+    Theorem remove_dup_hypothesis : P -> Q.
+    Proof.
+    intro p.
+    apply H.
+    assumption.
+    assumption.
+    Qed.
 
   End proof_of_remove_dup_hypothesis.
 
   (* m\u00eame exercice avec le s\u00e9quent P->Q |- P->P->Q *)
   Section proof_of_dup_hypothesis.
+  Hypothesis H : P -> Q.
+  Theorem dup_hypothesis : P -> P -> Q.
+  Proof.
+  intro p.
+  apply H.
+  Qed.
 
   End proof_of_dup_hypothesis.
 
-  (* meme exercice avec 
-     P -> Q , P -> R , Q -> R -> T |- P -> T  
+  (* meme exercice avec
+     P -> Q , P -> R , Q -> R -> T |- P -> T
    *)
   Section proof_of_distrib_impl.
+    Hypothesis Hq : P -> Q.
+    Hypothesis Hr : P -> R.
+    Hypothesis Ht : Q -> R -> T.
+    Theorem distrib_impl : P -> T.
+    Proof.
+    intro p.
+    apply Ht.
+    - apply Hq.
+      assumption.
+    - apply Hr.
+      assumption.
+    Qed.
 
   End proof_of_distrib_impl.
 
-  (* m\u00eame exercice, avec 
-     P->Q, Q->R, (P->R)->T->Q, (P->R)->T |- Q   
+  (* m\u00eame exercice, avec
+     P->Q, Q->R, (P->R)->T->Q, (P->R)->T |- Q
      (ex. 9 de la feuille TD2)
    *)
   Section proof_of_ex9.
+    Hypothesis Hq : P -> Q.
+    Hypothesis Hr : Q -> R.
+    Hypothesis Htq : (P -> R) -> T -> Q.
+    Hypothesis Ht : (P -> R) -> T.
+    Theorem exo9 : Q.
+    Proof.
+    assert (r: P -> R). {
+      intro p.
+      apply Hr.
+      apply Hq.
+      assumption.
+    }
+    apply Htq.
+    assumption.
+    - apply Ht.
+      assumption.
+    Qed.
 
   End proof_of_ex9.
-  
+  Check exo9.
+  Print exo9.
+
   (* exercice 12 de la feuille 1 *)
   Section Proof_of_weak_Peirce.
 
-    Hypothesis H: (((P->Q)->P)->P)->Q.
+    Hypothesis H : (((P->Q)->P)->P)->Q.
     Lemma weak_Peirce : Q.
     Proof.
-    Admitted.
+    apply H.
+    intro Hp.
+    apply Hp.
+    intro p.
+    apply H.
+    intro p1.
+    assumption.
+    Qed.
 
   End Proof_of_weak_Peirce.
   Check weak_Peirce.
