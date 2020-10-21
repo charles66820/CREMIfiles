@@ -1,56 +1,106 @@
 package com.cgoedefroit.RLE;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
 
 public class RLECompression implements ICompression {
 
     private static final char flag = '@';
 
-    private int lengthOfSingleLetterPrefix(String s) {
-        char c = s.charAt(0);
-        int i = 1;
-        while (i < s.length() && s.charAt(i) == c) i++;
-        return i;
-    }
-
     @Override
-    public void compress(String data, Writer out) throws IOException {
-        StringBuilder result = new StringBuilder("");
-        while (data.length() != 0) {
-            char c = data.charAt(0);
-            int L = lengthOfSingleLetterPrefix(data);
-            int t = L;
+    public void compress(Reader data, Writer out) throws IOException {
+        StringBuilder result = new StringBuilder();
+        int lastCCode = data.read();
+        int cCode = data.read();
+        while (lastCCode != -1) {
+            int t = 1;
+            while (cCode != -1 && lastCCode == cCode) {
+                cCode = data.read();
+                t++;
+            }
+            char c = (char) lastCCode;
             while (t != 0)
                 if (t > 9) {
-                    if (c != flag) result.append(c);
-                    result.append(flag).append('9');
+                    if (c == flag) for (int i = 0; i < t; i++) result.append(flag).append(0);
+                    else result.append(c).append(flag).append('9');
                     t -= 9;
                 } else if (t > 3) {
-                    if (c != flag) result.append(c);
-                    result.append(flag).append(t);
+                    if (c == flag) for (int i = 0; i < t; i++) result.append(flag).append(0);
+                    else result.append(c).append(flag).append(t);
                     t -= t;
                 } else {
-                    result.append(c);
+                    result.append(String.valueOf(c).repeat(t));
+                    if (c == flag) result.append(0);
                     t -= t;
                 }
-            data = data.substring(L);
+            lastCCode = cCode;
+            cCode = data.read();
         }
         out.write(result.toString());
         out.flush();
     }
 
     @Override
-    public void uncompress(String data, Writer out) throws IOException, RLEException {
+    public void uncompress(Reader data, Writer out) throws IOException, RLEException {
         StringBuilder result = new StringBuilder();
-        while (data.length() != 0) {
-            if (data.length() < 3) throw new RLEException("Invalide compress data string length", result.toString(), data);
-            if (data.charAt(1) != flag) throw new RLEException("Invalide compress data string flag", result.toString(), data);
-            char c = data.charAt(0);
-            char L = data.charAt(2);
-            int t = Integer.parseInt("" + L);
-            result.append(String.valueOf(c).repeat(t));
-            data = data.substring(3);
+        int c1 = data.read();
+        int c2 = data.read();
+        int c3 = data.read();
+        while (c1 != -1) {
+            // @0 : c
+            if ((char) c1 == flag) {
+                if (Character.getNumericValue(c2) == 0) {
+                    result.append(flag);
+                    c1 = c3;
+                    c2 = data.read();
+                    c3 = data.read();
+                } else {
+                    StringBuilder s = new StringBuilder();
+                    s.append((char) c1);
+                    if (c2 != -1) s.append((char) c2);
+                    if (c3 != -1) s.append((char) c3);
+                    while (true) {
+                        int c = data.read();
+                        if (c == -1) break;
+                        s.append((char) c);
+                    }
+                    throw new RLEException("Invalide compress data string flag", result.toString(), s.toString());
+                }
+            } else if ((char) c1 != flag && (char) c2 != flag && c2 != -1) { // cc : cc
+                result.append((char) c1);
+                c1 = c2;
+                c2 = c3;
+                c3 = data.read();
+            } else if ((char) c1 != flag && (char) c2 == flag && Character.getNumericValue(c3) == 0) { // c@0 : c@
+                result.append((char) c1);
+                result.append(flag);
+                c1 = data.read();
+                c2 = data.read();
+                c3 = data.read();
+            } else {
+                int t = Character.getNumericValue(c3);
+                if ((char) c1 != flag && (char) c2 == flag && t != 0 && t != -1) { // c@3 : ccc
+                    result.append(String.valueOf((char) c1).repeat(t));
+                    c1 = data.read();
+                    c2 = data.read();
+                    c3 = data.read();
+                }  else if ((char) c1 != flag && c2 == -1 && c3 == -1) { // c : c
+                    result.append((char) c1);
+                    c1 = data.read();
+                } else {
+                    StringBuilder s = new StringBuilder();
+                    s.append((char) c1);
+                    if (c2 != -1) s.append((char) c2);
+                    if (c3 != -1) s.append((char) c3);
+                    while (true) {
+                        int c = data.read();
+                        if (c == -1) break;
+                        s.append((char) c);
+                    }
+                    throw new RLEException("Unknown exception", result.toString(), s.toString());
+                }
+            }
         }
         out.write(result.toString());
         out.flush();
