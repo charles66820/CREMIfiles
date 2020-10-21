@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
   double t = 0;
 
   do {
-    n = write(pipe1[1], "k", sizeof(char)); // block here after 65536 char
+    n = write(pipe1[1], "k", sizeof(char)); // block here after 65536 char = 65.536 ko
     t++;
     printf("%f time\n", t);
   } while(n);
