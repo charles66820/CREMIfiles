@@ -1,0 +1,5 @@
+*.o
+Shell
+y.tab.*
+y.output
+lex.yy.*

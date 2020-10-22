@@ -17,6 +17,7 @@ int main(int argc, char* argv[]) {
 
   // cmd1 1 > 0 cmd2 args...
   if (!fork()) {
+    close(pipe1[0]);
     // Change cmd1 stdout
     dup2(pipe1[1], STDOUT_FILENO);
     execlp(argv[1], argv[1], (char*)NULL);
