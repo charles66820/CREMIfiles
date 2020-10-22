@@ -47,6 +47,8 @@ public class RLECompression implements ICompression {
                 throw new RLECompressionException("Invalide compress data string flag", result.toString(), data);
             char c = data.charAt(0);
             char L = data.charAt(2);
+            if (!Character.isDigit(L))
+                throw new RLECompressionException("Invalide compress data string digit", result.toString(), data);
             int t = Integer.parseInt("" + L);
             for (int i = 0; i < t; i++) result.append(c);
             data = data.substring(3);
