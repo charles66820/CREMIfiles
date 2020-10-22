@@ -55,18 +55,8 @@ public class RLECompression implements ICompression {
                     c1 = c3;
                     c2 = data.read();
                     c3 = data.read();
-                } else {
-                    StringBuilder s = new StringBuilder();
-                    s.append((char) c1);
-                    if (c2 != -1) s.append((char) c2);
-                    if (c3 != -1) s.append((char) c3);
-                    while (true) {
-                        int c = data.read();
-                        if (c == -1) break;
-                        s.append((char) c);
-                    }
-                    throw new RLEException("Invalide compress data string flag", result.toString(), s.toString());
-                }
+                } else
+                    throw new RLEException("Invalide compress data string flag", result.toString(), dumpData(c1, c2, c3, data));
             } else if ((char) c1 != flag && (char) c2 != flag && c2 != -1) { // cc : cc
                 result.append((char) c1);
                 c1 = c2;
@@ -80,29 +70,33 @@ public class RLECompression implements ICompression {
                 c3 = data.read();
             } else {
                 int t = Character.getNumericValue(c3);
-                if ((char) c1 != flag && (char) c2 == flag && t != 0 && t != -1) { // c@3 : ccc
+                if ((char) c1 != flag && (char) c2 == flag && t != 0 && Character.isDigit(c3)) { // c@3 : ccc
                     result.append(String.valueOf((char) c1).repeat(t));
                     c1 = data.read();
                     c2 = data.read();
                     c3 = data.read();
-                }  else if ((char) c1 != flag && c2 == -1 && c3 == -1) { // c : c
+                } else if ((char) c1 != flag && c2 == -1 && !Character.isDigit(c3)) { // c : c
                     result.append((char) c1);
                     c1 = data.read();
-                } else {
-                    StringBuilder s = new StringBuilder();
-                    s.append((char) c1);
-                    if (c2 != -1) s.append((char) c2);
-                    if (c3 != -1) s.append((char) c3);
-                    while (true) {
-                        int c = data.read();
-                        if (c == -1) break;
-                        s.append((char) c);
-                    }
-                    throw new RLEException("Unknown exception", result.toString(), s.toString());
-                }
+                } else if (!Character.isDigit(c3))
+                    throw new RLEException("Invalide compress data string digit", result.toString(), dumpData(c1, c2, c3, data));
+                else throw new RLEException("Unknown exception", result.toString(), dumpData(c1, c2, c3, data));
             }
         }
         out.write(result.toString());
         out.flush();
+    }
+
+    private static String dumpData(int c1, int c2, int c3, Reader data) throws IOException {
+        StringBuilder s = new StringBuilder();
+        s.append((char) c1);
+        if (c2 != -1) s.append((char) c2);
+        if (c3 != -1) s.append((char) c3);
+        while (true) {
+            int c = data.read();
+            if (c == -1) break;
+            s.append((char) c);
+        }
+        return s.toString();
     }
 }
