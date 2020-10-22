@@ -1,8 +1,8 @@
 package com.cgoedefroit.RLE;
 
 public class RLECompressionException extends Exception {
-    private String processedData;
-    private String unProcessedData;
+    private final String processedData;
+    private final String unProcessedData;
 
     public RLECompressionException(String msg, String processedData, String unProcessedData) {
         super(msg);
