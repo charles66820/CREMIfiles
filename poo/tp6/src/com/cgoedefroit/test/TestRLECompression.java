@@ -5,7 +5,7 @@ import com.cgoedefroit.RLE.RLEException;
 
 import java.io.*;
 
-public class TestRLECompression {
+class TestRLECompression {
     public static void main(String[] args) throws IOException {
         RLECompression bRleC = new RLECompression();
 

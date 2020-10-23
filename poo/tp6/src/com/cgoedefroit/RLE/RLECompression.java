@@ -6,8 +6,17 @@ import java.io.Writer;
 
 public class RLECompression implements ICompression {
 
+    /**
+     * Flacg use RLE compression
+     */
     private static final char flag = '@';
 
+    /**
+     * Use it for apply RLE compression
+     * @param data File stream will be compressed
+     * @param out File stream will recive compressed data
+     * @throws IOException Exception with file manipulation
+     */
     @Override
     public void compress(Reader data, Writer out) throws IOException {
         StringBuilder result = new StringBuilder();
@@ -41,6 +50,13 @@ public class RLECompression implements ICompression {
         out.flush();
     }
 
+    /**
+     * Use it for RLE uncompression
+     * @param data File stream will be uncompressed
+     * @param out File stream will recive uncompressed data
+     * @throws IOException Exception with file manipulation
+     * @throws RLEException Exception on file content is not valide
+     */
     @Override
     public void uncompress(Reader data, Writer out) throws IOException, RLEException {
         StringBuilder result = new StringBuilder();
