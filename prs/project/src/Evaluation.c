@@ -2,18 +2,43 @@
 
 #include <fcntl.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
 #include "Shell.h"
 
+typedef unsigned int uint;
+
 int evaluer_expr(Expression *e) {
-  if (e->type == VIDE) return 0;
-  if (e->type == SIMPLE) {
-    //fork();
-    
+  switch (e->type) {
+    case VIDE:
+      return 0;
+    case SIMPLE: {
+      int argc = LongueurListe(e->arguments);
+      if (!strcmp(e->arguments[0], "echo")) {
+        for (uint i = 1; i < argc; i++) {
+          printf("%s", e->arguments[i]);
+          if (i == argc - 1) printf("\n");
+          else printf(" ");
+        }
+      } else {
+        if (!fork()) {
+          execvp(e->arguments[0], e->arguments);
+
+          fprintf(stderr, "%s: command not found\n", e->arguments[0]);
+          return 127;
+        }
+        int exitCode;
+        wait(&exitCode);
+        return WTERMSIG(exitCode)? WTERMSIG(exitCode) + 128 : WEXITSTATUS(exitCode);
+      }
+      return 0;
+    }
+
+    default:
+      fprintf(stderr, "not yet implemented \n");
+      return 1;
   }
-  fprintf(stderr, "not yet implemented \n");
-  return 1;
 }
