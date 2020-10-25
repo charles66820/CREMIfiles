@@ -36,6 +36,20 @@ int evaluer_expr(Expression *e) {
       }
       return 0;
     }
+    case SEQUENCE: {
+      evaluer_expr(e->gauche);
+      return evaluer_expr(e->droite);
+    }
+    case SEQUENCE_ET: {
+      int status = evaluer_expr(e->gauche);
+      if (!status) return evaluer_expr(e->droite);
+      return status;
+    }
+    case SEQUENCE_OU: {
+      int status = evaluer_expr(e->gauche);
+      if (!status) return status;
+      return evaluer_expr(e->droite);
+    }
 
     default:
       fprintf(stderr, "not yet implemented \n");
