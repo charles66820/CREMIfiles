@@ -85,6 +85,45 @@ int evaluer_expr(Expression* e) {
       status = 0;
       break;
     }
+    case REDIRECTION_O: {
+      int fd = open(e->arguments[0], O_WRONLY | O_CREAT, 0666);
+      if (fd == -1) {
+        fprintf(stdout, "Cannot create %s file\n", e->arguments[0]);
+        status = 1;
+      }
+
+      int pid;
+      if (!(pid = fork())) {
+        dup2(fd, STDOUT_FILENO);
+        exit(evaluer_expr(e->gauche));
+      }
+
+      int exitStatus;
+      waitpid(pid, &exitStatus, 0);
+      close(fd);
+      status = WEXITSTATUS(exitStatus);
+      break;
+    }
+    case REDIRECTION_I: {
+      int fd = open(e->arguments[0], O_RDONLY);
+      if (fd == -1) {
+        fprintf(stdout, "Cannot open %s file\n", e->arguments[0]);
+        status = 1;
+        break;
+      }
+
+      int pid;
+      if (!(pid = fork())) {
+        dup2(fd, STDIN_FILENO);
+        exit(evaluer_expr(e->gauche));
+      }
+
+      int exitStatus;
+      waitpid(pid, &exitStatus, 0);
+      close(fd);
+      status = WEXITSTATUS(exitStatus);
+      break;
+    }
 
     default:
       fprintf(stderr, "not yet implemented\n");
