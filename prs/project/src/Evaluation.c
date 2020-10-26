@@ -86,6 +86,7 @@ int evaluer_expr(Expression* e) {
       break;
     }
     case REDIRECTION_O: {
+      remove(e->arguments[0]); // Empty file
       int fd = open(e->arguments[0], O_WRONLY | O_CREAT, 0666);
       if (fd == -1) {
         fprintf(stderr, "Cannot create %s file\n", e->arguments[0]);
@@ -116,6 +117,70 @@ int evaluer_expr(Expression* e) {
       int pid;
       if (!(pid = fork())) {
         dup2(fd, STDIN_FILENO);
+        exit(evaluer_expr(e->gauche));
+      }
+
+      int exitStatus;
+      waitpid(pid, &exitStatus, 0);
+      close(fd);
+      status = WEXITSTATUS(exitStatus);
+      break;
+    }
+    case REDIRECTION_A: {
+      int fd = open(e->arguments[0], O_WRONLY | O_CREAT, 0666);
+      if (fd == -1) {
+        fprintf(stderr, "Cannot create %s file\n", e->arguments[0]);
+        status = 1;
+        break;
+      }
+
+      int pid;
+      if (!(pid = fork())) {
+        lseek(fd, 0, SEEK_END);
+        dup2(fd, STDOUT_FILENO);
+        exit(evaluer_expr(e->gauche));
+      }
+
+      int exitStatus;
+      waitpid(pid, &exitStatus, 0);
+      close(fd);
+      status = WEXITSTATUS(exitStatus);
+      break;
+    }
+    case REDIRECTION_E: {
+      remove(e->arguments[0]); // Empty file
+      int fd = open(e->arguments[0], O_WRONLY | O_CREAT, 0666);
+      if (fd == -1) {
+        fprintf(stderr, "Cannot create %s file\n", e->arguments[0]);
+        status = 1;
+        break;
+      }
+
+      int pid;
+      if (!(pid = fork())) {
+        dup2(fd, STDERR_FILENO);
+        exit(evaluer_expr(e->gauche));
+      }
+
+      int exitStatus;
+      waitpid(pid, &exitStatus, 0);
+      close(fd);
+      status = WEXITSTATUS(exitStatus);
+      break;
+    }
+    case REDIRECTION_EO: {
+      remove(e->arguments[0]); // Empty file
+      int fd = open(e->arguments[0], O_WRONLY | O_CREAT, 0666);
+      if (fd == -1) {
+        fprintf(stderr, "Cannot create %s file\n", e->arguments[0]);
+        status = 1;
+        break;
+      }
+
+      int pid;
+      if (!(pid = fork())) {
+        dup2(fd, STDOUT_FILENO);
+        dup2(fd, STDERR_FILENO);
         exit(evaluer_expr(e->gauche));
       }
 
