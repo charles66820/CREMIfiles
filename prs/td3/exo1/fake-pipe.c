@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
   // tmp file rw
   int fd = open(TMP_FILE_NAME, O_RDWR | O_CREAT, 0666);
   if (fd == -1) {
-    fprintf(stdout, "Cannot create %s file\n", TMP_FILE_NAME);
+    fprintf(stderr, "Cannot create %s file\n", TMP_FILE_NAME);
     return EXIT_FAILURE;
   }
 

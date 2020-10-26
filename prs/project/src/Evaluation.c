@@ -19,7 +19,7 @@ static char** getArgs(int pid) {
   sprintf(cmdLineFile, "/proc/%d/cmdline", pid);
   FILE* f = fopen(cmdLineFile, "r");
   if (f == NULL) {
-    fprintf(stdout, "Cannot create %s file\n", cmdLineFile);
+    fprintf(stderr, "Cannot create %s file\n", cmdLineFile);
     exit(EXIT_FAILURE);
   }
 
@@ -88,8 +88,9 @@ int evaluer_expr(Expression* e) {
     case REDIRECTION_O: {
       int fd = open(e->arguments[0], O_WRONLY | O_CREAT, 0666);
       if (fd == -1) {
-        fprintf(stdout, "Cannot create %s file\n", e->arguments[0]);
+        fprintf(stderr, "Cannot create %s file\n", e->arguments[0]);
         status = 1;
+        break;
       }
 
       int pid;
@@ -107,7 +108,7 @@ int evaluer_expr(Expression* e) {
     case REDIRECTION_I: {
       int fd = open(e->arguments[0], O_RDONLY);
       if (fd == -1) {
-        fprintf(stdout, "Cannot open %s file\n", e->arguments[0]);
+        fprintf(stderr, "Cannot open %s file\n", e->arguments[0]);
         status = 1;
         break;
       }
