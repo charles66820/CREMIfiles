@@ -10,6 +10,9 @@
 //#include <signal.h>
 
 #include "Shell.h"
+// #include <readline/history.h>
+// #include <readline/readline.h>
+// extern int yyparse_string(char *);
 
 typedef unsigned int uint;
 #define BUFSIZE 1000
@@ -32,7 +35,7 @@ static char** getArgs(int pid) {
   return s;
 }
 
-int evaluer_expr(Expression* e) {
+int evaluer_expr(Expression* e) { // chdir
   int status;
   // Process exptression
   switch (e->type) {
@@ -50,6 +53,64 @@ int evaluer_expr(Expression* e) {
             printf(" ");
         }
         status = 0;
+      } else if (!strcmp(e->arguments[0], "source")) {
+        if (!e->arguments[1]) {
+          fprintf(stderr,
+                  "bash: source: filename argument required\n"
+                  "source: usage: source filename [arguments]\n");
+          status = 1;
+          break;
+        }
+
+        int fd = open(e->arguments[1], O_RDONLY);
+        if (fd == -1) {
+          fprintf(stderr, "Cannot open %s file\n", e->arguments[1]);
+          status = 1;
+          break;
+        }
+
+        char buffer[1024];
+        int l = 0;
+        do {
+          l = read(fd, buffer, 1024);
+          if (l) printf("%s", buffer);
+        } while (l);
+
+        close(fd);
+        status = 0;
+
+        /*
+        // try with stdin redirection
+        int saveFd = dup(STDIN_FILENO); // save stdin
+        int p[2];
+        pipe(p);
+        dup2(p[0], STDIN_FILENO); // redirect stdin
+
+        char buffer[1024];
+        int l = 0;
+        do {
+          l = read(fd, buffer, 1024);
+          if (l) write(p[1], buffer, l);
+        } while (l);
+        close(p[1]); // close pipe in
+
+        dup2(saveFd, STDIN_FILENO); // restore stdin
+        close(p[0]); // close pipe out
+
+        // try with yyparse_string
+        char* line = NULL;
+        char buffer[1024];
+        int l = 0;
+        do {
+          l = read(fd, buffer, 1024);
+          line = readline(buffer);
+          if (!line) break; // ERROR
+          strncat(line, "\n", 1);
+          int ret = yyparse_string(line);
+          free(line);
+          return ret;
+        } while (l);*/
+        break;
       } else {
         int pid;
         if (!(pid = fork())) {
@@ -86,7 +147,7 @@ int evaluer_expr(Expression* e) {
       break;
     }
     case REDIRECTION_O: {
-      remove(e->arguments[0]); // Empty file
+      remove(e->arguments[0]);  // Empty file
       int fd = open(e->arguments[0], O_WRONLY | O_CREAT, 0666);
       if (fd == -1) {
         fprintf(stderr, "Cannot create %s file\n", e->arguments[0]);
@@ -148,7 +209,7 @@ int evaluer_expr(Expression* e) {
       break;
     }
     case REDIRECTION_E: {
-      remove(e->arguments[0]); // Empty file
+      remove(e->arguments[0]);  // Empty file
       int fd = open(e->arguments[0], O_WRONLY | O_CREAT, 0666);
       if (fd == -1) {
         fprintf(stderr, "Cannot create %s file\n", e->arguments[0]);
@@ -169,7 +230,7 @@ int evaluer_expr(Expression* e) {
       break;
     }
     case REDIRECTION_EO: {
-      remove(e->arguments[0]); // Empty file
+      remove(e->arguments[0]);  // Empty file
       int fd = open(e->arguments[0], O_WRONLY | O_CREAT, 0666);
       if (fd == -1) {
         fprintf(stderr, "Cannot create %s file\n", e->arguments[0]);
