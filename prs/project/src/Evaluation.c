@@ -35,7 +35,7 @@ static char** getArgs(int pid) {
   return s;
 }
 
-int evaluer_expr(Expression* e) { // chdir
+int evaluer_expr(Expression* e) {  // chdir
   int status;
   // Process exptression
   switch (e->type) {
@@ -249,6 +249,47 @@ int evaluer_expr(Expression* e) { // chdir
       waitpid(pid, &exitStatus, 0);
       close(fd);
       status = WEXITSTATUS(exitStatus);
+      break;
+    }
+    case PIPE: {
+      // create pipe
+      int pipe1[2];
+      int s = pipe(pipe1);
+      if (s) {
+        status = 1;
+        break;
+      }
+
+      int pidLeft = fork();
+      if (!pidLeft) {
+        close(pipe1[0]); // close pipe read
+        // redirect left cmd stdout to pipe write
+        dup2(pipe1[1], STDOUT_FILENO);
+        // left cmd
+        exit(evaluer_expr(e->gauche));
+      } else {
+        int pidRight = fork();
+        if (!pidRight) {
+          // close pipe write
+          close(pipe1[1]);
+          // redirect pipe read to right cmd stdin
+          dup2(pipe1[0], STDIN_FILENO);
+          // right cmd
+          exit(evaluer_expr(e->droite));
+        } else {
+          // wait left cmd
+          waitpid(pidLeft, NULL, 0);
+          // on cmd finish close pipe write
+          close(pipe1[1]);
+
+          // wait right cmd
+          int exitStatus;
+          waitpid(pidRight, &exitStatus, 0);
+          // on cmd finish close pipe read
+          close(pipe1[0]);
+          status = WEXITSTATUS(exitStatus);
+        }
+      }
       break;
     }
 
