@@ -15,34 +15,68 @@ Section Negation.
     apply np.
     assumption.
   Qed.
-  
+
   Lemma triple_neg_e : ~~~P -> ~P.
   Proof.
-     intro H.
-     intro H0.
-     apply H.
-     intro H1.
-     apply H1; assumption.
-   Restart.  (* Annule la preuve en cours, et en commence un autre *)
-   unfold not.
-   auto.
-   (* auto est une tactique qui est capable de beaucoup, mais qu'on
+    intro H.
+    intro H0.
+    apply H.
+    intro H1.
+    apply H1; assumption.
+    Restart.
+    unfold not.
+    intro H.
+    intro H0.
+    apply H.
+    intro H1.
+    apply H1.
+    assumption.
+    Restart.  (* Annule la preuve en cours, et en commence un autre *)
+    unfold not.
+    auto.
+    (* auto est une tactique qui est capable de beaucoup, mais qu'on
       s'interdira d'utiliser dans nos preuves *)
-   Qed.
+  Qed.
 
-
-    (* Remplacer les Admitted par des scripts de preuve *)
+  (* Remplacer les Admitted par des scripts de preuve *)
   Lemma absurde: (P -> Q) -> (P -> ~Q) -> (P -> S).
   Proof.
-  Admitted.
+    intros pq pNq p.
+    assert (q:Q).
+    apply pq.
+    assumption.
+    assert (Nq:~Q).
+    apply pNq.
+    assumption.
+    exfalso.
+    apply Nq.
+    assumption.
+    Restart.
+    intros pq pNq p.
+    unfold not in pNq.
+    exfalso.
+    apply pNq.
+    assumption.
+    apply pq.
+    assumption.
+  Qed.
 
   Lemma triple_abs: ~P -> ~~~P.
   Proof.
-  Admitted.
-  
+    unfold not.
+    intros Np NNp.
+    apply NNp.
+    apply Np.
+  Qed.
+
   Lemma absurd' : (~P -> P) -> ~~P.
   Proof.
-  Admitted.
+    unfold not.
+    intros Npp Np.
+    apply Np.
+    apply Npp. (* Tautologie *)
+    apply Np.
+  Qed.
 
   Definition Peirce  := ((P -> Q) -> P) -> P.
 
@@ -54,7 +88,24 @@ Section Negation.
        entre Peirce et ~Peirce *)
     intro.
     assert (np: ~P).
-  Admitted. (* \u00c0 vous de finir *)
+    - unfold not.
+     intro p.
+     apply H.
+     intro peirce.
+     assert (nq: (P->Q)->P).
+     intro pq.
+     assumption.
+     assumption.
+    - assert (pirce: Peirce).
+     intro peirce.
+     apply peirce.
+     intro p.
+     exfalso.
+     apply np.
+     assumption.
+    apply H.
+    assumption.
+    Qed.
 
   (* Une s\u00e9rie de s\u00e9quents \u00e0 prouver; \u00e0 chaque fois, il faut
   l'\u00e9noncer, en introduisant les hypoth\u00e8ses au moyen d'une
