@@ -121,7 +121,7 @@ int evaluer_expr(Expression* e) {  // chdir
         }
         int exitStatus;
         waitpid(pid, &exitStatus, 0);
-        status = WTERMSIG(exitStatus) ? WTERMSIG(exitStatus) + 128
+        status = WIFSIGNALED(exitStatus) ? WTERMSIG(exitStatus) + 128 // resend signale
                                       : WEXITSTATUS(exitStatus);
       }
       break;
@@ -307,7 +307,7 @@ int evaluer_expr(Expression* e) {  // chdir
                   ? "Done"
                   : WEXITSTATUS(exitStatus) == 1
                         ? "Exit 1"
-                        : WEXITSTATUS(exitStatus) > 128
+                        : WEXITSTATUS(exitStatus) > 128 // rehandle signale
                               ? strsignal(WEXITSTATUS(exitStatus) - 128)
                               : "Unkown exit code";
     printf("[%d]\t%s\n", count, s);
