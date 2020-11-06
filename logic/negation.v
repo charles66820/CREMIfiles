@@ -112,17 +112,94 @@ Section Negation.
   sous-section... *)
 
   (* P->Q, R->~Q, P->R |- P->S *)
+  Section s1.
+    Hypothesis pq: P->Q.
+    Hypothesis rq: R->~Q.
+    Hypothesis pr: P->R.
+
+    Lemma s1: P->S.
+    Proof.
+      intro.
+      exfalso.
+      apply rq.
+      - apply pr.
+        assumption.
+      - apply pq.
+        assumption.
+    Qed.
+  End s1.
+
 
   (* ~P->~Q |- ~~Q->~~P *)
+  Section s2.
+    Hypothesis NpNq: ~P->~Q.
+
+    Lemma s2: ~~Q->~~P.
+    Proof.
+      intro NNq.
+      intro Np.
+      unfold not in NNq.
+      apply NNq.
+      unfold not in NpNq.
+      apply NpNq.
+      assumption.
+    Qed.
+  End s2.
 
   (* P->~P |- ~P *)
+  Section s3.
+    Hypothesis pNp: P->~P.
+
+    Lemma s3: ~P.
+    Proof.
+      intro p.
+      apply pNp.
+      assumption.
+      assumption.
+      Restart.
+      intro p.
+      apply pNp; assumption.
+    Qed.
+  End s3.
 
   (* ~~P |- ~P->~Q *)
+  Section s4.
+    Hypothesis NNp: ~~P.
+
+    Lemma s4: ~P->~Q.
+    Proof.
+      intro.
+      exfalso.
+      apply NNp.
+      assumption.
+    Qed.
+  End s4.
 
   (* P->~Q, R->Q |- P->~R *)
+  Section s5.
+    Hypothesis pNq: P->~Q.
+    Hypothesis rq: R->Q.
+
+    Lemma s5: P->~R.
+    Proof.
+      intros p r.
+      apply pNq.
+      - assumption.
+      - apply rq; assumption.
+    Qed.
+  End s5.
 
   (* ~(P->Q) |- ~Q *)
-  
+  Section s6.
+    Hypothesis Npq: ~(P->Q).
+
+    Lemma s6: ~Q.
+    Proof.
+      intro q.
+      apply Npq.
+      intro p; assumption.
+    Qed.
+  End s6.
 
   (* S\u00e9quents propos\u00e9s dans le test de la semaine 42 *)
 
@@ -131,28 +208,54 @@ Section Negation.
     Hypothesis H: P->Q.
 
     Lemma Mercredi: ~(~Q->~P) -> R.
-    Admitted.
+    Proof.
+      intro FNpNq.
+      exfalso.
+      apply FNpNq.
+      intro Nq.
+      intro p.
+      apply Nq.
+      apply H.
+      assumption.
+    Qed.
   End TestMercredi.
 
   Section TestJeudi.
     Hypothesis H: ~(P->R).
 
     Lemma Jeudi: Q->(P->Q->R)->P.
-    Admitted.
+    Proof.
+      intros q pqr.
+      exfalso.
+      apply H.
+      intro p.
+      apply pqr; assumption.
+    Qed.
   End TestJeudi.
 
   Section TestVendrediMatin.
     Hypothesis H: ~(Q->R).
 
     Lemma VendrediMatin: (P->Q->R)->(P->Q).
-    Admitted.
+    Proof.
+      intros pqr p.
+      exfalso.
+      apply H.
+      apply pqr; assumption.
+    Qed.
   End TestVendrediMatin.
 
   Section TestVendrediAM.
     Hypothesis H: ~~P.
 
     Lemma VendrediAM: Q->(P->Q->False)->P.
-    Admitted.
+    Proof.
+      intros q pqF.
+      exfalso.
+      apply H.
+      intro p.
+      apply pqF; assumption.
+    Qed.
   End TestVendrediAM.
     
 End Negation.
