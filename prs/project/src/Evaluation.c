@@ -1,13 +1,12 @@
 #include "Evaluation.h"
 
 #include <fcntl.h>
+#include <signal.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-
-//#include <signal.h>
 
 #include "Shell.h"
 // #include <readline/history.h>
@@ -17,22 +16,17 @@
 typedef unsigned int uint;
 #define BUFSIZE 1000
 
-static char** getArgs(int pid) {
-  char cmdLineFile[24];
-  sprintf(cmdLineFile, "/proc/%d/cmdline", pid);
-  FILE* f = fopen(cmdLineFile, "r");
-  if (f == NULL) {
-    fprintf(stderr, "Cannot create %s file\n", cmdLineFile);
-    exit(EXIT_FAILURE);
+void childSigHandler(int sig) {
+  int exitStatus;
+  int oldpid = wait(&exitStatus);
+  if (oldpid != -1) {
+    if (WIFSIGNALED(exitStatus))
+      printf("\n%d %s\n", oldpid, strsignal(exitStatus));
+    else if (WEXITSTATUS(exitStatus) == 0)
+      printf("\n%d %s\n", oldpid, "Done");
+    else
+      printf("\n%d Exit %d\n", oldpid, WEXITSTATUS(exitStatus));
   }
-
-  char** s = InitialiserListeArguments();
-  while (!feof(f)) {
-    char buff[BUFSIZE];
-    if (fgets(buff, BUFSIZE - 1, f) != NULL) s = AjouterArg(s, buff);
-  }
-  fclose(f);
-  return s;
 }
 
 int evaluer_expr(Expression* e) {  // chdir
@@ -69,15 +63,14 @@ int evaluer_expr(Expression* e) {  // chdir
           break;
         }
 
+        /*
+        // read file
         char buffer[1024];
         int l = 0;
         do {
           l = read(fd, buffer, 1024);
           if (l) printf("%s", buffer);
-        } while (l);
-
-        close(fd);
-        status = 0;
+        } while (l);//*/
 
         /*
         // try with stdin redirection
@@ -96,7 +89,9 @@ int evaluer_expr(Expression* e) {  // chdir
 
         dup2(saveFd, STDIN_FILENO); // restore stdin
         close(p[0]); // close pipe out
+        //*/
 
+        /*
         // try with yyparse_string
         char* line = NULL;
         char buffer[1024];
@@ -109,7 +104,10 @@ int evaluer_expr(Expression* e) {  // chdir
           int ret = yyparse_string(line);
           free(line);
           return ret;
-        } while (l);*/
+        } while (l);//*/
+
+        close(fd);
+        status = 0;
         break;
       } else {
         int pid;
@@ -117,12 +115,12 @@ int evaluer_expr(Expression* e) {  // chdir
           execvp(e->arguments[0], e->arguments);
 
           fprintf(stderr, "%s: command not found\n", e->arguments[0]);
-          status = 127;
+          exit(127);
         }
         int exitStatus;
         waitpid(pid, &exitStatus, 0);
-        status = WIFSIGNALED(exitStatus) ? WTERMSIG(exitStatus) + 128 // resend signale
-                                      : WEXITSTATUS(exitStatus);
+        status = WIFSIGNALED(exitStatus) ? WTERMSIG(exitStatus) + 128
+                                         : WEXITSTATUS(exitStatus);
       }
       break;
     }
@@ -142,7 +140,13 @@ int evaluer_expr(Expression* e) {  // chdir
       break;
     }
     case BG: {
-      if (!fork()) exit(evaluer_expr(e->gauche));
+      if (!fork()) {
+        int retStatus = evaluer_expr(e->gauche);
+        if (retStatus > 128)
+          raise(retStatus - 128);
+        else
+          exit(retStatus);
+      }
       status = 0;
       break;
     }
@@ -262,7 +266,7 @@ int evaluer_expr(Expression* e) {  // chdir
 
       int pidLeft = fork();
       if (!pidLeft) {
-        close(pipe1[0]); // close pipe read
+        close(pipe1[0]);  // close pipe read
         // redirect left cmd stdout to pipe write
         dup2(pipe1[1], STDOUT_FILENO);
         // left cmd
@@ -292,26 +296,18 @@ int evaluer_expr(Expression* e) {  // chdir
       }
       break;
     }
-
     default:
       fprintf(stderr, "not yet implemented\n");
       status = 1;
   }
 
   // Process backgrand process
-  pid_t pid;
-  int exitStatus;
-  int count = 1;
-  if (pid = waitpid(-1, &exitStatus, WNOHANG) > 0) {
-    char* s = !WEXITSTATUS(exitStatus)
-                  ? "Done"
-                  : WEXITSTATUS(exitStatus) == 1
-                        ? "Exit 1"
-                        : WEXITSTATUS(exitStatus) > 128 // rehandle signale
-                              ? strsignal(WEXITSTATUS(exitStatus) - 128)
-                              : "Unkown exit code";
-    printf("[%d]\t%s\n", count, s);
-    count++;
-  }
+  struct sigaction sa;
+
+  sa.sa_flags = 0;
+  sigemptyset(&sa.sa_mask);
+  sa.sa_handler = childSigHandler;
+  sigaction(SIGCHLD, &sa, NULL);
+
   return status;
 }
