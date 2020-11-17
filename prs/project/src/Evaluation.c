@@ -38,7 +38,8 @@ int evaluer_expr(Expression* e) {  // chdir
       break;
     case SIMPLE: {
       if (!strcmp(e->arguments[0], "echo")) {
-        for (uint i = 1; e->arguments[i] != NULL; i++) printf("%s ", e->arguments[i]);
+        for (uint i = 1; e->arguments[i] != NULL; i++)
+          printf("%s ", e->arguments[i]);
         printf("\n");
         status = 0;
       } else if (!strcmp(e->arguments[0], "source")) {
@@ -58,34 +59,6 @@ int evaluer_expr(Expression* e) {  // chdir
         }
 
         /*
-        // read file
-        char buffer[1024];
-        int l = 0;
-        do {
-          l = read(fd, buffer, 1024);
-          if (l) printf("%s", buffer);
-        } while (l);//*/
-
-        /*
-        // try with stdin redirection
-        int saveFd = dup(STDIN_FILENO); // save stdin
-        int p[2];
-        pipe(p);
-        dup2(p[0], STDIN_FILENO); // redirect stdin
-
-        char buffer[1024];
-        int l = 0;
-        do {
-          l = read(fd, buffer, 1024);
-          if (l) write(p[1], buffer, l);
-        } while (l);
-        close(p[1]); // close pipe in
-
-        dup2(saveFd, STDIN_FILENO); // restore stdin
-        close(p[0]); // close pipe out
-        //*/
-
-        /*
         // try with yyparse_string
         char* line = NULL;
         char buffer[1024];
@@ -93,12 +66,20 @@ int evaluer_expr(Expression* e) {  // chdir
         do {
           l = read(fd, buffer, 1024);
           line = readline(buffer);
-          if (!line) break; // ERROR
-          strncat(line, "\n", 1);
+          if (!line) {
+            // ERROR
+            close(fd);
+            status = 1;
+            break;
+          };
+          int len = strlen(line);
+          line = realloc(line, len + 2);
+          line[len] = '\n';
+          line[len + 1] = '\0';
           int ret = yyparse_string(line);
           free(line);
           return ret;
-        } while (l);//*/
+        } while (l);  //*/
 
         close(fd);
         status = 0;

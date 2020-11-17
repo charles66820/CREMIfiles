@@ -115,8 +115,13 @@ int my_yyparse(void) {
       int ret;
       add_history(
           line);  // Enregistre la line non vide dans l'historique courant
-      strncat(line, "\n", 1);  // Ajoute \n à la line pour qu'elle puisse etre
-                               // traité par le parseur
+
+      // Ajoute \n à la line pour qu'elle puisse etre traité par le parseur
+      int len = strlen(line); // replace : strncat(line, "\n", 1);
+      line = realloc(line, len + 2);
+      line[len] = '\n';
+      line[len + 1] = '\0';
+
       ret =
           yyparse_string(line);  // Remplace l'entrée standard de yyparse par s
       free(line);
