@@ -37,15 +37,9 @@ int evaluer_expr(Expression* e) {  // chdir
       status = 0;
       break;
     case SIMPLE: {
-      int argc = LongueurListe(e->arguments);
       if (!strcmp(e->arguments[0], "echo")) {
-        for (uint i = 1; i < argc; i++) {
-          printf("%s", e->arguments[i]);
-          if (i == argc - 1)
-            printf("\n");
-          else
-            printf(" ");
-        }
+        for (uint i = 1; e->arguments[i] != NULL; i++) printf("%s ", e->arguments[i]);
+        printf("\n");
         status = 0;
       } else if (!strcmp(e->arguments[0], "source")) {
         if (!e->arguments[1]) {
