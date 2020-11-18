@@ -41,11 +41,20 @@ int evaluer_expr(Expression* e) {  // chdir
         status = 0;
       } else if (!strcmp(e->arguments[0], "exit")) {
         exit(EXIT_SUCCESS);
+      } else if (!strcmp(e->arguments[0], "cd")) {
+        if (!e->arguments[1]) {
+          fprintf(stderr,
+                  "cd: path argument required\n"
+                  "usage: cd path [arguments]\n");
+          status = 1;
+          break;
+        }
+        status = chdir(e->arguments[1]);
       } else if (!strcmp(e->arguments[0], "source")) {  // don't rally work
         if (!e->arguments[1]) {
           fprintf(stderr,
-                  "bash: source: filename argument required\n"
-                  "source: usage: source filename [arguments]\n");
+                  "source: filename argument required\n"
+                  "usage: source filename [arguments]\n");
           status = 1;
           break;
         }
@@ -53,12 +62,17 @@ int evaluer_expr(Expression* e) {  // chdir
         int fd = open(e->arguments[1], O_RDONLY);
         if (fd == -1) {
           fprintf(stderr, "Cannot open %s file\n", e->arguments[1]);
-          exit(EXIT_FAILURE);
+          status = 1;
           break;
         }
 
         int p[2];
-        pipe(p);
+        if (pipe(p)) {
+          fprintf(stderr, "Cannot create pipe\n");
+          close(fd);
+          status = 1;
+          break;
+        }
 
         int pid;
         if (!(pid = fork())) {
@@ -72,10 +86,12 @@ int evaluer_expr(Expression* e) {  // chdir
         int l = 0;
         do {
           l = read(fd, buffer, 1024);
-          if (l) write(p[1], buffer, l);
+          if (l) {
+            int n = write(p[1], buffer, l);
+          }
         } while (l);
         char exit[6] = "\nexit";
-        write(p[1], exit, sizeof(exit));
+        int n = write(p[1], exit, sizeof(exit));
         close(fd);    // close file descriptor
         close(p[1]);  // close pipe in
 
