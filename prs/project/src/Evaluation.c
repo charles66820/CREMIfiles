@@ -9,9 +9,6 @@
 #include <unistd.h>
 
 #include "Shell.h"
-// #include <readline/history.h>
-// #include <readline/readline.h>
-// extern int yyparse_string(char *);
 
 typedef unsigned int uint;
 #define BUFSIZE 1000
@@ -42,7 +39,9 @@ int evaluer_expr(Expression* e) {  // chdir
           printf("%s ", e->arguments[i]);
         printf("\n");
         status = 0;
-      } else if (!strcmp(e->arguments[0], "source")) {
+      } else if (!strcmp(e->arguments[0], "exit")) {
+        exit(EXIT_SUCCESS);
+      } else if (!strcmp(e->arguments[0], "source")) {  // don't rally work
         if (!e->arguments[1]) {
           fprintf(stderr,
                   "bash: source: filename argument required\n"
@@ -54,35 +53,35 @@ int evaluer_expr(Expression* e) {  // chdir
         int fd = open(e->arguments[1], O_RDONLY);
         if (fd == -1) {
           fprintf(stderr, "Cannot open %s file\n", e->arguments[1]);
-          status = 1;
+          exit(EXIT_FAILURE);
           break;
         }
 
-        /*
-        // try with yyparse_string
-        char* line = NULL;
+        int p[2];
+        pipe(p);
+
+        int pid;
+        if (!(pid = fork())) {
+          close(p[1]);               // close pipe in
+          dup2(p[0], STDIN_FILENO);  // redirect stdin
+          close(p[0]);               // close pipe out
+          return 0;
+        }
+        close(p[0]);  // close pipe out
         char buffer[1024];
         int l = 0;
         do {
           l = read(fd, buffer, 1024);
-          line = readline(buffer);
-          if (!line) {
-            // ERROR
-            close(fd);
-            status = 1;
-            break;
-          };
-          int len = strlen(line);
-          line = realloc(line, len + 2);
-          line[len] = '\n';
-          line[len + 1] = '\0';
-          int ret = yyparse_string(line);
-          free(line);
-          return ret;
-        } while (l);  //*/
+          if (l) write(p[1], buffer, l);
+        } while (l);
+        char exit[6] = "\nexit";
+        write(p[1], exit, sizeof(exit));
+        close(fd);    // close file descriptor
+        close(p[1]);  // close pipe in
 
-        close(fd);
-        status = 0;
+        int exitStaus;
+        waitpid(pid, &exitStaus, 0);
+        status = WEXITSTATUS(exitStaus);
         break;
       } else {
         int pid;
@@ -134,16 +133,11 @@ int evaluer_expr(Expression* e) {  // chdir
         break;
       }
 
-      int pid;
-      if (!(pid = fork())) {
-        dup2(fd, STDOUT_FILENO);
-        exit(evaluer_expr(e->gauche));
-      }
-
-      int exitStatus;
-      waitpid(pid, &exitStatus, 0);
-      close(fd);
-      status = WEXITSTATUS(exitStatus);
+      int oldFD = dup(STDOUT_FILENO);    // Save stdout
+      dup2(fd, STDOUT_FILENO);           // change stdout with file descriptor
+      close(fd);                         // close file descriptor
+      status = evaluer_expr(e->gauche);  // Exec left tree
+      dup2(oldFD, STDOUT_FILENO);        // Reset stdout
       break;
     }
     case REDIRECTION_I: {
@@ -154,16 +148,11 @@ int evaluer_expr(Expression* e) {  // chdir
         break;
       }
 
-      int pid;
-      if (!(pid = fork())) {
-        dup2(fd, STDIN_FILENO);
-        exit(evaluer_expr(e->gauche));
-      }
-
-      int exitStatus;
-      waitpid(pid, &exitStatus, 0);
-      close(fd);
-      status = WEXITSTATUS(exitStatus);
+      int oldFD = dup(STDIN_FILENO);     // Save stdin
+      dup2(fd, STDIN_FILENO);            // change stdin with file descriptor
+      close(fd);                         // close file descriptor
+      status = evaluer_expr(e->gauche);  // Exec left tree
+      dup2(oldFD, STDIN_FILENO);         // Reset stdin
       break;
     }
     case REDIRECTION_A: {
@@ -174,17 +163,13 @@ int evaluer_expr(Expression* e) {  // chdir
         break;
       }
 
-      int pid;
-      if (!(pid = fork())) {
-        lseek(fd, 0, SEEK_END);
-        dup2(fd, STDOUT_FILENO);
-        exit(evaluer_expr(e->gauche));
-      }
+      lseek(fd, 0, SEEK_END);  // Go to end of file
 
-      int exitStatus;
-      waitpid(pid, &exitStatus, 0);
-      close(fd);
-      status = WEXITSTATUS(exitStatus);
+      int oldFD = dup(STDOUT_FILENO);    // Save stdout
+      dup2(fd, STDOUT_FILENO);           // change stdout with file descriptor
+      close(fd);                         // close file descriptor
+      status = evaluer_expr(e->gauche);  // Exec left tree
+      dup2(oldFD, STDOUT_FILENO);        // Reset stdout
       break;
     }
     case REDIRECTION_E: {
@@ -196,16 +181,11 @@ int evaluer_expr(Expression* e) {  // chdir
         break;
       }
 
-      int pid;
-      if (!(pid = fork())) {
-        dup2(fd, STDERR_FILENO);
-        exit(evaluer_expr(e->gauche));
-      }
-
-      int exitStatus;
-      waitpid(pid, &exitStatus, 0);
-      close(fd);
-      status = WEXITSTATUS(exitStatus);
+      int oldFD = dup(STDERR_FILENO);    // Save stderr
+      dup2(fd, STDERR_FILENO);           // change stderr with file descriptor
+      close(fd);                         // close file descriptor
+      status = evaluer_expr(e->gauche);  // Exec left tree
+      dup2(oldFD, STDERR_FILENO);        // Reset stderr
       break;
     }
     case REDIRECTION_EO: {
@@ -217,17 +197,14 @@ int evaluer_expr(Expression* e) {  // chdir
         break;
       }
 
-      int pid;
-      if (!(pid = fork())) {
-        dup2(fd, STDOUT_FILENO);
-        dup2(fd, STDERR_FILENO);
-        exit(evaluer_expr(e->gauche));
-      }
-
-      int exitStatus;
-      waitpid(pid, &exitStatus, 0);
-      close(fd);
-      status = WEXITSTATUS(exitStatus);
+      int oldStdoutFD = dup(STDOUT_FILENO);  // Save stdout
+      int oldStderrFD = dup(STDERR_FILENO);  // Save stderr
+      dup2(fd, STDOUT_FILENO);           // change stdout with file descriptor
+      dup2(fd, STDERR_FILENO);           // change stderr with file descriptor
+      close(fd);                         // close file descriptor
+      status = evaluer_expr(e->gauche);  // Exec left tree
+      dup2(oldStdoutFD, STDOUT_FILENO);  // Reset stdout
+      dup2(oldStderrFD, STDERR_FILENO);  // Reset stderr
       break;
     }
     case PIPE: {
