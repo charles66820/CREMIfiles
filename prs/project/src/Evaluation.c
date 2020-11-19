@@ -26,7 +26,7 @@ void childSigHandler(int sig) {
   }
 }
 
-int evaluer_expr(Expression* e) {  // chdir
+int evaluer_expr(Expression* e) {
   int status;
   // Process exptression
   switch (e->type) {
