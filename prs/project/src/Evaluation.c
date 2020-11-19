@@ -18,15 +18,23 @@ void childSigHandler(int sig) {
   int oldpid = wait(&exitStatus);
   if (oldpid != -1) {
     if (WIFSIGNALED(exitStatus))
-      printf("\n%d %s\n", oldpid, strsignal(exitStatus));
+      printf("\n\e[ABackground process %d finish with : %s\n", oldpid, strsignal(exitStatus));
     else if (WEXITSTATUS(exitStatus) == 0)
-      printf("\n%d %s\n", oldpid, "Done");
+      printf("\n\e[ABackground process %d finish with : %s\n", oldpid, "Done");
     else
-      printf("\n%d Exit %d\n", oldpid, WEXITSTATUS(exitStatus));
+      printf("\n\e[ABackground process %d finish with : Exit %d\n", oldpid, WEXITSTATUS(exitStatus));
   }
 }
 
+struct sigaction sa;
 int evaluer_expr(Expression* e) {
+  // Process backgrand process
+  sa.sa_flags = 0;
+  sigemptyset(&sa.sa_mask);
+  sa.sa_handler = childSigHandler;
+  sigaction(SIGCHLD, &sa, NULL);
+  sigprocmask(SIG_BLOCK, &sa.sa_mask, NULL); // block SIGCHLD
+
   int status;
   // Process exptression
   switch (e->type) {
@@ -79,7 +87,7 @@ int evaluer_expr(Expression* e) {
           close(p[1]);               // close pipe in
           dup2(p[0], STDIN_FILENO);  // redirect stdin
           close(p[0]);               // close pipe out
-          return 0;
+          return EXIT_SUCCESS;
         }
         close(p[0]);  // close pipe out
         char buffer[1024];
@@ -269,13 +277,8 @@ int evaluer_expr(Expression* e) {
       status = 1;
   }
 
-  // Process backgrand process
-  struct sigaction sa;
-
-  sa.sa_flags = 0;
-  sigemptyset(&sa.sa_mask);
-  sa.sa_handler = childSigHandler;
-  sigaction(SIGCHLD, &sa, NULL);
+  sigprocmask(SIG_UNBLOCK, &sa.sa_mask, NULL); // unblock SIGCHLD
+  sigprocmask(SIG_BLOCK, &sa.sa_mask, NULL); // reblock SIGCHLD
 
   return status;
 }
