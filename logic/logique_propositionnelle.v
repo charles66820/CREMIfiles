@@ -291,7 +291,14 @@ Section LK.
         apply H; assumption.
       }
       destruct f. (* ou: exfalso, etc. *)
-   Qed.
+  Restart.
+    intro H.
+    add_exm  P. (* "je fais un tiers exclus sur P " *)
+    destruct exm0. (* Presque toujours, destruct suit add_exm *)
+    - assumption.
+    - exfalso.
+      apply H; assumption.
+  Qed.
 
   (* Exercice: completer toutes les preuves, en rempla\u00e7ant les
      "Admitted" par des preuves termin\u00e9es par "Qed."; et 
@@ -299,60 +306,155 @@ Section LK.
 
   Lemma de_morgan : ~ ( P /\ Q) <-> ~P \/ ~Q.
   Proof.
-  Admitted.
+    split.
+      - intro H.
+        add_exm P.
+        destruct exm0 as [p | Np].
+        * right.
+          intro q.
+          apply H.
+          split; assumption.
+        * left; assumption.
+      - intros NpONq pAq.
+        destruct pAq as [p q].
+        destruct NpONq as [Np | Nq].
+        * apply Np; assumption.
+        * apply Nq; assumption.
+  Qed.
 
   Lemma not_impl_and : ~(P -> Q) <-> P /\ ~ Q.
   Proof.
-  Admitted.
+    split.
+    - intro Npq.
+      add_exm P.
+      destruct exm0 as [p | Np].
+      * split.
+        + assumption.
+        + intro q.
+          apply Npq.
+          intro p1; assumption.
+      * split.
+        + exfalso.
+          apply Npq.
+          intro p.
+          exfalso.
+          apply Np; assumption.
+        + intro q.
+          apply Npq.
+          intro p; assumption.
+    - intros pANq pq.
+      destruct pANq as [p Nq].
+      apply Nq.
+      apply pq.
+      assumption.
+  Qed.
 
   Lemma contraposee: (P -> Q) <-> (~Q -> ~P).
   Proof.
-  Admitted.
+    split.
+    - intros pq Nq p.
+      apply Nq.
+      apply pq.
+      assumption.
+    - intros NqNp p.
+      add_exm Q.
+      destruct exm0 as [q | Nq].
+      assumption.
+      exfalso.
+      apply NqNp; assumption.
+  Qed.
 
   Lemma exm_e : (P -> Q) -> (~P -> Q) -> Q.
   Proof.
-  Admitted.
+    intros pq Npq.
+    add_exm P.
+    destruct exm0 as [p | Np].
+    - apply pq; assumption.
+    - apply Npq; assumption.
+  Qed.
 
   Lemma exo_16 : (~ P -> P) -> P.
   Proof.
-  Admitted.
+    intro Npp.
+    add_exm P.
+    destruct exm0 as [p | Np].
+    assumption.
+    apply Npp; assumption.
+  Qed.
 
   Lemma double_impl : (P -> Q) \/ (Q -> P).
   Proof.
-  Admitted.
+    add_exm P.
+    destruct exm0 as [p | Np].
+    - right.
+      intro q; assumption.
+    - left.
+      intro p.
+      exfalso.
+      apply Np; assumption.
+  Qed.
 
   Lemma imp_translation : (P -> Q) <-> ~P \/ Q.
   Proof.
-  Admitted.
+    split.
+    - add_exm P.
+      destruct exm0 as [p | Np].
+      intro pq.
+      * right.
+        apply pq; assumption.
+      * left; assumption.
+    - add_exm Q.
+      destruct exm0 as [q | Nq]. 
+      * intros NpOq p; assumption.
+      * intros NpOq p.
+        destruct NpOq as [Np | q].
+        + exfalso.
+          apply Np; assumption.
+        + assumption.
+  Qed.
 
   Lemma Peirce : (( P -> Q) -> P) -> P.
   Proof.
-  Admitted.
+    add_exm Q.
+    destruct exm0 as [q | Nq].
+    - intro pqp.
+      apply pqp.
+      intro p.
+      apply q.
+    - add_exm P.
+      destruct exm0 as [p | Np].
+      * intro pqp; assumption.
+      * intro pqp.
+        apply pqp.
+        intro p.
+        exfalso.
+        apply Np; assumption.
+  Qed.
 
   (* Quelques exercices d'anciens tests *) 
   Lemma test_1: (P->Q)->(~P->R)->(R->Q)->Q.
   Proof.
-  Admitted.
+  Qed.
 
   Lemma test__2: (P \/ (Q\/R))-> (~P) -> (~R) -> (P\/Q).
   Proof.
-  Admitted.
+  Qed.
 
   Lemma test_3: (~P-> Q/\R)->(Q->~R)->P.
   Proof.
-  Admitted.
+  Qed.
 
   Lemma test_4: (~P->Q)->(~Q\/R)->(P->R)->R.
   Proof.
-  Admitted.
+  Qed.
 
   Lemma test_5: (P->Q)->(~P->~Q)->((P/\Q) \/ ~(P\/Q)).
   Proof.
-  Admitted.
+  Qed.
 
   Lemma test_6: (P->Q)->(~P->Q)->(Q->R)->R.
   Proof.
-  Admitted.
+  Qed.
 
 End LK.
 
