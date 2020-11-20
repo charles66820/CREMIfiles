@@ -2,23 +2,28 @@ Require Import Setoid.
 (*  Logique intuitionniste *)
 
 Section LJ.
- Variables P Q R S T : Prop.
- (*  Tactiques pour la conjonction 
+  Variables P Q R S T : Prop.
+  (*  Tactiques pour la conjonction
 
     Introduction : pour prouver A /\ B : split (il faudra prouver A, puis B)
-    Elimination : destruct H, si H : A /\ B 
+    Elimination : destruct H, si H : A /\ B
                   variante : destruct H as [H1 H2].
-        Dans les deux cas, on récupère deux hypothèses pour A et B (et on 
+        Dans les deux cas, on r\u00e9cup\u00e8re deux hypoth\u00e8ses pour A et B (et on
         choisit leurs noms, pour la variante "as..")
   *)
- Lemma and_comm : P /\ Q -> Q /\ P.
- Proof.
-   intro H.
-   destruct H as [H0 H1].
-   split; assumption. (* "assumption" résout les deux sous-buts *)
- Qed.
+  Lemma and_comm : P /\ Q -> Q /\ P.
+  Proof.
+    intro H.
+    destruct H as [H0 H1].
 
- (* tactiques pour la disjonction 
+    split.
+    - assumption.
+    - assumption.
+  Back 5.
+    split; assumption. (* "assumption" r\u00e9sout les deux sous-buts *)
+  Qed.
+
+  (* tactiques pour la disjonction
     Introduction:
      pour prouver A \/ B a partir de A : left
      pour prouver A \/ B a partir de B : right
@@ -31,23 +36,23 @@ Section LJ.
 
   Lemma or_not : P \/ Q -> ~P -> Q.
   Proof.
-   intros H H0.     
+   intros H H0.
    destruct H.
    - exfalso.
      apply H0; assumption.
      (* alternative: 
-     assert (f:False).    
+     assert (f:False).
      {
        apply H0; trivial.
      }
      destruct f. *)
-     (* "destruct f" sur f:False résoud n'importe quel but *)
+     (* "destruct f" sur f:False r\u00e9soud n'importe quel but *)
    - assumption.
    Qed.
 
   (* Structuration de la preuve: +,*,+
      utiles quand on a plusieurs sous-preuves non triviales;
-     améliorent la lisibilité du script *)
+     am\u00e9liorent la lisibilit\u00e9 du script *)
   
    (*  equivalence logique (<->, iff):
        unfold iff transforme A <-> B en
@@ -60,36 +65,42 @@ Section LJ.
   Lemma iff_comm : (P <-> Q) -> (Q <-> P).
   Proof.
     intro H.
+    unfold iff in H.
     destruct H.
     split.
     - assumption.
     - assumption.
-    (* "assumption" résoud les deux sous-buts engendrés par "split"
-    donc on peut remplacer les trois dernières lignes par
+    (* "assumption" r\u00e9soud les deux sous-buts engendr\u00e9s par "split"
+    donc on peut remplacer les trois derni\u00e8res lignes par
     split; assumption.
     *)
+  Back 5.
+    split; assumption.
   Qed.
 
-  (* la regle de remplacement est implantée en Coq *)
+  (* la regle de remplacement est implant\u00e9e en Coq *)
   (* "rewrite H" fait un remplacement uniforme quand H est une
-     équivalence *)
-  (* "rewrite H" réécrit le but courant avec H *)
-  (* "rewrite H in H'" fait la réécriture de H dans une autre hypothèse H' *)
-  (* "rewrite <- H" réécrit dans l'autre sens, le membre droit par le gauche *)
+     \u00e9quivalence *)
+  (* "rewrite H" r\u00e9\u00e9crit le but courant avec H *)
+  (* "rewrite H in H'" fait la r\u00e9\u00e9criture de H dans une autre hypoth\u00e8se H' *)
+  (* "rewrite <- H" r\u00e9\u00e9crit dans l'autre sens, le membre droit par le gauche *)
   Lemma L1 : (P <-> Q) -> ~(Q <-> ~P).
   Proof.  
-     intro H.
-     rewrite H.
-     intro H0.
-     destruct H0.
-     assert (~Q).
-     { intro H2.
-       apply H0; assumption.
-     }
-     apply H2. apply H1. assumption. 
+    intro H.
+    unfold iff. (* Car on a l'hypoth\u00e8se P <-> Q donc tous les p peuve \u00eatre remplacer par Q *)
+    rewrite H.
+    intro H0.
+    destruct H0.
+    assert (~Q).
+    { intro H2.
+      unfold not in H0.
+      unfold not in H1.
+      apply H0; assumption.
+    }
+    apply H2. apply H1. assumption. 
   Qed.
 
-  (* Fin des exemples, début des exercices *)
+  (* Fin des exemples, d\u00e9but des exercices *)
 
   (* Exercice : remplacer tauto par des vraies preuves 
      interactives *)
@@ -97,77 +108,159 @@ Section LJ.
 
   Lemma and_false : P /\ False -> False.
   Proof. 
-    tauto.
+    intro.
+    destruct H as [p F].
+    apply F.
   Qed.
 
   Lemma and_assoc : (P /\ Q) /\ R <-> P /\ (Q /\ R).
   Proof.
-    tauto.
+    split.
+    - intro H.
+      destruct H as [pAq r].
+      destruct pAq as [p q].
+      split.
+      * assumption.
+      * split; assumption.
+    - intro H.
+      destruct H as [p qAr].
+      destruct qAr as [q r].
+      split.
+      * split; assumption.
+      * assumption.
   Qed.
 
   (* Ex. 2 *)
   Lemma or_to_imp: ~ P \/ Q -> P -> Q.
   Proof.
-   tauto.
-  Qed.   
+    intros NpOq p.
+    destruct NpOq as [Np | q].
+    - exfalso.
+      apply Np; assumption.
+    - assumption.
+  Qed.
 
   Lemma not_or_and_not: ~(P\/Q) -> ~P /\ ~Q.
   Proof.
-    tauto.
+    intro NpOq.
+    split.
+    - intro p.
+      apply NpOq.
+      left; assumption.
+    - intro q.
+      apply NpOq.
+      right; assumption.
   Qed.
 
   (* Exercice 4 *)
 
   Lemma absorption_or: P \/ False <-> P.
   Proof.
-    tauto.
+    split.
+    - intro pOF.
+      destruct pOF as [H | p].
+      * assumption.
+      * exfalso; assumption.
+    - intro.
+      left; assumption.
   Qed.
 
   Lemma and_or_dist : P /\ (Q \/ R) <-> P /\ Q \/ P /\ R.
   Proof.
-    tauto.
+    split.
+    - intro H.
+      destruct H as [p qOr].
+      destruct qOr.
+      * left.
+        split; assumption.
+      * right.
+        split; assumption.
+    - intro H.
+      destruct H as [pAq | pAr].
+      * destruct pAq as [p q].
+        split.
+        + assumption.
+        + left; assumption.
+      * destruct pAr as [p r].
+        split.
+        + assumption.
+        + right; assumption.
   Qed.
 
   Lemma or_and_dist : P \/ (Q /\ R) <-> (P \/ Q) /\ (P \/ R).
   Proof.
-    tauto.
+    split.
+    - intro pOqAr.
+      destruct pOqAr as [p | qAr].
+      * split; left; assumption.
+      * destruct qAr as [q a].
+        split; right; assumption.
+    - intro H.
+      destruct H as [pOq pOr].
+      destruct pOq as [p | q].
+      * left; assumption.
+      * destruct pOr as [p | r].
+        + left; assumption.
+        + right.
+          split; assumption.
   Qed.
 
   Lemma and_not_not_impl: P /\ ~ Q -> ~(P -> Q).
   Proof.
-    tauto.
+    intro pANq.
+    destruct pANq as [p Nq].
+    intro pq.
+    apply Nq.
+    apply pq.
+    assumption.
   Qed.
 
   Lemma de_morgan1 : ~ (P \/ Q) <-> ~P /\ ~Q.
   Proof.
-    tauto.
+    split.
+    - split.
+      + intro.
+        apply H.
+        left; assumption.
+      + intro.
+        apply H.
+        right; assumption.
+    - intros NpONq pOq.
+      destruct NpONq as [Np Nq].
+      destruct pOq as [p | q].
+      + apply Np; assumption.
+      + apply Nq; assumption.
   Qed.
 
   Lemma reductio_ad_absurdum: (P -> ~P) -> ~P.
   Proof.
-    tauto.
+    intros pNp p.
+    apply pNp; assumption.
   Qed.
 
   Lemma np_p_nnp: (~P -> P) -> ~~P.
   Proof.
-    tauto.
+    intros Npp Np.
+    apply Np.
+    apply Npp; assumption.
   Qed.
 
-  (* Exercice: reprendre toutes les preuves précédentes, 
+  (* Exercice: reprendre toutes les preuves pr\u00e9c\u00e9dentes, 
      en simplifiant et clarifiant les scripts:
      - structurer les sous-preuves avec +/-/*
      - inversement, quand c'est possible, factoriser avec 
        l'enchainement de tactiques (par ";")
 
-     Le but est de faire que le script soit plus facile à lire
+     Le but est de faire que le script soit plus facile \u00e0 lire
      par un humain, pas pour la machine.
    *)
-  
+   (* TODO: here *) 
+
 End LJ.
 
 (*  Logique classique
     On peut sauter les 4 commandes suivantes 
- *)
+*)
 
 (* un peu de magie noire *)
 Definition EXM :=   forall A:Prop, A \/ ~A.
@@ -182,7 +275,7 @@ Section LK.
 
   (* 
    Pour ajouter une instance du tiers-exclu de la forme  A \/ ~A 
-   il suffit d'exécuter la commande "add_exm A"
+   il suffit d'ex\u00e9cuter la commande "add_exm A"
    *)
 
   Variables P Q R S T : Prop.
@@ -200,8 +293,8 @@ Section LK.
       destruct f. (* ou: exfalso, etc. *)
    Qed.
 
-  (* Exercice: completer toutes les preuves, en remplaçant les
-     "Admitted" par des preuves terminées par "Qed."; et 
+  (* Exercice: completer toutes les preuves, en rempla\u00e7ant les
+     "Admitted" par des preuves termin\u00e9es par "Qed."; et 
      sans utiliser ni auto, ni tauto.  *)
 
   Lemma de_morgan : ~ ( P /\ Q) <-> ~P \/ ~Q.
@@ -265,7 +358,7 @@ End LK.
 
 Section Club_Ecossais. (* version propositionnelle *)
   Variables E R D M K: Prop.
-  (* Ecossais, chaussettes Rouges, sort le Dimanche, Marié, Kilt *)
+  (* Ecossais, chaussettes Rouges, sort le Dimanche, Mari\u00e9, Kilt *)
 
   Hypothesis h1: ~E -> R.
   (* Tout membre non ecossais porte des chaussettes rouges *)
@@ -289,9 +382,9 @@ End Club_Ecossais.
 (** On peut sauter cette section *)
 
 (* Au sens strict, cette partie est hors programme; il s'agit de voir que 
-   diverses hypothèses (toutes formulées "au second ordre": avec des 
+   diverses hypoth\u00e8ses (toutes formul\u00e9es "au second ordre": avec des 
    quantificateurs universels sur des propositions)
-   sont équivalentes, et correspondent à la logique classique *)
+   sont \u00e9quivalentes, et correspondent \u00e0 la logique classique *)
 Section Second_ordre. 
   Definition PEIRCE := forall A B:Prop, ((A -> B) -> A) -> A.
   Definition DNEG := forall A, ~~A <-> A.
@@ -327,6 +420,3 @@ Section Second_ordre.
   Admitted.
 
 End Second_ordre.
-
-
-  
