@@ -39,8 +39,8 @@ int evaluer_exprL(Expression* e) {
     case SIMPLE: {
       if (!strcmp(e->arguments[0], "echo")) {
         for (uint i = 1; e->arguments[i] != NULL; i++)
-          printf("%s ", e->arguments[i]);
-        printf("\e[D\n");
+          printf("%s%s", e->arguments[i], !e->arguments[i + 1] ? "" : " ");
+        printf("\n");
         status = 0;
       } else if (!strcmp(e->arguments[0], "exit")) {
         exit(EXIT_SUCCESS);
