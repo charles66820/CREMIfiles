@@ -434,26 +434,95 @@ Section LK.
   (* Quelques exercices d'anciens tests *) 
   Lemma test_1: (P->Q)->(~P->R)->(R->Q)->Q.
   Proof.
+    add_exm R.
+    destruct exm0 as [r | Nr].
+    - intros pq Npr rq.
+      apply rq; assumption.
+    - add_exm P.
+      destruct exm0 as [p | Np].
+      * intros pq Npr rq.
+        apply pq; assumption.
+      * intros pq Npr rq.
+        apply rq.
+        apply Npr; assumption.
   Qed.
 
   Lemma test__2: (P \/ (Q\/R))-> (~P) -> (~R) -> (P\/Q).
   Proof.
+    add_exm Q.
+    destruct exm0 as [q | Nq].
+    - intros pOqOr Np Nr.
+      right; assumption.
+    - intros pOqOr Np Nr.
+      destruct pOqOr as [p | qOr].
+      * left.
+        assumption.
+      * destruct qOr as [q | r].
+        + right; assumption.
+        + exfalso.
+          apply Nr; assumption.
   Qed.
 
   Lemma test_3: (~P-> Q/\R)->(Q->~R)->P.
   Proof.
+    add_exm P.
+    destruct exm0 as [p | Np].
+    - intros NpqAr qNr; assumption.
+    - intros NpqAr qNr.
+      destruct NpqAr as [Npq r].
+      * assumption.
+      * exfalso.
+        apply qNr; assumption.
   Qed.
 
   Lemma test_4: (~P->Q)->(~Q\/R)->(P->R)->R.
   Proof.
+    add_exm Q.
+    destruct exm0 as [q | Nq].
+    - intros Npq NqOr pr.
+      destruct NqOr as [Nq | r].
+      exfalso.
+      * apply Nq; assumption.
+      * assumption.
+    - add_exm P.
+      destruct exm0 as [p | Np].
+      * intros Npq NqOr pr.
+        apply pr; assumption.
+      * intros Npq NqOr pr.
+        exfalso.
+        apply Nq.
+        apply Npq; assumption.
   Qed.
 
   Lemma test_5: (P->Q)->(~P->~Q)->((P/\Q) \/ ~(P\/Q)).
   Proof.
+    add_exm P.
+    destruct exm0 as [p | Np].
+    - intros pq NpNq.
+      left.
+      split.
+      * assumption.
+      * apply pq; assumption.
+    - intros pq NpNq.
+      right.
+      intro pOq.
+      apply NpNq.
+      * assumption.
+      * destruct pOq.
+        + apply pq; assumption.
+        + assumption.
   Qed.
 
   Lemma test_6: (P->Q)->(~P->Q)->(Q->R)->R.
   Proof.
+    add_exm P.
+    destruct exm0 as [p | Np].
+    - intros pq Npq qr.
+      apply qr.
+      apply pq; assumption.
+    - intros pq Npq qr.
+      apply qr.
+      apply Npq; assumption.
   Qed.
 
 End LK.
