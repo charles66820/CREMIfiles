@@ -40,7 +40,7 @@ Section LJ.
    destruct H.
    - exfalso.
      apply H0; assumption.
-     (* alternative: 
+     (* alternative:
      assert (f:False).
      {
        apply H0; trivial.
@@ -53,7 +53,7 @@ Section LJ.
   (* Structuration de la preuve: +,*,+
      utiles quand on a plusieurs sous-preuves non triviales;
      am\u00e9liorent la lisibilit\u00e9 du script *)
-  
+
    (*  equivalence logique (<->, iff):
        unfold iff transforme A <-> B en
                              (A -> B) /\ (B -> A).
@@ -85,7 +85,7 @@ Section LJ.
   (* "rewrite H in H'" fait la r\u00e9\u00e9criture de H dans une autre hypoth\u00e8se H' *)
   (* "rewrite <- H" r\u00e9\u00e9crit dans l'autre sens, le membre droit par le gauche *)
   Lemma L1 : (P <-> Q) -> ~(Q <-> ~P).
-  Proof.  
+  Proof.
     intro H.
     unfold iff. (* Car on a l'hypoth\u00e8se P <-> Q donc tous les p peuve \u00eatre remplacer par Q *)
     rewrite H.
@@ -97,17 +97,17 @@ Section LJ.
       unfold not in H1.
       apply H0; assumption.
     }
-    apply H2. apply H1. assumption. 
+    apply H2. apply H1. assumption.
   Qed.
 
   (* Fin des exemples, d\u00e9but des exercices *)
 
-  (* Exercice : remplacer tauto par des vraies preuves 
+  (* Exercice : remplacer tauto par des vraies preuves
      interactives *)
   (*  Exercices de la feuille 4 *)
 
   Lemma and_false : P /\ False -> False.
-  Proof. 
+  Proof.
     intro.
     destruct H as [p F].
     apply F.
@@ -245,10 +245,10 @@ Section LJ.
     apply Npp; assumption.
   Qed.
 
-  (* Exercice: reprendre toutes les preuves pr\u00e9c\u00e9dentes, 
+  (* Exercice: reprendre toutes les preuves pr\u00e9c\u00e9dentes,
      en simplifiant et clarifiant les scripts:
      - structurer les sous-preuves avec +/-/*
-     - inversement, quand c'est possible, factoriser avec 
+     - inversement, quand c'est possible, factoriser avec
        l'enchainement de tactiques (par ";")
 
      Le but est de faire que le script soit plus facile \u00e0 lire
@@ -258,7 +258,7 @@ Section LJ.
 End LJ.
 
 (*  Logique classique
-    On peut sauter les 4 commandes suivantes 
+    On peut sauter les 4 commandes suivantes
 *)
 
 (* un peu de magie noire *)
@@ -272,8 +272,8 @@ Section LK.
 
   Hypothesis  exm :  EXM.
 
-  (* 
-   Pour ajouter une instance du tiers-exclu de la forme  A \/ ~A 
+  (*
+   Pour ajouter une instance du tiers-exclu de la forme  A \/ ~A
    il suffit d'ex\u00e9cuter la commande "add_exm A"
    *)
 
@@ -300,7 +300,7 @@ Section LK.
   Qed.
 
   (* Exercice: completer toutes les preuves, en rempla\u00e7ant les
-     "Admitted" par des preuves termin\u00e9es par "Qed."; et 
+     "Admitted" par des preuves termin\u00e9es par "Qed."; et
      sans utiliser ni auto, ni tauto.  *)
 
   Lemma de_morgan : ~ ( P /\ Q) <-> ~P \/ ~Q.
@@ -403,7 +403,7 @@ Section LK.
         apply pq; assumption.
       * left; assumption.
     - add_exm Q.
-      destruct exm0 as [q | Nq]. 
+      destruct exm0 as [q | Nq].
       * intros NpOq p; assumption.
       * intros NpOq p.
         destruct NpOq as [Np | q].
@@ -430,7 +430,7 @@ Section LK.
         apply Np; assumption.
   Qed.
 
-  (* Quelques exercices d'anciens tests *) 
+  (* Quelques exercices d'anciens tests *)
   Lemma test_1: (P->Q)->(~P->R)->(R->Q)->Q.
   Proof.
     add_exm R.
@@ -545,6 +545,7 @@ Section Club_Ecossais. (* version propositionnelle *)
 
   Lemma personne: False. (* Le club est vide! *)
   Proof.
+  Restart.
     destruct h4 as [ke m].
     - apply h5.
       apply h1.
@@ -559,15 +560,15 @@ Section Club_Ecossais. (* version propositionnelle *)
       * rewrite h3; assumption.
   Qed.
 
-End Club_Ecossais.  
-  
+End Club_Ecossais.
+
 (** On peut sauter cette section *)
 
-(* Au sens strict, cette partie est hors programme; il s'agit de voir que 
-   diverses hypoth\u00e8ses (toutes formul\u00e9es "au second ordre": avec des 
+(* Au sens strict, cette partie est hors programme; il s'agit de voir que
+   diverses hypoth\u00e8ses (toutes formul\u00e9es "au second ordre": avec des
    quantificateurs universels sur des propositions)
    sont \u00e9quivalentes, et correspondent \u00e0 la logique classique *)
-Section Second_ordre. 
+Section Second_ordre.
   Definition PEIRCE := forall A B:Prop, ((A -> B) -> A) -> A.
   Definition DNEG := forall A, ~~A <-> A.
   Definition IMP2OR := forall A B:Prop, (A->B) <-> ~A \/ B.
@@ -576,10 +577,13 @@ Section Second_ordre.
   Proof.
     unfold IMP2OR, EXM.
     intros.
-    assert (~ A \/ A).
-    rewrite <- H. (* Coq "voit" qu'il suffit de prendre B=A; il va falloir prouver A->A *)
-  Admitted.
-  
+    assert (NaOa:~ A \/ A).
+    - rewrite <- H. (* Coq "voit" qu'il suffit de prendre B=A; il va falloir prouver A->A *)
+      intro a; assumption.
+    - destruct NaOa as [Na | a2].
+      * right; assumption.
+      * left; assumption.
+  Qed.
 
   Lemma L3 : EXM -> DNEG.
   Proof.
@@ -588,17 +592,51 @@ Section Second_ordre.
     (* H permet de faire un tiers exclus sur A *)
     assert (H0: A \/ ~A).
     {
-      admit.
+      apply H.
     }
-  Admitted.
+    split.
+    - intro NNa.
+      destruct H0 as [a | Na].
+      apply a.
+      exfalso.
+      apply NNa; assumption.
+    - intro a.
+      intro Na.
+      apply Na; assumption.
+  Qed.
 
   Lemma L4 : PEIRCE -> DNEG.
   Proof.
     unfold DNEG , PEIRCE.
-  Admitted.
-  
+    intros peirce A.
+    specialize peirce with (A:=A).
+    specialize peirce with (B:=~A).
+    split.
+    - intro NNA.
+      apply peirce.
+      intro aNa.
+      exfalso.
+      apply NNA.
+      intro a.
+      apply aNa; assumption.
+    - intros a Na.
+      apply Na; assumption.
+  Qed.
+
   Lemma L5 : EXM -> PEIRCE.
   Proof.
-  Admitted.
+    unfold EXM , PEIRCE.
+    intros exm A B aba.
+    assert (H0: A \/ ~A).
+    {
+      apply exm.
+    }
+    destruct H0 as [a | Na].
+    - assumption.
+    - apply aba.
+      intro a.
+      exfalso.
+      apply Na; assumption.
+  Qed.
 
 End Second_ordre.
