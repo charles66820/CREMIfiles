@@ -254,7 +254,6 @@ Section LJ.
      Le but est de faire que le script soit plus facile \u00e0 lire
      par un humain, pas pour la machine.
    *)
-   (* TODO: here *) 
 
 End LJ.
 
@@ -546,7 +545,19 @@ Section Club_Ecossais. (* version propositionnelle *)
 
   Lemma personne: False. (* Le club est vide! *)
   Proof.
-  Admitted.
+    destruct h4 as [ke m].
+    - apply h5.
+      apply h1.
+      intro e.
+      apply h2.
+      * destruct h4 as [ke m].
+        + apply h6; assumption.
+        + assumption.
+      * rewrite h3; assumption.
+    - apply h2.
+      * assumption.
+      * rewrite h3; assumption.
+  Qed.
 
 End Club_Ecossais.  
   
