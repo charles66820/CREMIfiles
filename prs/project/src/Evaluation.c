@@ -14,18 +14,22 @@ typedef unsigned int uint;
 #define BUFSIZE 1000
 
 void childSigHandler(int sig) {
+  int oldpid;
   int exitStatus;
-  int oldpid = waitpid(0, &exitStatus, WNOHANG); // BUG: call by children
-  if (oldpid != -1 && oldpid != 0) {
-    if (WIFSIGNALED(exitStatus))
-      printf("\n\e[ABackground process %d finish with : %s\n", oldpid,
-             strsignal(exitStatus));
-    else if (WEXITSTATUS(exitStatus) == 0)
-      printf("\n\e[ABackground process %d finish with : %s\n", oldpid, "Done");
-    else
-      printf("\n\e[ABackground process %d finish with : Exit %d\n", oldpid,
-             WEXITSTATUS(exitStatus));
-  }
+  do {
+    int oldpid = waitpid(-1, &exitStatus, WNOHANG);
+    if (oldpid > 0) {
+      if (WIFSIGNALED(exitStatus))
+        printf("\n\e[ABackground process %d finish with : %s\n", oldpid,
+               strsignal(exitStatus));
+      else if (WEXITSTATUS(exitStatus) == 0)
+        printf("\n\e[ABackground process %d finish with : %s\n", oldpid,
+               "Done");
+      else
+        printf("\n\e[ABackground process %d finish with : Exit %d\n", oldpid,
+               WEXITSTATUS(exitStatus));
+    }
+  } while (oldpid > 0);
 }
 
 struct sigaction sa, oldSa;
@@ -132,8 +136,7 @@ int evaluer_exprL(Expression* e) {
       break;
     }
     case BG: {
-      if (!fork()) { // FIXME: idk
-        sigaction(SIGCHLD, &oldSa, NULL);  // Disable SIGINT handler REVIEW: remove ?
+      if (!fork()) {  // FIXME: idk
         int retStatus = evaluer_exprL(e->gauche);
         if (retStatus > 128)
           raise(retStatus - 128);
