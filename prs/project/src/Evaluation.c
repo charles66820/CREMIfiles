@@ -20,14 +20,14 @@ void childSigHandler(int sig) {
     int oldpid = waitpid(-1, &exitStatus, WNOHANG);
     if (oldpid > 0) {
       if (WIFSIGNALED(exitStatus))
-        printf("\n\e[ABackground process %d finish with : %s\n", oldpid,
-               strsignal(exitStatus));
+        fprintf(stderr, "\n\e[ABackground process %d finish with : %s\n",
+                oldpid, strsignal(exitStatus));
       else if (WEXITSTATUS(exitStatus) == 0)
-        printf("\n\e[ABackground process %d finish with : %s\n", oldpid,
-               "Done");
+        fprintf(stderr, "\n\e[ABackground process %d finish with : %s\n",
+                oldpid, "Done");
       else
-        printf("\n\e[ABackground process %d finish with : Exit %d\n", oldpid,
-               WEXITSTATUS(exitStatus));
+        fprintf(stderr, "\n\e[ABackground process %d finish with : Exit %d\n",
+                oldpid, WEXITSTATUS(exitStatus));
     }
   } while (oldpid > 0);
 }
@@ -136,7 +136,7 @@ int evaluer_exprL(Expression* e) {
       break;
     }
     case BG: {
-      if (!fork()) {  // FIXME: idk
+      if (!fork()) {
         int retStatus = evaluer_exprL(e->gauche);
         if (retStatus > 128)
           raise(retStatus - 128);
