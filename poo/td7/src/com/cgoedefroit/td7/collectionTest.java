@@ -20,16 +20,43 @@ public class collectionTest {
     }
 
     public static int removeInsideDisk(List<Point2D> l, Point2D c, int r) {
-        Iterator<Point2D> pIterator = l.iterator();
-        int count = 0;
-        while (pIterator.hasNext()) {
-            Point2D p = pIterator.next();
-            if (c.distance(p) <= r) {
-                l.remove(p);
-                count++;
+        List<Point2D> rmList = new ArrayList<>();
+        for (Point2D p : l) if (c.distance(p) <= r) rmList.add(p);
+        for (Point2D point2D : rmList) l.remove(point2D);
+        return rmList.size();
+    }
+
+    private static List<Point2D> createInterlacingListIndexed(List<Point2D> pList, List<Point2D> pList2) {
+        List<Point2D> ret = new ArrayList<>();
+        int lenMin = Math.min(pList.size(), pList2.size()); // n = little list
+        List<Point2D> bigestPointList = pList.size() < pList2.size() ? pList2 : pList;
+        for (int i = 0; i < lenMin * 2; i++) {
+            if (i % 2 == 0) {
+                int j = (i / 2);
+                if (j < pList.size()) ret.add(pList.get(j));
+                else ret.add(pList2.get(j));
+            } else {
+                int j = (i / 2);
+                if (j < pList2.size()) ret.add(pList2.get(j));
+                else ret.add(pList.get(j));
             }
         }
-        return count;
+        for (int j = lenMin; j < bigestPointList.size(); j++) ret.add(bigestPointList.get(j));
+        return ret;
+    }
+
+    private static List<Point2D> createInterlacingListIterat(List<Point2D> pList, List<Point2D> pList2) {
+        List<Point2D> ret = new ArrayList<>();
+        Iterator<Point2D> it = pList.iterator();
+        Iterator<Point2D> it2 = pList2.iterator();
+        for (int i = 0; i < pList.size() + pList2.size(); i++) {
+            if (i % 2 == 0)
+                if (it.hasNext()) ret.add(it.next());
+                else ret.add(it2.next());
+            else if (it2.hasNext()) ret.add(it2.next());
+            else ret.add(it.next());
+        }
+        return ret;
     }
 
     public static void main(String[] args) {
@@ -88,7 +115,7 @@ public class collectionTest {
 
         // Generate point list (array) 1000000
         beginTime = System.currentTimeMillis();
-        pList = createRandom(1000000, 100);
+        pList = createRandom(100000, 100);
         for (Point2D p : pList) p.translate(-50, -50);
         endTime = System.currentTimeMillis();
         System.out.format("Generate point list size 1000000 in range between -50 and 50 (%dms)\n", endTime - beginTime);
@@ -99,6 +126,29 @@ public class collectionTest {
         endTime = System.currentTimeMillis();
         System.out.format("Test removeInsideDisk on point list with 1000000 items. %d items deleted (%dms)\n", d, endTime - beginTime);        // Test translate all points to (-50, 50)
 
+        // Two methods interlacing
+        pList = createRandom(1000000, 100);
+        List<Point2D> pList2 = createRandom(1000000, 100);
 
+        beginTime = System.currentTimeMillis();
+        List<Point2D> interlacingPointList1 = createInterlacingListIndexed(pList, pList2);
+        endTime = System.currentTimeMillis();
+        System.out.format("Create interlacing list from two list with index. (%dms)\n", endTime - beginTime);
+
+        beginTime = System.currentTimeMillis();
+        List<Point2D> interlacingPointList2 = createInterlacingListIterat(pList, pList2);
+        endTime = System.currentTimeMillis();
+        System.out.format("Create interlacing list from two list with iterator. (%dms)\n", endTime - beginTime);
+
+        // Sort list
+        beginTime = System.currentTimeMillis();
+        interlacingPointList2.sort(new Comparator<Point2D>() {
+            @Override
+            public int compare(Point2D p, Point2D p1) {
+                return 0;
+            }
+        });
+        endTime = System.currentTimeMillis();
+        System.out.format("Sort list. (%dms)\n", endTime - beginTime);
     }
 }
