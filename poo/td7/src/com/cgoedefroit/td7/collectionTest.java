@@ -11,8 +11,8 @@ public class collectionTest {
         // Add some shapes
         for (int i = 0; i < n; i++) {
             pList.add(new Point2D(
-                    range * randomizer.nextDouble(),
-                    range * randomizer.nextDouble(),
+                    randomizer.nextInt(range),
+                    randomizer.nextInt(range),
                     "point " + i
             ));
         }
@@ -25,8 +25,8 @@ public class collectionTest {
         // Add some shapes
         for (int i = 0; i < n; i++) {
             pList.add(new Point2D(
-                    range * randomizer.nextDouble(),
-                    range * randomizer.nextDouble(),
+                    randomizer.nextInt(range),
+                    randomizer.nextInt(range),
                     "point " + i
             ));
         }
@@ -241,8 +241,8 @@ public class collectionTest {
         interlacingPointList1.sort(new Comparator<Point2D>() {
             @Override
             public int compare(Point2D p, Point2D p1) {
-                int r = Double.compare(p.getX(), p1.getX());
-                return (r != 0)? r : Double.compare(p.getY(), p1.getY());
+                int r = Integer.compare(p.getX(), p1.getX());
+                return (r != 0)? r : Integer.compare(p.getY(), p1.getY());
             }
         });
         endTime = System.currentTimeMillis();
@@ -251,11 +251,29 @@ public class collectionTest {
         // Sort list use lambda
         beginTime = System.currentTimeMillis();
         interlacingPointList2.sort((p, p1) -> {
-            int r = Double.compare(p.getX(), p1.getX());
-            return (r != 0)? r : Double.compare(p.getY(), p1.getY());
+            int r = Integer.compare(p.getX(), p1.getX());
+            return (r != 0)? r : Integer.compare(p.getY(), p1.getY());
         });
         endTime = System.currentTimeMillis();
         System.out.format("Sort list use lambda. (%dms)\n", endTime - beginTime);
 
+        System.out.println("\nTest TreeSet\n");
+
+        TreeSet<Point2D> pts = new TreeSet<>();
+        pts.add(point1);
+        // The point2D class need to check hash because this set type need this for sort elements.
+
+        beginTime = System.currentTimeMillis();
+        for (int i = 0; i < 10000; i++) {
+            pts.add(new Point2D(
+                    randomizer.nextInt(100),
+                    randomizer.nextInt(100),
+                    "point " + i
+            ));
+        }
+        endTime = System.currentTimeMillis();
+        System.out.format("Add 10000 items to TreeSet. (%dms)\n", endTime - beginTime);
+        System.out.println(pts);
+        // Lol the size of tis set is 100 because it don't have duplicate ~
     }
 }

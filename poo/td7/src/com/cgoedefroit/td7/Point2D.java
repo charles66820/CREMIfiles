@@ -1,16 +1,14 @@
 package com.cgoedefroit.td7;
 
-import java.util.ArrayList;
-
-public class Point2D {
-    private double x, y;
+public class Point2D implements Comparable {
+    private int x, y;
     private final String name;
 
-    public Point2D(double x, double y) {
+    public Point2D(int x, int y) {
         this(x, y, "undefine");
     }
 
-    public Point2D(double x, double y, String name) {
+    public Point2D(int x, int y, String name) {
         this.x = x;
         this.y = y;
         this.name = name;
@@ -21,29 +19,29 @@ public class Point2D {
     }
 
     // Get / set
-    public double getX() {
+    public int getX() {
         return this.x;
     }
 
-    public void setX(double v) {
+    public void setX(int v) {
         this.x = v;
     }
 
-    public double getY() {
+    public int getY() {
         return this.y;
     }
 
-    public void setY(double v) {
+    public void setY(int v) {
         this.y = v;
     }
 
     // Methods
-    public void translate(double dx, double dy) {
+    public void translate(int dx, int dy) {
         this.x += dx;
         this.y += dy;
     }
 
-    public void translate(double d) {
+    public void translate(int d) {
         this.x += d;
         this.y += d;
     }
@@ -52,8 +50,8 @@ public class Point2D {
         return this.equals(p);
     }
 
-    public double distance(Point2D p) {
-        return Math.sqrt(Math.pow(p.x - this.x, 2) + Math.pow(p.y - this.y, 2));
+    public int distance(Point2D p) {
+        return (int) Math.sqrt(Math.pow(p.x - this.x, 2) + Math.pow(p.y - this.y, 2));
     }
 
     @Override
@@ -68,5 +66,15 @@ public class Point2D {
         Point2D point2D = (Point2D) o;
         return Double.compare(point2D.x, this.x) == 0 &&
                 Double.compare(point2D.y, this.y) == 0;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof Point2D) {
+            Point2D p = (Point2D) o;
+            int r = Integer.compare(this.getX(), p.getX());
+            return (r != 0)? r : Integer.compare(this.getY(), p.getY());
+        }
+        return -1;
     }
 }
