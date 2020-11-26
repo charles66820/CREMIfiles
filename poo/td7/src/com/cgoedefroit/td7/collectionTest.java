@@ -19,8 +19,22 @@ public class collectionTest {
         return pList;
     }
 
+    public static LinkedList<Point2D> createRandomLinked(int n, int range) {
+        LinkedList<Point2D> pList = new LinkedList<>();
+
+        // Add some shapes
+        for (int i = 0; i < n; i++) {
+            pList.add(new Point2D(
+                    range * randomizer.nextDouble(),
+                    range * randomizer.nextDouble(),
+                    "point " + i
+            ));
+        }
+        return pList;
+    }
+
     public static int removeInsideDisk(List<Point2D> l, Point2D c, int r) {
-        List<Point2D> rmList = new ArrayList<>();
+        ArrayList<Point2D> rmList = new ArrayList<>();
         for (Point2D p : l) if (c.distance(p) <= r) rmList.add(p);
         for (Point2D point2D : rmList) l.remove(point2D);
         return rmList.size();
@@ -61,18 +75,16 @@ public class collectionTest {
 
     public static void main(String[] args) {
         // Points for test
-        Point2D p1 = new Point2D(1, 2);
-        Point2D p2 = new Point2D(0, 2);
-        Point2D p3 = new Point2D(1, 3);
-        Point2D p4 = new Point2D(0, 4);
+        Point2D point1 = new Point2D(1, 2);
+        Point2D point2 = new Point2D(0, 2);
         List<Point2D> pList;
 
         // Test if is possible to add multiple occurance of a point
         System.out.println("Test add multiple occurance of a point in collection :");
         pList = new ArrayList<Point2D>();
-        pList.add(p1);
-        pList.add(p2);
-        pList.add(p1);
+        pList.add(point1);
+        pList.add(point2);
+        pList.add(point1);
         for (Point2D p : pList) System.out.println(p);
         // Response : yes is possible
         pList = null;
@@ -142,13 +154,108 @@ public class collectionTest {
 
         // Sort list
         beginTime = System.currentTimeMillis();
-        interlacingPointList2.sort(new Comparator<Point2D>() {
+        interlacingPointList1.sort(new Comparator<Point2D>() {
             @Override
             public int compare(Point2D p, Point2D p1) {
-                return 0;
+                int r = Double.compare(p.getX(), p1.getX());
+                return (r != 0)? r : Double.compare(p.getY(), p1.getY());
             }
         });
         endTime = System.currentTimeMillis();
         System.out.format("Sort list. (%dms)\n", endTime - beginTime);
+
+        // Sort list use lambda
+        beginTime = System.currentTimeMillis();
+        interlacingPointList2.sort((p, p1) -> {
+            int r = Double.compare(p.getX(), p1.getX());
+            return (r != 0)? r : Double.compare(p.getY(), p1.getY());
+        });
+        endTime = System.currentTimeMillis();
+        System.out.format("Sort list use lambda. (%dms)\n", endTime - beginTime);
+
+        System.out.println("\nSame test with linked list\n");
+
+        // Generate point list (array)
+        beginTime = System.currentTimeMillis();
+        pList = createRandomLinked(10000, 100);
+        endTime = System.currentTimeMillis();
+        System.out.format("Generate point list size 10000 in range 100 (%dms)\n", endTime - beginTime);
+
+        // Test translate all points to (-50, 50) with for index
+        beginTime = System.currentTimeMillis();
+        for (int i = 0; i < pList.size(); i++) pList.get(i).translate(-50, 50);
+        endTime = System.currentTimeMillis();
+        System.out.format("Test translate all points to (-50, 50) with for index (%dms)\n", endTime - beginTime);        // Test translate all points to (-50, 50)
+
+        // Test translate all points to (-50, 50) with iterator
+        beginTime = System.currentTimeMillis();
+        pIterator = pList.iterator();
+        while (pIterator.hasNext()) pIterator.next().translate(50, -50);
+        endTime = System.currentTimeMillis();
+        System.out.format("Test translate all points to (-50, 50) with iterator (%dms)\n", endTime - beginTime);        // Test translate all points to (-50, 50)
+
+        // Test translate all points to (-50, 50) with foreach
+        beginTime = System.currentTimeMillis();
+        for (Point2D p : pList) p.translate(-50, 50);
+        endTime = System.currentTimeMillis();
+        System.out.format("Test translate all points to (-50, 50) with foreach (%dms)\n", endTime - beginTime);
+        // The best version is foreach but is arraylist
+
+        // Test edit 100000 time the middle point of list
+        beginTime = System.currentTimeMillis();
+        for (int i = 0; i < 100000; i++) pList.get(pList.size() / 2).translate(2);
+        endTime = System.currentTimeMillis();
+        System.out.format("Test edit 100000 time the middle point of list (%dms)\n", endTime - beginTime);        // Test translate all points to (-50, 50)
+
+        System.out.println();
+
+        // Generate point list (array) 1000000
+        beginTime = System.currentTimeMillis();
+        pList = createRandomLinked(100000, 100);
+        for (Point2D p : pList) p.translate(-50, -50);
+        endTime = System.currentTimeMillis();
+        System.out.format("Generate point list size 1000000 in range between -50 and 50 (%dms)\n", endTime - beginTime);
+
+        // Test removeInsideDisk on point list with 1000000 items
+        beginTime = System.currentTimeMillis();
+        d = removeInsideDisk(pList, new Point2D(0, 0), 50);
+        endTime = System.currentTimeMillis();
+        System.out.format("Test removeInsideDisk on point list with 1000000 items. %d items deleted (%dms)\n", d, endTime - beginTime);        // Test translate all points to (-50, 50)
+
+        // Two methods interlacing
+        pList = createRandom(1000000, 100);
+        pList2 = createRandomLinked(1000000, 100);
+
+        beginTime = System.currentTimeMillis();
+        //interlacingPointList1 = createInterlacingListIndexed(pList, pList2);
+        endTime = System.currentTimeMillis();
+        System.out.format("Create interlacing list from two list with index. (%dms)\n", endTime - beginTime);
+
+        beginTime = System.currentTimeMillis();
+        interlacingPointList2 = createInterlacingListIterat(pList, pList2);
+        endTime = System.currentTimeMillis();
+        System.out.format("Create interlacing list from two list with iterator. (%dms)\n", endTime - beginTime);
+
+        // Sort list
+        beginTime = System.currentTimeMillis();
+        interlacingPointList1.sort(new Comparator<Point2D>() {
+            @Override
+            public int compare(Point2D p, Point2D p1) {
+                int r = Double.compare(p.getX(), p1.getX());
+                return (r != 0)? r : Double.compare(p.getY(), p1.getY());
+            }
+        });
+        endTime = System.currentTimeMillis();
+        System.out.format("Sort list. (%dms)\n", endTime - beginTime);
+
+        // Sort list use lambda
+        beginTime = System.currentTimeMillis();
+        interlacingPointList2.sort((p, p1) -> {
+            int r = Double.compare(p.getX(), p1.getX());
+            return (r != 0)? r : Double.compare(p.getY(), p1.getY());
+        });
+        endTime = System.currentTimeMillis();
+        System.out.format("Sort list use lambda. (%dms)\n", endTime - beginTime);
+
     }
 }
