@@ -358,9 +358,9 @@ Section LK.
     - intros NqNp p.
       add_exm Q.
       destruct exm0 as [q | Nq].
-      assumption.
-      exfalso.
-      apply NqNp; assumption.
+      * assumption.
+      * exfalso.
+        apply NqNp; assumption.
   Qed.
 
   Lemma exm_e : (P -> Q) -> (~P -> Q) -> Q.
@@ -377,8 +377,8 @@ Section LK.
     intro Npp.
     add_exm P.
     destruct exm0 as [p | Np].
-    assumption.
-    apply Npp; assumption.
+    * assumption.
+    * apply Npp; assumption.
   Qed.
 
   Lemma double_impl : (P -> Q) \/ (Q -> P).
@@ -419,7 +419,7 @@ Section LK.
     - intro pqp.
       apply pqp.
       intro p.
-      apply q.
+      assumption.
     - add_exm P.
       destruct exm0 as [p | Np].
       * intro pqp; assumption.
