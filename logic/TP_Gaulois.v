@@ -73,8 +73,10 @@ Section Gaulois.
     forall p:personnage, humain p -> ~romain p -> gaulois p.
   Proof.
     intros p Hp NRp.
-    destruct Hrom as [y Hy].
-    
+    forall_e Hpers p.
+    destruct H.
+    - 
+ 
   Qed.
 
   Theorem Exercice3:
