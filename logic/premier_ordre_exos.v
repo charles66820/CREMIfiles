@@ -28,7 +28,7 @@ Ltac forall_e H t := (generalize (H t); intro).
 Example E0 : ~(forall x:nat, x <> x).
 Proof.
   intro H.
-  specialize H with (x:=42) as H0.
+  specialize H with (x := 42) as H0.
   (* equivalent: forall_e H 42. *)
   apply H0.
   reflexivity.
@@ -58,7 +58,11 @@ Section Syllogismes. (* Entrainements *)
 
   Lemma contraposee : forall x, ~ mortel x -> ~ humain x.
   Proof.
-  Admitted.
+    intros E NmE hE.
+    apply NmE.
+    apply HM.
+    assumption.
+  Qed.
 
   Check Syllogisme.
   Lemma Existence_mortel: exists x, mortel x.
@@ -81,8 +85,15 @@ Section Syllogismes. (* Entrainements *)
   Proof.
     intro H.
     destruct H as [e He]. (* elimination de l'existentiel *)
-  Admitted.
-
+    destruct He as [NhE NaE].
+    apply NhE.
+    specialize Etre_disj with (x := e) as Etre_disjE.
+    destruct Etre_disjE as [hE | aE].
+    - assumption.
+    - exfalso.
+      apply NaE.
+      assumption.
+  Qed.
 End Syllogismes.
 
 Section Egalite. (* Entrainements, sur l'egalite *)
@@ -101,6 +112,15 @@ Section Egalite. (* Entrainements, sur l'egalite *)
     intros x y z H H0.
     rewrite H.
     assumption.
+  Back 2.
+    rewrite H0 in H.
+    assumption.
+  Back 1.
+    rewrite <- H.
+    reflexivity.
+  Back 2.
+    rewrite H.
+    reflexivity.
   Qed.
 
   (* x <> y est une abr\u00e9viation de ~ (x = y) *)
@@ -116,7 +136,7 @@ Section Egalite. (* Entrainements, sur l'egalite *)
   Proof.
     intros.
     intro.
-     rewrite H1 in H0.
+    rewrite H1 in H0.
     apply H0; assumption.
    Qed.
 
@@ -151,23 +171,64 @@ Section ExercicesIntuitionnistes.
         specialize H with x.
         destruct H.
         assumption.
-      + admit.
-  Admitted.
+      + intros x.
+        specialize H with x.
+        destruct H.
+        assumption.
+    - destruct H as [H H0].
+      intros x.
+
+      split.
+        * specialize H with x.
+          assumption.
+        * specialize H0 with x.
+          assumption.
+  Back 7.
+    specialize H with x.
+    specialize H0 with x.
+    split; assumption.
+  Qed.
 
   Lemma Forall_or_impl : (forall x, P x) \/ (forall x, Q x) ->
                     forall x, P x \/ Q x.
   Proof.
-  Admitted.
+    intros H x.
+    destruct H.
+    - specialize H with x.
+      left; assumption.
+    - specialize H with x.
+      right; assumption.
+  Qed.
 
   Lemma Exists_and_impl : (exists x:A, P x /\ Q x) ->
                     (exists x:A, P x) /\  (exists x:A, Q x).
   Proof.
-  Admitted.
+    intros H.
+    destruct H as [x H].
+    destruct H as [Px Qx].
+    split; exists x; assumption.
+  Qed.
 
   Lemma Exists_or_eq : (exists x:A, P x \/ Q x) <->
                     (exists x:A, P x) \/   (exists x:A, Q x).
   Proof.
-  Admitted.
+    split.
+    - intros H.
+      destruct H as [x H].
+      destruct H as [Px | Qx].
+      * left.
+        exists x; assumption.
+      * right.
+        exists x; assumption.
+    - intros H.
+      destruct H as [E1 | E2].
+      * destruct E1 as [x Px].
+        exists x.
+        left; assumption.
+      * destruct E2 as [x Qx].
+        exists x.
+        right; assumption.
+  Qed.
 
   Section Forall_exists_exists.
     Hypothesis H : forall x, P x -> Q x.
@@ -175,27 +236,53 @@ Section ExercicesIntuitionnistes.
 
     Lemma L7 : exists x, Q x.
     Proof.
-    Admitted.
+      destruct H0 as [x Px].
+      specialize H with x as PxQx.
+      exists x.
+      apply PxQx; assumption.
+    Qed.
 
   End Forall_exists_exists.
 
   Lemma L8 : forall x,  (P x -> exists y,  P y).
   Proof.
-  Admitted.
+    intros x Px.
+    exists x; assumption.
+  Qed.
 
   Lemma NonExists_ForallNot_eq : ~(exists x, P x) <-> forall x, ~ P x.
   Proof.
-  Admitted.
+    split.
+    - intros H x Px.
+      apply H.
+      exists x; assumption.
+    - intros H H0.
+      destruct H0 as [x Px].
+      specialize H with x as NPx.
+      apply NPx; assumption.
+  Qed.
 
   Lemma Exists_forall_eq : ((exists x, P x) -> X) <->
                      forall x, P x -> X.
   Proof.
-  Admitted.
+    split.
+    - intros H x Px.
+      apply H.
+      exists x; assumption.
+    - intros H H0.
+      destruct H0 as [x Px].
+      specialize H with x as PxX.
+      apply PxX; assumption.
+  Qed.
 
   Lemma ExForall_ForallEx :  (exists x:A, forall y:B, R x y)
                       -> (forall y:B, exists x:A, R x y).
   Proof.
-  Admitted.
+    intros H y.
+    destruct H as [x H].
+    specialize H with y as Rxy.
+    exists x;assumption.
+  Qed.
 
   (* Sur l egalite *)
   (* Vu en cours *)
@@ -209,12 +296,17 @@ Section ExercicesIntuitionnistes.
   (* Vu en cours aussi *)
   Lemma eq_trans : forall x y z:A, x = y -> y = z -> x = z.
   Proof.
-  Admitted.
+    intros.
+    rewrite <- H in H0; assumption.
+  Qed.
 
   (* Pas vu en cours *)
   Lemma eq_function: forall x y: A, x = y -> f x = f y.
   Proof.
-  Admitted.
+    intros.
+    rewrite H.
+    reflexivity.
+  Qed.
 
   (* Sur les types vides *)
 
@@ -224,11 +316,20 @@ Section ExercicesIntuitionnistes.
   Lemma Vide_forall : A_est_vide -> forall x:A, P x.
   Proof.
     unfold A_est_vide. (* A compl\u00e9ter *)
-  Admitted.
+    intros H x.
+    specialize H with x as xx.
+    exfalso.
+    apply xx; reflexivity.
+  Qed.
 
   Lemma TousDifferents_vide : (forall x y:A, x <> y) -> A_est_vide.
   Proof.
-  Admitted.
+    unfold A_est_vide.
+    intros H x.
+    specialize H with (y:=x) as Hx.
+    specialize Hx with x as xx.
+    assumption.
+  Qed.
 
 End ExercicesIntuitionnistes.
 
