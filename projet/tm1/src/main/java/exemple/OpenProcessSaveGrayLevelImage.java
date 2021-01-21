@@ -1,4 +1,4 @@
-package imageProcessing;
+package exemple;
 
 import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
