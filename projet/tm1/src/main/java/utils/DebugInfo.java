@@ -2,7 +2,6 @@ package utils;
 
 import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -14,7 +13,6 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
@@ -73,7 +71,7 @@ public class DebugInfo extends Application {
 
         if (histogramDest != null) {
             VBox vbox2 = new VBox();
-            vbox2.setLayoutX(0);
+            vbox2.setLayoutX(280);
             vbox2.setLayoutY(175);
             vbox2.setMaxHeight(150);
             vbox2.setMaxWidth(260);
@@ -88,7 +86,7 @@ public class DebugInfo extends Application {
             final BarChart<String, Number> bc2 = new BarChart<>(xAxis2, yAxis2);
             XYChart.Series<String, Number> histogramDestChart = new XYChart.Series<>();
             for (int i = 0; i < 256; i++)
-                histogramDestChart.getData().add(new XYChart.Data<>("" + i, histogramSrc[i]));
+                histogramDestChart.getData().add(new XYChart.Data<>("" + i, histogramDest[i]));
             bc2.getData().add(histogramDestChart);
             vbox2.getChildren().add(bc2);
             root.getChildren().add(vbox2);

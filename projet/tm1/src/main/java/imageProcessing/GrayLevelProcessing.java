@@ -166,6 +166,16 @@ public class GrayLevelProcessing {
         return r;
     }
 
+    public static void contrastImageWithHistogram(Img<UnsignedByteType> img, int N) {
+        int[] c = histogramComlet(img);
+        final Cursor<UnsignedByteType> cursor = img.cursor();
+        while (cursor.hasNext()) {
+            cursor.fwd();
+            final UnsignedByteType val = cursor.get();
+            val.set((c[val.get()] * 255) / N);
+        }
+    }
+
     public static void main(final String[] args) throws ImgIOException, IncompatibleTypeException {
         // load image
         if (args.length < 2) {
@@ -235,6 +245,12 @@ public class GrayLevelProcessing {
         int hclut = cumulatedHistogramWithLut(input, 100);
         endTime = System.nanoTime();
         System.out.println("cumulatedHistogramWithLut " + hclut + " (in " + (endTime - starTime) + "ns)");//*/
+
+        //*
+        starTime = System.nanoTime();
+        contrastImageWithHistogram(input, 20);
+        endTime = System.nanoTime();
+        System.out.println("contrastImageWithHistogram with N = 20 (in " + (endTime - starTime) + "ns)");//*/
 
         DebugInfo.showDebugInfo(defautInput, input, histogramComlet(defautInput), histogramComlet(input));
 
