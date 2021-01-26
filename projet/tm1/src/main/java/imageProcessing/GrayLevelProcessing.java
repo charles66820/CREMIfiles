@@ -153,7 +153,7 @@ public class GrayLevelProcessing {
 
     public static int cumulatedHistogram(Img<UnsignedByteType> img, int k) {
         int r = 0;
-        for (int i = 1; i <= k; i++)
+        for (int i = 0; i < k; i++)
             r += histogram(img, i);
         return r;
     }
