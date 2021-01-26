@@ -129,13 +129,41 @@ public class GrayLevelProcessing {
         }
     }
 
-    public static void contrastImageHistogramme(Img<UnsignedByteType> img, int k) {
+    public static int histogram(Img<UnsignedByteType> img, int k) {
+        int r = 0;
+        final Cursor<UnsignedByteType> cursor = img.cursor();
+        while (cursor.hasNext()) {
+            cursor.fwd();
+            final UnsignedByteType val = cursor.get();
+            if (val.get() == k) r++;
+        }
+        return r;
     }
 
-    public static void contrastImageCumulatedHistogramme(Img<UnsignedByteType> img, int k) {
+    public static int[] histogramComlet(Img<UnsignedByteType> img) {
+        int[] r = new int[256];
+        final Cursor<UnsignedByteType> cursor = img.cursor();
+        while (cursor.hasNext()) {
+            cursor.fwd();
+            final UnsignedByteType val = cursor.get();
+            r[val.get()]++;
+        }
+        return r;
     }
 
-    public static void contrastImageCumulatedHistogrammeWithLut(Img<UnsignedByteType> img, int k) {
+    public static int cumulatedHistogram(Img<UnsignedByteType> img, int k) {
+        int r = 0;
+        for (int i = 1; i <= k; i++)
+            r += histogram(img, i);
+        return r;
+    }
+
+    public static int cumulatedHistogramWithLut(Img<UnsignedByteType> img, int k) {
+        int r = 0;
+        int[] lut = histogramComlet(img);
+        for (int i = 0; i < k; i++)
+            r += lut[i];
+        return r;
     }
 
     public static void main(final String[] args) throws ImgIOException, IncompatibleTypeException {
@@ -190,25 +218,25 @@ public class GrayLevelProcessing {
         endTime = System.nanoTime();
         System.out.println("contrastImageWithLut with min max (in " + (endTime - starTime) + "ns)");//*/
 
-        //*
+        /*
         starTime = System.nanoTime();
-        contrastImageHistogramme(input, 0);
+        int h = histogram(input, 0);
         endTime = System.nanoTime();
-        System.out.println("contrastImageHistogramme with min max (in " + (endTime - starTime) + "ns)");//*/
+        System.out.println("histogram for 0 is " + h + " (in " + (endTime - starTime) + "ns)");//*/
 
         /*
         starTime = System.nanoTime();
-        contrastImageHistogramme(input, 0);
+        int hc = cumulatedHistogram(input, 100);
         endTime = System.nanoTime();
-        System.out.println("contrastImageCumulatedHistogramme with min max (in " + (endTime - starTime) + "ns)");//*/
+        System.out.println("cumulatedHistogram " + hc + " (in " + (endTime - starTime) + "ns)");//*/
 
         /*
         starTime = System.nanoTime();
-        contrastImageHistogramme(input, 0);
+        int hclut = cumulatedHistogramWithLut(input, 100);
         endTime = System.nanoTime();
-        System.out.println("contrastImageCumulatedHistogrammeWithLut with min max (in " + (endTime - starTime) + "ns)");//*/
+        System.out.println("cumulatedHistogramWithLut " + hclut + " (in " + (endTime - starTime) + "ns)");//*/
 
-        DebugInfo.showDebugInfo(defautInput, input);
+        DebugInfo.showDebugInfo(defautInput, input, histogramComlet(defautInput), histogramComlet(input));
 
         // save output image
         final String outPath = args[1];
