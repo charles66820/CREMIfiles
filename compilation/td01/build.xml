@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+    td1 project    
+                   
+     usage: ant
+     ====================================================================== -->
+
+<project name="td1 project" default="default">
+	<property name="CLASSES" location="classes" />
+	<property name="LIB" location="lib" />
+	<property name="SRC" location="src" />
+	<property name="BIN" location="bin" />
+	<property name="JFLEX" location="jflex" />
+	 <property name="JFLEX_JAR"
+		   location="${LIB}/jflex-full-1.8.2.jar" />
+	 <property name="DATA" location="data" />
+	 <property name="INPUT" location="${DATA}/pgcd.cpp" />
+	 <property name="OUTPUT" location="${DATA}/output.txt" />
+	 
+
+	<!-- ================================= 
+          target: default              
+         ================================= -->
+	<target name="default" depends="main" description="exécution du projet td1">
+	  <java classname="Lexer" classpath="${BIN}" output="${OUTPUT}">
+	    <arg value="${INPUT}" />
+	  </java>
+	</target>
+	
+	<!-- ================================= 
+             target: main              
+             ================================= -->
+	<target name="main" depends="lexer" description="compilation du projet td1">
+	  <mkdir dir="${BIN}" />
+	  <javac includeantruntime="false" srcdir="${SRC}" destdir="${BIN}" classpath="" debug="on" />
+	</target>
+	
+	<!-- =================================
+             target: clean
+             ================================= -->
+	<target name="clean">
+	  <delete dir="${BIN}"/>
+	  <delete dir="${CLASSES}"/>
+	  <delete file="${OUTPUT}"/>
+	</target>
+	
+	<!-- =================================
+             target: lexer
+             ================================= -->
+	<target name="lexer" description="exécution de JFlex">
+	  <taskdef name="jflex" classname="jflex.anttask.JFlexTask" classpath="${JFLEX_JAR}" />
+	  <jflex file="${JFLEX}/Lexer.jflex" destdir="${SRC}" />
+	</target>
+	
+</project>
