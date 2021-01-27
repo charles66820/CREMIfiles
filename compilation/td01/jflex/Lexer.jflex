@@ -12,11 +12,13 @@ import java.io.*;
 	int keywords = 0;
 	int identifiers = 0;
 	int operators = 0;
+
+	int comments = 0;
 %}
 
 %eof{
-	System.out.printf("Lines: %d\nKeywords: %d\nIdentifiers: %d\nOperators: %d", 
-		this.lineno, this.keywords, this.identifiers, this.operators);
+	System.out.printf("Lines: %d\nKeywords: %d\nIdentifiers: %d\nOperators: %d\nComments: %d",
+		this.lineno, this.keywords, this.identifiers, this.operators, this.comments);
 %eof}
 
 
@@ -25,8 +27,10 @@ import java.io.*;
 %%
 
 /* Keywords */
+"if"|"else"|"while" {++this.keywords;}
 
 /* Identifier */
+[a-zA-Z][a-zA-Z0-9]* {++this.identifiers;}
 
 /* Integer */
 
@@ -39,7 +43,9 @@ import java.io.*;
 /* Strings */
 
 /* Comments */
+"//"[^\n]* {++this.comments;}
+"/*"([^"*"]|"*"[^"/"])*"*"?"*/" {++this.comments;}
 
 /* Attention d'utiliser [^] plut^ot que . pour l'encodage des caractères unicodes */
-[^] {}
 \n  {++this.lineno;}
+[^] {}
