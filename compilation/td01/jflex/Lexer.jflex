@@ -41,7 +41,7 @@ import java.io.*;
 [a-zA-Z][a-zA-Z0-9]* {++this.identifiers;}
 
 /* Integer */
--?[0-9]* {++this.integers;}
+-?[0-9]+ {++this.integers;}
 
 /* Float */
 -?[0-9]*("."[0-9]+((e|E)(-|"+")[0-9]*)?|(e|E)(-|"+")[0-9]+) {++this.floats;}
