@@ -31,7 +31,7 @@ public class DebugInfo extends Application {
             ImageView imageView = new ImageView(imgSrc);
             imageView.setX(25);
             imageView.setY(25);
-            imageView.setFitHeight(150);
+            imageView.setFitHeight(350);
             imageView.setFitWidth(250);
             imageView.setPreserveRatio(true);
             root.getChildren().add(imageView);
@@ -40,7 +40,7 @@ public class DebugInfo extends Application {
             ImageView imageView1 = new ImageView(imgDest);
             imageView1.setX(300);
             imageView1.setY(25);
-            imageView1.setFitHeight(150);
+            imageView1.setFitHeight(350);
             imageView1.setFitWidth(250);
             imageView1.setPreserveRatio(true);
             root.getChildren().add(imageView1);
@@ -49,7 +49,7 @@ public class DebugInfo extends Application {
         if (histogramSrc != null) {
             VBox vbox1 = new VBox();
             vbox1.setLayoutX(0);
-            vbox1.setLayoutY(175);
+            vbox1.setLayoutY(375);
             vbox1.setMaxHeight(150);
             vbox1.setMaxWidth(260);
 
@@ -72,7 +72,7 @@ public class DebugInfo extends Application {
         if (histogramDest != null) {
             VBox vbox2 = new VBox();
             vbox2.setLayoutX(280);
-            vbox2.setLayoutY(175);
+            vbox2.setLayoutY(375);
             vbox2.setMaxHeight(150);
             vbox2.setMaxWidth(260);
 
@@ -92,7 +92,7 @@ public class DebugInfo extends Application {
             root.getChildren().add(vbox2);
         }
 
-        Scene scene = new Scene(root, 575, 400);
+        Scene scene = new Scene(root, 575, 600);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
