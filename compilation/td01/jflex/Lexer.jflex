@@ -15,6 +15,8 @@ import java.io.*;
 
 	int integers = 0;
 	int floats = 0;
+	int separators = 0;
+	int strings = 0;
 	int comments = 0;
 	boolean DEBUG = true;
 %}
@@ -23,8 +25,8 @@ import java.io.*;
 	System.out.printf("Lines: %d\nKeywords: %d\nIdentifiers: %d\nOperators: %d",
 		this.lineno, this.keywords, this.identifiers, this.operators);
 	if (DEBUG)
-	    System.out.printf("\nIntegers: %d\nFloats: %d\nComments: %d",
-        		this.integers, this.floats, this.comments);
+	    System.out.printf("\nIntegers: %d\nFloats: %d\nComments: %d\nSeparators: %d\nStrings: %d",
+        		this.integers, this.floats, this.comments, this.separators, this.strings);
 %eof}
 
 
@@ -46,10 +48,13 @@ import java.io.*;
 
 /* Operators (Attention d'utiliser les doubles quotes pour les caract`eres UTF8) */
 "++"|"+="|"+"|"--"|"-="|"-"|"*="|"*"|"/="|"/"|"%="|"%"|"<<="|"<<"|"<="|"<"|">>="|">>"|">="|">"|"&&"|"&="|"&"|"||"|"|="|"|"|"!="|"!"|"^="|"^"|"=="|"="|"~" {++this.operators;}
+// BUG: error with ** ? and < > in include ?
 
 /* Separators */
+","|";"|":"|"("|")"|"["|"]"|"{"|"}" {++this.separators;} // BUG: error with scope qualifier ?
 
 /* Strings */
+\"[^\"]*\" {++this.strings;} // FIXME: error with \"
 
 /* Comments */
 "//"[^\n]* {++this.comments;}
@@ -57,4 +62,4 @@ import java.io.*;
 
 /* Attention d'utiliser [^] plut^ot que . pour l'encodage des caractères unicodes */
 \n  {++this.lineno;}
-[^] {}
+[^] {} // NOTE: # is not process
