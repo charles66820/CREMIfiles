@@ -1,5 +1,4 @@
 import java.io.FileReader;
-import Token;
 
 public class Main {
     
