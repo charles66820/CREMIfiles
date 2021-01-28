@@ -33,7 +33,7 @@ import java.io.*;
 %%
 
 /* Keywords */
-"if"|"else"|"while" {++this.keywords;}
+"bool"|"break"|"case"|"catch"|"char"|"class"|"const"|"continue"|"default"|"delete"|"do"|"double"|"else"|"enum"|"false"|"float"|"for"|"friend"|"goto"|"if"|"inline"|"int"|"long"|"namespace"|"new"|"operator"|"private"|"protected"|"public"|"register"|"return"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"template"|"this"|"throw"|"true"|"try"|"typedef"|"typeid"|"typename"|"union"|"unsigned"|"using"|"virtual"|"void"|"while" {++this.keywords;}
 
 /* Identifier */
 [a-zA-Z][a-zA-Z0-9]* {++this.identifiers;}
@@ -45,6 +45,7 @@ import java.io.*;
 [0-9]*("."[0-9]+((e|E)(-|"+")[0-9]*)?|(e|E)(-|"+")[0-9]+) {++this.floats;}
 
 /* Operators (Attention d'utiliser les doubles quotes pour les caract`eres UTF8) */
+"++"|"+="|"+"|"--"|"-="|"-"|"*="|"*"|"/="|"/"|"%="|"%"|"<<="|"<<"|"<="|"<"|">>="|">>"|">="|">"|"&&"|"&="|"&"|"||"|"|="|"|"|"!="|"!"|"^="|"^"|"=="|"="|"~" {++this.operators;}
 
 /* Separators */
 
