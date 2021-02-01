@@ -140,7 +140,7 @@ public class GrayLevelProcessing {
         return r;
     }
 
-    public static int[] histogramComlet(Img<UnsignedByteType> img) {
+    public static int[] histogramComplet(Img<UnsignedByteType> img) {
         int[] r = new int[256];
         final Cursor<UnsignedByteType> cursor = img.cursor();
         while (cursor.hasNext()) {
@@ -160,14 +160,25 @@ public class GrayLevelProcessing {
 
     public static int cumulatedHistogramWithLut(Img<UnsignedByteType> img, int k) {
         int r = 0;
-        int[] lut = histogramComlet(img);
+        int[] histogramLut = histogramComplet(img);
         for (int i = 0; i < k; i++)
-            r += lut[i];
+            r += histogramLut[i];
         return r;
     }
 
-    public static void contrastImageWithHistogram(Img<UnsignedByteType> img, int N) {
-        int[] c = histogramComlet(img);
+    public static int[] cumulatedHistogramWithLut(Img<UnsignedByteType> img) {
+        int[] rLut = new int[256];
+        int[] histogramLut = histogramComplet(img);
+        for (int i = 0; i < 256; i++)
+            for (int j = 0; j < i; j++)
+                rLut[i] += histogramLut[j];
+        return rLut;
+    }
+
+    public static void contrastImageWithHistogram(Img<UnsignedByteType> img) {
+        int N = (int) img.max(0) * (int) img.max(1);
+
+        int[] c = cumulatedHistogramWithLut(img);
         final Cursor<UnsignedByteType> cursor = img.cursor();
         while (cursor.hasNext()) {
             cursor.fwd();
@@ -248,11 +259,11 @@ public class GrayLevelProcessing {
 
         //*
         starTime = System.nanoTime();
-        contrastImageWithHistogram(input, 20);
+        contrastImageWithHistogram(input);
         endTime = System.nanoTime();
         System.out.println("contrastImageWithHistogram with N = 20 (in " + (endTime - starTime) + "ns)");//*/
 
-        DebugInfo.showDebugInfo(defautInput, input, histogramComlet(defautInput), histogramComlet(input));
+        DebugInfo.showDebugInfo(defautInput, input, histogramComplet(defautInput), histogramComplet(input));
 
         // save output image
         final String outPath = args[1];
