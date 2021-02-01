@@ -1,0 +1,5 @@
+*.o
+tsp_main tsp
+test_heap
+a_star
+*.dSYM/
