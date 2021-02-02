@@ -18,6 +18,7 @@ import java.io.*;
 	int separators = 0;
 	int strings = 0;
 	int comments = 0;
+	int nbCodeSigns = 0;
 	boolean DEBUG = true;
 %}
 
@@ -25,8 +26,8 @@ import java.io.*;
 	System.out.printf("Lines: %d\nKeywords: %d\nIdentifiers: %d\nOperators: %d",
 		this.lineno, this.keywords, this.identifiers, this.operators);
 	if (DEBUG)
-	    System.out.printf("\nIntegers: %d\nFloats: %d\nComments: %d\nSeparators: %d\nStrings: %d",
-        		this.integers, this.floats, this.comments, this.separators, this.strings);
+	    System.out.printf("\nIntegers: %d\nFloats: %d\nComments: %d\nSeparators: %d\nStrings: %d\nNb code signs: %d",
+        		this.integers, this.floats, this.comments, this.separators, this.strings, this.nbCodeSigns);
 %eof}
 
 
@@ -35,26 +36,26 @@ import java.io.*;
 %%
 
 /* Keywords */
-"bool"|"break"|"case"|"catch"|"char"|"class"|"const"|"continue"|"default"|"delete"|"do"|"double"|"else"|"enum"|"false"|"float"|"for"|"friend"|"goto"|"if"|"inline"|"int"|"long"|"namespace"|"new"|"operator"|"private"|"protected"|"public"|"register"|"return"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"template"|"this"|"throw"|"true"|"try"|"typedef"|"typeid"|"typename"|"union"|"unsigned"|"using"|"virtual"|"void"|"while" {++this.keywords;}
+"bool"|"break"|"case"|"catch"|"char"|"class"|"const"|"continue"|"default"|"delete"|"do"|"double"|"else"|"enum"|"false"|"float"|"for"|"friend"|"goto"|"if"|"inline"|"int"|"long"|"namespace"|"new"|"operator"|"private"|"protected"|"public"|"register"|"return"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"template"|"this"|"throw"|"true"|"try"|"typedef"|"typeid"|"typename"|"union"|"unsigned"|"using"|"virtual"|"void"|"while" {++this.keywords; this.nbCodeSigns += yytext().length();}
 
 /* Identifier */
-[a-zA-Z][a-zA-Z0-9]* {++this.identifiers;}
+[a-zA-Z][a-zA-Z0-9]* {++this.identifiers; this.nbCodeSigns += yytext().length();}
 
 /* Integer */
--?[0-9]+ {++this.integers;}
+-?[0-9]+ {++this.integers; this.nbCodeSigns += yytext().length();}
 
 /* Float */
--?[0-9]*("."[0-9]+((e|E)(-|"+")[0-9]+)?|(e|E)(-|"+")[0-9]+) {++this.floats;}
+-?[0-9]*("."[0-9]+((e|E)(-|"+")[0-9]+)?|(e|E)(-|"+")[0-9]+) {++this.floats; this.nbCodeSigns += yytext().length();}
 
 /* Operators (Attention d'utiliser les doubles quotes pour les caract`eres UTF8) */
-"++"|"+="|"+"|"--"|"-="|"-"|"*="|"*"|"/="|"/"|"%="|"%"|"<<="|"<<"|"<="|"<"|">>="|">>"|">="|">"|"&&"|"&="|"&"|"||"|"|="|"|"|"!="|"!"|"^="|"^"|"=="|"="|"~" {++this.operators;}
+"++"|"+="|"+"|"--"|"-="|"-"|"*="|"*"|"/="|"/"|"%="|"%"|"<<="|"<<"|"<="|"<"|">>="|">>"|">="|">"|"&&"|"&="|"&"|"||"|"|="|"|"|"!="|"!"|"^="|"^"|"=="|"="|"~" {++this.operators; this.nbCodeSigns += yytext().length();}
 // BUG: error with ** ? and < > in include ?
 
 /* Separators */
-","|";"|":"|"("|")"|"["|"]"|"{"|"}" {++this.separators;} // BUG: error with scope qualifier ?
+","|";"|":"|"("|")"|"["|"]"|"{"|"}" {++this.separators; this.nbCodeSigns += yytext().length();} // BUG: error with scope qualifier ?
 
 /* Strings */
-\"[^\"]*\" {++this.strings;} // FIXME: error with \"
+\"[^\"]*\" {++this.strings; this.nbCodeSigns += yytext().length();} // FIXME: error with \"
 
 /* Comments */
 "//"[^\n]* {++this.comments;}
