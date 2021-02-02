@@ -45,7 +45,7 @@ import java.io.*;
 -?[0-9]+ {++this.integers; this.nbCodeSigns += yytext().length();}
 
 /* Float */
--?[0-9]*("."[0-9]+((e|E)(-|"+")[0-9]+)?|(e|E)(-|"+")[0-9]+) {++this.floats; this.nbCodeSigns += yytext().length();}
+-?([0-9]*(\.[0-9]+((e|E)(-|\+)?[0-9]+)?|[0-9]+(e|E)(-|\+)?[0-9]+)|([0-9]+\.)) {++this.floats; this.nbCodeSigns += yytext().length();}
 
 /* Operators (Attention d'utiliser les doubles quotes pour les caract`eres UTF8) */
 "++"|"+="|"+"|"--"|"-="|"-"|"*="|"*"|"/="|"/"|"%="|"%"|"<<="|"<<"|"<="|"<"|">>="|">>"|">="|">"|"&&"|"&="|"&"|"||"|"|="|"|"|"!="|"!"|"^="|"^"|"=="|"="|"~" {++this.operators; this.nbCodeSigns += yytext().length();}
