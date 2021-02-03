@@ -19,15 +19,14 @@ import java.io.*;
 	int strings = 0;
 	int comments = 0;
 	int nbCodeSigns = 0;
-	boolean DEBUG = true;
 %}
 
 %eof{
-	System.out.printf("Lines: %d\nKeywords: %d\nIdentifiers: %d\nOperators: %d",
-		this.lineno, this.keywords, this.identifiers, this.operators);
-	if (DEBUG)
-	    System.out.printf("\nIntegers: %d\nFloats: %d\nComments: %d\nSeparators: %d\nStrings: %d\nNb code signs: %d",
-        		this.integers, this.floats, this.comments, this.separators, this.strings, this.nbCodeSigns);
+	System.out.printf(
+	    "Lines: %d\nKeywords: %d\nIdentifiers: %d\nOperators: %d\nIntegers: %d\nFloats: %d\nComments: %d\nSeparators: %d\nStrings: %d\nNb code signs: %d",
+		this.lineno, this.keywords, this.identifiers, this.operators, this.integers,
+		this.floats, this.comments, this.separators, this.strings, this.nbCodeSigns
+	);
 %eof}
 
 
@@ -55,12 +54,12 @@ import java.io.*;
 ","|";"|":"|"("|")"|"["|"]"|"{"|"}" {++this.separators; this.nbCodeSigns += yytext().length();} // BUG: error with scope qualifier ?
 
 /* Strings */
-\"[^\"]*\" {++this.strings; this.nbCodeSigns += yytext().length();} // FIXME: error with \"
+\"[^"]*\" {++this.strings; this.nbCodeSigns += yytext().length();} // FIXME: error with \"
 
 /* Comments */
 "//"[^\n]* {++this.comments;}
 "/*"([^"*"]|"*"[^"/"])*"*"?"*/" {++this.comments;}
 
 /* Attention d'utiliser [^] plut^ot que . pour l'encodage des caractères unicodes */
-\n  {++this.lineno;}
-[^] {} // NOTE: # is not process
+\n  {++this.lineno; this.nbCodeSigns += yytext().length();}
+[^] {this.nbCodeSigns += yytext().length();} // NOTE: # is not process
