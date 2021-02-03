@@ -54,7 +54,7 @@ import java.io.*;
 ","|";"|":"|"("|")"|"["|"]"|"{"|"}" {++this.separators; this.nbCodeSigns += yytext().length();} // BUG: error with scope qualifier ?
 
 /* Strings */
-\"[^"]*\" {++this.strings; this.nbCodeSigns += yytext().length();} // FIXME: error with \"
+\"(\\\"|[^\"])*\" {++this.strings; this.nbCodeSigns += yytext().length();}
 
 /* Comments */
 "//"[^\n]* {++this.comments;}
