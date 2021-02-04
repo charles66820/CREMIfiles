@@ -118,7 +118,7 @@ public class Convolution {
      * Question 2.1
      */
     public static void convolution(final Img<UnsignedByteType> input, final Img<UnsignedByteType> output, int[][] kernel) {
-        int size = kernel.length - 1;
+        int size = (kernel.length - 1) / 2;
         Interval interval = Intervals.expand(input, -size);
 
         IntervalView<UnsignedByteType> source = Views.interval(input, interval);
@@ -153,6 +153,19 @@ public class Convolution {
         Gauss3.gauss((double) 4 / 3, Views.extendMirrorDouble(input), output);
     }
 
+    public static void saveImage(Img<UnsignedByteType> img, String name, String outFolderPath) {
+        String outPath = outFolderPath + "/" + name + ".tif";
+        File path = new File(outPath);
+        // clear the file if it already exists.
+        if (path.exists()) {
+            path.delete();
+        }
+        ImgSaver imgSaver = new ImgSaver();
+        imgSaver.saveImg(outPath, img);
+        imgSaver.context().dispose();
+        System.out.println("Image saved in: " + outPath);
+    }
+
     public static void main(final String[] args) throws ImgIOException, IncompatibleTypeException {
 
         // load image
@@ -160,20 +173,47 @@ public class Convolution {
             System.out.println("missing input or output image filename");
             System.exit(-1);
         }
+
         final String filename = args[0];
+        if (!new File(filename).exists()) {
+            System.err.println("File '" + filename + "' does not exist");
+            System.exit(-1);
+        }
+
         final ArrayImgFactory<UnsignedByteType> factory = new ArrayImgFactory<>(new UnsignedByteType());
         final ImgOpener imgOpener = new ImgOpener();
-        final Img<UnsignedByteType> input = (Img<UnsignedByteType>) imgOpener.openImgs(filename, factory).get(0);
+        final Img<UnsignedByteType> input = imgOpener.openImgs(filename, factory).get(0);
         imgOpener.context().dispose();
+
+        final String outPath = args[1];
 
         // output image of same dimensions
         final Dimensions dim = input;
         final Img<UnsignedByteType> output = factory.create(dim);
 
         // mean filter
-        //meanFilterSimple(input, output);
-        //meanFilterWithBorders(input, output, 1);
-        //meanFilterWithNeighborhood(input, output, 4);
+        long starTime, endTime;
+        //*
+        starTime = System.nanoTime();
+        meanFilterSimple(input, output);
+        endTime = System.nanoTime();
+        System.out.println("meanFilterSimple (in " + (endTime - starTime) + "ns)");
+        saveImage(output, "meanFilterSimple", outPath);//*/
+
+        //*
+        starTime = System.nanoTime();
+        meanFilterWithBorders(input, output, 1);
+        endTime = System.nanoTime();
+        System.out.println("meanFilterWithBorders (in " + (endTime - starTime) + "ns)");
+        saveImage(output, "meanFilterWithBorders", outPath);//*/
+
+        //*
+        starTime = System.nanoTime();
+        meanFilterWithNeighborhood(input, output, 4);
+        endTime = System.nanoTime();
+        System.out.println("meanFilterWithNeighborhood (in " + (endTime - starTime) + "ns)");
+        saveImage(output, "meanFilterWithNeighborhood", outPath);//*/
+
         int[][] kernelOne = new int[][]{
                 {1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1},
@@ -188,31 +228,29 @@ public class Convolution {
                 {2, 6, 8, 6, 2},
                 {1, 2, 3, 2, 1}
         };
-        //convolution(input, output, kernelOne);
-        long starTime, endTime;
+
+        //*
+        starTime = System.nanoTime();
+        convolution(input, output, kernelOne);
+        endTime = System.nanoTime();
+        System.out.println("my gauss convolution with one (in " + (endTime - starTime) + "ns)");
+        saveImage(output, "myGaussConvolutionWithOne", outPath);//*/
+        DebugInfo.showDebugInfo(input, output, null, null);
+
         //*
         starTime = System.nanoTime();
         convolution(input, output, kernel);
         endTime = System.nanoTime();
-        System.out.println("my gauss convolution (in " + (endTime - starTime) + "ns)");//*/
+        System.out.println("my gauss convolution (in " + (endTime - starTime) + "ns)");
+        saveImage(output, "myGaussConvolutionWithKernel", outPath);//*/
 
         //*
         starTime = System.nanoTime();
         gaussFilterImgLib(input, output);
         endTime = System.nanoTime();
-        System.out.println("default gauss convolution (in " + (endTime - starTime) + "ns)");//*/
+        System.out.println("default gauss convolution (in " + (endTime - starTime) + "ns)");
+        saveImage(output, "defaultGaussConvolutionWithKernel", outPath);//*/
 
-        DebugInfo.showDebugInfo(input, output, null, null);
-
-        final String outPath = args[1];
-        File path = new File(outPath);
-        if (path.exists()) {
-            path.delete();
-        }
-        ImgSaver imgSaver = new ImgSaver();
-        imgSaver.saveImg(outPath, output);
-        imgSaver.context().dispose();
-        System.out.println("Image saved in: " + outPath);
+       // DebugInfo.showDebugInfo(input, output, null, null);
     }
-
 }

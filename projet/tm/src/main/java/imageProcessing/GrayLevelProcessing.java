@@ -10,11 +10,11 @@ import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import utils.DebugInfo;
+
 import java.io.File;
 
 public class GrayLevelProcessing {
 
-    //ali.larbi@u-bordeaux.fr
     public static void threshold(Img<UnsignedByteType> img, int t) {
         final RandomAccess<UnsignedByteType> r = img.randomAccess();
 
@@ -187,12 +187,26 @@ public class GrayLevelProcessing {
         }
     }
 
+    public static void saveImage(Img<UnsignedByteType> img, String name, String outFolderPath) {
+        String outPath = outFolderPath + "/" + name + ".tif";
+        File path = new File(outPath);
+        // clear the file if it already exists.
+        if (path.exists()) {
+            path.delete();
+        }
+        ImgSaver imgSaver = new ImgSaver();
+        imgSaver.saveImg(outPath, img);
+        imgSaver.context().dispose();
+        System.out.println("Image saved in: " + outPath);
+    }
+
     public static void main(final String[] args) throws ImgIOException, IncompatibleTypeException {
         // load image
         if (args.length < 2) {
             System.out.println("missing input and/or output image filenames");
             System.exit(-1);
         }
+
         final String filename = args[0];
         if (!new File(filename).exists()) {
             System.err.println("File '" + filename + "' does not exist");
@@ -201,81 +215,94 @@ public class GrayLevelProcessing {
 
         final ArrayImgFactory<UnsignedByteType> factory = new ArrayImgFactory<>(new UnsignedByteType());
         final ImgOpener imgOpener = new ImgOpener();
-        final Img<UnsignedByteType> input = (Img<UnsignedByteType>) imgOpener.openImgs(filename, factory).get(0);
+        Img<UnsignedByteType> input = imgOpener.openImgs(filename, factory).get(0);
         final Img<UnsignedByteType> defautInput = input.copy();
         imgOpener.context().dispose();
 
+        final String outPath = args[1];
+
         // process image
         long starTime, endTime;
-        //threshold(input, 128);
+        starTime = System.nanoTime();
+        threshold(input, 128);
+        endTime = System.nanoTime();
+        System.out.println("threshold (in " + (endTime - starTime) + "ms)");
+        saveImage(input, "threshold", outPath);//*/
 
-		/*
-		starTime = System.nanoTime();
-		fillBrightnessImageRandomAccess(input, 50);
-		endTime = System.nanoTime();
-		System.out.println("fillBrightnessImageRandomAccess (in " + (endTime - starTime) + "ms)");//*/
+        input = defautInput.copy(); // Reset input
 
-        /*
-		starTime = System.nanoTime();
-		fillBrightnessImageCursor(input, 50);
-		endTime = System.nanoTime();
-		System.out.println("fillBrightnessImageRandomAccess (in " + (endTime - starTime) + "ms)");//*/
+        //*
+        starTime = System.nanoTime();
+        fillBrightnessImageRandomAccess(input, 50);
+        endTime = System.nanoTime();
+        System.out.println("fillBrightnessImageRandomAccess (in " + (endTime - starTime) + "ms)");
+        saveImage(input, "fillBrightnessImageRandomAccess", outPath);//*/
 
-        /*
+        input = defautInput.copy(); // Reset input
+
+        //*
+        starTime = System.nanoTime();
+        fillBrightnessImageCursor(input, 50);
+        endTime = System.nanoTime();
+        System.out.println("fillBrightnessImageCursor (in " + (endTime - starTime) + "ms)");
+        saveImage(input, "fillBrightnessImageCursor", outPath);//*/
+
+        input = defautInput.copy(); // Reset input
+
+        //*
         starTime = System.nanoTime();
         contrastImage(input);
         endTime = System.nanoTime();
-        System.out.println("contrastImage (in " + (endTime - starTime) + "ns)");//*/
+        System.out.println("contrastImage (in " + (endTime - starTime) + "ns)");
+        saveImage(input, "contrastImage", outPath);//*/
 
-        /*
+        input = defautInput.copy(); // Reset input
+
+        //*
         starTime = System.nanoTime();
         contrastImage(input, 0, 255);
         endTime = System.nanoTime();
-        System.out.println("contrastImage with min max (in " + (endTime - starTime) + "ns)");//*/
+        System.out.println("contrastImage with min max (in " + (endTime - starTime) + "ns)");
+        saveImage(input, "contrastImageMinMax", outPath);//*/
 
-        /*
+        input = defautInput.copy(); // Reset input
+
+        //*
         starTime = System.nanoTime();
         contrastImageWithLut(input, 0, 255);
         endTime = System.nanoTime();
-        System.out.println("contrastImageWithLut with min max (in " + (endTime - starTime) + "ns)");//*/
+        System.out.println("contrastImageWithLut with min max (in " + (endTime - starTime) + "ns)");
+        saveImage(input, "contrastImageWithLutMinMax", outPath);//*/
 
-        /*
+        input = defautInput.copy(); // Reset input
+
+        //*
         starTime = System.nanoTime();
         int h = histogram(input, 0);
         endTime = System.nanoTime();
-        System.out.println("histogram for 0 is " + h + " (in " + (endTime - starTime) + "ns)");//*/
-
-        /*
+        System.out.println("histogram for 0 is " + h + " (in " + (endTime - starTime) + "ns)");
+//*/
+        //*
         starTime = System.nanoTime();
         int hc = cumulatedHistogram(input, 100);
         endTime = System.nanoTime();
-        System.out.println("cumulatedHistogram " + hc + " (in " + (endTime - starTime) + "ns)");//*/
-
-        /*
+        System.out.println("cumulatedHistogram " + hc + " (in " + (endTime - starTime) + "ns)");
+//*/
+        //*
         starTime = System.nanoTime();
         int hclut = cumulatedHistogramWithLut(input, 100);
         endTime = System.nanoTime();
-        System.out.println("cumulatedHistogramWithLut " + hclut + " (in " + (endTime - starTime) + "ns)");//*/
-
+        System.out.println("cumulatedHistogramWithLut " + hclut + " (in " + (endTime - starTime) + "ns)");
+//*/
         //*
         starTime = System.nanoTime();
         contrastImageWithHistogram(input);
         endTime = System.nanoTime();
-        System.out.println("contrastImageWithHistogram with N = 20 (in " + (endTime - starTime) + "ns)");//*/
+        System.out.println("contrastImageWithHistogram with N = 20 (in " + (endTime - starTime) + "ns)");
+        saveImage(input, "contrastImageWithHistogram", outPath);//*/
+
+        input = defautInput.copy(); // Reset input
 
         DebugInfo.showDebugInfo(defautInput, input, histogramComplet(defautInput), histogramComplet(input));
-
-        // save output image
-        final String outPath = args[1];
-        File path = new File(outPath);
-        // clear the file if it already exists.
-        if (path.exists()) {
-            path.delete();
-        }
-        ImgSaver imgSaver = new ImgSaver();
-        imgSaver.saveImg(outPath, input);
-        imgSaver.context().dispose();
-        System.out.println("Image saved in: " + outPath);
     }
-
 }
