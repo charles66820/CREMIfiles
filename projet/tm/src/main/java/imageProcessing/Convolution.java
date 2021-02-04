@@ -112,21 +112,45 @@ public class Convolution {
             for (final UnsignedByteType value : localNeighborhood) sum += value.get();
             destValue.set(sum / (((size * 2) + 1) * ((size * 2) + 1)));
         }
-        DebugInfo.showDebugInfo(input, output, null, null);
     }
 
     /**
      * Question 2.1
      */
     public static void convolution(final Img<UnsignedByteType> input, final Img<UnsignedByteType> output, int[][] kernel) {
+        int size = kernel.length - 1;
+        Interval interval = Intervals.expand(input, -size);
 
+        IntervalView<UnsignedByteType> source = Views.interval(input, interval);
+        final Cursor<UnsignedByteType> sourceCursor = source.cursor();
+
+        IntervalView<UnsignedByteType> dest = Views.interval(output, interval);
+        final Cursor<UnsignedByteType> destCursor = dest.cursor();
+
+        final RectangleShape shape = new RectangleShape(size, true);
+
+        int kernelSum = 0;
+        for (int[] row : kernel) for (int value : row) kernelSum += value;
+
+        for (final Neighborhood<UnsignedByteType> localNeighborhood : shape.neighborhoods(source)) {
+            final UnsignedByteType sourceValue = sourceCursor.next();
+            final UnsignedByteType destValue = destCursor.next();
+
+            int pos = 0;
+            localNeighborhood.getIntPosition(pos);
+
+            int sum = sourceValue.get();
+            for (final UnsignedByteType value : localNeighborhood)
+                sum += (value.get() * kernel[pos / (kernel.length + 1)][pos % (kernel.length + 1)]);
+            destValue.set(sum / kernelSum);
+        }
     }
 
     /**
      * Question 2.3
      */
     public static void gaussFilterImgLib(final Img<UnsignedByteType> input, final Img<UnsignedByteType> output) {
-
+        Gauss3.gauss((double) 4 / 3, Views.extendMirrorDouble(input), output);
     }
 
     public static void main(final String[] args) throws ImgIOException, IncompatibleTypeException {
@@ -149,7 +173,36 @@ public class Convolution {
         // mean filter
         //meanFilterSimple(input, output);
         //meanFilterWithBorders(input, output, 1);
-        meanFilterWithNeighborhood(input, output, 4);
+        //meanFilterWithNeighborhood(input, output, 4);
+        int[][] kernelOne = new int[][]{
+                {1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1}
+        };
+        int[][] kernel = new int[][]{
+                {1, 2, 3, 2, 1},
+                {2, 6, 8, 6, 2},
+                {3, 8, 10, 8, 3},
+                {2, 6, 8, 6, 2},
+                {1, 2, 3, 2, 1}
+        };
+        //convolution(input, output, kernelOne);
+        long starTime, endTime;
+        //*
+        starTime = System.nanoTime();
+        convolution(input, output, kernel);
+        endTime = System.nanoTime();
+        System.out.println("my gauss convolution (in " + (endTime - starTime) + "ns)");//*/
+
+        //*
+        starTime = System.nanoTime();
+        gaussFilterImgLib(input, output);
+        endTime = System.nanoTime();
+        System.out.println("default gauss convolution (in " + (endTime - starTime) + "ns)");//*/
+
+        DebugInfo.showDebugInfo(input, output, null, null);
 
         final String outPath = args[1];
         File path = new File(outPath);
