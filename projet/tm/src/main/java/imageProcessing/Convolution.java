@@ -242,7 +242,6 @@ public class Convolution {
         endTime = System.nanoTime();
         System.out.println("my gauss convolution (in " + (endTime - starTime) + "ns)");
         saveImage(output, "myGaussConvolutionWithKernel", outPath);//*/
-        DebugInfo.showDebugInfo(input, output, null, null);
 
         //*
         starTime = System.nanoTime();
@@ -251,6 +250,6 @@ public class Convolution {
         System.out.println("default gauss convolution (in " + (endTime - starTime) + "ns)");
         saveImage(output, "defaultGaussConvolutionWithKernel", outPath);//*/
 
-       // DebugInfo.showDebugInfo(input, output, null, null);
+       DebugInfo.showDebugInfo(input, output, null, null);
     }
 }
