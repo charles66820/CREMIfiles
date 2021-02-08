@@ -36,9 +36,19 @@ double tsp_brute_force(point *V, int n, int *Q) {
 }
 
 void MaxPermutation(int *P, int n, int k) {
-  ;
-  ;
-  ;
+  printf("Permutation : ");
+  for (int i = 0; i < n; i++) printf("%d ", P[i]);
+  printf("\n");
+
+  int Per[n];
+  // from prefix to end
+  for (int i = k; i < n; i++) Per[i] = P[i];
+  // TODO: idk
+
+  printf("Permutation : ");
+  for (int i = 0; i < n; i++) printf("%d ", Per[i]);
+  printf("\n");
+
   return;
 }
 
@@ -52,6 +62,10 @@ double value_opt(point *V, int n, int *P, double w) {
 }
 
 double tsp_brute_force_opt(point *V, int n, int *Q) {
+  int P[n];
+  for (int i = 0; i < n; i++) P[i] = i;
+  MaxPermutation(P, n, 4);
+  // TODO: idk
   ;
   ;
   ;

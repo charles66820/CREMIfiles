@@ -30,7 +30,7 @@ double value(point *V, int n, int *P);
 double tsp_brute_force(point *V, int n, int *Q);
 
 /**
- * @brief Optimized value fonction
+ * @brief Optimized value function
  * @param V Point table
  * @param n Tables length (nb points)
  * @param P Index table for point table list
@@ -43,21 +43,36 @@ double value_opt(point *V, int n, int *P, double wmin);
  * @brief 
  * @param P Return the largest permutation, in lexicographic order;
  * @param n Tables length (nb points)
- * @param k 
+ * @param k P prefix will be save
  */
 void MaxPermutation(int *P, int n, int k);
 
 /**
- * @brief 
- * @param V 
- * @param n 
- * @param Q 
- * @return double 
+ * @brief Search the best tour with optimized method
+ * @param V Point table
+ * @param n Tables length (nb points)
+ * @param Q Reference for optimal tour
+ * @return double The smaller value
  */
 double tsp_brute_force_opt(point *V, int n, int *Q);
 
+/**
+ * @brief Optimized value function 2
+ * @param V Point table
+ * @param n Tables length (nb points)
+ * @param P Index table for point table list
+ * @param wmin Current minimal value
+ * @return double Distance value
+ */
 double value_opt2(point *V, int n, int *P, double wmin);
 
+/**
+ * @brief Search the best tour with optimized method 2
+ * @param V Point table
+ * @param n Tables length (nb points)
+ * @param Q Reference for optimal tour
+ * @return double The smaller value
+ */
 double tsp_brute_force_opt2(point *V, int n, int *Q);
 
 #endif /* TSP_BRUTE_FORCE_H */
