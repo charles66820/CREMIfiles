@@ -15,6 +15,7 @@ tsp_src := $(wildcard tsp_*.c)
 tsp_src := $(filter-out %.cor.c,$(tsp_src))
 tsp_objs := $(patsubst %.c,%.o,$(tsp_src))
 
+.PHONY: all clean
 all: tsp_main
 
 tsp_main: tools.o $(tsp_objs)
@@ -23,7 +24,6 @@ tsp_main: tools.o $(tsp_objs)
 
 #a_star: a_star.o tools.o heap.o
 
-.PHONY: clean
 clean:
 	rm -f *.o
 	rm -f tsp_main
