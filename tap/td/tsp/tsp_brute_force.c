@@ -1,5 +1,6 @@
-#include <float.h>
 #include "tsp_brute_force.h"
+
+#include <float.h>
 
 //
 //  TSP - BRUTE-FORCE
@@ -35,21 +36,15 @@ double tsp_brute_force(point *V, int n, int *Q) {
   return bestValue;
 }
 
+int compare(const void *a, const void *b) {
+  int int_a = *((int *)a);
+  int int_b = *((int *)b);
+  return (int_a < int_b) - (int_a > int_b);
+}
+
 void MaxPermutation(int *P, int n, int k) {
-  printf("Permutation : ");
-  for (int i = 0; i < n; i++) printf("%d ", P[i]);
-  printf("\n");
-
-  int Per[n];
-  // from prefix to end
-  for (int i = k; i < n; i++) Per[i] = P[i];
-  // TODO: idk
-
-  printf("Permutation : ");
-  for (int i = 0; i < n; i++) printf("%d ", Per[i]);
-  printf("\n");
-
-  return;
+  // Sort from prefix to end
+  qsort(P + k, n - k, sizeof(int), compare);
 }
 
 double value_opt(point *V, int n, int *P, double w) {
@@ -63,11 +58,28 @@ double value_opt(point *V, int n, int *P, double w) {
 
 double tsp_brute_force_opt(point *V, int n, int *Q) {
   int P[n];
-  for (int i = 0; i < n; i++) P[i] = i;
-  MaxPermutation(P, n, 4);
-  // TODO: idk
-  ;
-  ;
-  ;
-  return 0;
+  for (int i = 0; i < n; i++) P[i] = i;  // Create the first permutation
+  double bestValue = DBL_MAX;
+
+  // Test all permutation
+  do {
+    double currentValue = value(V, n, P);
+    // TODO: MaxPermutation if mistake
+    if (currentValue < bestValue) {
+      bestValue = currentValue;
+      memcpy(Q, P, n * sizeof(int));  // copy P in Q
+    }
+    if (false) {
+      printf("Permutation : ");
+      for (int i = 0; i < n; i++) printf("%d ", P[i]);
+      printf("\n");
+      MaxPermutation(P, n, 4);
+
+      printf("Permutation : ");
+      for (int i = 0; i < n; i++) printf("%d ", P[i]);
+      printf("\n");
+    }
+  } while (NextPermutation(P, n));
+
+  return bestValue;
 }

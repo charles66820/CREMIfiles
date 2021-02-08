@@ -40,7 +40,7 @@ double tsp_brute_force(point *V, int n, int *Q);
 double value_opt(point *V, int n, int *P, double wmin);
 
 /**
- * @brief 
+ * @brief Set all numbers after the prefix form bit to lower
  * @param P Return the largest permutation, in lexicographic order;
  * @param n Tables length (nb points)
  * @param k P prefix will be save
