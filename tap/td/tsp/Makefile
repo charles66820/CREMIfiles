@@ -11,19 +11,22 @@ endif
 LDLIBS += $(shell sdl2-config --libs)
 LDFLAGS += $(shell sdl2-config --cflags)
 
-all: tsp_main #test_heap a_star
+tsp_src := $(wildcard tsp_*.c)
+tsp_src := $(filter-out %.cor.c,$(tsp_src))
+tsp_objs := $(patsubst %.c,%.o,$(tsp_src))
 
-# tsp_main: tsp_main.o tools.o tsp_brute_force.o tsp_prog_dyn.o tsp_heuristic.o tsp_mst.o
+all: tsp_main
 
-tsp_main: tsp_main.o tools.o tsp_brute_force.o
+tsp_main: tools.o $(tsp_objs)
 
 #test_heap: test_heap.o heap.o
 
 #a_star: a_star.o tools.o heap.o
 
+.PHONY: clean
 clean:
 	rm -f *.o
-	rm -f tsp_main tsp
+	rm -f tsp_main
 	rm -f test_heap
-	rm -f a_star a_star
+	rm -f a_star
 	rm -fr *.dSYM/
