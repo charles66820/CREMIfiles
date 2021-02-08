@@ -11,8 +11,8 @@ int DeleteSet(int S, int i) { return S & ~(1 << i); }
 
 /* une cellule de la table */
 typedef struct {
-  double length; // longueur du chemin minimum D[t][S]
-  int pred;      // point précédant t dans la solution D[t][S]
+  double length;  // longueur du chemin minimum D[t][S]
+  int pred;       // point précédant t dans la solution D[t][S]
 } cell;
 
 int ExtractPath(cell **D, int t, int S, int n, int *Q) {
@@ -21,11 +21,11 @@ int ExtractPath(cell **D, int t, int S, int n, int *Q) {
     D[t][S]) jusqu'au point V[n-1]. Il faut que Q[] soit assez grand.
     Renvoie la taille du chemin construit.
   */
-  if(D[0][1].length < 0) return 0; // si D n'a pas été remplie
+  if (D[0][1].length < 0) return 0;  // si D n'a pas été remplie
 
-  Q[0] = t;                   // écrit le dernier point
-  int k = 1;                  // k=taille de Q=nombre de points écrits dans Q
-  while (Q[k - 1] != n - 1) { // on s'arrête si le dernier point est V[n-1]
+  Q[0] = t;                    // écrit le dernier point
+  int k = 1;                   // k=taille de Q=nombre de points écrits dans Q
+  while (Q[k - 1] != n - 1) {  // on s'arrête si le dernier point est V[n-1]
     Q[k] = D[Q[k - 1]][S].pred;
     S = DeleteSet(S, Q[k - 1]);
     k++;
@@ -40,7 +40,7 @@ double tsp_prog_dyn(point *V, int n, int *Q) {
     être alloué par l'appelant. La fonction doit renvoyer aussi la
     valeur de la tournée Q ou 0 s'il y a eut un problème, comme la
     pression de 'q' pour sortir de l'affichage.
-    
+
     La table D est un tableau 2D de "cell" indexé par t ("int"),
     l'indice d'un point V[t], et S ("int") représentant un ensemble
     d'indices de points.
@@ -61,7 +61,7 @@ double tsp_prog_dyn(point *V, int n, int *Q) {
            de mémoire.
          En pratique on peut monter facilement jusqu'à n=24 pour une
          dizaine de secondes de calcul.
- 
+
     NB2: La variable globale "running" indique si l'affichage
          graphique est actif, la pression de 'q' la faisant passer à
          faux. L'usage de "running" permet à l'utilisateur de sortir
@@ -77,13 +77,13 @@ double tsp_prog_dyn(point *V, int n, int *Q) {
   // Elle comportent (n-1)*2^(n-1) "cell". NB: la colonne S=0
   // (l'ensemble vide) n'est pas utilisée.
 
-  int const L = n-1;    // L = nombre de lignes = indice du dernier point
-  int const C = 1 << L; // C = nombre de colonnes
+  int const L = n - 1;   // L = nombre de lignes = indice du dernier point
+  int const C = 1 << L;  // C = nombre de colonnes
 
-  cell **D = malloc(L*sizeof(cell*)); // L=n-1 lignes
-  for (int t=0; t<L; t++) D[t] = malloc(C*sizeof(cell)); // C=2^{n-1} colonnes
-  D[0][1].length=-1; // pour savoir si la table a été remplie
-
+  cell **D = malloc(L * sizeof(cell *));  // L=n-1 lignes
+  for (int t = 0; t < L; t++)
+    D[t] = malloc(C * sizeof(cell));  // C=2^{n-1} colonnes
+  D[0][1].length = -1;                // pour savoir si la table a été remplie
 
   //-------------------------------------------------------------
   // Phase 2: Remplissage de la table.
@@ -116,7 +116,6 @@ double tsp_prog_dyn(point *V, int n, int *Q) {
   //
   // Ici, c'est la fin des deux boucles. Le calcul de la table est
   // terminé.
-  
 
   //-------------------------------------------------------------
   // Phase 3: Extraction de la tournée optimale.
@@ -125,7 +124,7 @@ double tsp_prog_dyn(point *V, int n, int *Q) {
   // calculer. NB: si le calcul a été interrompu (pression de 'q'), il
   // faut renvoyer 0.
 
-  double w = 0; // valeur par défaut
+  double w = 0;  // valeur par défaut
 
   if (running) {
     // Calcul de la longueur w et extraction de la tournée Q optimale
@@ -137,7 +136,6 @@ double tsp_prog_dyn(point *V, int n, int *Q) {
     ;
     ;
   }
-
 
   //-------------------------------------------------------------
   // Phase 4: Valeur retour en libérant la table D.
