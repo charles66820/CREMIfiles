@@ -1,4 +1,5 @@
 #include "tools.h"
+#include "tsp_brute_force.h"  // for dist
 
 //
 //  TSP - PROGRAMMATION DYNAMIQUE
@@ -32,7 +33,14 @@ int ExtractPath(cell **D, int t, int S, int n, int *Q) {
   }
   return k;
 }
-
+/**
+ * @brief
+ *
+ * @param V
+ * @param n
+ * @param Q Optimal permutation
+ * @return double The tour value or 0 if pb
+ */
 double tsp_prog_dyn(point *V, int n, int *Q) {
   /*
     Version programmation dynamique du TSP. La tournée optimale
@@ -97,25 +105,46 @@ double tsp_prog_dyn(point *V, int n, int *Q) {
   // avec t∈S et x∈S\{t}. NB: pour calculer T = S\{t}, poser
   // T=DeleteSet(S,t). On peut tester si t∈S aussi avec
   // DeleteSet(S,t).
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  ;
-  // Toujours dans la boucle, mais à la fin, lorsque le calcul de la
-  // cellule D[t][S] est fait (c'est-à-dire les valeurs D[t][S].length
-  // et D[t][S].pred correctement calcuées), vous pouvez afficher le
-  // chemin Q obtenu de V[n-1] à V[t] à l'aide d'ExtractPath() puis de
-  // drawPath() comme ci-dessous:
-  //
-  // int k = ExtractPath(D, t, S, n, Q);
-  // drawPath(V, n, Q, k);
-  //
-  // Ici, c'est la fin des deux boucles. Le calcul de la table est
-  // terminé.
+  // L for Last point indice
+
+  for (int S = 1; S < C; S++) {
+    for (int t = 0; t < L; t++) {
+      int T = DeleteSet(S, t);  // T = t - S
+      if (T == S) continue; // Si la case est vide
+      if (T == 0) { // Si il y a un seul element dans S
+        D[t][S].length = dist(V[n - 1], V[t]);
+        D[t][S].pred = n - 1;
+      } else {
+        double min = DBL_MAX;
+        double new_val;
+        int pred = 0;
+
+        for (int x = 0; x < L; x++) {
+          int Toto = DeleteSet(S, t);
+          if (Toto == T) continue;  // T = S - x
+          new_val = D[x][T].length + dist(V[x], V[t]);
+          if (new_val < min) {
+            min = new_val;
+            pred = x;
+          }
+        }
+        D[t][S].length = min;
+        D[t][S].pred = pred;
+      }
+
+      // Toujours dans la boucle, mais à la fin, lorsque le calcul de la
+      // cellule D[t][S] est fait (c'est-à-dire les valeurs D[t][S].length
+      // et D[t][S].pred correctement calcuées), vous pouvez afficher le
+      // chemin Q obtenu de V[n-1] à V[t] à l'aide d'ExtractPath() puis de
+      // drawPath() comme ci-dessous:
+      //
+      int k = ExtractPath(D, t, S, n, Q);
+      drawPath(V, n, Q, k);
+      //
+      // Ici, c'est la fin des deux boucles. Le calcul de la table est
+      // terminé.
+    }
+  }
 
   //-------------------------------------------------------------
   // Phase 3: Extraction de la tournée optimale.
@@ -145,3 +174,5 @@ double tsp_prog_dyn(point *V, int n, int *Q) {
 
   return w;
 }
+
+// min c'est le min des vm1 a vn
