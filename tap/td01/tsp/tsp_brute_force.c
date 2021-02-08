@@ -21,7 +21,7 @@ double value(point *V, int n, int *P) {
 double tsp_brute_force(point *V, int n, int *Q) {
   int P[n];
   for (int i = 0; i < n; i++) P[i] = i;  // Create the first permutation
-  int bestValue = DBL_MAX;
+  double bestValue = DBL_MAX;
 
   // Test all permutation
   do {
