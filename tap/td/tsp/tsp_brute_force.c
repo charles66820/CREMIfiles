@@ -63,21 +63,14 @@ double tsp_brute_force_opt(point *V, int n, int *Q) {
 
   // Test all permutation
   do {
-    double currentValue = value(V, n, P);
-    // TODO: MaxPermutation if mistake
-    if (currentValue < bestValue) {
-      bestValue = currentValue;
+    int k = 6;
+    double w = n;
+    w = value_opt(V, n, P, w); // currentValue is w
+    if (w < 0) {
+      MaxPermutation(P, n, k); // TODO: k
+    } else if (w < bestValue) { // bestValue is mim
+      bestValue = w;
       memcpy(Q, P, n * sizeof(int));  // copy P in Q
-    }
-    if (false) {
-      printf("Permutation : ");
-      for (int i = 0; i < n; i++) printf("%d ", P[i]);
-      printf("\n");
-      MaxPermutation(P, n, 4);
-
-      printf("Permutation : ");
-      for (int i = 0; i < n; i++) printf("%d ", P[i]);
-      printf("\n");
     }
   } while (NextPermutation(P, n));
 
