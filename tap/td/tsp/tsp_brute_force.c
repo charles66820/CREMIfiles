@@ -63,11 +63,9 @@ double tsp_brute_force_opt(point *V, int n, int *Q) {
 
   // Test all permutation
   do {
-    int k = 6;
-    double w = n;
-    w = value_opt(V, n, P, w); // currentValue is w
+    double w = value_opt(V, n, P, bestValue); // currentValue is w
     if (w < 0) {
-      MaxPermutation(P, n, k); // TODO: k
+      MaxPermutation(P, n, abs(w)); // TODO: bug with k ? or w in value_opt
     } else if (w < bestValue) { // bestValue is mim
       bestValue = w;
       memcpy(Q, P, n * sizeof(int));  // copy P in Q
