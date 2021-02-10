@@ -26,7 +26,7 @@ import java.io.*;
 
 Digit = [[:digit:]]
 Integer = {Digit}+
-Float [-+]?{Integer}"."?{Integer}?([eE][-+]?{Integer})?|"."{Integer}
+Float = {Integer}"."?{Integer}?([eE][-+]?{Integer})?|"."{Integer}
 Letter = [[:letter:]]
 Identifier = {Letter}({Letter}|{Integer})*
 Space = [\t\s]
@@ -170,7 +170,7 @@ Space = [\t\s]
 }
 
 <STRING> {
-  \" { yybegin(YYINITIAL); return symbol(Sym.STRING, string.toString()); }
+  \" { yybegin(YYINITIAL); return token(Sym.STRING, string.toString()); }
   [^\n\r\"\\]+ { string.append( yytext() ); }
   \\t { string.append('\t'); }
   \\n { string.append('\n'); }
