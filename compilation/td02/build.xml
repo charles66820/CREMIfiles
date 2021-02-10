@@ -31,7 +31,9 @@
     ================================= -->
   <target name="main" depends="lexer" description="compilation du projet td2">
     <mkdir dir="${BIN}" />
-    <javac includeantruntime="false" srcdir="${SRC}" destdir="${BIN}"  classpath="${JFLEX_JAR}" debug="off" />
+    <javac includeantruntime="false" srcdir="${SRC}" destdir="${BIN}"  classpath="${JFLEX_JAR}" debug="off">
+      <compilerarg value="-Xlint:deprecation" />
+    </javac>
   </target>
 
   <!-- =================================

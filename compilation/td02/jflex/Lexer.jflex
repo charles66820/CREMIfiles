@@ -28,7 +28,7 @@ Digit = [[:digit:]]
 Integer = {Digit}+
 Float = {Integer}"."?{Integer}?([eE][-+]?{Integer})?|"."{Integer}
 Letter = [[:letter:]]
-Identifier = {Letter}({Letter}|{Integer})*
+Identifier = ({Letter}|_)({Letter}|{Integer}|_)*
 Space = [\t\s]
 
 %%
@@ -99,10 +99,10 @@ Space = [\t\s]
   {Identifier} {return token(Sym.IDENTIFIER, yytext());}
 
   /* Integer */
-  [-+]?{Integer} {return token(Sym.INTEGER, new Integer(yytext()));}
+  [-+]?{Integer} {return token(Sym.INTEGER, Integer.parseInt(yytext()));}
 
   /* Float */
-  {Float} {return token(Sym.NUMBER, new Double(yytext()));}
+  {Float} {return token(Sym.NUMBER, Double.parseDouble(yytext()));}
 
   /* Operators (Attention d'utiliser les doubles quotes pour les caract`eres UTF8) */
   "++" {return token(Sym.INCREMENT);}
@@ -157,16 +157,18 @@ Space = [\t\s]
   /* Comments */
   "//"[^\n]* {}
 
-  //"#include"{Space}\" {yybegin(INCLUDE);}
+  "#include"{Space}(\"|<) {yybegin(INCLUDE);}
 }
 
 <COMMENT> {
   "*/" {yybegin(YYINITIAL);}
+  [^] {}
 }
 
 <COMMENT_DOC> {
   "*/" {yybegin(YYINITIAL);}
   //"@author" {return token(Sym.DOC_AUTHOR);}
+  [^] {}
 }
 
 <STRING> {
@@ -180,5 +182,13 @@ Space = [\t\s]
   \\ { string.append('\\'); }
 }
 
+<INCLUDE> {
+  (\"|>) {yybegin(YYINITIAL);}
+  [^] {}
+}
+
 \n  {}
-[^] {throw new Error("Illegal character <"+yytext()+">");}
+
+{Space} {}
+
+[^] {throw new Error("Illegal character <" + yytext() + "> at " + yyline + ":" + yycolumn);}
