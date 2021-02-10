@@ -12,6 +12,7 @@ public enum Sym {
     DO("Do"),
     DOUBLE("Double"),
     ELSE("Else"),
+    ELSEIF("Elseif"),
     ENUM("Enum"),
     FALSE("False"),
     FLOAT("Float"),
