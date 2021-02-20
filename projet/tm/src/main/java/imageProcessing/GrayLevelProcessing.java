@@ -44,19 +44,29 @@ public class GrayLevelProcessing {
 
         final int iw = (int) img.max(0);
         final int ih = (int) img.max(1);
-        /*
-        for (int d = 0; d < img.numDimensions(); d++) // For support dimention */
+
+        if (img.numDimensions() == 2) // For gray
             for (int x = 0; x <= iw; ++x) {
                 for (int y = 0; y <= ih; ++y) {
                     // Place cursor
                     r.setPosition(x, 0);
                     r.setPosition(y, 1);
-                    /*
-                    r.setPosition(d, 2); //*/
                     final UnsignedByteType val = r.get();
                     val.set(Math.min(val.get() + delta, 255));
                 }
             }
+        else // Colors
+            for (int d = 0; d < img.dimension(2); d++) // For support dimention
+                for (int x = 0; x <= iw; ++x) {
+                    for (int y = 0; y <= ih; ++y) {
+                        // Place cursor
+                        r.setPosition(x, 0);
+                        r.setPosition(y, 1);
+                        r.setPosition(d, 2);
+                        final UnsignedByteType val = r.get();
+                        val.set(Math.min(val.get() + delta, 255));
+                    }
+                }
     }
 
     public static void fillBrightnessImageCursor(Img<UnsignedByteType> img, int delta) {
@@ -231,7 +241,7 @@ public class GrayLevelProcessing {
             final int iw = (int) img.max(0);
             final int ih = (int) img.max(1);
 
-            for (int d = 0; d < img.numDimensions(); d++) {
+            for (int d = 0; d < img.dimension(2); d++) {
                 int[] c = cumulatedColorsHistogramWithLut(img, d);
                 for (int x = 0; x <= iw; ++x) {
                     for (int y = 0; y <= ih; ++y) {
@@ -320,7 +330,7 @@ public class GrayLevelProcessing {
 
         //*
         starTime = System.nanoTime();
-        contrastImage(input, 100, 155);
+        contrastImage(input, 0, 255);
         endTime = System.nanoTime();
         System.out.println("contrastImage with min max (in " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageMinMax", outPath);//*/
