@@ -15,7 +15,9 @@ import java.io.File;
 
 public class GrayLevelProcessing {
 
+    // Fonctionne seulement sur le rouge avec une image couleur car il y a trois canneaux donc il faut partourire les trois image R, G et B
     public static void threshold(Img<UnsignedByteType> img, int t) {
+        // use img.numDimensions() and img.dimension() for fix
         final RandomAccess<UnsignedByteType> r = img.randomAccess();
 
         final int iw = (int) img.max(0);
@@ -35,21 +37,26 @@ public class GrayLevelProcessing {
 
     }
 
+    // Fonctionne seulement sur le rouge avec une image couleur car il y a trois canneaux donc il faut partourire les trois image R, G et B
     public static void fillBrightnessImageRandomAccess(Img<UnsignedByteType> img, int delta) {
+        // use img.numDimensions() and img.dimension() for fix
         final RandomAccess<UnsignedByteType> r = img.randomAccess();
 
         final int iw = (int) img.max(0);
         final int ih = (int) img.max(1);
-
-        for (int x = 0; x <= iw; ++x) {
-            for (int y = 0; y <= ih; ++y) {
-                // Place cursor
-                r.setPosition(x, 0);
-                r.setPosition(y, 1);
-                final UnsignedByteType val = r.get();
-                val.set(Math.min(val.get() + delta, 255));
+        /*
+        for (int d = 0; d < img.numDimensions(); d++) // For support dimention */
+            for (int x = 0; x <= iw; ++x) {
+                for (int y = 0; y <= ih; ++y) {
+                    // Place cursor
+                    r.setPosition(x, 0);
+                    r.setPosition(y, 1);
+                    /*
+                    r.setPosition(d, 2); //*/
+                    final UnsignedByteType val = r.get();
+                    val.set(Math.min(val.get() + delta, 255));
+                }
             }
-        }
     }
 
     public static void fillBrightnessImageCursor(Img<UnsignedByteType> img, int delta) {
@@ -151,6 +158,27 @@ public class GrayLevelProcessing {
         return r;
     }
 
+    // For colors
+    public static int[] histogramComplet(Img<UnsignedByteType> img, int dimension) {
+        int[] r = new int[256];
+
+        final RandomAccess<UnsignedByteType> ri = img.randomAccess();
+
+        final int iw = (int) img.max(0);
+        final int ih = (int) img.max(1);
+        for (int x = 0; x <= iw; ++x) {
+            for (int y = 0; y <= ih; ++y) {
+                // Place cursor
+                ri.setPosition(x, 0);
+                ri.setPosition(y, 1);
+                ri.setPosition(dimension, 2);
+                final UnsignedByteType val = ri.get();
+                r[val.get()]++;
+            }
+        }
+        return r;
+    }
+
     public static int cumulatedHistogram(Img<UnsignedByteType> img, int k) {
         int r = 0;
         for (int i = 0; i < k; i++)
@@ -175,15 +203,47 @@ public class GrayLevelProcessing {
         return rLut;
     }
 
+    // For colors
+    public static int[] cumulatedColorsHistogramWithLut(Img<UnsignedByteType> img, int dimension) {
+        int[] rLut = new int[256];
+        int[] histogramLut = histogramComplet(img, dimension);
+        for (int i = 0; i < 256; i++)
+            for (int j = 0; j < i; j++)
+                rLut[i] += histogramLut[j];
+        return rLut;
+    }
+
+    // Il y a une erreur car on faire l'histogram cumuler sur les 3 canaux au lieu de le faire sur chaque cannaux separement
     public static void contrastImageWithHistogram(Img<UnsignedByteType> img) {
         int N = (int) img.max(0) * (int) img.max(1);
 
-        int[] c = cumulatedHistogramWithLut(img);
-        final Cursor<UnsignedByteType> cursor = img.cursor();
-        while (cursor.hasNext()) {
-            cursor.fwd();
-            final UnsignedByteType val = cursor.get();
-            val.set((c[val.get()] * 255) / N);
+        if (img.numDimensions() == 2) {
+            // Gray
+            int[] c = cumulatedHistogramWithLut(img);
+            final Cursor<UnsignedByteType> cursor = img.cursor();
+            while (cursor.hasNext()) {
+                cursor.fwd();
+                final UnsignedByteType val = cursor.get();
+                val.set((c[val.get()] * 255) / N);
+            }
+        } else { // Colors*/
+            final RandomAccess<UnsignedByteType> ri = img.randomAccess();
+            final int iw = (int) img.max(0);
+            final int ih = (int) img.max(1);
+
+            for (int d = 0; d < img.numDimensions(); d++) {
+                int[] c = cumulatedColorsHistogramWithLut(img, d);
+                for (int x = 0; x <= iw; ++x) {
+                    for (int y = 0; y <= ih; ++y) {
+                        // Place cursor
+                        ri.setPosition(x, 0);
+                        ri.setPosition(y, 1);
+                        ri.setPosition(d, 2);
+                        final UnsignedByteType val = ri.get();
+                        val.set((c[val.get()] * 255) / N);
+                    }
+                }
+            }
         }
     }
 
@@ -260,7 +320,7 @@ public class GrayLevelProcessing {
 
         //*
         starTime = System.nanoTime();
-        contrastImage(input, 0, 255);
+        contrastImage(input, 100, 155);
         endTime = System.nanoTime();
         System.out.println("contrastImage with min max (in " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageMinMax", outPath);//*/
@@ -300,8 +360,6 @@ public class GrayLevelProcessing {
         endTime = System.nanoTime();
         System.out.println("contrastImageWithHistogram with N = 20 (in " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageWithHistogram", outPath);//*/
-
-        input = defautInput.copy(); // Reset input
 
         DebugInfo.showDebugInfo(defautInput, input, histogramComplet(defautInput), histogramComplet(input));
     }

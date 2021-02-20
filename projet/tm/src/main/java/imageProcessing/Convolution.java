@@ -51,6 +51,8 @@ public class Convolution {
      * Question 1.2
      */
     public static void meanFilterWithBorders(final Img<UnsignedByteType> input, final Img<UnsignedByteType> output, int size) {
+        if (input.numDimensions() != 2) return; // Fix for colorised image
+
         final int iw = (int) input.max(0);
         final int ih = (int) input.max(1);
 
@@ -250,6 +252,6 @@ public class Convolution {
         System.out.println("default gauss convolution (in " + (endTime - starTime) + "ns)");
         saveImage(output, "defaultGaussConvolutionWithKernel", outPath);//*/
 
-       DebugInfo.showDebugInfo(input, output, null, null);
+        DebugInfo.showDebugInfo(input, output, null, null);
     }
 }
