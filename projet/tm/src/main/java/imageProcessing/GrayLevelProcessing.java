@@ -296,7 +296,7 @@ public class GrayLevelProcessing {
         starTime = System.nanoTime();
         threshold(input, 128);
         endTime = System.nanoTime();
-        System.out.println("threshold (in " + (endTime - starTime) + "ms)");
+        System.out.println("threshold (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "threshold", outPath);//*/
 
         input = defautInput.copy(); // Reset input
@@ -305,7 +305,7 @@ public class GrayLevelProcessing {
         starTime = System.nanoTime();
         fillBrightnessImageRandomAccess(input, 50);
         endTime = System.nanoTime();
-        System.out.println("fillBrightnessImageRandomAccess (in " + (endTime - starTime) + "ms)");
+        System.out.println("fillBrightnessImageRandomAccess (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "fillBrightnessImageRandomAccess", outPath);//*/
 
         input = defautInput.copy(); // Reset input
@@ -314,7 +314,7 @@ public class GrayLevelProcessing {
         starTime = System.nanoTime();
         fillBrightnessImageCursor(input, 50);
         endTime = System.nanoTime();
-        System.out.println("fillBrightnessImageCursor (in " + (endTime - starTime) + "ms)");
+        System.out.println("fillBrightnessImageCursor (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "fillBrightnessImageCursor", outPath);//*/
 
         input = defautInput.copy(); // Reset input
@@ -323,7 +323,7 @@ public class GrayLevelProcessing {
         starTime = System.nanoTime();
         contrastImage(input);
         endTime = System.nanoTime();
-        System.out.println("contrastImage (in " + (endTime - starTime) + "ns)");
+        System.out.println("contrastImage (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImage", outPath);//*/
 
         input = defautInput.copy(); // Reset input
@@ -332,7 +332,7 @@ public class GrayLevelProcessing {
         starTime = System.nanoTime();
         contrastImage(input, 0, 255);
         endTime = System.nanoTime();
-        System.out.println("contrastImage with min max (in " + (endTime - starTime) + "ns)");
+        System.out.println("contrastImage with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageMinMax", outPath);//*/
 
         input = defautInput.copy(); // Reset input
@@ -341,7 +341,7 @@ public class GrayLevelProcessing {
         starTime = System.nanoTime();
         contrastImageWithLut(input, 0, 255);
         endTime = System.nanoTime();
-        System.out.println("contrastImageWithLut with min max (in " + (endTime - starTime) + "ns)");
+        System.out.println("contrastImageWithLut with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageWithLutMinMax", outPath);//*/
 
         input = defautInput.copy(); // Reset input
@@ -350,25 +350,25 @@ public class GrayLevelProcessing {
         starTime = System.nanoTime();
         int h = histogram(input, 0);
         endTime = System.nanoTime();
-        System.out.println("histogram for 0 is " + h + " (in " + (endTime - starTime) + "ns)");
+        System.out.println("histogram for 0 is " + h + " (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
 //*/
         //*
         starTime = System.nanoTime();
         int hc = cumulatedHistogram(input, 100);
         endTime = System.nanoTime();
-        System.out.println("cumulatedHistogram " + hc + " (in " + (endTime - starTime) + "ns)");
+        System.out.println("cumulatedHistogram " + hc + " (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
 //*/
         //*
         starTime = System.nanoTime();
         int hclut = cumulatedHistogramWithLut(input, 100);
         endTime = System.nanoTime();
-        System.out.println("cumulatedHistogramWithLut " + hclut + " (in " + (endTime - starTime) + "ns)");
+        System.out.println("cumulatedHistogramWithLut " + hclut + " (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
 //*/
         //*
         starTime = System.nanoTime();
         contrastImageWithHistogram(input);
         endTime = System.nanoTime();
-        System.out.println("contrastImageWithHistogram with N = 20 (in " + (endTime - starTime) + "ns)");
+        System.out.println("contrastImageWithHistogram with N = 20 (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageWithHistogram", outPath);//*/
 
         DebugInfo.showDebugInfo(defautInput, input, histogramComplet(defautInput), histogramComplet(input));
