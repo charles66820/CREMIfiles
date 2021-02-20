@@ -138,12 +138,22 @@ public class Convolution {
             final UnsignedByteType sourceValue = sourceCursor.next();
             final UnsignedByteType destValue = destCursor.next();
 
-            int pos = 0;
-            localNeighborhood.getIntPosition(pos);
-
+            int sourceX = sourceCursor.getIntPosition(0);
+            int sourceY = sourceCursor.getIntPosition(1);
             int sum = sourceValue.get();
-            for (final UnsignedByteType value : localNeighborhood)
-                sum += (value.get() * kernel[pos / (kernel.length + 1)][pos % (kernel.length + 1)]);
+
+            Cursor<UnsignedByteType> localNeighborhoodCursor = localNeighborhood.cursor();
+            while(localNeighborhoodCursor.hasNext()) {
+                final UnsignedByteType value = localNeighborhoodCursor.next();
+                int[] pos = new int[localNeighborhoodCursor.numDimensions()];
+                localNeighborhoodCursor.localize(pos);
+
+                int x = pos[0] - (sourceX - size);
+                int y = pos[1] - (sourceY - size);
+
+                sum += (value.get() * kernel[x][y]);
+            }
+
             destValue.set(sum / kernelSum);
         }
     }
