@@ -56,13 +56,13 @@ public class GrayLevelProcessing {
                 }
             }
         else // Colors
-            for (int d = 0; d < img.dimension(2); d++) // For support dimention
+            for (int c = 0; c < img.dimension(2); c++) // For support channels
                 for (int x = 0; x <= iw; ++x) {
                     for (int y = 0; y <= ih; ++y) {
                         // Place cursor
                         r.setPosition(x, 0);
                         r.setPosition(y, 1);
-                        r.setPosition(d, 2);
+                        r.setPosition(c, 2);
                         final UnsignedByteType val = r.get();
                         val.set(Math.min(val.get() + delta, 255));
                     }
@@ -169,7 +169,7 @@ public class GrayLevelProcessing {
     }
 
     // For colors
-    public static int[] histogramComplet(Img<UnsignedByteType> img, int dimension) {
+    public static int[] histogramComplet(Img<UnsignedByteType> img, int chanel) {
         int[] r = new int[256];
 
         final RandomAccess<UnsignedByteType> ri = img.randomAccess();
@@ -181,7 +181,7 @@ public class GrayLevelProcessing {
                 // Place cursor
                 ri.setPosition(x, 0);
                 ri.setPosition(y, 1);
-                ri.setPosition(dimension, 2);
+                ri.setPosition(chanel, 2);
                 final UnsignedByteType val = ri.get();
                 r[val.get()]++;
             }
@@ -214,9 +214,9 @@ public class GrayLevelProcessing {
     }
 
     // For colors
-    public static int[] cumulatedColorsHistogramWithLut(Img<UnsignedByteType> img, int dimension) {
+    public static int[] cumulatedColorsHistogramWithLut(Img<UnsignedByteType> img, int chanel) {
         int[] rLut = new int[256];
-        int[] histogramLut = histogramComplet(img, dimension);
+        int[] histogramLut = histogramComplet(img, chanel);
         for (int i = 0; i < 256; i++)
             for (int j = 0; j < i; j++)
                 rLut[i] += histogramLut[j];
@@ -241,16 +241,16 @@ public class GrayLevelProcessing {
             final int iw = (int) img.max(0);
             final int ih = (int) img.max(1);
 
-            for (int d = 0; d < img.dimension(2); d++) {
-                int[] c = cumulatedColorsHistogramWithLut(img, d);
+            for (int c = 0; c < img.dimension(2); c++) { // c for channels
+                int[] cum = cumulatedColorsHistogramWithLut(img, c);
                 for (int x = 0; x <= iw; ++x) {
                     for (int y = 0; y <= ih; ++y) {
                         // Place cursor
                         ri.setPosition(x, 0);
                         ri.setPosition(y, 1);
-                        ri.setPosition(d, 2);
+                        ri.setPosition(c, 2);
                         final UnsignedByteType val = ri.get();
-                        val.set((c[val.get()] * 255) / N);
+                        val.set((cum[val.get()] * 255) / N);
                     }
                 }
             }
