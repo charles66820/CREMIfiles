@@ -108,14 +108,6 @@ public class Conversion {
             hsv[0] = hue;
             int[] rgb = new int[3];
             hsvToRgb(hsv[0], hsv[1], hsv[2], rgb);
-            /*System.out.println(
-                    "r : " + r.get() +
-                            " g : " + g.get() +
-                            " b : " + b.get() +
-                            " r : " + rgb[0] +
-                            " g : " + rgb[1] +
-                            " b : " + rgb[2]
-            );*/
 
             r.set(rgb[0]);
             g.set(rgb[1]);

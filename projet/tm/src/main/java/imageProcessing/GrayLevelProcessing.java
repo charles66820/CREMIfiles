@@ -105,44 +105,22 @@ public class GrayLevelProcessing {
         }
     }
 
-    public static void contrastImage(Img<UnsignedByteType> img, int resMin, int resMax) {
+    public static void contrastImage(Img<UnsignedByteType> img, int min, int max) {
         final Cursor<UnsignedByteType> cursor = img.cursor();
-
-        int min = 255;
-        int max = 0;
-
-        while (cursor.hasNext()) {
-            cursor.fwd();
-            min = Math.min(cursor.get().get(), min);
-            max = Math.max(cursor.get().get(), max);
-        }
-
-        cursor.reset();
 
         while (cursor.hasNext()) {
             cursor.fwd();
             final UnsignedByteType val = cursor.get();
-            val.set(Math.max(Math.min((255 * (val.get() - min)) / (max - min), resMax), resMin));
+            val.set(Math.max(Math.min((255 * (val.get() - min)) / (max - min), max), min));
         }
     }
 
-    public static void contrastImageWithLut(Img<UnsignedByteType> img, int resMin, int resMax) {
+    public static void contrastImageWithLut(Img<UnsignedByteType> img, int min, int max) {
         final Cursor<UnsignedByteType> cursor = img.cursor();
-
-        int min = 255;
-        int max = 0;
-
-        while (cursor.hasNext()) {
-            cursor.fwd();
-            min = Math.min(cursor.get().get(), min);
-            max = Math.max(cursor.get().get(), max);
-        }
-
-        cursor.reset();
 
         int[] lut = new int[256];
         for (int i = 0; i < 256; i++)
-            lut[i] = Math.max(Math.min((255 * (i - min)) / (max - min), resMax), resMin);
+            lut[i] = Math.max(Math.min((255 * (i - min)) / (max - min), max), min);
 
         while (cursor.hasNext()) {
             cursor.fwd();
@@ -151,51 +129,37 @@ public class GrayLevelProcessing {
         }
     }
 
-    public static void contrastColorM1ImageWithLut(Img<UnsignedByteType> img, int resMin, int resMax) {
+    public static void contrastColorM1ImageWithLut(Img<UnsignedByteType> img, int min, int max) {
 
         Img<UnsignedByteType> grayImg = img.copy();
-        colorToGray(grayImg);
+        colorToGray(img);
 
         final Cursor<UnsignedByteType> cursor = grayImg.cursor();
 
-        int min = 255;
-        int max = 0;
-
-        while (cursor.hasNext()) {
-            cursor.fwd();
-            min = Math.min(cursor.get().get(), min);
-            max = Math.max(cursor.get().get(), max);
-        }
-
-        cursor.reset();
-
         int[] lut = new int[256];
         for (int i = 0; i < 256; i++)
-            lut[i] = Math.max(Math.min((255 * (i - min)) / (max - min), resMax), resMin);
+            lut[i] = Math.max(Math.min((255 * (i - min)) / (max - min), max), min);
 
-        while (cursor.hasNext()) {
+        final IntervalView<UnsignedByteType> cR = Views.hyperSlice(img, 2, 0); // Dimension 2 channel 0 (red)
+        final IntervalView<UnsignedByteType> cG = Views.hyperSlice(img, 2, 1); // Dimension 2 channel 1 (green)
+        final IntervalView<UnsignedByteType> cB = Views.hyperSlice(img, 2, 2); // Dimension 2 channel 2 (blue)
+
+        LoopBuilder.setImages(cR, cG, cB).forEachPixel((r, g, b) -> {
             cursor.fwd();
             final UnsignedByteType val = cursor.get();
-            val.set(lut[val.get()]);
-        }
+
+            r.set(lut[val.get()]);
+            g.set(lut[val.get()]);
+            b.set(lut[val.get()]);
+        });
     }
 
-    public static void contrastColorM2ImageWithLut(Img<UnsignedByteType> img, int resMin, int resMax) {
+    public static void contrastColorM2ImageWithLut(Img<UnsignedByteType> img, int min, int max) {
         final Cursor<UnsignedByteType> cursor = img.cursor();
 
-        int min = 255;
-        int max = 0;
-
-        while (cursor.hasNext()) {
-            cursor.fwd();
-            min = Math.min(cursor.get().get(), min);
-            max = Math.max(cursor.get().get(), max);
-        }
-
-        cursor.reset();
         int[] lut = new int[256];
         for (int i = 0; i < 256; i++)
-            lut[i] = Math.max(Math.min((255 * (i - min)) / (max - min), resMax), resMin);
+            lut[i] = Math.max(Math.min((255 * (i - min)) / (max - min), max), min);
 
         final IntervalView<UnsignedByteType> cR = Views.hyperSlice(img, 2, 0); // Dimension 2 channel 0 (red)
         final IntervalView<UnsignedByteType> cG = Views.hyperSlice(img, 2, 1); // Dimension 2 channel 1 (green)
@@ -504,14 +468,14 @@ public class GrayLevelProcessing {
         starTime = System.nanoTime();
         int hc = cumulatedHistogram(input, 100);
         endTime = System.nanoTime();
-        System.out.println("cumulatedHistogram " + hc + " (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
+        System.out.println("cumulatedHistogram for 100 is " + hc + " (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         //*/
 
         //*
         starTime = System.nanoTime();
         int hclut = cumulatedHistogramWithLut(input, 100);
         endTime = System.nanoTime();
-        System.out.println("cumulatedHistogramWithLut " + hclut + " (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
+        System.out.println("cumulatedHistogramWithLut for 100 is " + hclut + " (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         //*/
 
         //*
