@@ -16,7 +16,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
+import net.imglib2.view.IntervalView;
+import net.imglib2.view.Views;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +50,7 @@ public class DebugInfo extends Application {
 
     @Override
     public void start(Stage stage) {
-        for (ImgResult imgRes : imgResults){
+        for (ImgResult imgRes : imgResults) {
             Stage newStage = new Stage();
             newStage.setTitle(imgRes.title);
             this.newWindows(newStage, imgRes);
@@ -59,19 +62,33 @@ public class DebugInfo extends Application {
         Group root = new Group();
         if (imgRes.imgSrc != null) {
             ImageView imageView = new ImageView(imgRes.imgSrc);
-            imageView.setX(25);
-            imageView.setY(25);
-            imageView.setFitHeight(350);
-            imageView.setFitWidth(250);
+            if (imgRes.imgSrc.getHeight() > imgRes.imgSrc.getWidth()) {
+                imageView.setX(25);
+                imageView.setY(25);
+                imageView.setFitHeight(350);
+                imageView.setFitWidth(250);
+            } else {
+                imageView.setX(25);
+                imageView.setY(25);
+                imageView.setFitHeight(350);
+                imageView.setFitWidth(500);
+            }
             imageView.setPreserveRatio(true);
             root.getChildren().add(imageView);
         }
         if (imgRes.imgDest != null) {
             ImageView imageView1 = new ImageView(imgRes.imgDest);
-            imageView1.setX(300);
-            imageView1.setY(25);
-            imageView1.setFitHeight(350);
-            imageView1.setFitWidth(250);
+            if (imgRes.imgSrc.getHeight() > imgRes.imgSrc.getWidth()) {
+                imageView1.setX(300);
+                imageView1.setY(25);
+                imageView1.setFitHeight(350);
+                imageView1.setFitWidth(250);
+            } else {
+                imageView1.setX(550);
+                imageView1.setY(25);
+                imageView1.setFitHeight(350);
+                imageView1.setFitWidth(500);
+            }
             imageView1.setPreserveRatio(true);
             root.getChildren().add(imageView1);
         }
@@ -122,7 +139,7 @@ public class DebugInfo extends Application {
             root.getChildren().add(vbox2);
         }
 
-        Scene scene = new Scene(root, 575, 600);
+        Scene scene = new Scene(root, 1075, 600);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
@@ -146,19 +163,34 @@ public class DebugInfo extends Application {
 
     private static Image ImgUnsignedByteType2Image(Img<UnsignedByteType> img) {
         if (img == null) return null;
-        final RandomAccess<UnsignedByteType> r = img.randomAccess();
 
         final int iw = (int) img.max(0);
         final int ih = (int) img.max(1);
 
         WritableImage wr = new WritableImage(iw, ih);
         PixelWriter pw = wr.getPixelWriter();
-        for (int x = 0; x < iw; x++)
-            for (int y = 0; y < ih; y++) {
-                r.setPosition(x, 0);
-                r.setPosition(y, 1);
-                pw.setColor(x, y, Color.grayRgb(r.get().get()));
-            }
+
+        final RandomAccess<UnsignedByteType> ra = img.randomAccess();
+        if (img.numDimensions() == 2) {
+            for (int x = 0; x < iw; x++)
+                for (int y = 0; y < ih; y++) {
+                    ra.setPosition(x, 0);
+                    ra.setPosition(y, 1);
+                    pw.setColor(x, y, Color.grayRgb(ra.get().get()));
+                }
+        } else {
+            for (int x = 0; x < iw; x++)
+                for (int y = 0; y < ih; y++) {
+                    int[] rgb = new int[(int) img.dimension(2)];
+                    for (int z = 0; z < img.dimension(2); z++) {
+                        ra.setPosition(x, 0);
+                        ra.setPosition(y, 1);
+                        ra.setPosition(z, 2);
+                        rgb[z] = ra.get().get();
+                    }
+                    pw.setColor(x, y, Color.rgb(rgb[0], rgb[1], rgb[2]));
+                }
+        }
         return new ImageView(wr).getImage();
     }
 

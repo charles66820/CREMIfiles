@@ -166,7 +166,7 @@ public class Conversion {
         System.out.println("colorToGray (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ms)");
         saveImage(input, "colorToGray", outPath);//*/
 
-        DebugInfo.addForDebugInfo("colorToGray", defautInput, input, null, null);
+        DebugInfo.addForDebugInfo("colorToGray", defautInput, input);
         input = defautInput.copy(); // Reset input
 
         //*
@@ -176,7 +176,7 @@ public class Conversion {
         System.out.println("changeHue with 270 (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ms)");
         saveImage(input, "changeHue", outPath);//*/
 
-        DebugInfo.addForDebugInfo("changeHue", defautInput, input, null, null);
+        DebugInfo.addForDebugInfo("changeHue", defautInput, input);
         DebugInfo.showDebugInfo();
     }
 }

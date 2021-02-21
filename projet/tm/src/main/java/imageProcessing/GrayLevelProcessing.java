@@ -397,7 +397,7 @@ public class GrayLevelProcessing {
         System.out.println("threshold (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "threshold", outPath);//*/
 
-        DebugInfo.addForDebugInfo("threshold", defautInput, input, null, null);
+        DebugInfo.addForDebugInfo("threshold", defautInput, input);
         input = defautInput.copy(); // Reset input
 
         //*
@@ -407,7 +407,7 @@ public class GrayLevelProcessing {
         System.out.println("fillBrightnessImageRandomAccess (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "fillBrightnessImageRandomAccess", outPath);//*/
 
-        DebugInfo.addForDebugInfo("fillBrightnessImageRandomAccess", defautInput, input, null, null);
+        DebugInfo.addForDebugInfo("fillBrightnessImageRandomAccess", defautInput, input);
         input = defautInput.copy(); // Reset input
 
         //*
@@ -417,7 +417,7 @@ public class GrayLevelProcessing {
         System.out.println("fillBrightnessImageCursor (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "fillBrightnessImageCursor", outPath);//*/
 
-        DebugInfo.addForDebugInfo("fillBrightnessImageCursor", defautInput, input, null, null);
+        DebugInfo.addForDebugInfo("fillBrightnessImageCursor", defautInput, input);
         input = defautInput.copy(); // Reset input
 
         //*
@@ -427,7 +427,7 @@ public class GrayLevelProcessing {
         System.out.println("contrastImage (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImage", outPath);//*/
 
-        DebugInfo.addForDebugInfo("contrastImage", defautInput, input, null, null);
+        DebugInfo.addForDebugInfo("contrastImage", defautInput, input);
         input = defautInput.copy(); // Reset input
 
         //*
@@ -437,7 +437,7 @@ public class GrayLevelProcessing {
         System.out.println("contrastImage with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageMinMax", outPath);//*/
 
-        DebugInfo.addForDebugInfo("contrastImageMinMax", defautInput, input, null, null);
+        DebugInfo.addForDebugInfo("contrastImageMinMax", defautInput, input);
         input = defautInput.copy(); // Reset input
 
         //*
@@ -447,7 +447,7 @@ public class GrayLevelProcessing {
         System.out.println("contrastImageWithLut with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageWithLutMinMax", outPath);//*/
 
-        DebugInfo.addForDebugInfo("contrastImageWithLutMinMax", defautInput, input, null, null);
+        DebugInfo.addForDebugInfo("contrastImageWithLutMinMax", defautInput, input);
         input = defautInput.copy(); // Reset input
 
         // *
@@ -458,7 +458,7 @@ public class GrayLevelProcessing {
             System.out.println("contrastColorM1ImageWithLut with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
             saveImage(input, "contrastColorM1ImageWithLutMinMax", outPath);
 
-            DebugInfo.addForDebugInfo("contrastColorM1ImageWithLutMinMax", defautInput, input, null, null);
+            DebugInfo.addForDebugInfo("contrastColorM1ImageWithLutMinMax", defautInput, input);
             input = defautInput.copy(); // Reset input
         }//*/
 
@@ -470,7 +470,7 @@ public class GrayLevelProcessing {
             System.out.println("contrastColorM2ImageWithLut with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
             saveImage(input, "contrastColorM2ImageWithLutMinMax", outPath);
 
-            DebugInfo.addForDebugInfo("contrastColorM2ImageWithLutMinMax", defautInput, input, null, null);
+            DebugInfo.addForDebugInfo("contrastColorM2ImageWithLutMinMax", defautInput, input);
             input = defautInput.copy(); // Reset input
         }//*/
 

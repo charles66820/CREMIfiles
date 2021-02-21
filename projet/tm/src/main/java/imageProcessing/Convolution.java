@@ -6,6 +6,7 @@ import net.imglib2.img.array.ArrayImgFactory;
 import io.scif.img.ImgIOException;
 import io.scif.img.ImgOpener;
 import io.scif.img.ImgSaver;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.exception.IncompatibleTypeException;
 
@@ -45,6 +46,16 @@ public class Convolution {
                     }
                 out.get().set(sum / 9);
             }
+
+        if (input.numDimensions() > 2) { // Disable red °~°
+            final IntervalView<UnsignedByteType> cR = Views.hyperSlice(output, 2, 0); // Dimension 2 channel 0 (red)
+            final IntervalView<UnsignedByteType> cG = Views.hyperSlice(output, 2, 1); // Dimension 2 channel 1 (green)
+            final IntervalView<UnsignedByteType> cB = Views.hyperSlice(output, 2, 2); // Dimension 2 channel 2 (blue)
+            LoopBuilder.setImages(cR, cG, cB).forEachPixel((r, g, b) -> {
+                g.set(r.get());
+                b.set(r.get());
+            });
+        }
     }
 
     /**
@@ -114,6 +125,16 @@ public class Convolution {
             for (final UnsignedByteType value : localNeighborhood) sum += value.get();
             destValue.set(sum / (((size * 2) + 1) * ((size * 2) + 1)));
         }
+
+        if (input.numDimensions() > 2) { // Disable red °~°
+            final IntervalView<UnsignedByteType> cR = Views.hyperSlice(output, 2, 0); // Dimension 2 channel 0 (red)
+            final IntervalView<UnsignedByteType> cG = Views.hyperSlice(output, 2, 1); // Dimension 2 channel 1 (green)
+            final IntervalView<UnsignedByteType> cB = Views.hyperSlice(output, 2, 2); // Dimension 2 channel 2 (blue)
+            LoopBuilder.setImages(cR, cG, cB).forEachPixel((r, g, b) -> {
+                g.set(r.get());
+                b.set(r.get());
+            });
+        }
     }
 
     /**
@@ -131,9 +152,6 @@ public class Convolution {
 
         final RectangleShape shape = new RectangleShape(size, true);
 
-        int kernelSum = 0;
-        for (int[] row : kernel) for (int value : row) kernelSum += value;
-
         for (final Neighborhood<UnsignedByteType> localNeighborhood : shape.neighborhoods(source)) {
             final UnsignedByteType sourceValue = sourceCursor.next();
             final UnsignedByteType destValue = destCursor.next();
@@ -143,7 +161,7 @@ public class Convolution {
             int sum = sourceValue.get();
 
             Cursor<UnsignedByteType> localNeighborhoodCursor = localNeighborhood.cursor();
-            while(localNeighborhoodCursor.hasNext()) {
+            while (localNeighborhoodCursor.hasNext()) {
                 final UnsignedByteType value = localNeighborhoodCursor.next();
                 int[] pos = new int[localNeighborhoodCursor.numDimensions()];
                 localNeighborhoodCursor.localize(pos);
@@ -154,7 +172,17 @@ public class Convolution {
                 sum += (value.get() * kernel[x][y]);
             }
 
-            destValue.set(sum / kernelSum);
+            destValue.set(sum / ((2 * size + 1) * (2 * size + 1)));
+        }
+
+        if (input.numDimensions() > 2) { // Disable red °~°
+            final IntervalView<UnsignedByteType> cR = Views.hyperSlice(output, 2, 0); // Dimension 2 channel 0 (red)
+            final IntervalView<UnsignedByteType> cG = Views.hyperSlice(output, 2, 1); // Dimension 2 channel 1 (green)
+            final IntervalView<UnsignedByteType> cB = Views.hyperSlice(output, 2, 2); // Dimension 2 channel 2 (blue)
+            LoopBuilder.setImages(cR, cG, cB).forEachPixel((r, g, b) -> {
+                g.set(r.get());
+                b.set(r.get());
+            });
         }
     }
 
@@ -211,7 +239,7 @@ public class Convolution {
         endTime = System.nanoTime();
         System.out.println("meanFilterSimple (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(output, "meanFilterSimple", outPath);//*/
-        DebugInfo.addForDebugInfo("meanFilterSimple", input, output, null, null);
+        DebugInfo.addForDebugInfo("meanFilterSimple", input, output);
 
         //*
         starTime = System.nanoTime();
@@ -219,7 +247,7 @@ public class Convolution {
         endTime = System.nanoTime();
         System.out.println("meanFilterWithBorders (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(output, "meanFilterWithBorders", outPath);//*/
-        DebugInfo.addForDebugInfo("meanFilterWithBorders", input, output, null, null);
+        DebugInfo.addForDebugInfo("meanFilterWithBorders", input, output);
 
         //*
         starTime = System.nanoTime();
@@ -227,7 +255,7 @@ public class Convolution {
         endTime = System.nanoTime();
         System.out.println("meanFilterWithNeighborhood (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(output, "meanFilterWithNeighborhood", outPath);//*/
-        DebugInfo.addForDebugInfo("meanFilterWithNeighborhood", input, output, null, null);
+        DebugInfo.addForDebugInfo("meanFilterWithNeighborhood", input, output);
 
         int[][] kernelOne = new int[][]{
                 {1, 1, 1, 1, 1},
@@ -250,7 +278,7 @@ public class Convolution {
         endTime = System.nanoTime();
         System.out.println("my gauss convolution with one (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(output, "myGaussConvolutionWithOne", outPath);//*/
-        DebugInfo.addForDebugInfo("myGaussConvolutionWithOne", input, output, null, null);
+        DebugInfo.addForDebugInfo("myGaussConvolutionWithOne", input, output);
 
         //*
         starTime = System.nanoTime();
@@ -258,7 +286,7 @@ public class Convolution {
         endTime = System.nanoTime();
         System.out.println("my gauss convolution (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(output, "myGaussConvolutionWithKernel", outPath);//*/
-        DebugInfo.addForDebugInfo("myGaussConvolutionWithKernel", input, output, null, null);
+        DebugInfo.addForDebugInfo("myGaussConvolutionWithKernel", input, output);
 
         //*
         starTime = System.nanoTime();
@@ -267,7 +295,7 @@ public class Convolution {
         System.out.println("default gauss convolution (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(output, "defaultGaussConvolutionWithKernel", outPath);//*/
 
-        DebugInfo.addForDebugInfo("defaultGaussConvolutionWithKernel", input, output, null, null);
+        DebugInfo.addForDebugInfo("defaultGaussConvolutionWithKernel", input, output);
         DebugInfo.showDebugInfo();
     }
 }
