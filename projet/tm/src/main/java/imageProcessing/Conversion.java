@@ -28,72 +28,72 @@ public class Conversion {
         });
     }
 
-    public static void rgbToHsv(int r, int g, int b, float[] hsv) { // hue (la teinte), saturation, value
-        // Hue
-        float h;
-        float max = Math.max(r, Math.max(g, b));
-        float min = Math.min(r, Math.min(g, b));
-        float chroma = max - min;
-        if (chroma == 0) h = 0;
-        else if (max == r) h = (60 * (((g - b) / chroma) + 360)) % 360;
-        else if (max == g) h = (60 * (((b - r) / chroma) + 120));
-        else h = (60 * (((r - g) / chroma) + 240)); // max == b
-        hsv[0] = h;
+    public static void rgbToHsv(int r, int g, int b, float[] hsv){
+        //HSV 0: t 1: S 2: v
+        float rf = r / 255f;
+        float gf = g / 255f;
+        float bf = b / 255f;
 
-        // Saturation
-        float s;
-        if (max == 0) s = 0;
-        else s = (1f - (min / max));
-        hsv[1] = s;
+        float max = rf;
 
-        // Value
+        if(gf > rf && gf > bf)
+            max = gf;
+        if(bf > rf && bf > gf)
+            max = bf;
+
+        float min = gf;
+
+        if(rf < gf && rf < bf)
+            min = rf;
+        if(bf < rf && bf < gf)
+            min = bf;
+
+        if(max == min){
+            hsv[0] = 0;
+        }else if(max == rf){
+            hsv[0] = (60 * (gf - bf)/(max - min) + 360) % 360;
+        }else if(max == gf){
+            hsv[0] = 60 * (bf -rf)/(max - min) + 120;
+        }else if(max == bf){
+            hsv[0] = 60 * (rf - gf)/(max - min) + 240;
+        }
+
+        hsv[1] = max == 0 ? 0 : 1 - (min/max);
+
         hsv[2] = max;
     }
 
-    public static void hsvToRgb(float h, float s, float v, int[] rgb) {
-        float ti = (float) (Math.floor(h / 60f) % 6f);
-        float f = (h / 60f) - ti;
+    public static void hsvToRgb(float h, float s, float v, int[] rgb){
+        //RGB 0:R 1:G 2:B
+        float chroma = v * s;
+        float hprime = h / 60;
+        float x = chroma * (1 - Math.abs(hprime % 2 - 1));
 
-        float l = v * (1f - s);
-        float m = v * (1f - (f * s));
-        float n = v * (1f - ((1f - f) * s));
+        float r = 0,g = 0,b = 0;
 
-        float r = 0, g = 0, b = 0;
-        switch ((int) ti) {
-            case 0:
-                r = v;
-                g = n;
-                b = l;
-                break;
-            case 1:
-                r = m;
-                g = v;
-                b = l;
-                break;
-            case 2:
-                r = l;
-                g = v;
-                b = n;
-                break;
-            case 3:
-                r = l;
-                g = m;
-                b = v;
-                break;
-            case 4:
-                r = n;
-                g = l;
-                b = v;
-                break;
-            case 5:
-                r = v;
-                g = l;
-                b = m;
+        if(hprime >= 0 && hprime <= 1){
+            r = chroma;
+            g = x;
+        }else if(hprime <= 2){
+            r = x;
+            g = chroma;
+        }else if(hprime <= 3){
+            g = chroma;
+            b = x;
+        }else if(hprime <= 4){
+            g = x;
+            b = chroma;
+        }else if(hprime <= 5){
+            r = x;
+            b = chroma;
+        }else if(hprime <= 6){
+            r = chroma;
+            b = x;
         }
 
-        rgb[0] = (int) r;
-        rgb[1] = (int) g;
-        rgb[2] = (int) b;
+        rgb[0] = Math.round ((r + (v - chroma)) * 255);
+        rgb[1] = Math.round ((g + (v - chroma)) * 255);
+        rgb[2] = Math.round ((b + (v - chroma)) * 255);
     }
 
     public static void changeHue(Img<UnsignedByteType> img, int hue) {
