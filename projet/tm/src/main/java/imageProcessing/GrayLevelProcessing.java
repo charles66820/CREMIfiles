@@ -292,7 +292,6 @@ public class GrayLevelProcessing {
         return rLut;
     }
 
-    // Il y a une erreur car on faire l'histogram cumuler sur les 3 canaux au lieu de le faire sur chaque cannaux separement
     public static void contrastImageWithHistogram(Img<UnsignedByteType> img) {
         int N = (int) img.max(0) * (int) img.max(1);
 
