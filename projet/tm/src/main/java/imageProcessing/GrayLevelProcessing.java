@@ -181,7 +181,7 @@ public class GrayLevelProcessing {
 
     public static void contrastColorM2ImageWithLut(Img<UnsignedByteType> img, int resMin, int resMax) {
         final Cursor<UnsignedByteType> cursor = img.cursor();
-
+        // FIXME: bug here
         int min = 255;
         int max = 0;
 
@@ -331,6 +331,29 @@ public class GrayLevelProcessing {
         }
     }
 
+    public static void contrastColorM1ImageWithHistogram(Img<UnsignedByteType> img) {
+        Img<UnsignedByteType> grayImg = img.copy();
+        colorToGray(grayImg);
+
+        int N = (int) img.max(0) * (int) img.max(1);
+
+        int[] c = cumulatedHistogramWithLut(grayImg);
+
+        final IntervalView<UnsignedByteType> cR = Views.hyperSlice(img, 2, 0); // Dimension 2 channel 0 (red)
+        final IntervalView<UnsignedByteType> cG = Views.hyperSlice(img, 2, 1); // Dimension 2 channel 1 (green)
+        final IntervalView<UnsignedByteType> cB = Views.hyperSlice(img, 2, 2); // Dimension 2 channel 2 (blue)
+
+        LoopBuilder.setImages(cR, cG, cB).forEachPixel((r, g, b) -> {
+            r.set((c[r.get()] * 255) / N);
+            g.set((c[g.get()] * 255) / N);
+            b.set((c[b.get()] * 255) / N);
+        });
+    }
+
+    public static void contrastColorM2ImageWithHistogram(Img<UnsignedByteType> img) {
+        // TODO:
+    }
+
     public static void saveImage(Img<UnsignedByteType> img, String name, String outFolderPath) {
         String outPath = outFolderPath + "/" + name + ".tif";
         File path = new File(outPath);
@@ -466,13 +489,37 @@ public class GrayLevelProcessing {
         System.out.println("contrastImageWithHistogram with N = 20 (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageWithHistogram", outPath);//*/
 
+        input = defautInput.copy(); // Reset input
+
         // *
-        if (input.numDimensions() == 2) {
+        if (input.numDimensions() != 2) {
             starTime = System.nanoTime();
             contrastColorImageWithHistogram(input);
             endTime = System.nanoTime();
             System.out.println("contrastColorImageWithHistogram with N = 20 (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
             saveImage(input, "contrastColorImageWithHistogram", outPath);
+        }//*/
+
+        input = defautInput.copy(); // Reset input
+
+        // *
+        if (input.numDimensions() != 2) {
+            starTime = System.nanoTime();
+            contrastColorM1ImageWithHistogram(input);
+            endTime = System.nanoTime();
+            System.out.println("contrastColorM1ImageWithHistogram with N = 20 (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
+            saveImage(input, "contrastColorM1ImageWithHistogram", outPath);
+        }//*/
+
+        input = defautInput.copy(); // Reset input
+
+        // *
+        if (input.numDimensions() != 2) {
+            starTime = System.nanoTime();
+            contrastColorM2ImageWithHistogram(input);
+            endTime = System.nanoTime();
+            System.out.println("contrastColorM2ImageWithHistogram with N = 20 (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
+            saveImage(input, "contrastColorM2ImageWithHistogram", outPath);
         }//*/
 
         DebugInfo.showDebugInfo(defautInput, input, histogramComplet(defautInput), histogramComplet(input));
