@@ -15,6 +15,7 @@ import net.imglib2.view.Views;
 import utils.DebugInfo;
 
 import java.io.File;
+
 import static imageProcessing.Conversion.colorToGray;
 
 public class GrayLevelProcessing {
@@ -396,6 +397,7 @@ public class GrayLevelProcessing {
         System.out.println("threshold (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "threshold", outPath);//*/
 
+        DebugInfo.addForDebugInfo("threshold", defautInput, input, null, null);
         input = defautInput.copy(); // Reset input
 
         //*
@@ -405,6 +407,7 @@ public class GrayLevelProcessing {
         System.out.println("fillBrightnessImageRandomAccess (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "fillBrightnessImageRandomAccess", outPath);//*/
 
+        DebugInfo.addForDebugInfo("fillBrightnessImageRandomAccess", defautInput, input, null, null);
         input = defautInput.copy(); // Reset input
 
         //*
@@ -414,6 +417,7 @@ public class GrayLevelProcessing {
         System.out.println("fillBrightnessImageCursor (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "fillBrightnessImageCursor", outPath);//*/
 
+        DebugInfo.addForDebugInfo("fillBrightnessImageCursor", defautInput, input, null, null);
         input = defautInput.copy(); // Reset input
 
         //*
@@ -423,6 +427,7 @@ public class GrayLevelProcessing {
         System.out.println("contrastImage (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImage", outPath);//*/
 
+        DebugInfo.addForDebugInfo("contrastImage", defautInput, input, null, null);
         input = defautInput.copy(); // Reset input
 
         //*
@@ -432,6 +437,7 @@ public class GrayLevelProcessing {
         System.out.println("contrastImage with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageMinMax", outPath);//*/
 
+        DebugInfo.addForDebugInfo("contrastImageMinMax", defautInput, input, null, null);
         input = defautInput.copy(); // Reset input
 
         //*
@@ -441,25 +447,32 @@ public class GrayLevelProcessing {
         System.out.println("contrastImageWithLut with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageWithLutMinMax", outPath);//*/
 
+        DebugInfo.addForDebugInfo("contrastImageWithLutMinMax", defautInput, input, null, null);
         input = defautInput.copy(); // Reset input
 
         // *
-        starTime = System.nanoTime();
-        contrastColorM1ImageWithLut(input, 0, 255);
-        endTime = System.nanoTime();
-        System.out.println("contrastColorM1ImageWithLut with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
-        saveImage(input, "contrastColorM1ImageWithLutMinMax", outPath);//*/
+        if (input.numDimensions() != 2) {
+            starTime = System.nanoTime();
+            contrastColorM1ImageWithLut(input, 0, 255);
+            endTime = System.nanoTime();
+            System.out.println("contrastColorM1ImageWithLut with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
+            saveImage(input, "contrastColorM1ImageWithLutMinMax", outPath);
 
-        input = defautInput.copy(); // Reset input
+            DebugInfo.addForDebugInfo("contrastColorM1ImageWithLutMinMax", defautInput, input, null, null);
+            input = defautInput.copy(); // Reset input
+        }//*/
 
         // *
-        starTime = System.nanoTime();
-        contrastColorM2ImageWithLut(input, 0, 255);
-        endTime = System.nanoTime();
-        System.out.println("contrastColorM2ImageWithLut with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
-        saveImage(input, "contrastColorM2ImageWithLutMinMax", outPath);//*/
+        if (input.numDimensions() != 2) {
+            starTime = System.nanoTime();
+            contrastColorM2ImageWithLut(input, 0, 255);
+            endTime = System.nanoTime();
+            System.out.println("contrastColorM2ImageWithLut with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
+            saveImage(input, "contrastColorM2ImageWithLutMinMax", outPath);
 
-        input = defautInput.copy(); // Reset input
+            DebugInfo.addForDebugInfo("contrastColorM2ImageWithLutMinMax", defautInput, input, null, null);
+            input = defautInput.copy(); // Reset input
+        }//*/
 
         //*
         starTime = System.nanoTime();
@@ -489,6 +502,7 @@ public class GrayLevelProcessing {
         System.out.println("contrastImageWithHistogram with N = 20 (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageWithHistogram", outPath);//*/
 
+        DebugInfo.addForDebugInfo("contrastImageWithHistogram", defautInput, input, histogramComplet(defautInput), histogramComplet(input));
         input = defautInput.copy(); // Reset input
 
         // *
@@ -500,6 +514,7 @@ public class GrayLevelProcessing {
             saveImage(input, "contrastColorImageWithHistogram", outPath);
         }//*/
 
+        DebugInfo.addForDebugInfo("contrastColorImageWithHistogram", defautInput, input, histogramComplet(defautInput), histogramComplet(input));
         input = defautInput.copy(); // Reset input
 
         // *
@@ -511,6 +526,7 @@ public class GrayLevelProcessing {
             saveImage(input, "contrastColorM1ImageWithHistogram", outPath);
         }//*/
 
+        DebugInfo.addForDebugInfo("contrastColorM1ImageWithHistogram", defautInput, input, histogramComplet(defautInput), histogramComplet(input));
         input = defautInput.copy(); // Reset input
 
         // *
@@ -522,6 +538,7 @@ public class GrayLevelProcessing {
             saveImage(input, "contrastColorM2ImageWithHistogram", outPath);
         }//*/
 
-        DebugInfo.showDebugInfo(defautInput, input, histogramComplet(defautInput), histogramComplet(input));
+        DebugInfo.addForDebugInfo("contrastColorM2ImageWithHistogram", defautInput, input, histogramComplet(defautInput), histogramComplet(input));
+        DebugInfo.showDebugInfo();
     }
 }

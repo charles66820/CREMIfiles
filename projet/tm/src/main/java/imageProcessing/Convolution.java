@@ -211,6 +211,7 @@ public class Convolution {
         endTime = System.nanoTime();
         System.out.println("meanFilterSimple (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(output, "meanFilterSimple", outPath);//*/
+        DebugInfo.addForDebugInfo("meanFilterSimple", input, output, null, null);
 
         //*
         starTime = System.nanoTime();
@@ -218,6 +219,7 @@ public class Convolution {
         endTime = System.nanoTime();
         System.out.println("meanFilterWithBorders (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(output, "meanFilterWithBorders", outPath);//*/
+        DebugInfo.addForDebugInfo("meanFilterWithBorders", input, output, null, null);
 
         //*
         starTime = System.nanoTime();
@@ -225,6 +227,7 @@ public class Convolution {
         endTime = System.nanoTime();
         System.out.println("meanFilterWithNeighborhood (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(output, "meanFilterWithNeighborhood", outPath);//*/
+        DebugInfo.addForDebugInfo("meanFilterWithNeighborhood", input, output, null, null);
 
         int[][] kernelOne = new int[][]{
                 {1, 1, 1, 1, 1},
@@ -247,6 +250,7 @@ public class Convolution {
         endTime = System.nanoTime();
         System.out.println("my gauss convolution with one (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(output, "myGaussConvolutionWithOne", outPath);//*/
+        DebugInfo.addForDebugInfo("myGaussConvolutionWithOne", input, output, null, null);
 
         //*
         starTime = System.nanoTime();
@@ -254,6 +258,7 @@ public class Convolution {
         endTime = System.nanoTime();
         System.out.println("my gauss convolution (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(output, "myGaussConvolutionWithKernel", outPath);//*/
+        DebugInfo.addForDebugInfo("myGaussConvolutionWithKernel", input, output, null, null);
 
         //*
         starTime = System.nanoTime();
@@ -262,6 +267,7 @@ public class Convolution {
         System.out.println("default gauss convolution (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(output, "defaultGaussConvolutionWithKernel", outPath);//*/
 
-        DebugInfo.showDebugInfo(input, output, null, null);
+        DebugInfo.addForDebugInfo("defaultGaussConvolutionWithKernel", input, output, null, null);
+        DebugInfo.showDebugInfo();
     }
 }

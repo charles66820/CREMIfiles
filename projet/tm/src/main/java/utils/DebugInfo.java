@@ -18,17 +18,47 @@ import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 
+import java.util.LinkedList;
+import java.util.List;
+
+class ImgResult {
+    public final String title;
+    public final Image imgSrc;
+    public final Image imgDest;
+    public final int[] histogramSrc;
+    public final int[] histogramDest;
+
+    public ImgResult(String title, Image imgSrc, Image imgDest, int[] histogramSrc, int[] histogramDest) {
+        this.title = title;
+        this.imgSrc = imgSrc;
+        this.imgDest = imgDest;
+        this.histogramSrc = histogramSrc;
+        this.histogramDest = histogramDest;
+    }
+
+}
+
 public class DebugInfo extends Application {
-    private static Image imgSrc;
-    private static Image imgDest;
-    private static int[] histogramSrc;
-    private static int[] histogramDest;
+    private static final List<ImgResult> imgResults = new LinkedList<>();
+
+    public static void addImgRes(String title, Image imgSrc, Image imgDest, int[] histogramSrc, int[] histogramDest) {
+        imgResults.add(new ImgResult(title, imgSrc, imgDest, histogramSrc, histogramDest));
+    }
 
     @Override
     public void start(Stage stage) {
+        for (ImgResult imgRes : imgResults){
+            Stage newStage = new Stage();
+            newStage.setTitle(imgRes.title);
+            this.newWindows(newStage, imgRes);
+        }
+    }
+
+    public void newWindows(Stage stage, ImgResult imgRes) {
+
         Group root = new Group();
-        if (imgSrc != null) {
-            ImageView imageView = new ImageView(imgSrc);
+        if (imgRes.imgSrc != null) {
+            ImageView imageView = new ImageView(imgRes.imgSrc);
             imageView.setX(25);
             imageView.setY(25);
             imageView.setFitHeight(350);
@@ -36,8 +66,8 @@ public class DebugInfo extends Application {
             imageView.setPreserveRatio(true);
             root.getChildren().add(imageView);
         }
-        if (imgSrc != null) {
-            ImageView imageView1 = new ImageView(imgDest);
+        if (imgRes.imgDest != null) {
+            ImageView imageView1 = new ImageView(imgRes.imgDest);
             imageView1.setX(300);
             imageView1.setY(25);
             imageView1.setFitHeight(350);
@@ -46,7 +76,7 @@ public class DebugInfo extends Application {
             root.getChildren().add(imageView1);
         }
 
-        if (histogramSrc != null) {
+        if (imgRes.histogramSrc != null) {
             VBox vbox1 = new VBox();
             vbox1.setLayoutX(0);
             vbox1.setLayoutY(375);
@@ -63,13 +93,13 @@ public class DebugInfo extends Application {
             final BarChart<String, Number> bc1 = new BarChart<>(xAxis1, yAxis2);
             XYChart.Series<String, Number> histogramSrcChart = new XYChart.Series<>();
             for (int i = 0; i < 256; i++)
-                histogramSrcChart.getData().add(new XYChart.Data<>("" + i, histogramSrc[i]));
+                histogramSrcChart.getData().add(new XYChart.Data<>("" + i, imgRes.histogramSrc[i]));
             bc1.getData().add(histogramSrcChart);
             vbox1.getChildren().add(bc1);
             root.getChildren().add(vbox1);
         }
 
-        if (histogramDest != null) {
+        if (imgRes.histogramDest != null) {
             VBox vbox2 = new VBox();
             vbox2.setLayoutX(280);
             vbox2.setLayoutY(375);
@@ -86,7 +116,7 @@ public class DebugInfo extends Application {
             final BarChart<String, Number> bc2 = new BarChart<>(xAxis2, yAxis2);
             XYChart.Series<String, Number> histogramDestChart = new XYChart.Series<>();
             for (int i = 0; i < 256; i++)
-                histogramDestChart.getData().add(new XYChart.Data<>("" + i, histogramDest[i]));
+                histogramDestChart.getData().add(new XYChart.Data<>("" + i, imgRes.histogramDest[i]));
             bc2.getData().add(histogramDestChart);
             vbox2.getChildren().add(bc2);
             root.getChildren().add(vbox2);
@@ -98,27 +128,24 @@ public class DebugInfo extends Application {
         stage.show();
     }
 
-    public static void showDebugInfo(Img<UnsignedByteType> imgSrc, Img<UnsignedByteType> imgDest, int[] histogramSrc, int[] histogramDest) {
-        if (imgSrc != null) DebugInfo.imgSrc = ImgUnsignedByteType2Image(imgSrc);
-        if (imgDest != null) DebugInfo.imgDest = ImgUnsignedByteType2Image(imgDest);
-        DebugInfo.histogramSrc = histogramSrc;
-        DebugInfo.histogramDest = histogramDest;
-        Application.launch(DebugInfo.class);
+    public static void addForDebugInfo(String title, Img<UnsignedByteType> imgSrc, Img<UnsignedByteType> imgDest, int[] histogramSrc, int[] histogramDest) {
+        addImgRes(title, ImgUnsignedByteType2Image(imgSrc), ImgUnsignedByteType2Image(imgDest), histogramSrc, histogramDest);
     }
 
-    public static void showDebugInfo(Img<UnsignedByteType> imgSrc, Img<UnsignedByteType> imgDest) {
-        showDebugInfo(imgSrc, imgDest, null, null);
+    public static void addForDebugInfo(String title, Img<UnsignedByteType> imgSrc, Img<UnsignedByteType> imgDest) {
+        addForDebugInfo(title, imgSrc, imgDest, null, null);
     }
 
-    public static void showDebugInfo(Img<UnsignedByteType> imgSrc, int[] histogramSrc) {
-        showDebugInfo(imgSrc, null, histogramSrc, null);
+    public static void addForDebugInfo(String title, Img<UnsignedByteType> imgSrc, int[] histogramSrc) {
+        addForDebugInfo(title, imgSrc, null, histogramSrc, null);
     }
 
-    public static void showDebugInfo(Img<UnsignedByteType> imgSrc) {
-        showDebugInfo(imgSrc, null, null, null);
+    public static void addForDebugInfo(String title, Img<UnsignedByteType> imgSrc) {
+        addForDebugInfo(title, imgSrc, null, null, null);
     }
 
     private static Image ImgUnsignedByteType2Image(Img<UnsignedByteType> img) {
+        if (img == null) return null;
         final RandomAccess<UnsignedByteType> r = img.randomAccess();
 
         final int iw = (int) img.max(0);
@@ -133,6 +160,10 @@ public class DebugInfo extends Application {
                 pw.setColor(x, y, Color.grayRgb(r.get().get()));
             }
         return new ImageView(wr).getImage();
+    }
+
+    public static void showDebugInfo() {
+        Application.launch(DebugInfo.class);
     }
 
 }
