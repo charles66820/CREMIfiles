@@ -28,7 +28,7 @@ public class Conversion {
         });
     }
 
-    static void rgbToHsv(int r, int g, int b, float[] hsv) { // hue (la teinte), saturation, value
+    public static void rgbToHsv(int r, int g, int b, float[] hsv) { // hue (la teinte), saturation, value
         // Hue
         float h;
         float max = Math.max(r, Math.max(g, b));
@@ -50,7 +50,7 @@ public class Conversion {
         hsv[2] = max;
     }
 
-    static void hsvToRgb(float h, float s, float v, int[] rgb) {
+    public static void hsvToRgb(float h, float s, float v, int[] rgb) {
         float ti = (float) (Math.floor(h / 60f) % 6f);
         float f = (h / 60f) - ti;
 
@@ -108,6 +108,14 @@ public class Conversion {
             hsv[0] = hue;
             int[] rgb = new int[3];
             hsvToRgb(hsv[0], hsv[1], hsv[2], rgb);
+            /*System.out.println(
+                    "r : " + r.get() +
+                            " g : " + g.get() +
+                            " b : " + b.get() +
+                            " r : " + rgb[0] +
+                            " g : " + rgb[1] +
+                            " b : " + rgb[2]
+            );*/
 
             r.set(rgb[0]);
             g.set(rgb[1]);

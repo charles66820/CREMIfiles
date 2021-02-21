@@ -8,10 +8,14 @@ import net.imglib2.RandomAccess;
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
+import net.imglib2.view.IntervalView;
+import net.imglib2.view.Views;
 import utils.DebugInfo;
 
 import java.io.File;
+import static imageProcessing.Conversion.colorToGray;
 
 public class GrayLevelProcessing {
 
@@ -146,6 +150,76 @@ public class GrayLevelProcessing {
         }
     }
 
+    public static void contrastColorM1ImageWithLut(Img<UnsignedByteType> img, int resMin, int resMax) {
+
+        Img<UnsignedByteType> grayImg = img.copy();
+        colorToGray(grayImg);
+
+        final Cursor<UnsignedByteType> cursor = grayImg.cursor();
+
+        int min = 255;
+        int max = 0;
+
+        while (cursor.hasNext()) {
+            cursor.fwd();
+            min = Math.min(cursor.get().get(), min);
+            max = Math.max(cursor.get().get(), max);
+        }
+
+        cursor.reset();
+
+        int[] lut = new int[256];
+        for (int i = 0; i < 256; i++)
+            lut[i] = Math.max(Math.min((255 * (i - min)) / (max - min), resMax), resMin);
+
+        while (cursor.hasNext()) {
+            cursor.fwd();
+            final UnsignedByteType val = cursor.get();
+            val.set(lut[val.get()]);
+        }
+    }
+
+    public static void contrastColorM2ImageWithLut(Img<UnsignedByteType> img, int resMin, int resMax) {
+        final Cursor<UnsignedByteType> cursor = img.cursor();
+
+        int min = 255;
+        int max = 0;
+
+        while (cursor.hasNext()) {
+            cursor.fwd();
+            min = Math.min(cursor.get().get(), min);
+            max = Math.max(cursor.get().get(), max);
+        }
+
+        cursor.reset();
+        int[] lut = new int[256];
+        for (int i = 0; i < 256; i++)
+            lut[i] = Math.max(Math.min((255 * (i - min)) / (max - min), resMax), resMin);
+
+        while (cursor.hasNext()) {
+            cursor.fwd();
+            final UnsignedByteType val = cursor.get();
+            val.set(lut[val.get()]);
+        }
+
+        final IntervalView<UnsignedByteType> cR = Views.hyperSlice(img, 2, 0); // Dimension 2 channel 0 (red)
+        final IntervalView<UnsignedByteType> cG = Views.hyperSlice(img, 2, 1); // Dimension 2 channel 1 (green)
+        final IntervalView<UnsignedByteType> cB = Views.hyperSlice(img, 2, 2); // Dimension 2 channel 2 (blue)
+
+        LoopBuilder.setImages(cR, cG, cB).forEachPixel((r, g, b) -> {
+            float[] hsv = new float[3];
+            Conversion.rgbToHsv(r.get(), g.get(), b.get(), hsv);
+
+            hsv[2] = lut[(int) hsv[2]];
+            int[] rgb = new int[3];
+            Conversion.hsvToRgb(hsv[0], hsv[1], hsv[2], rgb);
+
+            r.set(rgb[0]);
+            g.set(rgb[1]);
+            b.set(rgb[2]);
+        });
+    }
+
     public static int histogram(Img<UnsignedByteType> img, int k) {
         int r = 0;
         final Cursor<UnsignedByteType> cursor = img.cursor();
@@ -227,31 +301,31 @@ public class GrayLevelProcessing {
     public static void contrastImageWithHistogram(Img<UnsignedByteType> img) {
         int N = (int) img.max(0) * (int) img.max(1);
 
-        if (img.numDimensions() == 2) {
-            // Gray
-            int[] c = cumulatedHistogramWithLut(img);
-            final Cursor<UnsignedByteType> cursor = img.cursor();
-            while (cursor.hasNext()) {
-                cursor.fwd();
-                final UnsignedByteType val = cursor.get();
-                val.set((c[val.get()] * 255) / N);
-            }
-        } else { // Colors*/
-            final RandomAccess<UnsignedByteType> ri = img.randomAccess();
-            final int iw = (int) img.max(0);
-            final int ih = (int) img.max(1);
+        int[] c = cumulatedHistogramWithLut(img);
+        final Cursor<UnsignedByteType> cursor = img.cursor();
+        while (cursor.hasNext()) {
+            cursor.fwd();
+            final UnsignedByteType val = cursor.get();
+            val.set((c[val.get()] * 255) / N);
+        }
+    }
 
-            for (int c = 0; c < img.dimension(2); c++) { // c for channels
-                int[] cum = cumulatedColorsHistogramWithLut(img, c);
-                for (int x = 0; x <= iw; ++x) {
-                    for (int y = 0; y <= ih; ++y) {
-                        // Place cursor
-                        ri.setPosition(x, 0);
-                        ri.setPosition(y, 1);
-                        ri.setPosition(c, 2);
-                        final UnsignedByteType val = ri.get();
-                        val.set((cum[val.get()] * 255) / N);
-                    }
+    public static void contrastColorImageWithHistogram(Img<UnsignedByteType> img) {
+        int N = (int) img.max(0) * (int) img.max(1);
+        final RandomAccess<UnsignedByteType> ri = img.randomAccess();
+        final int iw = (int) img.max(0);
+        final int ih = (int) img.max(1);
+
+        for (int c = 0; c < img.dimension(2); c++) { // c for channels
+            int[] cum = cumulatedColorsHistogramWithLut(img, c);
+            for (int x = 0; x <= iw; ++x) {
+                for (int y = 0; y <= ih; ++y) {
+                    // Place cursor
+                    ri.setPosition(x, 0);
+                    ri.setPosition(y, 1);
+                    ri.setPosition(c, 2);
+                    final UnsignedByteType val = ri.get();
+                    val.set((cum[val.get()] * 255) / N);
                 }
             }
         }
@@ -346,30 +420,60 @@ public class GrayLevelProcessing {
 
         input = defautInput.copy(); // Reset input
 
+        // *
+        starTime = System.nanoTime();
+        contrastColorM1ImageWithLut(input, 0, 255);
+        endTime = System.nanoTime();
+        System.out.println("contrastColorM1ImageWithLut with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
+        saveImage(input, "contrastColorM1ImageWithLutMinMax", outPath);//*/
+
+        input = defautInput.copy(); // Reset input
+
+        // *
+        starTime = System.nanoTime();
+        contrastColorM2ImageWithLut(input, 0, 255);
+        endTime = System.nanoTime();
+        System.out.println("contrastColorM2ImageWithLut with min max (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
+        saveImage(input, "contrastColorM2ImageWithLutMinMax", outPath);//*/
+
+        input = defautInput.copy(); // Reset input
+
         //*
         starTime = System.nanoTime();
         int h = histogram(input, 0);
         endTime = System.nanoTime();
         System.out.println("histogram for 0 is " + h + " (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
-//*/
+        //*/
+
         //*
         starTime = System.nanoTime();
         int hc = cumulatedHistogram(input, 100);
         endTime = System.nanoTime();
         System.out.println("cumulatedHistogram " + hc + " (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
-//*/
+        //*/
+
         //*
         starTime = System.nanoTime();
         int hclut = cumulatedHistogramWithLut(input, 100);
         endTime = System.nanoTime();
         System.out.println("cumulatedHistogramWithLut " + hclut + " (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
-//*/
+        //*/
+
         //*
         starTime = System.nanoTime();
         contrastImageWithHistogram(input);
         endTime = System.nanoTime();
         System.out.println("contrastImageWithHistogram with N = 20 (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
         saveImage(input, "contrastImageWithHistogram", outPath);//*/
+
+        // *
+        if (input.numDimensions() == 2) {
+            starTime = System.nanoTime();
+            contrastColorImageWithHistogram(input);
+            endTime = System.nanoTime();
+            System.out.println("contrastColorImageWithHistogram with N = 20 (in " + ((endTime - starTime) / 1000000) + "ms " + (endTime - starTime) + "ns)");
+            saveImage(input, "contrastColorImageWithHistogram", outPath);
+        }//*/
 
         DebugInfo.showDebugInfo(defautInput, input, histogramComplet(defautInput), histogramComplet(input));
     }
