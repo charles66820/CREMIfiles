@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+#  db:
+#    container_name: db
+#    image: 'mysql:5.7'
+#    env_file:
+#      - .env
+#    volumes:
+#      - './mysql_data:/var/lib/mysql'
+#    ports:
+#      - '3306:3306'
+
+#  phpmyadmin:
+#    depends_on:
+#    - db
+#    container_name: phpmyadmin
+#    image: 'phpmyadmin/phpmyadmin'
+#    environment:
+#      PMA_HOST: 'db'
+
+  web:
+    #depends_on:
+    #  - db
+    container_name: web-tomcat
+    image: tomcat
+    env_file:
+      - .env
+    volumes:
+      - ./target/LoginWebApp-1.war:/usr/local/tomcat/webapps/LoginWebApp-1.war
+    ports:
+      - '8080:8080'
