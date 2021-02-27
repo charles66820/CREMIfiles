@@ -98,7 +98,11 @@ public enum Sym {
     RBRACE("Rbrace"),
     QUESTION("Question"),
     COLON("Colon"),
-    STRING("String");
+    STRING("String"),
+    DOC_AUTHOR("Doc author"),
+    DOC_VERSION("Doc version"),
+    DOC_PARAM("Doc param"),
+    DOC_RETURN("Doc return");
 
     private final String name;
 

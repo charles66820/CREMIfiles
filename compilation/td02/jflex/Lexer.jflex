@@ -167,8 +167,15 @@ Space = [\t\s]
 
 <COMMENT_DOC> {
   "*/" {yybegin(YYINITIAL);}
-  //"@author" {return token(Sym.DOC_AUTHOR);}
+  "@author"[^\n]*"\n" {return token(Sym.DOC_AUTHOR, yytext());}
+  "@version"[^\n]*"\n" {return token(Sym.DOC_VERSION, yytext());}
+  "@param"[^\n]*"\n" {return token(Sym.DOC_PARAM, yytext());}
+  "@return"[^\n]*"\n" {return token(Sym.DOC_RETURN, yytext());}
   [^] {}
+  // 4. Il ne faut pas traite les structures enchˆass´ees de type XML ou LaTex au niveau de l’analyse lexicale,
+  // mais syntaxique car :
+  //  - le XML a une infiniter de nom de balises et d'attributs.
+  //  - le LaTex a un trés grand nombre de commandes et cela nous ferai coder un compilateur LaTex dans le notre.
 }
 
 <STRING> {
