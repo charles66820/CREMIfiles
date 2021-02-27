@@ -1,18 +1,16 @@
 package pdl.backend;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -50,14 +48,18 @@ public class ImageController {
     @RequestMapping(value = "/images/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteImage(@PathVariable("id") long id) {
         Optional<Image> image = imageDao.retrieve(id);
-        image.ifPresent(imageDao::delete);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+
+        if (image.isPresent()) {
+            imageDao.delete(image.get());
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "/images", method = RequestMethod.POST)
     public ResponseEntity<?> addImage(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         if (!Objects.equals(file.getContentType(), MediaType.IMAGE_JPEG.toString()))
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
 
         try {
             Image image = new Image(file.getOriginalFilename(), file.getBytes());
@@ -76,7 +78,7 @@ public class ImageController {
         List<Image> images = imageDao.retrieveAll();
         for (Image image : images) {
             ObjectNode node = mapper.createObjectNode();
-            node.put("id", String.valueOf(image.getId()));
+            node.put("id", image.getId());
             node.put("name", image.getName());
             nodes.add(node);
         }
