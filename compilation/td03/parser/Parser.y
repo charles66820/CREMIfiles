@@ -25,28 +25,21 @@
   }
 }
 
-
-%token a b
-%token YYEOF
-
 // Grammar follows
 %%
 
-str: R {System.out.println("test"); return 0;}
+// My language
+L: R '\n';
 
-R:
-  %empty
-| a R b
+// a^n b^n
+R: //%empty
+  | 'a' R 'b' { /* Code */ };
 
-
-/*
-R: e
-R: a R b
-
-I: if EXPr instr; // reduce
-I: IF EPR insr else insr // shift
-*/
-
+// $$ is vars for value ?
+// $0, $1 ... is for select part ?
+// YYACCEPT or YYABORT
+// yyclearin ?
+// yyerror("msg"); is for print error
 %%
 
 class MyLexer implements Parser.Lexer {
