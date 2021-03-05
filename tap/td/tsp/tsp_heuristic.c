@@ -53,8 +53,28 @@ double tsp_flip(point *V, int n, int *P) {
 double tsp_greedy(point *V, int n, int *P) {
   // La fonction doit renvoyer la valeur de la tournée obtenue. Pensez
   // à initialiser P, par exemple à P[i]=i.
-  ;
-  ;
-  ;
-  return 0.0;
+  bool freePoint[n];
+  for (int i = 0; i < n; i++) {
+    freePoint[i] = true;
+  }
+  freePoint[0] = false;
+
+  P[0] = 0;
+  for (int i = 0; i < n; i++) {
+    int closerFreePoint = 0;
+    double min_dist = DBL_MAX;
+    for (int j = 0; j < n; j++)
+      if (freePoint[j] && j != i) {
+        double new_dist = dist(V[i], V[j]);
+        if (new_dist < min_dist) {
+          min_dist = new_dist;
+          closerFreePoint = j;
+        }
+      }
+    if (i != n - 1) P[i + 1] = closerFreePoint;
+    freePoint[closerFreePoint] = false;
+    drawTour(V, n, P);
+  }
+
+  return value(V, n, P);
 }
