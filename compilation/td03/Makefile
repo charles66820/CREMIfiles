@@ -22,7 +22,10 @@ $(bindir)/Parser.class: $(srcfiles)
 	mkdir -p $(bindir)
 	javac -sourcepath $(srcdir) -d $(bindir) $(srcdir)/Parser.java
 
-parser: $(srcdir)/Parser.java
+parser: $(srcdir)/CustomLexer.java $(srcdir)/Parser.java
+
+$(srcdir)/CustomLexer.java: lexer/CustomLexer.jflex
+	java -jar lib/jflex-full-1.8.2.jar $< -d $(srcdir)
 
 $(srcdir)/Parser.java: parser/Parser.y
 	$(bison) $(bison_options) $< -o $@
