@@ -31,6 +31,7 @@ double tsp_brute_force(point *V, int n, int *Q) {
       bestValue = currentValue;
       memcpy(Q, P, n * sizeof(int));  // copy P in Q
     }
+    drawTour(V, n, P); // Show
   } while (NextPermutation(P, n));
 
   return bestValue;
@@ -70,6 +71,7 @@ double tsp_brute_force_opt(point *V, int n, int *Q) {
       bestValue = w;
       memcpy(Q, P, n * sizeof(int));  // copy P in Q
     }
+    drawTour(V, n, P); // Show
   } while (NextPermutation(P, n));
 
   return bestValue;

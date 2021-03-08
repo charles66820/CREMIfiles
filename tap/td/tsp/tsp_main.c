@@ -1,8 +1,8 @@
 #include "tools.h"
 //#include "tsp_brute_force.h"
 //#include "tsp_prog_dyn.h"
-#include "tsp_heuristic.h"
-//#include "tsp_mst.h"
+//#include "tsp_heuristic.h"
+#include "tsp_mst.h"
 
 int main(int argc, char *argv[]) {
   const int n = (argc >= 2) ? atoi(argv[1]) : 10;
