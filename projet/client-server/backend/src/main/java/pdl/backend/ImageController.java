@@ -64,7 +64,9 @@ public class ImageController {
         try {
             Image image = new Image(file.getOriginalFilename(), file.getBytes());
             imageDao.create(image);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            ObjectNode jsonNode = mapper.createObjectNode();
+            jsonNode.put("id", image.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.valueOf(MediaType.APPLICATION_JSON_UTF8_VALUE)).body(jsonNode);
         } catch (IOException exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
