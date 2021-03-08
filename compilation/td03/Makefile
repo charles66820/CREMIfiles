@@ -30,4 +30,4 @@ $(srcdir)/Parser.java: parser/Parser.y
 clean:
 	rm $(bindir)/* || true
 	rm $(srcdir)/Parser.java || true
-	
+	rm $(srcdir)/CustomLexer.java || true

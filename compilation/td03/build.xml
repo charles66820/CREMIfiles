@@ -7,6 +7,9 @@
 	<property name="src" location="src" />
 	<property name="bin" location="bin" />
 	<property name="parser" location="parser" />
+	<property name="lexer" location="lexer" />
+	<property name="lib" location="lib" />
+	<property name="jflex_jar" location="${lib}/jflex-full-1.8.2.jar" />
 
 	<description>
 		Compilation du projet
@@ -47,7 +50,7 @@
 	<property name="parser.srcfile" value="${parser}/Parser.y" />
 	<property name="parser.targetfile" value="${src}/Parser.java" />
 	<uptodate property="parser.isUpToDate" srcfile="${parser.srcfile}" targetfile="${parser.targetfile}" />
-	<target name="parser" description="Compilation du parseur" unless="parser.isUpToDate">
+	<target name="parser" depends="lexer" description="Compilation du parseur" unless="parser.isUpToDate">
 		<property name="bison" location="/usr/local/bin/bison" />
 
 		<echo message="création par bison du fichier ${parser.targetfile} " />
@@ -57,6 +60,11 @@
 			<arg value="${parser.targetfile}" />
 			<arg value="${parser.srcfile}" />
 		</exec>
+	</target>
+
+	<target name="lexer" description="exécution de JFlex">
+		<taskdef name="jflex" classname="jflex.anttask.JFlexTask" classpath="${jflex_jar}" />
+		<jflex file="${lexer}/CustomLexer.jflex" destdir="${src}" />
 	</target>
 
 </project>

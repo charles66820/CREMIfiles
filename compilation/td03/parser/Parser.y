@@ -16,7 +16,7 @@
 
 %code {
   public static void main(String[] args) throws IOException {
-    Lexer Lexer = new MyLexer(System.in);
+    Lexer Lexer = new CustomLexer(System.in);
     Parser parser = new Parser(Lexer);
     if (!parser.parse()) {
 		System.exit(1);
@@ -41,35 +41,3 @@ R: //%empty
 // yyclearin ?
 // yyerror("msg"); is for print error
 %%
-
-class MyLexer implements Parser.Lexer {
-
-  private StreamTokenizer streamTokenizer;
-
-  public MyLexer (InputStream inputStream) {
-    streamTokenizer = new StreamTokenizer(new InputStreamReader(inputStream));
-    streamTokenizer.resetSyntax();
-    streamTokenizer.eolIsSignificant(true);
-  }
-
-  public void yyerror(String s) {
-    System.err.println(s);
-  }
-
-  public Object getLVal() {
-    // not used
-    return null;
-  }
-
-  public int yylex() throws IOException {
-    int ttype = streamTokenizer.nextToken();
-    switch (ttype) {
-    case StreamTokenizer.TT_EOF:
-      return YYEOF;
-    case StreamTokenizer.TT_EOL:
-      return (int) '\n';
-    default:
-      return ttype;
-    }
-  }
-}
