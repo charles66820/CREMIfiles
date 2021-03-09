@@ -31,10 +31,22 @@ public Object getLVal() {
 %eof}
 
 %%
-"toto" { System.out.println("Toto"); }
+1 { return TRUE; }
+0 { return FALSE; }
 
+p { return P; }
+
+OR { return OR; } // \u2228 ∨
+AND { return AND; } // \u2227 ∧
+NOT { return NOT; } // \u00AC ¬
+
+"(" { return PARB; }
+")" { return PARE; }
+
+/*
 a { return 'a'; }
 b { return 'b'; }
+*/
 
 \n { System.out.println("NewLine"); return '\n'; }
 <<EOF>> { System.out.println("EOF"); return YYEOF;}

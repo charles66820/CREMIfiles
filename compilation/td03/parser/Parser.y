@@ -25,15 +25,27 @@
   }
 }
 
+%token TRUE FALSE P NOT OR AND PARB PARE
 // Grammar follows
 %%
+// Logique propositionnelle
+L: E '\n';
 
+E: P
+ | TRUE
+ | FALSE
+ | E OR E
+ | E AND E
+ | NOT E
+ | PARB E PARE;
+
+/*
 // My language
 L: R '\n';
 
 // a^n b^n
 R: //%empty
-  | 'a' R 'b' { /* Code */ };
+  | 'a' R 'b'; */
 
 // $$ is vars for value ?
 // $0, $1 ... is for select part ?
