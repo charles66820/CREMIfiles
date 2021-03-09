@@ -39,6 +39,12 @@ J'ai implémenter :
 
 ## Run and dev
 
+Install
+
+```bash
+mvn clean install
+```
+
 Run production server
 
 ```bash
