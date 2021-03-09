@@ -51,7 +51,7 @@ public class ImageController {
 
         if (image.isPresent()) {
             imageDao.delete(image.get());
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

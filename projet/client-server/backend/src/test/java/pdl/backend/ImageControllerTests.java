@@ -71,7 +71,7 @@ public class ImageControllerTests {
     @Order(6)
     public void deleteImageShouldReturnSuccess() throws Exception {
         this.mockMvc.perform(delete("/images/0")) // .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
     }
 
     @Test

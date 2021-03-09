@@ -1,30 +1,32 @@
 <template>
-  <section>
-    <h2>Image component for look server images form <code>select</code></h2>
+  <div>
+    <section>
+      <h2>Image component for look server images form <code>select</code></h2>
 
-    <ul>
-      <li v-for="err in errors" :key="err.type">
-        {{ err.message }}
-      </li>
-    </ul>
+      <ul>
+        <li v-for="err in errors" :key="err.type">
+          {{ err.message }}
+        </li>
+      </ul>
 
-    <select v-model="selected" @change="onImageChange($event)">
-      <option disabled selected value>-- select an image --</option>
-      <option v-for="image in images" :key="image.id" :value="image.id">
-        {{ image.name }}
-      </option>
-    </select>
+      <select v-model="selected" @change="onImageChange($event)">
+        <option disabled selected value>-- select an image --</option>
+        <option v-for="image in images" :key="image.id" :value="image.id">
+          {{ image.name }}
+        </option>
+      </select>
 
-    <p>Selected image id is {{ selected }}</p>
-    <img v-if="selected != null" id="previewImage" alt="Images" />
-  </section>
-  <section>
-    <h2>Upload new image</h2>
-    <form v-on:submit="onSubmitImage($event)">
-      <input type="file" ref="image" name="image" />
-      <button type="submit">Submit</button>
-    </form>
-  </section>
+      <p>Selected image id is {{ selected }}</p>
+      <img v-if="selected != null" id="previewImage" alt="Images" />
+    </section>
+    <section>
+      <h2>Upload new image</h2>
+      <form v-on:submit="onSubmitImage($event)">
+        <input type="file" ref="image" name="image" />
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+  </div>
 </template>
 
 <script>
