@@ -25,6 +25,7 @@
   }
 }
 
+%locations
 %token TRUE FALSE P NOT OR AND PARB PARE
 // Grammar follows
 %%

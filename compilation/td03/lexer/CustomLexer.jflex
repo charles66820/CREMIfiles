@@ -4,6 +4,8 @@ import java.io.*;
 
 %public
 %class CustomLexer
+%line
+%column
 %8bit
 
 %implements Parser.Lexer
@@ -11,14 +13,26 @@ import java.io.*;
 %int
 
 %{
-//private StreamTokenizer streamTokenizer;
+private Position startPos;
+private Position endPos;
+
 public CustomLexer (InputStream inputStream) {
   this(new InputStreamReader(inputStream));
 }
 
 @Override
-public void yyerror(String s) {
-  System.err.println(s);
+public Position getStartPos() {
+  return this.startPos;
+}
+
+@Override
+public Position getEndPos() {
+  return this.endPos;
+}
+
+@Override
+public void yyerror(Parser.Location loc, String msg) {
+  System.err.println(msg + " at " + loc);
 }
 
 @Override
@@ -40,8 +54,16 @@ OR { return OR; } // \u2228 ∨
 AND { return AND; } // \u2227 ∧
 NOT { return NOT; } // \u00AC ¬
 
-"(" { return PARB; }
-")" { return PARE; }
+"(" {
+  this.startPos = new Position(yyline, yycolumn);
+  this.endPos = new Position(yyline, yycolumn);
+  return PARB;
+}
+")" {
+  this.endPos = new Position(yyline, yycolumn);
+  if (this.startPos == null) this.startPos = new Position(yyline, yycolumn);
+  return PARE;
+}
 
 /*
 a { return 'a'; }
