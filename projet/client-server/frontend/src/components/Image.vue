@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <h1>{{ msg }}</h1>
+  <section>
+    <h2>Image component for look server images form <code>select</code></h2>
 
-    <!-- @click= -->
+    <ul>
+      <li v-for="err in errors" :key="err.type">
+        {{ err.message }}
+      </li>
+    </ul>
 
     <select v-model="selected" @change="onImageChange($event)">
       <option disabled selected value>-- select an image --</option>
@@ -11,20 +15,16 @@
       </option>
     </select>
 
-    <h3>Selected image id {{ selected }}</h3>
+    <p>Selected image id is {{ selected }}</p>
     <img v-if="selected != null" id="previewImage" alt="Images" />
-
-    <ul>
-      <li v-for="err in errors" :key="err.type">
-        {{ err.message }}
-      </li>
-    </ul>
-
+  </section>
+  <section>
+    <h2>Upload new image</h2>
     <form v-on:submit="onSubmitImage($event)">
       <input type="file" ref="image" name="image" />
       <button type="submit">Submit</button>
     </form>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -56,7 +56,8 @@ export default {
     onSubmitImage(e) {
       // this.$refs.image.files[0] but i prefer the event way
       let file = e.target["image"].files[0];
-      httpApi.postImage(file)
+      httpApi
+        .postImage(file)
         .then((res) => {
           this.images.push({ id: res.data.id, name: file.name });
         })
@@ -66,13 +67,17 @@ export default {
     },
   },
   mounted: function () {
-    httpApi.getImages()
+    httpApi
+      .getImages()
       .then((res) => (this.images = res.data))
       .catch((err) => this.errors.push(err));
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#previewImage {
+  max-height: 50%;
+  max-width: 50%;
+}
 </style>

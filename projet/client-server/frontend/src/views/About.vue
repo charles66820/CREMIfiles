@@ -1,5 +1,13 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <article>
+    <h1>About</h1>
+    <section>
+      <h2>Section 1</h2>
+      <p>This is an about page</p>
+    </section>
+    <section>
+      <h2>Section 2</h2>
+      <p>This is an about page</p>
+    </section>
+  </article>
 </template>
