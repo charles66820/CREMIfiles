@@ -30,6 +30,9 @@
 // Grammar follows
 %%
 // Logique propositionnelle
+T: T L
+  | L;
+
 L: E '\n';
 
 E: P
