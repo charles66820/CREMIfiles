@@ -12,13 +12,14 @@ import java.io.*;
 
 %int
 
+%function yylex
+%yylexthrow java.io.IOException
+
 %{
+private Object lastVal;
+
 private Position startPos;
 private Position endPos;
-
-public CustomLexer (InputStream inputStream) {
-  this(new InputStreamReader(inputStream));
-}
 
 @Override
 public Position getStartPos() {
@@ -32,23 +33,28 @@ public Position getEndPos() {
 
 @Override
 public void yyerror(Parser.Location loc, String msg) {
-  System.err.println(msg + " at " + loc);
+  System.err.println(msg + " start at " + loc.begin + " end at " + loc.end);
 }
 
 @Override
 public Object getLVal() {
-  return null;
+  return lastVal;
 }
 %}
 
 %eof{
 %eof}
 
+Digit = [[:digit:]]
+Integer = {Digit}+
+Float = {Integer}"."?{Integer}?([eE][-+]?{Integer})?|"."{Integer}
+Letter = [[:letter:]]
+Identifier = ({Letter}|_)({Letter}|{Integer}|_)*
+Space = [\t\s]
+
 %%
 1 { return TRUE; }
 0 { return FALSE; }
-
-p { return P; }
 
 OR { return OR; } // \u2228 ∨
 AND { return AND; } // \u2227 ∧
@@ -65,11 +71,8 @@ NOT { return NOT; } // \u00AC ¬
   return PARE;
 }
 
-/*
-a { return 'a'; }
-b { return 'b'; }
-*/
+{Identifier} { lastVal = yytext(); return IDENTIFIER; }
 
-\n { System.out.println("NewLine"); return '\n'; }
+\n { return '\n'; }
 <<EOF>> { System.out.println("EOF"); return YYEOF;}
 [^] {}

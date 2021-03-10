@@ -11,37 +11,35 @@
   import java.io.InputStream;
   import java.io.InputStreamReader;
   import java.io.Reader;
-  import java.io.StreamTokenizer;
 }
 
 %code {
   public static void main(String[] args) throws IOException {
-    Lexer Lexer = new CustomLexer(System.in);
+    Lexer Lexer = new CustomLexer(new InputStreamReader(System.in));
     Parser parser = new Parser(Lexer);
-    if (!parser.parse()) {
-		System.exit(1);
-      }
+    if (!parser.parse()) System.exit(1);
     System.out.println("OK");
   }
 }
 
 %locations
-%token TRUE FALSE P NOT OR AND PARB PARE
+%token TRUE FALSE IDENTIFIER NOT OR AND PARB PARE
 // Grammar follows
 %%
 // Logique propositionnelle
 T: T L
   | L;
 
-L: E '\n';
+L: '\n' { System.out.println("L: NewLine"); }
+ | E '\n' { System.out.println("L: e NewLine"); };
 
-E: P
- | TRUE
- | FALSE
- | E OR E
- | E AND E
- | NOT E
- | PARB E PARE;
+E: IDENTIFIER { System.out.println("e: identifier");}
+ | TRUE { System.out.println("e: true");}
+ | FALSE { System.out.println("e: false");}
+ | E OR E { System.out.println("e: e ∨ e");}
+ | E AND E { System.out.println("e: e ∧ e");}
+ | NOT E { System.out.println("e: ¬e");}
+ | PARB E PARE { System.out.println("e: ( e )");};
 
 /*
 // My language
