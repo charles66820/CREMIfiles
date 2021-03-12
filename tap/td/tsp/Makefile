@@ -20,7 +20,7 @@ all: tsp_main
 
 tsp_main: tools.o $(tsp_objs)
 
-#test_heap: test_heap.o heap.o
+test_heap: test_heap.o heap.o
 
 #a_star: a_star.o tools.o heap.o
 
