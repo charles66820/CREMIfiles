@@ -4,7 +4,7 @@ srcdir = src
 bindir = bin
 
 bison = bison
-bison_options = --report=all
+bison_options = --report=all --report itemsets -Wcex
 
 parserjava = $(srcdir)/Parser.java
 

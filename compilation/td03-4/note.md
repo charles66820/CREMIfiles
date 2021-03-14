@@ -4,6 +4,6 @@
 //%type <Expr> a
 
 I: if EXPR instr; // reduce
-I: IF EXPR insr else insr // shift
+I: IF EXPR instr else instr // shift
 */
 ```
