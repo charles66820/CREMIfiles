@@ -6,7 +6,6 @@ import java.io.*;
 %class CustomLexer
 %line
 %column
-%8bit
 
 %implements Parser.Lexer
 
@@ -56,18 +55,18 @@ Space = [\t\s]
 1 { return TRUE; }
 0 { return FALSE; }
 
-OR { return OR; } // \u2228 ∨
-AND { return AND; } // \u2227 ∧
-NOT { return NOT; } // \u00AC ¬
+OR | \u2228 { return OR; } // ∨
+AND | \u2227 { return AND; } // ∧
+NOT | \u00AC { return NOT; } // ¬
 
 "(" {
-  this.startPos = new Position(yyline, yycolumn);
-  this.endPos = new Position(yyline, yycolumn);
+  this.startPos = new Position(yyline, yycolumn);  // TODO: fix
+  this.endPos = new Position(yyline, yycolumn);  // TODO: fix
   return PARB;
 }
 ")" {
   this.endPos = new Position(yyline, yycolumn);
-  if (this.startPos == null) this.startPos = new Position(yyline, yycolumn);
+  if (this.startPos == null) this.startPos = new Position(yyline, yycolumn); // TODO: fix
   return PARE;
 }
 
