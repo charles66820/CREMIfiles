@@ -1,0 +1,23 @@
+class main {
+	private m: map<integer, integer>;
+
+	private function fib(n: integer): integer {
+		if ((n == "1") || (n == 2))
+			return 1;
+		else {
+			if (m.get(n) == null)
+				m.put(n, fib(n-1) + fib(n-2)); 
+			return m.get(n);
+		}
+	}
+
+	// @Définition de la fonction principale@
+	main(args: list<string>) {
+		i: float;
+		for (i := 1 ; i <= 120 ; i++)
+			writeln(i);
+		foreach i in [1 .. 20]
+			writeln (fib(i));
+	}
+ 
+}

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+    mini project    
+                   
+    usage:
+    		ant parser
+    		ant lexer
+    		ant bin
+    		ant data
+    		ant clean
+	2021/03/13 Lionel 
+====================================================================== -->
+
+<project name="miniproject" default="data">
+    	<property name="src" location="src" />
+	<property name="bin" location="bin" />
+	<property name="lib" location="lib" />
+	<property name="log" location="log" />
+	<property name="log.errorfile" location="${log}/error" />
+	<property name="data" location="data" />
+	<property name="data.inputfile" value="${data}/input-1.lea"/>
+	<property name="data.outputfile" value="${data}/output"/>
+	<property name="parser" location="parser" />
+	<property name="parser.srcfile" value="${parser}/Parser.y"/>
+	<property name="parser.package" value="${src}/fr/ubordeaux/deptinfo/compilation/lea/parser"/>
+	<property name="parser.targetfile" value="${parser.package}/Parser.java"/>
+  	<property name="lexer" location="lexer" />
+  	<property name="lexer.srcfile" value="${lexer}/Lexer.jflex"/>
+  	<property name="lexer.targetfile" value="${parser.package}/Lexer.java"/>
+	<property name="jflex" location="jflex" />
+	<property name="jflex.jar"
+		   location="${lib}/jflex-full-1.8.2.jar" />
+	<property name="bison"
+  	          location="/usr/local/opt/bison/bin/bison"/>
+	<description>
+		Compilation du projet
+	</description>
+
+	<!-- ================================= 
+	= target: dir.bin.check 
+	================================= -->
+	<target name="dir.bin.check">
+		<condition property="dir.bin.exists">
+			<available file="${bin}" type="dir" />
+		</condition>
+	</target>
+
+	<target name="dir.bin.create" depends="dir.bin.check" unless="dir.bin.exists">
+		<echo>Création du répertoire ${bin}"</echo>
+		<mkdir dir="${bin}" />
+	</target>
+
+	<!-- ================================= 
+	= target: dir.log.check 
+	================================= -->
+	<target name="dir.log.check">
+		<condition property="dir.log.exists">
+			<available file="${log}" type="dir" />
+		</condition>
+	</target>
+
+	<target name="dir.log.create" depends="dir.log.check" unless="dir.log.exists">
+		<echo>Création du répertoire ${log}"</echo>
+		<mkdir dir="${log}" />
+	</target>
+
+	
+	<!-- ================================= 
+	= target: data
+	================================= -->
+	<target name="data" depends="bin, dir.log.create" description="Compilation avec miniproject">
+    <java 
+        classname="fr.ubordeaux.deptinfo.compilation.lea.Main"
+        	classpath="${bin}"
+		output="${data.outputfile}"
+		error="${log.errorfile}">
+      <arg value="${data.inputfile}"/>
+    </java>
+	</target>
+	
+	<!-- ================================= 
+	= target: clean
+	================================= -->
+	<target name="clean" description="Clean all compiled files">
+		<delete dir="${bin}"/>
+		<delete>
+      		<fileset dir="${src}" >
+      		    <include name="**/Parser.java" />
+      		    <include name="**/ParserLexer.java" />
+				<include name="**/Parser.output" />
+      		</fileset>
+      	</delete>
+      	<delete>
+      		<fileset dir="${data}" includes="output" />
+      	</delete>
+      	<delete>
+      		<fileset dir="${log}" includes="error" />
+      	</delete>
+	</target>
+	
+		<!-- ================================= 
+	= target: compilation 
+	================================= -->
+	<target name="bin" depends="parser, lexer, dir.bin.create" description="Compilation">
+		<javac includeantruntime="false" srcdir="${src}" destdir="${bin}"
+			debug="on">
+		</javac>
+	</target>
+
+  <!-- =================================
+       target: lexer
+       ================================= -->
+  <uptodate property="lexer.isUpToDate"
+          srcfile="${lexer.srcfile}"
+          targetfile="${lexer.targetfile}"/>
+  <target name="lexer" description="Exécution de JFlex" unless="lexer.isUpToDate">
+    <echo message="création par jflex du fichier ${lexer.targetfile} " />
+    <taskdef name="jflex" classname="jflex.anttask.JFlexTask">
+      <classpath location="${jflex.jar}" />
+    </taskdef>
+    <jflex 
+		file="${lexer.srcfile}" 
+		destdir="${src}"/>
+  </target>
+
+  <!-- ================================= 
+       target: parser              
+       ================================= -->
+  <uptodate property="parser.isUpToDate"
+          srcfile="${parser.srcfile}"
+          targetfile="${parser.targetfile}"/>
+  <target name="parser" description="Compilation du parseur" unless="parser.isUpToDate">
+  	<echo message="création par bison du fichier ${parser.targetfile} " />
+    <exec executable="${bison}">
+  		<arg value="--report"/>
+  		<arg value="itemsets"/>
+  		<arg value="-Wcex"/>
+  				<arg value="-o"/>
+  		<arg value="${parser.targetfile}"/>
+  		<arg value="${parser.srcfile}"/>
+  	</exec>
+  </target>
+
+</project>
