@@ -2,6 +2,7 @@ package pdl.backend;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.Order;
@@ -100,7 +101,7 @@ public class ImageControllerTests {
                 "Hello, World!".getBytes()
         );
 
-        this.mockMvc.perform(MockMvcRequestBuilders.multipart("/images").file(file)) // .andDo(print())
+        this.mockMvc.perform(multipart("/images").file(file)) // .andDo(print())
                 .andExpect(status().isUnsupportedMediaType());
     }
 

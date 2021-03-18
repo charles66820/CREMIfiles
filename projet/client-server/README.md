@@ -4,7 +4,7 @@
 
 ### Backend
 
-J'ai implémenter :
+J'ai implémenté :
 
 - La class `ImageDao`
 - Les route `GET /images/{id}`, `POST /images`, `DELETE /images/{id}` et `GET /images`.
@@ -17,7 +17,7 @@ J'ai implémenter :
   - Pour le test `deleteImageShouldReturnBadRequest` :
     Si le serveur retourne bien le http status code `400` quant l'id est du text ou qu'il est trop grans pour être un long.
 
-Je n'ai eu aucune difficulté à implémenter ces fonctionnalités.
+Je n'ai eu aucune difficulté à implémenté ces fonctionnalités.
 
 ### Frontend
 
@@ -25,7 +25,7 @@ Comme vous pouvez le voir j'ai bien ajouter et modifier tous les `pom.xml`.
 
 J'ai renommé le composent `HelloWorld.vue` en `Image.vue`.
 
-J'ai implémenter :
+J'ai implémenté :
 
 - La liste déroulante qui permet d'afficher l'image sélectionnée.
 - Le formulaire pour déposer une image sur le serveur.
