@@ -45,18 +45,16 @@ void *heap_top(heap h) {
   return h->array[1];
 }
 
-void *heap_pop(heap h) { // FIXME: not sorted
+void *heap_pop(heap h) {
   void *root = heap_top(h);
   if (root == NULL) return NULL;
 
   h->array[1] = h->array[h->n];  // Last to first
-
-  h->array[h->n] = NULL;
   h->n--;
 
   // Re sort
   int pos = 1;
-  while (pos < h->n / 2 &&
+  while (pos <= h->n / 2 &&
          (h->f(h->array[pos * 2], h->array[pos]) < 0 ||
           h->f(h->array[(pos * 2) + 1], h->array[pos]) < 0)) {
     int childPos = (h->f(h->array[pos * 2], h->array[(pos * 2) + 1]) < 0)
@@ -67,7 +65,7 @@ void *heap_pop(heap h) { // FIXME: not sorted
     h->array[pos] = h->array[childPos];
     h->array[childPos] = tmp;
     pos = childPos;
-  };
+  }
 
   return root;
 }
