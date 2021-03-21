@@ -22,12 +22,12 @@ private Position endPos;
 
 @Override
 public Position getStartPos() {
-  return this.startPos;
+  return new Position(yyline, yycolumn);
 }
 
 @Override
 public Position getEndPos() {
-  return this.endPos;
+  return new Position(yyline, yycolumn);
 }
 
 @Override
@@ -71,20 +71,12 @@ OR | \u2228 { return OR; } // ∨
 AND | \u2227 { return AND; } // ∧
 NOT | \u00AC { return NOT; } // ¬
 
-"(" {
-  this.startPos = new Position(yyline, yycolumn);  // TODO: fix
-  this.endPos = new Position(yyline, yycolumn);  // TODO: fix
-  return PARB;
-}
-")" {
-  this.endPos = new Position(yyline, yycolumn);
-  if (this.startPos == null) this.startPos = new Position(yyline, yycolumn); // TODO: fix
-  return PARE;
-}
+"(" { return PARB; }
+")" { return PARE; }
 
 {Identifier} { lastVal = yytext(); return IDENTIFIER; }
-{Integer} { lastVal = yytext(); return INTEGER; }
-{Float} { lastVal = yytext(); return FLOAT; }
+{Integer} { lastVal = new Integer.parseInt(yytext()); return INTEGER; }
+{Float} { lastVal = Double.parseDouble(yytext()); return FLOAT; }
 
 \n { return '\n'; }
 <<EOF>> { System.out.println("EOF"); return YYEOF;}

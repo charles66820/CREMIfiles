@@ -23,18 +23,30 @@
 }
 
 %locations
-%token TRUE FALSE IDENTIFIER INTEGER FLOAT PARB PARE
+%token <boolean> TRUE FALSE
+%token <int> INTEGER
+%token <double> FLOAT
+%token IDENTIFIER PARB PARE
 %token PLUS MULTIPLICATION MINUS DIVISION
 %token LESS LESSTHAN GREATER GREATERTHAN EQUAL NOTEQUAL
 %token AND OR NOT
+
+//%type <Expr> E
+
+// Precedence
+%left PLUS MINUS
+%left MULTIPLICATION DIVISION
+%nonassoc PARB PARE
+
 // Grammar follows
 %%
 // Logique propositionnelle
 T: T L
-  | L;
+ | T error
+ | L;
 
-L: '\n' { System.out.println("NewLine"); }
- | E '\n' { System.out.println("NewLine"); };
+L: '\n'
+ | E '\n';
 
 E: IDENTIFIER
  | INTEGER
