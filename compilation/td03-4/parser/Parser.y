@@ -27,16 +27,23 @@
 %token <int> INTEGER
 %token <double> FLOAT
 %token IDENTIFIER PARB PARE
-%token PLUS MULTIPLICATION MINUS DIVISION
-%token LESS LESSTHAN GREATER GREATERTHAN EQUAL NOTEQUAL
+%token PLUS MULTIPLICATION MINUS DIVISION UMINUS
 %token AND OR NOT
+%token LESS LESSTHAN GREATER GREATERTHAN EQUAL NOTEQUAL
 
 //%type <Expr> E
+%type <Integer> exprArith
+%type <Boolean> exprComp
+%type <Boolean> exprLog
 
 // Precedence
+%left LESS LESSTHAN GREATER GREATERTHAN EQUAL NOTEQUAL
+%precedence OR
+%precedence AND
 %left PLUS MINUS
 %left MULTIPLICATION DIVISION
 %nonassoc PARB PARE
+%right NOT UMINUS
 
 // Grammar follows
 %%
@@ -58,22 +65,23 @@ E: IDENTIFIER
  | exprComp
  | exprLog;
 
-exprArith: E PLUS E
- | E MULTIPLICATION E
- | E MINUS E
- | E DIVISION E;
+exprArith: MINUS exprArith %prec UMINUS { System.out.println("U -");}
+ | E PLUS E { System.out.println("+");}
+ | E MULTIPLICATION E { System.out.println("*");}
+ | E MINUS E { System.out.println("-");}
+ | E DIVISION E { System.out.println("/");};
 
-exprComp: E LESS E
- | E LESSTHAN E
- | E GREATER E
- | E GREATERTHAN E
- | E EQUAL E
- | E NOTEQUAL E;
+exprComp: E LESS E { System.out.println("<");}
+ | E LESSTHAN E { System.out.println("<=");}
+ | E GREATER E { System.out.println(">");}
+ | E GREATERTHAN E { System.out.println(">=");}
+ | E EQUAL E { System.out.println("=");}
+ | E NOTEQUAL E { System.out.println("!=");};
 
 exprLog:
- | E OR E
- | E AND E
- | NOT E;
+ | E OR E { System.out.println("OR");};
+ | E AND E { System.out.println("AND");}
+ | NOT E { System.out.println("NOT");};
 
 /*
 // My language

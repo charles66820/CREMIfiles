@@ -58,6 +58,7 @@ false | 0 { return FALSE; }
 "+" { return PLUS; }
 "*" | \u00D7 { return MULTIPLICATION; } // ×
 - { return MINUS; }
+- { return UMINUS; }
 "/" { return DIVISION; }
 
 "<" { return LESS; }
@@ -75,7 +76,7 @@ NOT | \u00AC { return NOT; } // ¬
 ")" { return PARE; }
 
 {Identifier} { lastVal = yytext(); return IDENTIFIER; }
-{Integer} { lastVal = new Integer.parseInt(yytext()); return INTEGER; }
+{Integer} { lastVal = Integer.parseInt(yytext()); return INTEGER; }
 {Float} { lastVal = Double.parseDouble(yytext()); return FLOAT; }
 
 \n { return '\n'; }
