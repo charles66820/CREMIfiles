@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ public class ImageControllerTests {
     @Test
     @Order(1)
     public void getImageListShouldReturnSuccess() throws Exception {
-        this.mockMvc.perform(get("/images")) // .andDo(print())
+        this.mockMvc.perform(get("/images")).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("[{\"id\":0,\"name\":\"logo.jpg\"}]"))
                 .andExpect(header().exists("Content-Type"))
