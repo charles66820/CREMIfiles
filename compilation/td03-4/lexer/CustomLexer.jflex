@@ -52,21 +52,8 @@ Identifier = ({Letter}|_)({Letter}|{Integer}|_)*
 Space = [\t\s]
 
 %%
-true { return TRUE; }
-false { return FALSE; }
-
-"+" { return PLUS; }
-"*" | \u00D7 { return MULTIPLICATION; } // ×
-- { return MINUS; }
-- { return UMINUS; }
-"/" { return DIVISION; }
-
-"<" { return LESS; }
-"<=" | \u2264 { return LESSTHAN; }
-> { return GREATER; }
->= | \u2267 { return GREATERTHAN; }
-= { return EQUAL; }
-"=/" | \u2260 { return NOTEQUAL; }
+1 { return TRUE; }
+0 { return FALSE; }
 
 OR | \u2228 { return OR; } // ∨
 AND | \u2227 { return AND; } // ∧
@@ -75,9 +62,7 @@ NOT | \u00AC { return NOT; } // ¬
 "(" { return PARB; }
 ")" { return PARE; }
 
-//{Identifier} { lastVal = yytext(); return IDENTIFIER; }
-{Integer} { lastVal = Integer.parseInt(yytext()); return INTEGER; }
-//{Float} { lastVal = Double.parseDouble(yytext()); return FLOAT; }
+{Identifier} { lastVal = yytext(); return IDENTIFIER; }
 
 \n { return '\n'; }
 <<EOF>> { System.out.println("EOF"); return YYEOF;}
