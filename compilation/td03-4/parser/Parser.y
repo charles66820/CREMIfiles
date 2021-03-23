@@ -31,10 +31,10 @@
 %token AND OR NOT
 %token LESS LESSTHAN GREATER GREATERTHAN EQUAL NOTEQUAL
 
-//%type <Expr> E
+%type <Integer> E
 %type <Integer> exprArith
-%type <Boolean> exprComp
-%type <Boolean> exprLog
+//%type <Boolean> exprComp
+//%type <Boolean> exprLog
 
 // Precedence
 %left LESS LESSTHAN GREATER GREATERTHAN EQUAL NOTEQUAL
@@ -53,35 +53,35 @@ T: T L
  | L;
 
 L: '\n'
- | E '\n';
+ | E '\n' { System.out.println($1);};
 
-E: IDENTIFIER
- | INTEGER
- | FLOAT
- | TRUE
- | FALSE
- | PARB E PARE
- | exprArith
- | exprComp
- | exprLog;
+E: //IDENTIFIER
+ INTEGER { System.out.println($1); $$ = $1; }
+ | FLOAT { System.out.println($1); $$ = $1; }
+// | TRUE { System.out.println($1); $$ = true; }
+// | FALSE { System.out.println($1); $$ = false; }
+ | PARB E PARE { System.out.println($2); $$ = $2; }
+ | exprArith;
+// | exprComp
+// | exprLog;
 
-exprArith: MINUS exprArith %prec UMINUS { System.out.println("U -");}
- | E PLUS E { System.out.println("+");}
- | E MULTIPLICATION E { System.out.println("*");}
- | E MINUS E { System.out.println("-");}
- | E DIVISION E { System.out.println("/");};
+exprArith: MINUS exprArith %prec UMINUS { System.out.println("U -"); }
+ | E PLUS E { System.out.println($1 + " + "); $$ = $1 + $3; }
+ | E MULTIPLICATION E { System.out.println("*"); $$ = $1 * $3; }
+ | E MINUS E { System.out.println("-"); $$ = $1 - $3; }
+ | E DIVISION E { System.out.println("/"); $$ = $1 / $3; };
 
-exprComp: E LESS E { System.out.println("<");}
- | E LESSTHAN E { System.out.println("<=");}
- | E GREATER E { System.out.println(">");}
- | E GREATERTHAN E { System.out.println(">=");}
- | E EQUAL E { System.out.println("=");}
- | E NOTEQUAL E { System.out.println("!=");};
+/*exprComp: E LESS E { System.out.println("<"); $$ = $1 < $3; }
+ | E LESSTHAN E { System.out.println("<="); $$ = $1 <= $3; }
+ | E GREATER E { System.out.println(">"); $$ = $1 > $3; }
+ | E GREATERTHAN E { System.out.println(">="); $$ = $1 >= $3; }
+ | E EQUAL E { System.out.println("="); $$ = $1 == $3; }
+ | E NOTEQUAL E { System.out.println("!="); $$ = $1 != $3; };*/
 
-exprLog:
- | E OR E { System.out.println("OR");};
- | E AND E { System.out.println("AND");}
- | NOT E { System.out.println("NOT");};
+/*exprLog:
+ E OR E { System.out.println("OR"); $$ = $1 || $3; }
+ | E AND E { System.out.println("AND"); $$ = $1 && $3; }
+ | NOT E { System.out.println("NOT"); $$ = !$2; };*/
 
 /*
 // My language
@@ -91,8 +91,8 @@ L: R '\n';
 R: //%empty
   | 'a' R 'b'; */
 
-// $$ is vars for value ?
-// $0, $1 ... is for select part ?
+// $$ is return valuer to parent
+// $1, $2, $3 ... is for select right, middle andleft element
 // YYACCEPT or YYABORT
 // yyclearin ?
 // yyerror("msg"); is for print error
