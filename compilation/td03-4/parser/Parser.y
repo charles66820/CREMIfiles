@@ -25,16 +25,15 @@
 %locations
 %token <boolean> TRUE FALSE
 %token <int> INTEGER
-%token <double> FLOAT
-%token IDENTIFIER PARB PARE
+//%token <double> FLOAT
+%token PARB PARE //IDENTIFIER
 %token PLUS MULTIPLICATION MINUS DIVISION UMINUS
 %token AND OR NOT
 %token LESS LESSTHAN GREATER GREATERTHAN EQUAL NOTEQUAL
 
-%type <Integer> E
-%type <Integer> exprArith
-//%type <Boolean> exprComp
-//%type <Boolean> exprLog
+%type <String> E
+%type <Integer> FOC FOA exprArith
+%type <Boolean> FOL exprComp exprLog
 
 // Precedence
 %left LESS LESSTHAN GREATER GREATERTHAN EQUAL NOTEQUAL
@@ -55,33 +54,43 @@ T: T L
 L: '\n'
  | E '\n' { System.out.println($1);};
 
-E: //IDENTIFIER
- INTEGER { System.out.println($1); $$ = $1; }
- | FLOAT { System.out.println($1); $$ = $1; }
-// | TRUE { System.out.println($1); $$ = true; }
-// | FALSE { System.out.println($1); $$ = false; }
- | PARB E PARE { System.out.println($2); $$ = $2; }
- | exprArith;
-// | exprComp
-// | exprLog;
+E: exprArith { System.out.println($1); $$ = String.valueOf($1); }
+ | exprComp { System.out.println($1); $$ = Boolean.toString($1); }
+ | exprLog { System.out.println($1); $$ = Boolean.toString($1); };
 
-exprArith: MINUS exprArith %prec UMINUS { System.out.println("U -"); }
- | E PLUS E { System.out.println($1 + " + "); $$ = $1 + $3; }
- | E MULTIPLICATION E { System.out.println("*"); $$ = $1 * $3; }
- | E MINUS E { System.out.println("-"); $$ = $1 - $3; }
- | E DIVISION E { System.out.println("/"); $$ = $1 / $3; };
+exprArith: MINUS exprArith %prec UMINUS { System.out.println("-" + $2); }
+ | FOA PLUS FOA { System.out.println($1 + " + " + $3); $$ = $1 + $3; }
+ | FOA MULTIPLICATION FOA { System.out.println($1 + " * " + $3); $$ = $1 * $3; }
+ | FOA MINUS FOA { System.out.println($1 + " - " + $3); $$ = $1 - $3; }
+ | FOA DIVISION FOA { System.out.println($1 + " / " + $3); $$ = $1 / $3; };
 
-/*exprComp: E LESS E { System.out.println("<"); $$ = $1 < $3; }
- | E LESSTHAN E { System.out.println("<="); $$ = $1 <= $3; }
- | E GREATER E { System.out.println(">"); $$ = $1 > $3; }
- | E GREATERTHAN E { System.out.println(">="); $$ = $1 >= $3; }
- | E EQUAL E { System.out.println("="); $$ = $1 == $3; }
- | E NOTEQUAL E { System.out.println("!="); $$ = $1 != $3; };*/
+exprComp: FOC LESS FOC { System.out.println($1 + " < " + $3); $$ = $1 < $3; }
+ | FOC LESSTHAN FOC { System.out.println($1 + " <= " + $3); $$ = $1 <= $3; }
+ | FOC GREATER FOC { System.out.println($1 + " > " + $3); $$ = $1 > $3; }
+ | FOC GREATERTHAN FOC { System.out.println($1 + " >= " + $3); $$ = $1 >= $3; }
+ | FOC EQUAL FOC { System.out.println($1 + " = " + $3); $$ = $1 == $3; }
+ | FOC NOTEQUAL FOC { System.out.println($1 + " != " + $3); $$ = $1 != $3; };
 
-/*exprLog:
- E OR E { System.out.println("OR"); $$ = $1 || $3; }
- | E AND E { System.out.println("AND"); $$ = $1 && $3; }
- | NOT E { System.out.println("NOT"); $$ = !$2; };*/
+exprLog: FOL OR FOL { System.out.println($1 + " OR " + $3); $$ = $1 || $3; }
+ | FOL AND FOL { System.out.println($1 + " AND " + $3); $$ = $1 && $3; }
+ | NOT FOL { System.out.println("NOT " + $2); $$ = !$2; };
+
+// Final Operands Arithmetic operations
+FOA: exprArith { $$ = $1; }
+ | INTEGER { $$ = $1; }
+ | PARB FOA PARE { $$ = $2; };
+
+// Final Operands Comparison operations
+FOC: exprArith { $$ = $1; }
+ | INTEGER { $$ = $1; }
+ | PARB FOC PARE { $$ = $2; };
+
+// Final Operands Logical operators
+FOL: exprLog { $$ = $1; }
+ | exprComp { $$ = $1; }
+ | TRUE { $$ = true; }
+ | FALSE { $$ = false; }
+ | PARB FOL PARE { $$ = $2; };
 
 /*
 // My language
@@ -94,6 +103,4 @@ R: //%empty
 // $$ is return valuer to parent
 // $1, $2, $3 ... is for select right, middle andleft element
 // YYACCEPT or YYABORT
-// yyclearin ?
-// yyerror("msg"); is for print error
 %%

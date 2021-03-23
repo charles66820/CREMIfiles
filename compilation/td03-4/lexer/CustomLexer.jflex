@@ -52,8 +52,8 @@ Identifier = ({Letter}|_)({Letter}|{Integer}|_)*
 Space = [\t\s]
 
 %%
-true | 1 { return TRUE; }
-false | 0 { return FALSE; }
+true { return TRUE; }
+false { return FALSE; }
 
 "+" { return PLUS; }
 "*" | \u00D7 { return MULTIPLICATION; } // ×
@@ -75,9 +75,9 @@ NOT | \u00AC { return NOT; } // ¬
 "(" { return PARB; }
 ")" { return PARE; }
 
-{Identifier} { lastVal = yytext(); return IDENTIFIER; }
+//{Identifier} { lastVal = yytext(); return IDENTIFIER; }
 {Integer} { lastVal = Integer.parseInt(yytext()); return INTEGER; }
-{Float} { lastVal = Double.parseDouble(yytext()); return FLOAT; }
+//{Float} { lastVal = Double.parseDouble(yytext()); return FLOAT; }
 
 \n { return '\n'; }
 <<EOF>> { System.out.println("EOF"); return YYEOF;}
