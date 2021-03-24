@@ -57,7 +57,7 @@ L: '\n'
 E: INTEGER { $$ = String.valueOf($1); }
  | TRUE { $$ = "true"; }
  | FALSE { $$ = "false"; }
- | PARB E PARE { $$ = $2; };
+ | PARB E PARE { $$ = $2; }
  | exprArith { System.out.println($1); $$ = String.valueOf($1); }
  | exprComp { System.out.println($1); $$ = Boolean.toString($1); }
  | exprLog { System.out.println($1); $$ = Boolean.toString($1); };
