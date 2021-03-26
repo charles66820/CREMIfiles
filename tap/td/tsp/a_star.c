@@ -142,9 +142,10 @@ double A_star(grid G, heuristic h) {
   start->pos = G.start;
   start->cost = 0;
   start->score = start->cost + h(G.start, G.end, &G);
-  // TODO: here
 
   heap_add(Q, start);
+
+  G.mark[start->pos.x][start->pos.y] = M_FRONT;
 
   while (!heap_empty(Q)) {
     node current = heap_pop(Q);
@@ -161,31 +162,33 @@ double A_star(grid G, heuristic h) {
       return total_path;
     }
 
+    G.mark[current->pos.x][current->pos.y] = M_USED;
+
     // Search paths
     for (int x = -1; x <= 1; x++)
-      for (int y = -1; y <= 1; y++)
-        if (x != 0 && y != 0) {  // all nightbor without middle
-          position neighborPos;
-          neighborPos.x = current->pos.x + x;
-          neighborPos.y = current->pos.y + y;
-
+      for (int y = -1; y <= 1; y++) {
           node neighbor = malloc(sizeof(*neighbor));
+          neighbor->pos.x = current->pos.x + x;
+          neighbor->pos.y = current->pos.y + y;
+
+        if(G.value[neighbor->pos.x][neighbor->pos.y] == V_WALL) continue;
+
           neighbor->cost =
-              weight[G.value[neighborPos.x][neighborPos.y]] + current->cost;
-          neighbor->score = start->cost + h(neighborPos, G.end, &G);
+              weight[G.value[neighbor->pos.x][neighbor->pos.y]] + current->cost;
+          neighbor->score = neighbor->cost + h(neighbor->pos, G.end, &G);
+          neighbor->parent = current;
+
           // if can move
-          if (G.mark[neighborPos.x][neighborPos.y] != M_USED) {
-            if (G.mark[neighborPos.x][neighborPos.y] != M_FRONT) {
+          if (G.mark[neighbor->pos.x][neighbor->pos.y] != M_USED) {
+            if (G.mark[neighbor->pos.x][neighbor->pos.y] != M_FRONT) {
               heap_add(Q, neighbor);
-              G.mark[neighborPos.x][neighborPos.y] = M_FRONT;
-            } else if (neighbor->cost >=
-                       weight[G.value[neighborPos.x][neighborPos.y]])
+              G.mark[neighbor->pos.x][neighbor->pos.y] = M_FRONT;
+            } else/* if (neighbor->cost >=
+                       weight[G.value[neighbor->pos.x][neighbor->pos.y]])*/
               free(neighbor);
-          } /*else {
-            free(neighbor);
-          }*/
+          } else free(neighbor);
         }
-        drawGrid(G);
+    drawGrid(G);
   }
 
   heap_destroy(Q);
