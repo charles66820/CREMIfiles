@@ -167,27 +167,34 @@ double A_star(grid G, heuristic h) {
     // Search paths
     for (int x = -1; x <= 1; x++)
       for (int y = -1; y <= 1; y++) {
-          node neighbor = malloc(sizeof(*neighbor));
-          neighbor->pos.x = current->pos.x + x;
-          neighbor->pos.y = current->pos.y + y;
+        node neighbor = malloc(sizeof(*neighbor));
+        neighbor->pos.x = current->pos.x + x;
+        neighbor->pos.y = current->pos.y + y;
 
-        if(G.value[neighbor->pos.x][neighbor->pos.y] == V_WALL) continue;
-
-          neighbor->cost =
-              weight[G.value[neighbor->pos.x][neighbor->pos.y]] + current->cost;
-          neighbor->score = neighbor->cost + h(neighbor->pos, G.end, &G);
-          neighbor->parent = current;
-
-          // if can move
-          if (G.mark[neighbor->pos.x][neighbor->pos.y] != M_USED) {
-            if (G.mark[neighbor->pos.x][neighbor->pos.y] != M_FRONT) {
-              heap_add(Q, neighbor);
-              G.mark[neighbor->pos.x][neighbor->pos.y] = M_FRONT;
-            } else/* if (neighbor->cost >=
-                       weight[G.value[neighbor->pos.x][neighbor->pos.y]])*/
-              free(neighbor);
-          } else free(neighbor);
+        if (G.value[neighbor->pos.x][neighbor->pos.y] == V_WALL ||
+            positionEqual(neighbor->pos, current->pos)) {
+          free(neighbor);
+          continue;
         }
+
+        neighbor->cost =
+            weight[G.value[neighbor->pos.x][neighbor->pos.y]] + current->cost;
+        neighbor->score = neighbor->cost + h(neighbor->pos, G.end, &G);
+        neighbor->parent = current;
+
+        // if can move
+        if (G.mark[neighbor->pos.x][neighbor->pos.y] != M_USED) {
+          if (G.mark[neighbor->pos.x][neighbor->pos.y] != M_FRONT) {
+            heap_add(Q, neighbor);
+            G.mark[neighbor->pos.x][neighbor->pos.y] = M_FRONT;
+          } else/* if (neighbor->cost >=
+                     weight[G.value[neighbor->pos.x][neighbor->pos.y]])*/
+            free(neighbor);
+        } else free(neighbor);
+
+        /*heap_add(Q, neighbor);
+        G.mark[neighbor->pos.x][neighbor->pos.y] = M_FRONT;*/
+      }
     drawGrid(G);
   }
 
@@ -258,12 +265,23 @@ int main(int argc, char *argv[]) {
 
   // testez différentes grilles ...
 
-  grid G = initGridPoints(80, 60, V_FREE, 1);  // petite grille vide, sans mur
-  // grid G = initGridPoints(width,height,V_FREE,1); // grande grille vide, sans
-  // mur grid G = initGridPoints(32,24,V_WALL,0.2); // petite grille avec
-  // quelques murs grid G = initGridLaby(12,9,8); // petit labyrinthe aléatoire
-  // grid G = initGridLaby(width/8,height/8,3); // grand labyrinthe aléatoire
-  // grid G = initGridFile("mygrid.txt"); // grille à partir d'un fichier
+  // petite grille vide, sans mur
+  // grid G = initGridPoints(80, 60, V_FREE, 1);
+
+  // grande grille vide, sans mur
+  // grid G = initGridPoints(width,height,V_FREE,1);
+
+  // petite grille avec quelques murs
+  // grid G = initGridPoints(32,24,V_WALL,0.2);
+
+  // petit labyrinthe aléatoire
+  grid G = initGridLaby(12, 9, 8);
+
+  // grand labyrinthe aléatoire
+  // grid G = initGridLaby(width/8,height/8,3);
+
+  // grille à partir d'un fichier
+  // grid G = initGridFile("mygrid.txt");
 
   // ajoutez à G une (ou plus) "région" de texture donnée ...
   // (déconseillé pour initGridLaby() et initGridFile())
