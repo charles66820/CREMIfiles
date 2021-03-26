@@ -290,7 +290,7 @@ int main(int argc, char *argv[]) {
   drawGrid(G);        // dessin de la grille avant l'algo
   update = false;     // accélère les dessins répétitifs
 
-  alpha = 0;
+  alpha = 1;
   double d = A_star(G, halpha);  // heuristique: h0, hvo, alpha*hvo
 
   // chemin trouvé ou pas ?
