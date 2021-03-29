@@ -12,4 +12,4 @@ RUN wget http://ftp.gnu.org/gnu/bison/bison-3.7.tar.gz && \
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 
-CMD ["ant"]
+CMD ["make"]
