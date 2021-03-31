@@ -27,13 +27,9 @@ public class Main {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		catch (EnvironmentException e) {
+		catch (EnvironmentException | TypeException e) {
 			System.err.println(e.getMessage());
-		}
-		catch (TypeException e) {
-			System.err.println(e.getMessage());
-		}
-	    finally {
+		} finally {
 	    		System.out.println("*** end compilation");
 	    }
 	}

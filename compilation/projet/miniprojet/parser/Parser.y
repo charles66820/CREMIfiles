@@ -234,7 +234,7 @@ methodDefinition:
 		varEnvironment.put($2, new TypeExpr(TType.FUNCTION, $4, new TypeExpr(TType.VOID)));
 	}
 	';'
-	| determiner specifier "procedure" IDENTIFIER '(' argsDefinition ')' 	
+	| determiner specifier "procedure" IDENTIFIER '(' argsDefinition ')'
 	{
 		varEnvironment.put($4, new TypeExpr(TType.FUNCTION, $6, new TypeExpr(TType.VOID)));
 	}
@@ -244,12 +244,12 @@ methodDefinition:
 		varEnvironment.put($4, new TypeExpr(TType.FUNCTION, $6, new TypeExpr(TType.VOID)));
 	}
 	';'
-	| determiner specifier "function" IDENTIFIER '(' argsDefinition ')' ':' typeExpr  	
+	| determiner specifier "function" IDENTIFIER '(' argsDefinition ')' ':' typeExpr
 	{
 		varEnvironment.put($4, new TypeExpr(TType.FUNCTION, $6, $9));
 	}
 	block
-	| determiner specifier "function" IDENTIFIER '(' argsDefinition ')' ':' typeExpr	
+	| determiner specifier "function" IDENTIFIER '(' argsDefinition ')' ':' typeExpr
 	{
 		varEnvironment.put($4, new TypeExpr(TType.FUNCTION, $6, $9));
 	}
@@ -306,12 +306,12 @@ user_defined_operators:
 	| "*=" 			{$$ = "*=";}
 	| "/=" 			{$$ = "/=";}
 	| "%=" 			{$$ = "%=";}
-	| "||=" 			{$$ = "||=";}
-	| "&&=" 			{$$ = "&&=";}
+	| "||=" 		{$$ = "||=";}
+	| "&&=" 		{$$ = "&&=";}
 	| "&=" 			{$$ = "&=";}
 	| "|=" 			{$$ = "|=";}
-	| "<<=" 			{$$ = "<<=";}
-	| ">>=" 			{$$ = ">>=";}
+	| "<<=" 		{$$ = "<<=";}
+	| ">>=" 		{$$ = ">>=";}
 	| "[]" 			{$$ = "[]";}
 	;
 
@@ -321,40 +321,40 @@ interfaceDefinition:
 	;
 
 typeExpr:
-	"char"											{$$ = new TypeExpr(TType.CHAR);}
-	| "integer"									{$$ = new TypeExpr(TType.INTEGER);}
-	| "float"										{$$ = new TypeExpr(TType.FLOAT);}
-	| "boolean"									{$$ = new TypeExpr(TType.BOOLEAN);}
-	| "string"										{$$ = new TypeExpr(TType.STRING);}
-	| "enum" '<' typeNames '>'						{$$ = new TypeExpr(TType.ENUM, $3);}
-	| "range" '<' typeExpr '>'						{$$ = new TypeExpr(TType.RANGE, $3);}
-	| "list" '<' typeExpr '>'				{$$ = new TypeExpr(TType.LIST, $3);}
-	| "set" '<' typeExpr '>'				{$$ = new TypeExpr(TType.SET, $3);}
-	| "map" '<' typeExpr ',' typeExpr '>'	{$$ = new TypeExpr(TType.MAP, $3, $5);}
-	| typePtrExpr								{$$ = $1;}
+	"char"                                  {$$ = new TypeExpr(TType.CHAR);}
+	| "integer"                             {$$ = new TypeExpr(TType.INTEGER);}
+	| "float"                               {$$ = new TypeExpr(TType.FLOAT);}
+	| "boolean"                             {$$ = new TypeExpr(TType.BOOLEAN);}
+	| "string"                              {$$ = new TypeExpr(TType.STRING);}
+	| "enum" '<' typeNames '>'              {$$ = new TypeExpr(TType.ENUM, $3);}
+	| "range" '<' typeExpr '>'              {$$ = new TypeExpr(TType.RANGE, $3);}
+	| "list" '<' typeExpr '>'               {$$ = new TypeExpr(TType.LIST, $3);}
+	| "set" '<' typeExpr '>'                {$$ = new TypeExpr(TType.SET, $3);}
+	| "map" '<' typeExpr ',' typeExpr '>'   {$$ = new TypeExpr(TType.MAP, $3, $5);}
+	| typePtrExpr                           {$$ = $1;}
 	;
 	
 typePtrExpr:
-	IDENTIFIER '<' typeExprs '>'		{$$ = new TypeExpr(TType.CLASS, $1, $3);}
-	| IDENTIFIER	 						{$$ = new TypeExpr(TType.CLASS, $1, null);}
+	IDENTIFIER '<' typeExprs '>'            {$$ = new TypeExpr(TType.CLASS, $1, $3);}
+	| IDENTIFIER                            {$$ = new TypeExpr(TType.CLASS, $1, null);}
 	;
 	
 typeExprs:
-	typeExprs ',' typeExpr						{$$ = new TypeExpr(TType.PRODUCT, $1, $3);}
-	| typeExpr									{$$ = $1;}
+	typeExprs ',' typeExpr                  {$$ = new TypeExpr(TType.PRODUCT, $1, $3);}
+	| typeExpr                              {$$ = $1;}
 	;
 	
 typeNames:
-	typeNames ',' typeName						{$$ = new TypeExpr(TType.PRODUCT, $1, $3);}
-	| typeName									{$$ = $1;}
+	typeNames ',' typeName                  {$$ = new TypeExpr(TType.PRODUCT, $1, $3);}
+	| typeName                              {$$ = $1;}
 	;
 	
 typeName:
-	IDENTIFIER									{$$ = new TypeExpr(TType.NAME, $1);}
+	IDENTIFIER                              {$$ = new TypeExpr(TType.NAME, $1);}
 	;
 	
 argsDefinition:
-	argsDefinition ',' argDefinition {$$ = new TypeExpr(TType.PRODUCT, $1, $3);}
+	argsDefinition ',' argDefinition       {$$ = new TypeExpr(TType.PRODUCT, $1, $3);}
 	| argDefinition {$$ = $1;}
 	;	
 	
@@ -379,12 +379,12 @@ varDefinition:
 	IDENTIFIER ':' typeExpr ';' {localVarEnvironment.put($1, $3);}
 	;
 	
-stms:
+stms: // Statements
 	stms stm
 	| stm
 	;
 	
-stm:
+stm: // Statement
 	simple_stm ';'
 	| "if" '(' expr ')' stm %prec WITHOUT_ELSE
 	| "if" '(' expr ')' stm "else" stm
@@ -451,43 +451,43 @@ args:
 	;
 	
 constExpr:
-	"null" 										{$$ = new TypeExpr(TType.INTEGER);}
-	| NUMBER_INTEGER 							{$$ = new TypeExpr(TType.INTEGER);}
-	| NUMBER_FLOAT								{$$ = new TypeExpr(TType.FLOAT);}
-	| LITTERAL_CHAR								{$$ = new TypeExpr(TType.CHAR);}
-	| LITTERAL_STRING							{$$ = new TypeExpr(TType.STRING);}
-	| '[' NUMBER_INTEGER DOTS NUMBER_INTEGER ']'	{$$ = new TypeExpr(TType.RANGE);}
+	"null"                                          {$$ = new TypeExpr(TType.INTEGER);}
+	| NUMBER_INTEGER                                {$$ = new TypeExpr(TType.INTEGER);}
+	| NUMBER_FLOAT                                  {$$ = new TypeExpr(TType.FLOAT);}
+	| LITTERAL_CHAR                                 {$$ = new TypeExpr(TType.CHAR);}
+	| LITTERAL_STRING                               {$$ = new TypeExpr(TType.STRING);}
+	| '[' NUMBER_INTEGER DOTS NUMBER_INTEGER ']'    {$$ = new TypeExpr(TType.RANGE);}
 	;
 	
 expr:
-	constExpr 					{$$ = $1;}
-	| assignedVariable			{$$ = $1;}
-	| methodName '(' args ')'	{Type type = $1; if (type != null) $$ = type.getRight(); else $$ = null;}
-	| "new" typePtrExpr '(' args_opt ')'			{$$ = $2;}
-	| expr "&&" expr				{$$ = $1;}
-	| expr "||" expr				{$$ = $1;}
-	| '!' expr					{$$ = $2;}
-	| expr '<' expr				{$$ = new TypeExpr(TType.BOOLEAN);}
-	| expr "<=" expr				{$$ = new TypeExpr(TType.BOOLEAN);}
-	| expr '>' expr				{$$ = new TypeExpr(TType.BOOLEAN);}
-	| expr ">=" expr				{$$ = new TypeExpr(TType.BOOLEAN);}
-	| expr "==" expr				{$$ = new TypeExpr(TType.BOOLEAN);}
-	| expr "!=" expr				{$$ = new TypeExpr(TType.BOOLEAN);}
-	| expr '+' expr 			{$$ = $1;}
-	| expr '-' expr			{$$ = $1;}
-	| '-' expr %prec UMINUS			{$$ = $2;}
-	| expr '*' expr 			{$$ = $1;}
-	| expr '/' expr			{$$ = $1;}
-	| expr '%' expr			{$$ = $1;}
-	| expr "++" 			{$$ = $1;}
-	| expr "--"			{$$ = $1;}
-	| "++" expr %prec LEFTPLUSPLUS			{$$ = $2;}
-	| "--" expr %prec LEFTMINUSMINUS			{$$ = $2;}
-	| expr '&' expr			{$$ = $1;}
-	| expr '|' expr			{$$ = $1;}
-	| expr "<<" expr			{$$ = $1;}
-	| expr ">>" expr			{$$ = $1;}
-	| '(' expr ')'			{$$ = $2;}
+	constExpr                                       {$$ = $1;}
+	| assignedVariable                              {$$ = $1;}
+	| methodName '(' args ')'                       {Type type = $1; if (type != null) $$ = type.getRight(); else $$ = null;}
+	| "new" typePtrExpr '(' args_opt ')'            {$$ = $2;}
+	| expr "&&" expr                                {$$ = $1;}
+	| expr "||" expr                                {$$ = $1;}
+	| '!' expr                                      {$$ = $2;}
+	| expr '<' expr                                 {$$ = new TypeExpr(TType.BOOLEAN);}
+	| expr "<=" expr                                {$$ = new TypeExpr(TType.BOOLEAN);}
+	| expr '>' expr                                 {$$ = new TypeExpr(TType.BOOLEAN);}
+	| expr ">=" expr                                {$$ = new TypeExpr(TType.BOOLEAN);}
+	| expr "==" expr                                {$$ = new TypeExpr(TType.BOOLEAN);}
+	| expr "!=" expr                                {$$ = new TypeExpr(TType.BOOLEAN);}
+	| expr '+' expr                                 {$$ = $1;}
+	| expr '-' expr                                 {$$ = $1;}
+	| '-' expr %prec UMINUS                         {$$ = $2;}
+	| expr '*' expr                                 {$$ = $1;}
+	| expr '/' expr                                 {$$ = $1;}
+	| expr '%' expr                                 {$$ = $1;}
+	| expr "++"                                     {$$ = $1;}
+	| expr "--                                      {$$ = $1;}
+	| "++" expr %prec LEFTPLUSPLUS                  {$$ = $2;}
+	| "--" expr %prec LEFTMINUSMINUS                {$$ = $2;}
+	| expr '&' expr                                 {$$ = $1;}
+	| expr '|' expr                                 {$$ = $1;}
+	| expr "<<" expr                                {$$ = $1;}
+	| expr ">>" expr                                {$$ = $1;}
+	| '(' expr ')'                                  {$$ = $2;}
 	;
 
 args_opt:

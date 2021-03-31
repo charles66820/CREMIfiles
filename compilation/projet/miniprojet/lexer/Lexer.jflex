@@ -88,7 +88,7 @@ import java.io.*;
   public int token(int yytype, Object lVal){
   	this.lVal = lVal;
   	return token(yytype);
-  }
+  }x
 
 %}
 
