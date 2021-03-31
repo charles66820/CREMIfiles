@@ -480,7 +480,7 @@ expr:
 	| expr '/' expr                                 {$$ = $1;}
 	| expr '%' expr                                 {$$ = $1;}
 	| expr "++"                                     {$$ = $1;}
-	| expr "--                                      {$$ = $1;}
+	| expr "--"                                     {$$ = $1;}
 	| "++" expr %prec LEFTPLUSPLUS                  {$$ = $2;}
 	| "--" expr %prec LEFTMINUSMINUS                {$$ = $2;}
 	| expr '&' expr                                 {$$ = $1;}
