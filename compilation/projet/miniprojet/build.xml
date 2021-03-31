@@ -31,7 +31,7 @@
 	<property name="jflex.jar"
 		   location="${lib}/jflex-full-1.8.2.jar" />
 	<property name="bison"
-  	          location="/usr/local/opt/bison/bin/bison"/>
+  	          location="/usr/local/bin/bison"/>
 	<description>
 		Compilation du projet
 	</description>
