@@ -153,8 +153,9 @@ double A_star(grid G, heuristic h) {
   while (!heap_empty(Q)) {
     node current = heap_pop(Q);
 
+    // printf("cur pos : (%d, %d), end pos (%d, %d)\n", current->pos.x, current->pos.y, G.end.x, G.end.y);
     // On goal is reached
-    if (positionEqual(current->pos, G.end)) {
+    if (current->pos.x == G.end.x && current->pos.y == G.end.y) {
       double total_cost = 0;
       node parent = current;  // leaf (end) to start
       while (parent != NULL) {
@@ -180,7 +181,8 @@ double A_star(grid G, heuristic h) {
         }
 
         node neighbor = malloc(sizeof(*neighbor));
-        neighbor->pos = pos;
+        neighbor->pos.x = pos.x;
+        neighbor->pos.y = pos.y;
         neighbor->cost = weight[G.value[pos.x][pos.y]] + current->cost;
         neighbor->score = neighbor->cost + h(neighbor->pos, G.end, &G);
         neighbor->parent = current;
@@ -283,10 +285,10 @@ int main(int argc, char *argv[]) {
   // grid G = initGridPoints(32,24,V_WALL,0.2);
 
   // petit labyrinthe aléatoire
-  grid G = initGridLaby(12, 9, 8);
+  // grid G = initGridLaby(12, 9, 8);
 
   // grand labyrinthe aléatoire
-  // grid G = initGridLaby(width/8,height/8,3);
+  grid G = initGridLaby(width/8,height/8,3);
 
   // grille à partir d'un fichier
   // grid G = initGridFile("mygrid.txt");
@@ -305,9 +307,9 @@ int main(int argc, char *argv[]) {
   // sélectionnez des positions s->t ...
   // (inutile pour initGridLaby() et initGridFile())
 
-  G.start = (position){0.1 * G.X, 0.2 * G.Y},
-  G.end = (position){0.8 * G.X, 0.9 * G.Y};
-  // G.start=randomPosition(G,V_FREE); G.end=randomPosition(G,V_FREE);
+  //G.start = (position){0.1 * G.X, 0.2 * G.Y},
+  //G.end = (position){0.8 * G.X, 0.9 * G.Y};
+  G.start=randomPosition(G,V_FREE); G.end=randomPosition(G,V_FREE);
 
   // constantes à initialiser avant init_SDL_OpenGL()
   scale = fmin((double)width / G.X, (double)height / G.Y);  // zoom courant
