@@ -143,7 +143,10 @@ double A_star(grid G, heuristic h) {
   start->cost = 0;
   start->score = start->cost + h(G.start, G.end, &G);
 
-  heap_add(Q, start);
+  if (heap_add(Q, start)) {
+    fprintf (stderr, "Not enough space in heap!\n");
+    exit (EXIT_FAILURE);
+  }
 
   G.mark[start->pos.x][start->pos.y] = M_FRONT;
 
@@ -152,48 +155,53 @@ double A_star(grid G, heuristic h) {
 
     // On goal is reached
     if (positionEqual(current->pos, G.end)) {
-      double total_path = 0;
+      double total_cost = 0;
       node parent = current;  // leaf (end) to start
       while (parent != NULL) {
         G.mark[parent->pos.x][parent->pos.y] = M_PATH;
-        total_path += parent->score;
+        total_cost += parent->cost;
         parent = parent->parent;
       }
-      return total_path;
+      return total_cost;
     }
+
+    if (G.mark[current->pos.x][current->pos.y] == M_USED)
+      continue;
 
     G.mark[current->pos.x][current->pos.y] = M_USED;
 
     // Search paths
     for (int x = -1; x <= 1; x++)
       for (int y = -1; y <= 1; y++) {
-        node neighbor = malloc(sizeof(*neighbor));
-        neighbor->pos.x = current->pos.x + x;
-        neighbor->pos.y = current->pos.y + y;
+        position pos = {current->pos.x + x, current->pos.y + y};
 
-        if (G.value[neighbor->pos.x][neighbor->pos.y] == V_WALL ||
-            positionEqual(neighbor->pos, current->pos)) {
-          free(neighbor);
+        if (G.value[pos.x][pos.y] == V_WALL || G.mark[pos.x][pos.y] == M_USED) {
           continue;
         }
 
-        neighbor->cost =
-            weight[G.value[neighbor->pos.x][neighbor->pos.y]] + current->cost;
+        node neighbor = malloc(sizeof(*neighbor));
+        neighbor->pos = pos;
+        neighbor->cost = weight[G.value[pos.x][pos.y]] + current->cost;
         neighbor->score = neighbor->cost + h(neighbor->pos, G.end, &G);
         neighbor->parent = current;
 
+        /* // v2
         // if can move
         if (G.mark[neighbor->pos.x][neighbor->pos.y] != M_USED) {
           if (G.mark[neighbor->pos.x][neighbor->pos.y] != M_FRONT) {
             heap_add(Q, neighbor);
             G.mark[neighbor->pos.x][neighbor->pos.y] = M_FRONT;
-          } else/* if (neighbor->cost >=
-                     weight[G.value[neighbor->pos.x][neighbor->pos.y]])*/
-            free(neighbor);
+          } else free(neighbor);
         } else free(neighbor);
+        */
 
-        /*heap_add(Q, neighbor);
-        G.mark[neighbor->pos.x][neighbor->pos.y] = M_FRONT;*/
+        // v3
+        if (heap_add(Q, neighbor)) {
+          fprintf (stderr, "Not enough space in heap!\n");
+          exit (EXIT_FAILURE);
+        }
+
+        G.mark[neighbor->pos.x][neighbor->pos.y] = M_FRONT;
       }
     drawGrid(G);
   }
