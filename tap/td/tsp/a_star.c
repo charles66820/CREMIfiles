@@ -29,6 +29,7 @@ typedef struct node {
   double cost;          // coût[u]
   double score;         // score[u] = coût[u] + h(u,end)
   struct node *parent;  // parent[u] = pointeur vers le père, NULL pour start
+  int source;
 } * node;
 
 // Les arêtes, connectant les 8 cases voisines de la grille, sont
@@ -144,8 +145,8 @@ double A_star(grid G, heuristic h) {
   start->score = start->cost + h(G.start, G.end, &G);
 
   if (heap_add(Q, start)) {
-    fprintf (stderr, "Not enough space in heap!\n");
-    exit (EXIT_FAILURE);
+    fprintf(stderr, "Not enough space in heap!\n");
+    exit(EXIT_FAILURE);
   }
 
   G.mark[start->pos.x][start->pos.y] = M_FRONT;
@@ -153,9 +154,8 @@ double A_star(grid G, heuristic h) {
   while (!heap_empty(Q)) {
     node current = heap_pop(Q);
 
-    // printf("cur pos : (%d, %d), end pos (%d, %d)\n", current->pos.x, current->pos.y, G.end.x, G.end.y);
     // On goal is reached
-    if (current->pos.x == G.end.x && current->pos.y == G.end.y) {
+    if (positionEqual(current->pos, G.end)) {
       double total_cost = 0;
       node parent = current;  // leaf (end) to start
       while (parent != NULL) {
@@ -166,8 +166,7 @@ double A_star(grid G, heuristic h) {
       return total_cost;
     }
 
-    if (G.mark[current->pos.x][current->pos.y] == M_USED)
-      continue;
+    if (G.mark[current->pos.x][current->pos.y] == M_USED) continue;
 
     G.mark[current->pos.x][current->pos.y] = M_USED;
 
@@ -176,9 +175,8 @@ double A_star(grid G, heuristic h) {
       for (int y = -1; y <= 1; y++) {
         position pos = {current->pos.x + x, current->pos.y + y};
 
-        if (G.value[pos.x][pos.y] == V_WALL || G.mark[pos.x][pos.y] == M_USED) {
+        if (G.value[pos.x][pos.y] == V_WALL || G.mark[pos.x][pos.y] == M_USED)
           continue;
-        }
 
         node neighbor = malloc(sizeof(*neighbor));
         neighbor->pos.x = pos.x;
@@ -199,8 +197,8 @@ double A_star(grid G, heuristic h) {
 
         // v3
         if (heap_add(Q, neighbor)) {
-          fprintf (stderr, "Not enough space in heap!\n");
-          exit (EXIT_FAILURE);
+          fprintf(stderr, "Not enough space in heap!\n");
+          exit(EXIT_FAILURE);
         }
 
         G.mark[neighbor->pos.x][neighbor->pos.y] = M_FRONT;
@@ -268,6 +266,110 @@ double A_star(grid G, heuristic h) {
 //     feuille. C'est donc la même procédure d'élagage que précdemment
 //     qu'on pourrait capturer par une fonction freeNode(node p).
 
+double A_star2(grid G, heuristic h) {
+  // From start
+  heap Q = heap_create(G.X * G.Y, coparingNode);
+
+  node start = malloc(sizeof(*start));
+  assert(start != NULL);
+  start->parent = NULL;
+  start->pos = G.start;
+  start->cost = 0;
+  start->score = start->cost + h(G.start, G.end, &G);
+  start->source = 0;
+
+  if (heap_add(Q, start)) {
+    fprintf(stderr, "Not enough space in heap!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  G.mark[start->pos.x][start->pos.y] = M_FRONT;
+
+  // From end
+  node end = malloc(sizeof(*end));
+  assert(end != NULL);
+  end->parent = NULL;
+  end->pos = G.end;
+  end->cost = 0;
+  end->score = end->cost + h(G.end, G.start, &G);
+  end->source = 1;
+
+  if (heap_add(Q, end)) {
+    fprintf(stderr, "Not enough space in heap!\n");
+    exit(EXIT_FAILURE);
+  }
+
+  G.mark[end->pos.x][end->pos.y] = M_FRONT;
+
+  node head0 = start;
+  node head1 = end;
+
+  while (!heap_empty(Q)) {
+    node current = heap_pop(Q);
+
+    int usetag = current->source == 0 ? M_USED : M_USED2;
+
+    // On goal is reached
+    // G.mark[current->pos.x][current->pos.y] == (current->source == 1 ? M_USED:
+    // M_USED2)
+    if (positionEqual(current->pos,
+                      (current->source == 1 ? head0 : head1)->pos)) {
+      double total_cost = 0;
+      node parent = current;  // current to begin
+      while (parent != NULL) {
+        G.mark[parent->pos.x][parent->pos.y] = M_PATH;
+        total_cost += parent->cost;
+        parent = parent->parent;
+      }
+      parent = current->source == 1 ? head0 : head1;  // current 2 to begin
+      while (parent != NULL) {
+        G.mark[parent->pos.x][parent->pos.y] = M_PATH;
+        total_cost += parent->cost;
+        parent = parent->parent;
+      }
+      return total_cost;
+    }
+
+    if (G.mark[current->pos.x][current->pos.y] == usetag) continue;
+
+    G.mark[current->pos.x][current->pos.y] = current->source == usetag;
+
+    // Search paths
+    for (int x = -1; x <= 1; x++)
+      for (int y = -1; y <= 1; y++) {
+        position pos = {current->pos.x + x, current->pos.y + y};
+
+        if (G.value[pos.x][pos.y] == V_WALL || G.mark[pos.x][pos.y] == usetag)
+          continue;
+
+        node neighbor = malloc(sizeof(*neighbor));
+        neighbor->pos.x = pos.x;
+        neighbor->pos.y = pos.y;
+        neighbor->cost = weight[G.value[pos.x][pos.y]] + current->cost;
+        neighbor->score =
+            neighbor->cost +
+            h(neighbor->pos, current->source == 0 ? G.end : G.start, &G);
+        neighbor->parent = current;
+        neighbor->source = current->source;
+
+        if (heap_add(Q, neighbor)) {
+          fprintf(stderr, "Not enough space in heap!\n");
+          exit(EXIT_FAILURE);
+        }
+
+        G.mark[neighbor->pos.x][neighbor->pos.y] = M_FRONT;
+        if (current->source == 0)
+          head0 = neighbor;
+        else if (current->source == 1)
+          head1 = neighbor;
+      }
+    drawGrid(G);
+  }
+
+  heap_destroy(Q);
+  return -1;
+}
+
 int main(int argc, char *argv[]) {
   unsigned seed = time(NULL) % 1000;
   printf("seed: %u\n", seed);  // pour rejouer la même grille au cas où
@@ -288,7 +390,7 @@ int main(int argc, char *argv[]) {
   // grid G = initGridLaby(12, 9, 8);
 
   // grand labyrinthe aléatoire
-  grid G = initGridLaby(width/8,height/8,3);
+  grid G = initGridLaby(width / 8, height / 8, 3);
 
   // grille à partir d'un fichier
   // grid G = initGridFile("mygrid.txt");
@@ -307,9 +409,10 @@ int main(int argc, char *argv[]) {
   // sélectionnez des positions s->t ...
   // (inutile pour initGridLaby() et initGridFile())
 
-  //G.start = (position){0.1 * G.X, 0.2 * G.Y},
-  //G.end = (position){0.8 * G.X, 0.9 * G.Y};
-  G.start=randomPosition(G,V_FREE); G.end=randomPosition(G,V_FREE);
+  // G.start = (position){0.1 * G.X, 0.2 * G.Y},
+  // G.end = (position){0.8 * G.X, 0.9 * G.Y};
+  G.start = randomPosition(G, V_FREE);
+  G.end = randomPosition(G, V_FREE);
 
   // constantes à initialiser avant init_SDL_OpenGL()
   scale = fmin((double)width / G.X, (double)height / G.Y);  // zoom courant
@@ -319,7 +422,7 @@ int main(int argc, char *argv[]) {
   update = false;     // accélère les dessins répétitifs
 
   alpha = 1;
-  double d = A_star(G, halpha);  // heuristique: h0, hvo, alpha*hvo
+  double d = A_star2(G, halpha);  // heuristique: h0, hvo, alpha*hvo
 
   // chemin trouvé ou pas ?
   if (d < 0)
