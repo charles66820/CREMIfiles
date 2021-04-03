@@ -13,6 +13,8 @@
 %locations
 
 %code imports {
+	import java.util.Iterator;
+	import java.util.LinkedList;
 	import fr.ubordeaux.deptinfo.compilation.lea.type.TType;
 	import fr.ubordeaux.deptinfo.compilation.lea.type.Type;
 	import fr.ubordeaux.deptinfo.compilation.lea.type.TypeExpr;
@@ -25,7 +27,9 @@
 %code {
 	private Environment<Type> typeEnvironment = new MapEnvironment<Type>("types", true);
 	private Environment<Type> varEnvironment = new MapEnvironment<Type>("var", true);
-	private Environment<Type> localVarEnvironment = new MapEnvironment<Type>("local", true);
+	private LinkedList<Environment<Type>> localVarEnvironmentStack = new LinkedList<Environment<Type>>(){{
+		addLast(new MapEnvironment<Type>("local", true)); // Add init local var env TODO: change to block ?
+	}};
 	private Environment<Type> constEnvironment = new MapEnvironment<Type>("const", true);
 }
 
@@ -56,7 +60,7 @@
 	IMPORTANT_TOKEN;
 
 //keywords
-%token 
+%token
 	BOOLEAN "boolean"
 	BREAK "break"
 	CHAR "char"
@@ -103,15 +107,15 @@
 	WHILE "while";
 
 // constants
-%token<String> 
-	IDENTIFIER 
+%token<String>
+	IDENTIFIER
 	LITTERAL_STRING;
 
-%token<Integer> 
+%token<Integer>
 	NUMBER_INTEGER
 	LITTERAL_CHAR;
 
-%token<Float> 
+%token<Float>
 	NUMBER_FLOAT;
 
 %nterm<Type> typeExprs typeExpr typePtrExpr typeNames typeName argsDefinition argDefinition
@@ -144,7 +148,7 @@
 
 %%
 
-S: 	imports  
+S: 	imports
 	declarations
 	;
 
@@ -156,76 +160,76 @@ imports:
 import:
 	"import" LITTERAL_STRING
 	;
-	
+
 declarations:
 	declarations declaration
 	| declaration
 	;
-	
+
 declaration:
 	"class" IDENTIFIER implements extends '{' classDefinition '}'
 	| "class" "main" '{' classDefinition '}'
 	| "interface" IDENTIFIER extends_public '{' interfaceDefinition '}'
 	;
-	
+
 implements:
 	%empty
 	| "implements" classNames
 	;
-	
+
 extends:
 	%empty
 	| "extends" determiner className
 	;
-	
+
 extends_public:
 	%empty
 	| "extends" className
 	;
-	
+
 classNames:
 	classNames ',' className
 	| className
 	;
-	
+
 className:
 	IDENTIFIER
 	| IDENTIFIER '<' classNames '>'
 	;
-	
+
 classDefinition:
 	%empty
 	| classDefinitionContent classDefinition
 	;
-	
+
 classDefinitionContent:
 	typeDefinition
 	| constDefinition
 	| attributeDefinition
 	| methodDefinition
 	;
-	
+
 typeDefinition:
-	"type" IDENTIFIER ":=" typeExpr 	
+	"type" IDENTIFIER ":=" typeExpr
 	{
 		typeEnvironment.put($2, $4);
 	}
 	;
-	
+
 constDefinition:
-	"const" IDENTIFIER ":=" constExpr 
+	"const" IDENTIFIER ":=" constExpr
 	{
 		constEnvironment.put($2, $4);
 	}
 	;
-	
+
 attributeDefinition:
-	determiner IDENTIFIER ':' typeExpr ';' 	
+	determiner IDENTIFIER ':' typeExpr ';'
 	{
 		varEnvironment.put($2, $4);
 	}
 	;
-	
+
 methodDefinition:
 	"main" '(' argsDefinition ')' block
 	| determiner IDENTIFIER '(' argsDefinition ')'
@@ -276,13 +280,13 @@ determiner:
 	| "public"
 	| "protected"
 	;
-	
+
 specifier:
 	%empty %prec SPECIFIER
 	| "virtual"
 	| "final"
 	;
-	
+
 user_defined_operators:
 	"&&" 			{$$ = "&&";}
 	| "||" 			{$$ = "||";}
@@ -337,58 +341,69 @@ typeExpr:
 	| "map" '<' typeExpr ',' typeExpr '>'   {$$ = new TypeExpr(TType.MAP, $3, $5);}
 	| typePtrExpr                           {$$ = $1;}
 	;
-	
+
 typePtrExpr:
 	IDENTIFIER '<' typeExprs '>'            {$$ = new TypeExpr(TType.CLASS, $1, $3);}
 	| IDENTIFIER                            {$$ = new TypeExpr(TType.CLASS, $1, null);}
 	;
-	
+
 typeExprs:
 	typeExprs ',' typeExpr                  {$$ = new TypeExpr(TType.PRODUCT, $1, $3);}
 	| typeExpr                              {$$ = $1;}
 	;
-	
+
 typeNames:
 	typeNames ',' typeName                  {$$ = new TypeExpr(TType.PRODUCT, $1, $3);}
 	| typeName                              {$$ = $1;}
 	;
-	
+
 typeName:
 	IDENTIFIER                              {$$ = new TypeExpr(TType.NAME, $1);}
 	;
-	
+
 argsDefinition:
 	argsDefinition ',' argDefinition       {$$ = new TypeExpr(TType.PRODUCT, $1, $3);}
 	| argDefinition {$$ = $1;}
-	;	
-	
+	;
+
 argDefinition:
-	IDENTIFIER ':' typeExpr 
+	IDENTIFIER ':' typeExpr
 	{
-		localVarEnvironment.put($1, $3);
+		// localVarEnvironmentStack.getLast() is for get current localVarEnvironment
+		Environment<Type> localVarEnvironment = localVarEnvironmentStack.getLast();
+		if (localVarEnvironment != null) {
+			localVarEnvironment.put($1, $3);
+		}
 		$$ = new TypeExpr(TType.FEATURE, $1, $3);
 	}
-	;	
-	
+	;
+
 block:
-	'{' varDefinitions stms '}'
+	'{' varDefinitions stms '}' {
+		//localVarEnvironmentStack.addLast(new MapEnvironment<Type>("local", true)); // Open local var env
+	}
 	| '{' '}'
 	;
-	
+
 varDefinitions:
 	%empty
 	| varDefinitions varDefinition
 	;
-	
+
 varDefinition:
-	IDENTIFIER ':' typeExpr ';' {localVarEnvironment.put($1, $3);}
+	IDENTIFIER ':' typeExpr ';' {
+		Environment<Type> localVarEnvironment = localVarEnvironmentStack.getLast();
+		if (localVarEnvironment != null) {
+			localVarEnvironment.put($1, $3);
+		}
+	}
 	;
-	
+
 stms: // Statements
 	stms stm
 	| stm
 	;
-	
+
 stm: // Statement
 	simple_stm ';'
 	| "if" '(' expr ')' stm %prec WITHOUT_ELSE
@@ -417,10 +432,18 @@ simple_stm:
 
 assignedVar_or_null_stm:
 	%empty
-	| IDENTIFIER ':' typeExpr {localVarEnvironment.put($1, $3);}
+	| IDENTIFIER ':' typeExpr {
+		Environment<Type> localVarEnvironment = localVarEnvironmentStack.getLast();
+		if (localVarEnvironment != null) {
+			localVarEnvironment.put($1, $3);
+		}
+	}
 	| IDENTIFIER ':' typeExpr ":=" expr { // varDefinitionAssigned
-		localVarEnvironment.put($1, $3);
-		localVarEnvironment.get($1).assertEqual($5);
+		Environment<Type> localVarEnvironment = localVarEnvironmentStack.getLast();
+		if (localVarEnvironment != null) {
+			localVarEnvironment.put($1, $3);
+			localVarEnvironment.get($1).assertEqual($5);
+		}
 	};
 
 assigned_or_null_stm:
@@ -454,7 +477,11 @@ expr_or_null:
 assignedVariable:
   	IDENTIFIER %prec IMPORTANT_TOKEN
 	{
-		$$ = localVarEnvironment.get($1);
+		Iterator<Environment<Type>> itStack = localVarEnvironmentStack.descendingIterator();
+		do {
+			if (itStack.hasNext()) $$ = itStack.next().get($1);
+			else $$ = null;
+		} while(itStack.hasNext() && $$ == null);
 		if ($$ == null)
 			$$ = varEnvironment.get($1);
 		if ($$ == null)
@@ -468,7 +495,11 @@ assignedVariable:
 methodName:
 	IDENTIFIER
 	{
-		$$ = localVarEnvironment.get($1);
+		Iterator<Environment<Type>> itStack = localVarEnvironmentStack.descendingIterator();
+		do {
+			if (itStack.hasNext()) $$ = itStack.next().get($1);
+			else $$ = null;
+		} while(itStack.hasNext() && $$ == null);
 		if ($$ == null)
 			$$ = varEnvironment.get($1);
 		if ($$ == null)
