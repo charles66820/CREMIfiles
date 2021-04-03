@@ -52,7 +52,8 @@
 	EQ_EQ "=="
 	LT_EQ "<="
 	GT_EQ ">="
-	BANG_EQ "!=";
+	BANG_EQ "!="
+	IMPORTANT_TOKEN;
 
 //keywords
 %token 
@@ -114,10 +115,13 @@
 	NUMBER_FLOAT;
 
 %nterm<Type> typeExprs typeExpr typePtrExpr typeNames typeName argsDefinition argDefinition
-	constExpr expr assignedVariable 
+	constExpr expr expr_or_null assignedVariable
 	methodName args args_opt;
 
 %nterm<String> user_defined_operators;
+
+%precedence ':'
+%precedence IMPORTANT_TOKEN
 
 %precedence WITHOUT_ELSE
 %precedence ELSE;
@@ -368,6 +372,7 @@ argDefinition:
 	
 block:
 	'{' varDefinitions stms '}'
+	| '{' '}'
 	;
 	
 varDefinitions:
@@ -392,35 +397,62 @@ stm: // Statement
 	| "do" stm WHILE '(' expr ')' ';'
 	| "for" '(' assignedVariable ':' expr ')' stm
 	| "foreach" assignedVariable "in" expr stm
+	| "for" '(' assignedVar_or_null_stm ';' expr_or_null {
+		System.out.println($5);
+		if ($5 == null) {
+		} else $5.assertEqual(new TypeExpr(TType.BOOLEAN));
+	} ';'  assigned_or_null_stm')' stm // NOTE: 1. for loop
+	{
+		// add to stack
+	}
 	| block
 	;
 
 simple_stm:
-	assignedVariable ":=" expr {$1.assertEqual($3);}
-	| assignedVariable "++"
-	| assignedVariable "--"
-	| assignedVariable "+=" expr
-	| assignedVariable "-=" expr
-	| assignedVariable "*=" expr
-	| assignedVariable "/=" expr
-	| assignedVariable "%=" expr
-	| assignedVariable "||=" expr
-	| assignedVariable "&&=" expr
-	| assignedVariable "&=" expr
-	| assignedVariable "|=" expr
-	| assignedVariable "<<=" expr
-	| assignedVariable ">>=" expr
-	| methodName '(' args ')'
-	| "readln" '(' expr ')'
-	| "write" '(' expr ')'
-	| "writeln" '(' expr ')'
+	assigned_stm
 	| "break"
 	| "continue"
 	| "return" expr
 	;
 
+assignedVar_or_null_stm:
+	%empty
+	| IDENTIFIER ':' typeExpr {localVarEnvironment.put($1, $3);}
+	| IDENTIFIER ':' typeExpr ":=" expr { // varDefinitionAssigned
+		localVarEnvironment.put($1, $3);
+		localVarEnvironment.get($1).assertEqual($5);
+	};
+
+assigned_or_null_stm:
+	%empty
+	| assigned_stm;
+
+assigned_stm:
+	assignedVariable ":=" expr {$1.assertEqual($3);};
+       	| assignedVariable "++"
+       	| assignedVariable "--"
+       	| assignedVariable "+=" expr
+       	| assignedVariable "-=" expr
+       	| assignedVariable "*=" expr
+       	| assignedVariable "/=" expr
+       	| assignedVariable "%=" expr
+       	| assignedVariable "||=" expr
+       	| assignedVariable "&&=" expr
+       	| assignedVariable "&=" expr
+       	| assignedVariable "|=" expr
+       	| assignedVariable "<<=" expr
+       	| assignedVariable ">>=" expr
+       	| methodName '(' args ')'
+       	| "readln" '(' expr ')'
+       	| "write" '(' expr ')'
+       	| "writeln" '(' expr ')';
+
+expr_or_null:
+	%empty {$$ = null;}
+	| expr;
+
 assignedVariable:
-	IDENTIFIER 
+  	IDENTIFIER %prec IMPORTANT_TOKEN
 	{
 		$$ = localVarEnvironment.get($1);
 		if ($$ == null)
