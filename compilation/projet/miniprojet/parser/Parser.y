@@ -432,6 +432,12 @@ simple_stm:
 
 assignedVar_or_null_stm:
 	%empty
+	| IDENTIFIER ":=" expr {
+		Environment<Type> localVarEnvironment = localVarEnvironmentStack.getLast();
+		if (localVarEnvironment != null) {
+			localVarEnvironment.get($1).assertEqual($3);
+		}
+	}
 	| IDENTIFIER ':' typeExpr ":=" expr { // varDefinitionAssigned
 		Environment<Type> localVarEnvironment = localVarEnvironmentStack.getLast();
 		if (localVarEnvironment != null) {
