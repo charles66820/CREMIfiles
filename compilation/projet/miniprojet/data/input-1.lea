@@ -8,10 +8,11 @@ class main {
       }
       i++;
     }
+    k: integer
     for (;;) {
-      if (i > 140) break;
-      writeln(i);
-      i++;
+      if (k > 140) break;
+      writeln(k);
+      k++;
     }
     for ( ; ; ) { }
   }
