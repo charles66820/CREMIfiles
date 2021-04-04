@@ -27,9 +27,7 @@
 %code {
 	private Environment<Type> typeEnvironment = new MapEnvironment<Type>("types", true);
 	private Environment<Type> varEnvironment = new MapEnvironment<Type>("var", true);
-	private LinkedList<Environment<Type>> localVarEnvironmentStack = new LinkedList<Environment<Type>>(){{
-		addLast(new MapEnvironment<Type>("local", true)); // Add init local var env TODO: change to block ?
-	}};
+	private LinkedList<Environment<Type>> localVarEnvironmentStack = new LinkedList<Environment<Type>>();
 	private Environment<Type> constEnvironment = new MapEnvironment<Type>("const", true);
 }
 
@@ -129,6 +127,9 @@
 
 %precedence WITHOUT_ELSE
 %precedence ELSE;
+
+%precedence INILVTENV
+%precedence '('
 
 %precedence DETERMINER
 %precedence SPECIFIER
@@ -231,20 +232,22 @@ attributeDefinition:
 	;
 
 methodDefinition:
-	"main" '(' argsDefinition ')' block
+	"main" initLocalVarEnv '(' argsDefinition ')' block
+	{ localVarEnvironmentStack.removeLast(); /* close local var env */ System.out.println ("*** Pop local var environment");}
+	| determiner IDENTIFIER initLocalVarEnv '(' argsDefinition ')'
+	{
+		varEnvironment.put($2, new TypeExpr(TType.FUNCTION, $5, new TypeExpr(TType.VOID)));
+	}
+	block
+        { localVarEnvironmentStack.removeLast(); /* close local var env */ System.out.println ("*** Pop local var environment"); }
 	| determiner IDENTIFIER '(' argsDefinition ')'
 	{
 		varEnvironment.put($2, new TypeExpr(TType.FUNCTION, $4, new TypeExpr(TType.VOID)));
 	}
-	block
-	| determiner IDENTIFIER '(' argsDefinition ')'
-	{
-		varEnvironment.put($2, new TypeExpr(TType.FUNCTION, $4, new TypeExpr(TType.VOID)));
-	}
 	';'
-	| determiner specifier "procedure" IDENTIFIER '(' argsDefinition ')'
+	| determiner specifier "procedure" IDENTIFIER initLocalVarEnv '(' argsDefinition ')'
 	{
-		varEnvironment.put($4, new TypeExpr(TType.FUNCTION, $6, new TypeExpr(TType.VOID)));
+		varEnvironment.put($4, new TypeExpr(TType.FUNCTION, $7, new TypeExpr(TType.VOID)));
 	}
 	block
 	| determiner specifier "procedure" IDENTIFIER '(' argsDefinition ')'
@@ -252,9 +255,9 @@ methodDefinition:
 		varEnvironment.put($4, new TypeExpr(TType.FUNCTION, $6, new TypeExpr(TType.VOID)));
 	}
 	';'
-	| determiner specifier "function" IDENTIFIER '(' argsDefinition ')' ':' typeExpr
+	| determiner specifier "function" IDENTIFIER initLocalVarEnv '(' argsDefinition ')' ':' typeExpr
 	{
-		varEnvironment.put($4, new TypeExpr(TType.FUNCTION, $6, $9));
+		varEnvironment.put($4, new TypeExpr(TType.FUNCTION, $7, $10));
 	}
 	block
 	| determiner specifier "function" IDENTIFIER '(' argsDefinition ')' ':' typeExpr
@@ -262,9 +265,9 @@ methodDefinition:
 		varEnvironment.put($4, new TypeExpr(TType.FUNCTION, $6, $9));
 	}
 	';'
-	| "operator" user_defined_operators '(' argsDefinition ')' ':' typeExpr
+	| "operator" user_defined_operators initLocalVarEnv '(' argsDefinition ')' ':' typeExpr
 	{
-		varEnvironment.put($2, new TypeExpr(TType.FUNCTION, $4, $7));
+		varEnvironment.put($2, new TypeExpr(TType.FUNCTION, $5, $8));
 	}
 	block
 	| "operator" user_defined_operators '(' argsDefinition ')' ':' typeExpr
@@ -273,6 +276,11 @@ methodDefinition:
 	}
 	';'
 	;
+
+initLocalVarEnv: %empty %prec INILVTENV {
+	localVarEnvironmentStack.addLast(new MapEnvironment<Type>("local", true)); /* Open local var env */
+	System.out.println ("*** Put new local var environment in local var environment stack");
+};
 
 determiner:
 	%empty %prec DETERMINER
@@ -379,9 +387,7 @@ argDefinition:
 	;
 
 block:
-	'{' varDefinitions stms '}' {
-		//localVarEnvironmentStack.addLast(new MapEnvironment<Type>("local", true)); // Open local var env
-	}
+	'{' varDefinitions stms '}'
 	| '{' '}'
 	;
 
@@ -408,19 +414,20 @@ stm: // Statement
 	simple_stm ';'
 	| "if" '(' expr ')' stm %prec WITHOUT_ELSE
 	| "if" '(' expr ')' stm "else" stm
-	| "while" '(' expr ')' stm
-	| "do" stm WHILE '(' expr ')' ';'
-	| "for" '(' assignedVariable ':' expr ')' stm
-	| "foreach" assignedVariable "in" expr stm
-	| "for" '(' assignedVar_or_null_stm ';' expr_or_null {
-		System.out.println($5);
-		if ($5 == null) {
-		} else $5.assertEqual(new TypeExpr(TType.BOOLEAN));
-	} ';'  assigned_or_null_stm')' stm // NOTE: 1. for loop
-	{
-		// add to stack
-	}
-	| block
+	| "while" initLocalVarEnv '(' expr ')' stm
+	{ localVarEnvironmentStack.removeLast(); /* close local var env */ System.out.println ("*** Pop local var environment"); }
+	| "do" initLocalVarEnv stm WHILE '(' expr ')' ';'
+	{ localVarEnvironmentStack.removeLast(); /* close local var env */ System.out.println ("*** Pop local var environment"); }
+	| "for" initLocalVarEnv '(' assignedVariable ':' expr ')' stm
+	{ localVarEnvironmentStack.removeLast(); /* close local var env */ System.out.println ("*** Pop local var environment"); }
+	| "foreach" initLocalVarEnv assignedVariable "in" expr stm
+	{ localVarEnvironmentStack.removeLast(); /* close local var env */ System.out.println ("*** Pop local var environment"); }
+	| "for" initLocalVarEnv '(' assignedVar_or_null_stm ';' expr_or_null { // NOTE: 1. for loop
+		if ($6 != null) $6.assertEqual(new TypeExpr(TType.BOOLEAN));
+	} ';'  assigned_or_null_stm')' stm
+	{ localVarEnvironmentStack.removeLast(); /* close local var env */ System.out.println ("*** Pop local var environment"); }
+	| initLocalVarEnv block
+	{ localVarEnvironmentStack.removeLast(); /* close local var env */ System.out.println ("*** Pop local var environment"); }
 	;
 
 simple_stm:

@@ -6,6 +6,7 @@ class main {
 		for (i: integer := 6 ; i <= 12 ; ) {
       for ( j: integer := 0 ; j < 10 ; j++) {
         writeln(j);
+        k := 6;
       }
       i++;
     }
