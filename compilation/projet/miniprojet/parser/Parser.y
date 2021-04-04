@@ -124,8 +124,8 @@
 
 %nterm<String> user_defined_operators;
 
-%precedence ':'
 %precedence IMPORTANT_TOKEN
+%precedence ':'
 
 %precedence WITHOUT_ELSE
 %precedence ELSE;
