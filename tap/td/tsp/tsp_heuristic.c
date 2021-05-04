@@ -78,3 +78,71 @@ double tsp_greedy(point *V, int n, int *P) {
 
   return value(V, n, P);
 }
+
+double tsp_greedy(point *V, int n, int *P) {
+
+  // La fonction doit renvoyer la valeur de la tournée obtenue. Pensez
+
+  // à initialiser P, par exemple à P[i]=i.  
+
+  P[0] = 0; // On part de 0
+
+  bool Vb[n];
+
+  for (size_t i = 0; i < n; i++)
+
+  {
+
+    P[i] = i;
+
+    Vb[i] = false;
+
+  }
+
+  Vb[0] = true;
+
+  int nbr = 1;
+
+  double out = 0;
+
+  
+
+  while(nbr < n){
+
+    double distMin = DBL_MAX;
+
+    int iMin = -1;
+
+    
+
+    for(size_t i = 0; i < n; i++){
+
+      double d = dist(V[P[i]], V[P[nbr-1]]);
+
+      if(!Vb[i] && d < distMin && d != 0){
+
+        distMin = d;
+
+        iMin = i;
+
+      }
+
+    }
+
+    if(iMin != -1){
+
+      out += distMin;
+
+    }
+
+    Vb[iMin] = true;
+
+    P[nbr] = iMin;
+
+    nbr++;
+
+  }
+
+  return out;
+
+}
