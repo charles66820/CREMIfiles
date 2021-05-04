@@ -15,7 +15,7 @@ import java.io.*;
 
 %{
   private final boolean DEBUGGING = true;
-  
+
   private Position startPos = new Position(0, 0);
   private Position endPos = new Position(0, 0);
   private Object lVal;
@@ -43,7 +43,7 @@ import java.io.*;
     public Object getLVal(){
         return lVal;
     }
-    
+
   /**
    * Fetch the next token.  Called yylex in pull parsers.
    */
@@ -97,8 +97,8 @@ Integer = [0-9]+
 Float = {Integer}(\.{Integer})?([eE][+-]?{Integer})?
 String = \"~\"
 Char = \'[^']\'
-CommentLines = "/*"~"*/" 
-CommentLine = "//".* 
+CommentLines = "/*"~"*/"
+CommentLine = "//".*
 
 %%
 

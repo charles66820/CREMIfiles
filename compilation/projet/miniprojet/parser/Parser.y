@@ -4,7 +4,7 @@
 %define api.parser.public
 %define api.parser.class {Parser}
 %define throws {EnvironmentException, TypeException}
- 
+
 %define lr.type ielr
 
 %verbose
