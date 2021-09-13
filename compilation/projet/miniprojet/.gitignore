@@ -1,5 +1,0 @@
-/bin
-/data/output
-/log/error
-/src/fr/ubordeaux/deptinfo/compilation/lea/parser/*
-!/src/fr/ubordeaux/deptinfo/compilation/lea/parser/Position.java
