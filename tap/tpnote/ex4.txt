@@ -1,2 +1,0 @@
-Répondre à la question de l'exercice 4 (format texte libre).
-Car cela respect l'ordre lexicographique.
