@@ -1,27 +1,27 @@
-// stats.h 
+// stats.h
 //	Routines for managing statistics about Nachos performance.
 //
 // DO NOT CHANGE -- these stats are maintained by the machine emulation.
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
+
+#include "stats.h"
 
 #include "copyright.h"
 #include "utility.h"
-#include "stats.h"
 
 //----------------------------------------------------------------------
 // Statistics::Statistics
 // 	Initialize performance metrics to zero, at system startup.
 //----------------------------------------------------------------------
 
-Statistics::Statistics()
-{
-    totalTicks = idleTicks = systemTicks = userTicks = 0;
-    numDiskReads = numDiskWrites = 0;
-    numConsoleCharsRead = numConsoleCharsWritten = 0;
-    numPageFaults = numPacketsSent = numPacketsRecvd = 0;
+Statistics::Statistics() {
+  totalTicks = idleTicks = systemTicks = userTicks = 0;
+  numDiskReads = numDiskWrites = 0;
+  numConsoleCharsRead = numConsoleCharsWritten = 0;
+  numPageFaults = numPacketsSent = numPacketsRecvd = 0;
 }
 
 //----------------------------------------------------------------------
@@ -30,20 +30,18 @@ Statistics::Statistics()
 //	at system shutdown.
 //----------------------------------------------------------------------
 
-void
-Statistics::Print()
-{
+void Statistics::Print() {
   // LB: format adapted to long long tick type
-  // printf("Ticks: total %d, idle %d, system %d, user %d\n", totalTicks, 
+  // printf("Ticks: total %d, idle %d, system %d, user %d\n", totalTicks,
   // idleTicks, systemTicks, userTicks);
-  printf("Ticks: total %lld, idle %lld, system %lld, user %lld\n", 
-	 totalTicks, idleTicks, systemTicks, userTicks);
+  printf("Ticks: total %lld, idle %lld, system %lld, user %lld\n", totalTicks,
+         idleTicks, systemTicks, userTicks);
   // End of correction
 
-    printf("Disk I/O: reads %d, writes %d\n", numDiskReads, numDiskWrites);
-    printf("Console I/O: reads %d, writes %d\n", numConsoleCharsRead, 
-	numConsoleCharsWritten);
-    printf("Paging: faults %d\n", numPageFaults);
-    printf("Network I/O: packets received %d, sent %d\n", numPacketsRecvd, 
-	numPacketsSent);
+  printf("Disk I/O: reads %d, writes %d\n", numDiskReads, numDiskWrites);
+  printf("Console I/O: reads %d, writes %d\n", numConsoleCharsRead,
+         numConsoleCharsWritten);
+  printf("Paging: faults %d\n", numPageFaults);
+  printf("Network I/O: packets received %d, sent %d\n", numPacketsRecvd,
+         numPacketsSent);
 }

@@ -1,11 +1,11 @@
-// sysdep.h 
+// sysdep.h
 //	System-dependent interface.  Nachos uses the routines defined
 //	here, rather than directly calling the UNIX library functions, to
 //	simplify porting between versions of UNIX, and even to
 //	other systems, such as MSDOS and the Macintosh.
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
 #ifndef SYSDEP_H
@@ -36,7 +36,8 @@ extern void AssignNameToSocket(const char *socketName, int sockID);
 extern void DeAssignNameToSocket(const char *socketName);
 extern bool PollSocket(int sockID);
 extern void ReadFromSocket(int sockID, void *buffer, int packetSize);
-extern void SendToSocket(int sockID, const void *buffer, int packetSize,const char *toName);
+extern void SendToSocket(int sockID, const void *buffer, int packetSize,
+                         const char *toName);
 
 // Process control: abort, exit, and sleep
 extern void Abort();
@@ -60,9 +61,9 @@ extern void DeallocBoundedArray(char *p, int size);
 // Other C library routines that are used by Nachos.
 // These are assumed to be portable, so we don't include a wrapper.
 extern "C" {
-#include <stdlib.h>		// for atoi, atof, abs
-#include <stdio.h>		// for printf, fprintf
-#include <string.h>		// for DEBUG, etc.
+#include <stdio.h>   // for printf, fprintf
+#include <stdlib.h>  // for atoi, atof, abs
+#include <string.h>  // for DEBUG, etc.
 }
 
-#endif // SYSDEP_H
+#endif  // SYSDEP_H

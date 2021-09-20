@@ -20,4 +20,4 @@
 #define VALGRIND_STACK_DEREGISTER(id) ((void)0)
 #endif
 
-#endif // VALGRIND_H
+#endif  // VALGRIND_H

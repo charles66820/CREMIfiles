@@ -1,5 +1,5 @@
-// synchdisk.cc 
-//	Routines to synchronously access the disk.  The physical disk 
+// synchdisk.cc
+//	Routines to synchronously access the disk.  The physical disk
 //	is an asynchronous device (disk requests return immediately, and
 //	an interrupt happens later on).  This is a layer on top of
 //	the disk providing a synchronous interface (requests wait until
@@ -11,24 +11,23 @@
 //	exclusion.
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
-#include "copyright.h"
 #include "synchdisk.h"
+
+#include "copyright.h"
 
 //----------------------------------------------------------------------
 // DiskRequestDone
-// 	Disk interrupt handler.  Need this to be a C routine, because 
+// 	Disk interrupt handler.  Need this to be a C routine, because
 //	C++ can't handle pointers to member functions.
 //----------------------------------------------------------------------
 
-static void
-DiskRequestDone (void *arg)
-{
-    SynchDisk* disk = (SynchDisk *)arg;
+static void DiskRequestDone(void* arg) {
+  SynchDisk* disk = (SynchDisk*)arg;
 
-    disk->RequestDone();
+  disk->RequestDone();
 }
 
 //----------------------------------------------------------------------
@@ -40,11 +39,10 @@ DiskRequestDone (void *arg)
 //	   (usually, "DISK")
 //----------------------------------------------------------------------
 
-SynchDisk::SynchDisk(const char* name)
-{
-    semaphore = new Semaphore("synch disk", 0);
-    lock = new Lock("synch disk lock");
-    disk = new Disk(name, DiskRequestDone, this);
+SynchDisk::SynchDisk(const char* name) {
+  semaphore = new Semaphore("synch disk", 0);
+  lock = new Lock("synch disk lock");
+  disk = new Disk(name, DiskRequestDone, this);
 }
 
 //----------------------------------------------------------------------
@@ -53,14 +51,13 @@ SynchDisk::SynchDisk(const char* name)
 //	abstraction.
 //----------------------------------------------------------------------
 
-SynchDisk::~SynchDisk()
-{
-    delete disk;
-    disk = NULL;
-    delete lock;
-    lock = NULL;
-    delete semaphore;
-    semaphore = NULL;
+SynchDisk::~SynchDisk() {
+  delete disk;
+  disk = NULL;
+  delete lock;
+  lock = NULL;
+  delete semaphore;
+  semaphore = NULL;
 }
 
 //----------------------------------------------------------------------
@@ -72,13 +69,11 @@ SynchDisk::~SynchDisk()
 //	"data" -- the buffer to hold the contents of the disk sector
 //----------------------------------------------------------------------
 
-void
-SynchDisk::ReadSector(int sectorNumber, void* data)
-{
-    lock->Acquire();			// only one disk I/O at a time
-    disk->ReadRequest(sectorNumber, data);
-    semaphore->P();			// wait for interrupt
-    lock->Release();
+void SynchDisk::ReadSector(int sectorNumber, void* data) {
+  lock->Acquire();  // only one disk I/O at a time
+  disk->ReadRequest(sectorNumber, data);
+  semaphore->P();  // wait for interrupt
+  lock->Release();
 }
 
 //----------------------------------------------------------------------
@@ -90,13 +85,11 @@ SynchDisk::ReadSector(int sectorNumber, void* data)
 //	"data" -- the new contents of the disk sector
 //----------------------------------------------------------------------
 
-void
-SynchDisk::WriteSector(int sectorNumber, const void* data)
-{
-    lock->Acquire();			// only one disk I/O at a time
-    disk->WriteRequest(sectorNumber, data);
-    semaphore->P();			// wait for interrupt
-    lock->Release();
+void SynchDisk::WriteSector(int sectorNumber, const void* data) {
+  lock->Acquire();  // only one disk I/O at a time
+  disk->WriteRequest(sectorNumber, data);
+  semaphore->P();  // wait for interrupt
+  lock->Release();
 }
 
 //----------------------------------------------------------------------
@@ -105,8 +98,4 @@ SynchDisk::WriteSector(int sectorNumber, const void* data)
 //	request to finish.
 //----------------------------------------------------------------------
 
-void
-SynchDisk::RequestDone()
-{ 
-    semaphore->V();
-}
+void SynchDisk::RequestDone() { semaphore->V(); }
