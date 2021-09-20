@@ -1,0 +1,11 @@
+*.o
+*.d
+*.so
+*.coff
+nachos/code/bin/coff2noff
+nachos/code/test/halt
+nachos/code/test/matmult
+nachos/code/test/shell
+nachos/code/test/sort
+nachos/code/threads/nachos
+nachos/code/userprog/nachos
