@@ -1,4 +1,3 @@
-
 {
   "version": "2.0.0",
   "tasks": [
@@ -7,10 +6,10 @@
       "type": "shell",
       "command": "rm -rf ./code/callgrind.out.* report report.xml",
       "options": {
-          "cwd": "${workspaceRoot}"
+        "cwd": "${workspaceRoot}"
       },
       "presentation": {
-          "reveal": "silent"
+        "reveal": "silent"
       }
     },
     {
@@ -18,52 +17,52 @@
       "type": "shell",
       "command": "cppcheck --check-config --enable=all --suppress=missingIncludeSystem --xml-version=2 code/threads/*.c code/threads/*.h 2> report.xml && cppcheck-htmlreport --source-dir=. --report-dir=report --file=report.xml --title=Nachos && google-chrome file://`pwd`/report/index.html",
       "options": {
-          "cwd": "${workspaceRoot}"
+        "cwd": "${workspaceRoot}"
       },
       "presentation": {
-          "reveal": "silent"
-      }
-  },
-  {
-    "label": "valgrind",
-    "type": "shell",
-    "command": "valgrind --leak-check=full -v ${input:debugBin}",
-    "options": {
-        "cwd": "${workspaceRoot}/code"
-    },
-    "presentation": {
-        "reveal": "always"
-    }
-  },
-  {
-    "label": "valgrind callgrind",
-    "type": "shell",
-    "command": "valgrind --tool=callgrind ${input:debugBin} && echo 'use kcachegrind'",
-    "options": {
-        "cwd": "${workspaceRoot}/code"
-    },
-    "presentation": {
-        "reveal": "always"
-    }
-  },
-  {
-    "label": "make",
-    "type": "shell",
-    "command": "make",
-    "options": {
-        "cwd": "${workspaceRoot}/code"
-    },
-    "presentation": {
         "reveal": "silent"
+      }
+    },
+    {
+      "label": "valgrind",
+      "type": "shell",
+      "command": "valgrind --leak-check=full -v ${input:debugBin}",
+      "options": {
+        "cwd": "${workspaceRoot}/code"
+      },
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "valgrind callgrind",
+      "type": "shell",
+      "command": "valgrind --tool=callgrind ${input:debugBin} && echo 'use kcachegrind'",
+      "options": {
+        "cwd": "${workspaceRoot}/code"
+      },
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "make",
+      "type": "shell",
+      "command": "make",
+      "options": {
+        "cwd": "${workspaceRoot}/code"
+      },
+      "presentation": {
+        "reveal": "silent"
+      }
     }
-  }
   ],
   "inputs": [
     {
-        "id": "debugBin",
-        "description": "executable args:",
-        "default": "./threads/nachos",
-        "type": "promptString"
+      "id": "debugBin",
+      "description": "executable args:",
+      "default": "./threads/nachos",
+      "type": "promptString"
     }
   ]
 }
