@@ -242,7 +242,7 @@ void Thread::Yield() {
   ASSERT(this == currentThread);
 
   DEBUG('t', "Yielding thread %p \"%s\"\n", this, getName());
-
+  // TODO: 5.4 1/2 td01
   nextThread = scheduler->FindNextToRun();
   if (nextThread != NULL) {
     scheduler->ReadyToRun(this);
