@@ -1,4 +1,4 @@
-.vscode/
+.vscode/*
 .idea/
 node_modules/
 .env
