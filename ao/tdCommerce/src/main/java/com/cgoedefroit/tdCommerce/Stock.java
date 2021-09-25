@@ -19,14 +19,30 @@ public class Stock {
         return products.add(new Product(name, quantity));
     }
 
-    public void printProductQuantity() {
+    public boolean hasProducts() {
+        return products.size() != 0;
+    }
+
+    public void printProducts() {
         for (Product p : products) {
-            System.out.println(p);
+            System.out.println(" * " + p);
         }
+    }
+
+    public Product getProduct(String name) {
+        for (Product product : products)
+            if (Objects.equals(product.getName(), name))
+                return product;
+        return null;
     }
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return '"' + name + "\" at \"" + address + '"';
     }
 
     @Override

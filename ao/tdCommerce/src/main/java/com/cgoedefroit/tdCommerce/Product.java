@@ -15,6 +15,10 @@ public class Product {
         this.quantity = quantity;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public int getQuantity() {
         return quantity;
     }
@@ -25,11 +29,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "name='" + name + '\'' +
-                ", quantity=" + quantity +
-                ", reference=" + reference +
-                '}';
+        return '"' + name + "\" nb: " + quantity + ", ref: " + reference + '"';
     }
 
     @Override
