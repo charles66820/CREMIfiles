@@ -29,15 +29,43 @@ public class Stock {
         }
     }
 
-    public Product getProduct(String name) {
+    private Product getProduct(String name) {
         for (Product product : products)
             if (Objects.equals(product.getName(), name))
                 return product;
         return null;
     }
 
+    public String getProductInfo(String name) {
+        Product product = getProduct(name);
+        if (product == null) return null;
+        return product.toString();
+    }
+
     public String getName() {
         return name;
+    }
+
+    boolean addProductQuantity(String name, int delta) throws Exception {
+        Product product = getProduct(name);
+        if (product == null) throw new Exception("Product not found");
+        int newQuantity = product.getQuantity() + Math.abs(delta);
+        if (newQuantity >= 0) {
+            product.setQuantity(newQuantity);
+            return true;
+        }
+        return false;
+    }
+
+    boolean subProductQuantity(String name, int delta) throws Exception {
+        Product product = getProduct(name);
+        if (product == null) throw new Exception("Product not found");
+        int newQuantity = product.getQuantity() - Math.abs(delta);
+        if (newQuantity >= 0) {
+            product.setQuantity(newQuantity);
+            return true;
+        }
+        return false;
     }
 
     @Override
