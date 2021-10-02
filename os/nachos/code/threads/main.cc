@@ -78,6 +78,9 @@ int main(int argc, char **argv) {
         "-s causes user programs to be executed in single-step mode\n"
         "-x runs a user program\n"
         "-c tests the console\n"
+#ifdef CHANGED
+        "-sc tests the synchonous consoledriver\n"
+#endif
 #endif
 #ifdef FILESYS
         "FILESYS\n"
@@ -124,6 +127,17 @@ int main(int argc, char **argv) {
         argCount = 3;
       }
     }
+#ifdef CHANGED
+    else if (!strcmp(*argv, "-sc")) {  // test the synchronous consoledriver
+      if (argc == 1)
+        ConsoleDriverTest(NULL, NULL);
+      else {
+        ASSERT(argc > 2);
+        ConsoleDriverTest(*(argv + 1), *(argv + 2));
+        argCount = 3;
+      }
+    }
+#endif  // CHANGED
 #endif  // USER_PROGRAM
 #ifdef FILESYS
     if (!strcmp(*argv, "-cp")) {  // copy from UNIX to Nachos

@@ -15,4 +15,8 @@ extern void StartProcess(char *filename);
 
 extern void ConsoleTest(const char *in, const char *out);
 
+#ifdef CHANGED
+extern void ConsoleDriverTest(const char *in, const char *out);
+#endif // CHANGED
+
 #endif  // PROGTEST_H

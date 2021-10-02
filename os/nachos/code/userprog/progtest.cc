@@ -10,6 +10,7 @@
 
 #include "addrspace.h"
 #include "console.h"
+#include "consoledriver.h"
 #include "copyright.h"
 #include "synch.h"
 #include "system.h"
@@ -70,7 +71,7 @@ static void WriteDoneHandler(void *arg) {
 //----------------------------------------------------------------------
 // ConsoleTest
 //      Test the console by echoing characters typed at the input onto
-//      the output.  Stop when the user types a 'q'.
+//      the output.  Stop when the user types a 'q' or '^d'.
 //----------------------------------------------------------------------
 
 void ConsoleTest(const char *in, const char *out) {
@@ -88,12 +89,14 @@ void ConsoleTest(const char *in, const char *out) {
       printf("Au revoir\n");
       break;  // if q, quit
     }
-    console->TX('<'); writeDone->P(); // For TD1 Action II.3
+    console->TX('<');
+    writeDone->P();  // For TD1 Action II.3
 
     console->TX(ch);  // echo it!
     writeDone->P();   // wait for write to finish
 
-    console->TX('>'); writeDone->P(); // For TD1 Action II.3
+    console->TX('>');
+    writeDone->P();  // For TD1 Action II.3
 #else
     console->TX(ch);  // echo it!
     writeDone->P();   // wait for write to finish
@@ -107,3 +110,24 @@ void ConsoleTest(const char *in, const char *out) {
   delete readAvail;
   delete writeDone;
 }
+
+//----------------------------------------------------------------------
+// ConsoleDriverTest
+//      Test the synchronous console driver by echoing characters typed at the
+//      input onto the output.  Stop when the user types `^d'.
+//----------------------------------------------------------------------
+
+#ifdef CHANGED
+
+void ConsoleDriverTest(const char *in, const char *out) {
+  char ch;
+  ConsoleDriver *test_consoledriver = new ConsoleDriver(in, out);
+  while ((ch = test_consoledriver->GetChar()) != EOF) {
+    test_consoledriver->PutChar('<');
+    test_consoledriver->PutChar(ch);
+    test_consoledriver->PutChar('>');
+  }
+  fprintf(stderr, "EOF detected in ConsoleDriver!\n");
+  delete test_consoledriver;
+}
+#endif  // CHANGED
