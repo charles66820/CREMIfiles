@@ -88,8 +88,12 @@ void ConsoleTest(const char *in, const char *out) {
       printf("Au revoir\n");
       break;  // if q, quit
     }
+    console->TX('<'); writeDone->P(); // For TD1 Action II.3
+
     console->TX(ch);  // echo it!
     writeDone->P();   // wait for write to finish
+
+    console->TX('>'); writeDone->P(); // For TD1 Action II.3
 #else
     console->TX(ch);  // echo it!
     writeDone->P();   // wait for write to finish
