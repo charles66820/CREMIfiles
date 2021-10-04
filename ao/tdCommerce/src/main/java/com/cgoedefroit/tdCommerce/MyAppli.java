@@ -1,5 +1,6 @@
 package com.cgoedefroit.tdCommerce;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class MyAppli {
@@ -39,7 +40,25 @@ public class MyAppli {
                             String productName = getUserInputString("Enter a name : ");
                             int quantity = getUserInputInt("Enter a quantity : ");
 
-                            if (currentStock.addProduct(productName, quantity))
+                            boolean created = false;
+
+                            System.out.println("Choose what kind of product you want to create : (s)anitary, (f)ood");
+                            input = scan.nextLine();
+                            switch (input) {
+                                case "s":
+                                    created = currentStock.addSanitaryProduct(productName, quantity);
+                                break;
+                                case "f":
+                                    String date;
+                                    LocalDate expirationDate;
+                                    do {
+                                        date = getUserInputString("Enter a product expiration date : ");
+                                    } while ((expirationDate = LocalDate.parse(date)) == null); // FIXME: parse string
+                                    created = currentStock.addFoodProduct(productName, quantity, expirationDate);
+                                    break;
+                            }
+
+                            if (created)
                                 System.out.println("New product created with success in stock \"" + currentStock.getName() + "\"");
                             else
                                 System.out.println("A product named \"" + productName + "\" alrady exist in stock \"" + currentStock.getName() + "\"");

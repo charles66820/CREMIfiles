@@ -2,7 +2,7 @@ package com.cgoedefroit.tdCommerce;
 
 import java.util.Objects;
 
-public class Product {
+public abstract class Product {
     private String name;
     private int quantity;
     public final int reference;

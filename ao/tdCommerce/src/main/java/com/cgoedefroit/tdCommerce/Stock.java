@@ -1,5 +1,6 @@
 package com.cgoedefroit.tdCommerce;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -15,8 +16,12 @@ public class Stock {
         this.products = new HashSet<>();
     }
 
-    public boolean addProduct(String name, int quantity) {
-        return products.add(new Product(name, quantity));
+    public boolean addSanitaryProduct(String name, int quantity) {
+        return products.add(new SanitaryProduct(name, quantity));
+    }
+
+    public boolean addFoodProduct(String name, int quantity, LocalDate date) {
+        return products.add(new FoodProduct(name, quantity, date));
     }
 
     public boolean hasProducts() {
