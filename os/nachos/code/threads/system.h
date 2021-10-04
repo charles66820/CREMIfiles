@@ -9,7 +9,6 @@
 #define SYSTEM_H
 
 #include "copyright.h"
-#include "consoledriver.h"
 #include "interrupt.h"
 #include "scheduler.h"
 #include "stats.h"
@@ -34,6 +33,7 @@ extern Timer *timer;                 // the hardware alarm clock
 #include "machine.h"
 extern Machine *machine;  // user program memory and registers
 #ifdef CHANGED
+#include "consoledriver.h"
 extern ConsoleDriver *consoledriver;
 #endif //CHANGED
 #endif

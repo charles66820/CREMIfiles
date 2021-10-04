@@ -6,8 +6,6 @@
 // of liability and disclaimer of warranty provisions.
 
 #include "system.h"
-#include "consoledriver.h"
-
 #include <locale.h>
 
 #include "copyright.h"
