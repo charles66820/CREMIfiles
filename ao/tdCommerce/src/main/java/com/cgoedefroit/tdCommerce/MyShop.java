@@ -1,155 +1,12 @@
 package com.cgoedefroit.tdCommerce;
 
-import org.omg.CosNaming.NamingContextPackage.NotFound;
-
 import java.util.*;
 
 public class MyShop {
-    private static Scanner scan;
     private static final Set<Stock> stocks = new HashSet<>();
 
-    public static void main(String[] args) {
-        System.out.println("Welcome in MyShop");
-        scan = new Scanner(System.in);
-        Stock currentStock;
-        while (true) {
-            System.out.println("Choose your action (c)reate, (s)how, (e)dit product quantitiy, (q)uit");
-            String input = scan.nextLine();
-            switch (input) {
-                case "c":
-                    System.out.println("Choose what you want to create (s)tock, (p)roduct");
-                    input = scan.nextLine();
-                    switch (input) {
-                        case "s":
-                            System.out.println("Create a stock");
-                            String stockName = getUserInputString("Enter a name : ");
-                            String address = getUserInputString("Enter an address : ");
-                            if (stocks.add(new Stock(stockName, address)))
-                                System.out.println("New stock created with success");
-                            else System.out.println("A stock named \"" + stockName + "\" alrady exist");
-                            break;
-                        case "p":
-                            if (stocks.size() == 0) {
-                                System.out.println("You need to create stock first");
-                                break;
-                            }
-                            System.out.println("Create a product");
-                            do {
-                                System.out.print("Enter the stock name where the product will be create : ");
-                                input = scan.nextLine();
-                            } while ((currentStock = selectAStock(input)) == null);
-
-                            String productName = getUserInputString("Enter a name : ");
-                            int quantity = getUserInputInt("Enter a quantity : ");
-
-                            if (currentStock.addProduct(productName, quantity))
-                                System.out.println("New product created with success in stock \"" + currentStock.getName() + "\"");
-                            else
-                                System.out.println("A product named \"" + productName + "\" alrady exist in stock \"" + currentStock.getName() + "\"");
-                            break;
-                        default:
-                            System.out.println("Creation cancel");
-                    }
-                    break;
-                case "s":
-                    System.out.println("Choose what you want to show (s)tocks, (sp) stock product, (p)roduct");
-                    input = scan.nextLine();
-                    switch (input) {
-                        case "s":
-                            if (stocks.size() == 0) {
-                                System.out.println("No stock found");
-                                break;
-                            }
-                            System.out.println("All stocks :");
-                            stocks.forEach(stock -> System.out.println(" * " + stock.toString()));
-                            break;
-                        case "sp":
-                            if (stocks.size() == 0) {
-                                System.out.println("No stock found");
-                                break;
-                            }
-                            do {
-                                System.out.print("Enter the stock name to show all the products : ");
-                                input = scan.nextLine();
-                            } while ((currentStock = selectAStock(input)) == null);
-
-                            if (!currentStock.hasProducts()) {
-                                System.out.println("This stock don't have products");
-                                break;
-                            }
-                            System.out.println("All products of " + currentStock.getName() + " :");
-                            currentStock.printProducts();
-                            break;
-                        case "p":
-                            if (stocks.size() == 0) {
-                                System.out.println("No stock found");
-                                break;
-                            }
-                            do {
-                                input = getUserInputString("Enter the stock name where the product is located : ");
-                            } while ((currentStock = selectAStock(input)) == null);
-
-                            if (!currentStock.hasProducts()) {
-                                System.out.println("This stock don't have products");
-                                break;
-                            }
-
-                            String productInfo;
-                            do {
-                                input = getUserInputString("Enter a name :");
-                            } while ((productInfo = currentStock.getProductInfo(input)) == null);
-
-                            System.out.println("Product info :");
-                            System.out.println(productInfo);
-                            break;
-                    }
-                    break;
-                case "e":
-                    if (stocks.size() == 0) {
-                        System.out.println("No stock found");
-                        break;
-                    }
-                    do {
-                        System.out.print("Enter the stock name where is the product you want to edit : ");
-                        input = scan.nextLine();
-                    } while ((currentStock = selectAStock(input)) == null);
-
-                    if (!currentStock.hasProducts()) {
-                        System.out.println("This stock don't have products");
-                        break;
-                    }
-
-                    System.out.println("Choose (a)dd or (r)emove");
-                    input = scan.nextLine();
-                    switch (input) {
-                        case "a":
-                            try {
-                                String productName = getUserInputString("Enter a name : ");
-                                if (currentStock.addProductQuantity(productName, getUserInputInt("Enter a quantity to add : ")))
-                                    System.out.println(productName + " quantity changed with success");
-                                else System.out.println(productName + " quantity not changed");
-                            } catch (Exception e) {
-                                System.out.println("Product not found");
-                            }
-                            break;
-                        case "r":
-                            try {
-                                String productName = getUserInputString("Enter a name : ");
-                                if (currentStock.subProductQuantity(productName, getUserInputInt("Enter a quantity to soustract : ")))
-                                    System.out.println(productName + " quantity changed with success");
-                                else
-                                    System.out.println(productName + " quantity not changed (you remove to many products)");
-                            } catch (Exception e) {
-                                System.out.println("Product not found");
-                            }
-                            break;
-                    }
-                    break;
-                case "q":
-                    System.exit(0);
-                    break;
-            }
-        }
+    static boolean addStock(String name, String address) {
+        return stocks.add(new Stock(name, address));
     }
 
     static Stock selectAStock(String name) {
@@ -159,27 +16,11 @@ public class MyShop {
         return null;
     }
 
-    static String getUserInputString(String msg) {
-        String input;
-        do {
-            System.out.print(msg);
-            input = scan.nextLine();
-        } while (input.equals(""));
-        return input;
+    static boolean hasStock() {
+        return stocks.size() != 0;
     }
 
-    static int getUserInputInt(String msg) {
-        int num = 0;
-        boolean isValidValue = false;
-        do {
-            System.out.print(msg);
-            String input = scan.nextLine();
-            try {
-                num = Integer.parseInt(input);
-                isValidValue = true;
-            } catch (NumberFormatException ignored) {
-            }
-        } while (!isValidValue);
-        return num;
+    public static void printStocks() {
+        stocks.forEach(stock -> System.out.println(" * " + stock.toString()));
     }
 }
