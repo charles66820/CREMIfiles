@@ -9,6 +9,7 @@
 #define SYSTEM_H
 
 #include "copyright.h"
+#include "consoledriver.h"
 #include "interrupt.h"
 #include "scheduler.h"
 #include "stats.h"
@@ -32,6 +33,9 @@ extern Timer *timer;                 // the hardware alarm clock
 #ifdef USER_PROGRAM
 #include "machine.h"
 extern Machine *machine;  // user program memory and registers
+#ifdef CHANGED
+extern ConsoleDriver *consoledriver;
+#endif //CHANGED
 #endif
 
 #ifdef FILESYS_NEEDED  // FILESYS or FILESYS_STUB

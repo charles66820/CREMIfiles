@@ -6,6 +6,7 @@
 // of liability and disclaimer of warranty provisions.
 
 #include "system.h"
+#include "consoledriver.h"
 
 #include <locale.h>
 
@@ -35,6 +36,9 @@ SynchDisk *synchDisk;
 
 #ifdef USER_PROGRAM  // requires either FILESYS or FILESYS_STUB
 Machine *machine;    // user program memory and registers
+#ifdef CHANGED
+ConsoleDriver *consoledriver;
+#endif // CHANGED
 #endif
 
 #ifdef NETWORK
@@ -210,6 +214,11 @@ void Cleanup() {
     delete machine;
     machine = NULL;
   }
+  #ifdef CHANGED
+  if (consoledriver) {
+    delete consoledriver;
+  }
+  #endif // CHANGED
 #endif
 
 #ifdef FILESYS_NEEDED
