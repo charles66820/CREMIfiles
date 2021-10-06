@@ -112,10 +112,12 @@ void ExceptionHandler(ExceptionType which) {
           char s[MAX_STRING_SIZE];
 
           int len = 0;
-          do {
+          while (true) {
             len = copyStringFromMachine(p, s, MAX_STRING_SIZE);
             consoledriver->PutString(s);
-          } while (len >= MAX_STRING_SIZE - 1);
+            if (len < MAX_STRING_SIZE - 1) break;
+            p += len;
+          }
           break;
         }
 #endif  // CHANGED

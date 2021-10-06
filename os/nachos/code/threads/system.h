@@ -36,7 +36,7 @@ extern Machine *machine;  // user program memory and registers
 #include "consoledriver.h"
 extern ConsoleDriver *consoledriver;
 
-#define MAX_STRING_SIZE 1024 //size of local buffer
+#define MAX_STRING_SIZE 128 //size of local buffer
 
 #endif //CHANGED
 #endif
