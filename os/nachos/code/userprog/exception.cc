@@ -38,6 +38,32 @@ static void UpdatePC() {
   machine->WriteRegister(NextPCReg, pc);
 }
 
+#ifdef CHANGED
+/**
+ * @brief Copy char from mips memory to a table give in args
+ * @param from address in mips memory space
+ * @param to table pointer to copy string
+ * @param size nb char to copy
+ * @return int length copy
+ */
+int copyStringFromMachine(int from, char *to, unsigned size) {
+  if (size <= 0) return -1;
+
+  uint cpt = 0;
+  for (; cpt < size - 1; cpt++) {
+    int tmp;
+    if (machine->ReadMem(from + cpt, 1, &tmp)) {
+      // copy read tmp char to `to`
+      to[cpt] = tmp;
+      if (tmp == '\0') return cpt;
+    } else break;
+  }
+
+  to[cpt] = '\0';
+  return cpt;
+}
+#endif  // CHANGED
+
 //----------------------------------------------------------------------
 // ExceptionHandler
 //      Entry point into the Nachos kernel.  Called when a user program
@@ -78,6 +104,18 @@ void ExceptionHandler(ExceptionType which) {
           DEBUG('s', "PutChar\n");
           int c = machine->ReadRegister(4);
           consoledriver->PutChar(c);
+          break;
+        }
+        case SC_PutString: {
+          DEBUG('s', "PutString\n");
+          int p = machine->ReadRegister(4);
+          char s[MAX_STRING_SIZE];
+
+          int len = 0;
+          do {
+            len = copyStringFromMachine(p, s, MAX_STRING_SIZE);
+            consoledriver->PutString(s);
+          } while (len >= MAX_STRING_SIZE - 1);
           break;
         }
 #endif  // CHANGED
@@ -138,24 +176,3 @@ void ExceptionHandler(ExceptionType which) {
       break;
   }
 }
-
-#ifdef CHANGED
-/**
- * @brief Copy char from mips memory to a table give in args
- * @param from address in mips memory space
- * @param to table pointer to copy string
- * @param size nb char to copy
- * @return int length copy
- */
-int copyStringFromMachine(int from, char *to, unsigned size) {
-  uint cpt;
-  for (cpt = 0; cpt < size; cpt++) {
-    int tmp;
-    if (machine->ReadMem(from + cpt, 1, &tmp)) {
-      // copy read tmp char to `to`
-      to[cpt] = tmp;
-    } else return cpt;
-  }
-  return cpt;
-}
-#endif  // CHANGED
