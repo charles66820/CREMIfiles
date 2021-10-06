@@ -1,7 +1,7 @@
-# This is part of a GNU-Makefile, to specify system-dependent 
+# This is part of a GNU-Makefile, to specify system-dependent
 # parts of the Makefile enviroment.
 #
-# This gets included as part of the GNU-Makefile used in each of 
+# This gets included as part of the GNU-Makefile used in each of
 # the subdirectories.
 #
 # Depending on your platform, you need to select the correct definition.
@@ -51,7 +51,7 @@ endif
 # HP PA-RISC, HP_UX
 # HOST = -DHOST_SNAKE -DHOST_IS_BIG_ENDIAN
 
-# 386, 386BSD Unix, or NetBSD Unix (available via anon ftp 
+# 386, 386BSD Unix, or NetBSD Unix (available via anon ftp
 #    from agate.berkeley.edu)
 # HOST = -DHOST_i386
 # CPP=/usr/bin/cpp
