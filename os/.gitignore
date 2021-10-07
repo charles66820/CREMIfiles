@@ -13,3 +13,5 @@ nachos/code/test/putstring
 nachos/code/threads/nachos
 nachos/code/userprog/nachos
 !nachos/.vscode/tasks.json
+nachos/report
+nachos/report.xml

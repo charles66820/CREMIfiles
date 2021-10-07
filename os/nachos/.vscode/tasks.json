@@ -15,7 +15,7 @@
     {
       "label": "cppcheck",
       "type": "shell",
-      "command": "cppcheck --check-config --enable=all --suppress=missingIncludeSystem --xml-version=2 code/threads/*.c code/threads/*.h 2> report.xml && cppcheck-htmlreport --source-dir=. --report-dir=report --file=report.xml --title=Nachos && google-chrome file://`pwd`/report/index.html",
+      "command": "cppcheck --check-config --enable=all --suppress=missingIncludeSystem --xml-version=2 code/filesys/*.c code/machine/*.c code/network/*.c code/test/*.c code/threads/*.c code/userprog/*.c code/filesys/*.h code/machine/*.h code/network/*.h code/test/*.h code/threads/*.h code/userprog/*.h 2> report.xml && cppcheck-htmlreport --source-dir=. --report-dir=report --file=report.xml --title=Nachos && google-chrome file://`pwd`/report/index.html",
       "options": {
         "cwd": "${workspaceRoot}"
       },
@@ -25,6 +25,17 @@
     },
     {
       "label": "valgrind",
+      "type": "shell",
+      "command": "valgrind ${input:debugBin}",
+      "options": {
+        "cwd": "${workspaceRoot}/code"
+      },
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "valgrind mem leak full check and verbose",
       "type": "shell",
       "command": "valgrind --leak-check=full -v ${input:debugBin}",
       "options": {
@@ -61,7 +72,7 @@
     {
       "id": "debugBin",
       "description": "executable args:",
-      "default": "./threads/nachos",
+      "default": "./userprog/nachos -x ./test/",
       "type": "promptString"
     }
   ]
