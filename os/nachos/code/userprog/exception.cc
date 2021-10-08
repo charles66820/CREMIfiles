@@ -100,6 +100,12 @@ void ExceptionHandler(ExceptionType which) {
           break;
         }
 #ifdef CHANGED
+        case SC_Exit: {
+          int returnStatus = machine->ReadRegister(4);
+          DEBUG('s', "Program %s exit with status code %d\n", currentThread->getName(), returnStatus);
+          currentThread->Finish();
+          break;
+        }
         case SC_PutChar: {
           DEBUG('s', "PutChar\n");
           int c = machine->ReadRegister(4);
