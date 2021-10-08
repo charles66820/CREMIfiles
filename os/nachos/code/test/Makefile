@@ -45,7 +45,7 @@ endif
 
 LDFLAGS = -T script -N
 ASFLAGS = 
-CPPFLAGS = $(INCDIR) -DCHANGED
+CPPFLAGS = $(INCDIR) -DCHANGED -G 0
 
 
 # If you aren't cross-compiling:

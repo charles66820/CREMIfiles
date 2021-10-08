@@ -9,7 +9,9 @@ nachos/code/test/matmult
 nachos/code/test/shell
 nachos/code/test/sort
 nachos/code/test/putchar
+nachos/code/test/putchar.s
 nachos/code/test/putstring
+nachos/code/test/putstring.s
 nachos/code/threads/nachos
 nachos/code/userprog/nachos
 !nachos/.vscode/tasks.json
