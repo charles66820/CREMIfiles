@@ -1,6 +1,7 @@
 package com.cgoedefroit.tdCommerce;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class MyAppli {
@@ -51,9 +52,15 @@ public class MyAppli {
                                 case "f":
                                     String date;
                                     LocalDate expirationDate;
-                                    do {
+                                    while (true) {
                                         date = getUserInputString("Enter a product expiration date : ");
-                                    } while ((expirationDate = LocalDate.parse(date)) == null); // FIXME: parse string
+                                        try {
+                                            expirationDate = LocalDate.parse(date);
+                                            if (expirationDate != null) break;
+                                        } catch (DateTimeParseException e) {
+                                            System.out.println("Bad date \"" + e.getMessage() + '"');
+                                        }
+                                    }
                                     created = currentStock.addFoodProduct(productName, quantity, expirationDate);
                                     break;
                             }
