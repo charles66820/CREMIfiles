@@ -59,7 +59,7 @@
     {
       "label": "make",
       "type": "shell",
-      "command": "make",
+      "command": "make -j 4",
       "options": {
         "cwd": "${workspaceRoot}/code"
       },
