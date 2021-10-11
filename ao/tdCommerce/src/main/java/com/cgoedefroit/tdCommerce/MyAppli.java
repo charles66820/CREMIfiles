@@ -1,5 +1,7 @@
 package com.cgoedefroit.tdCommerce;
 
+import com.google.gson.Gson;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -10,10 +12,16 @@ public class MyAppli {
     public static void main(String[] args) {
         System.out.println("Welcome in MyShop");
         scan = new Scanner(System.in);
+
+        System.out.println("Don't load save ?");
+        String input = scan.nextLine();
+        if (!input.matches("^(?:1|t(?:rue)?|y(?:es)?|ok(?:ay)?)$"))
+            MyShop.load();
+
         Stock currentStock;
         while (true) {
             System.out.println("Choose your action (c)reate, (s)how, (e)dit product quantitiy, (q)uit");
-            String input = scan.nextLine();
+            input = scan.nextLine();
             switch (input) {
                 case "c":
                     System.out.println("Choose what you want to create (s)tock, (p)roduct");
@@ -169,6 +177,10 @@ public class MyAppli {
                     }
                     break;
                 case "q":
+                    System.out.println("Don't save ?");
+                    input = scan.nextLine();
+                    if (!input.matches("^(?:1|t(?:rue)?|y(?:es)?|ok(?:ay)?)$"))
+                        MyShop.save();
                     System.exit(0);
                     break;
             }
