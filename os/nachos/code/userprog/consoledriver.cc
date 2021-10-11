@@ -48,7 +48,29 @@ void ConsoleDriver::PutString(const char s[]) {
 }
 
 void ConsoleDriver::GetString(char *s, int n) {
-  // ...
+  //Check if the size is correct
+  if (n <= 0) {
+    return;
+  }
+
+  int c = 0;
+  for (int i = 0; i < n-1; i++) {
+    readAvail->P();
+    c = console->RX();
+    //Reading stop after and EOF or a newline
+    if (c == EOF) {
+      s[i] = '\0';
+      return;
+    }
+    if (c == '\n') {
+      s[i] = '\n';
+      s[i+1] = '\0';
+      return;
+    }
+    s[i] = c;
+  }
+  //At the end of the buffer we add a termining null byte '\0'
+  s[n] = '\0';
 }
 
 #endif  // CHANGED

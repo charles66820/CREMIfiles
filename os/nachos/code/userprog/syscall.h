@@ -35,6 +35,8 @@
 #ifdef CHANGED
 #define SC_PutChar 11
 #define SC_PutString 12
+#define SC_GetChar 13
+#define SC_GetString 14
 #endif // CHANGED
 
 #ifdef IN_USER_MODE
@@ -136,6 +138,12 @@ void PutChar(char c);
 
 /* Wait for a string which can be write */
 void PutString(const char s[]);
+
+/* Wait for a char to read it */
+int GetChar();
+
+/* Wait for an string to read it */
+int GetString(const char s[], int n);
 #endif
 
 #endif  // IN_USER_MODE

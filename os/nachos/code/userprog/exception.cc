@@ -56,10 +56,33 @@ int copyStringFromMachine(int from, char *to, unsigned size) {
       // copy read tmp char to `to`
       to[cpt] = tmp;
       if (tmp == '\0') return cpt;
-    } else break;
+    } else
+      break;
   }
 
   to[cpt] = '\0';
+  return cpt;
+}
+
+/**
+ * @brief Copy char from kernel to mips memory at address to
+ * @param from pointer of string to copy
+ * @param to destination address in mips memory space
+ * @param size nb char to copy
+ * @return int length copy
+ */
+int copyStringToMachine(char *from, int to, unsigned size) {
+  if (size <= 0) return -1;
+
+  uint cpt = 0;
+  for (; cpt < size - 1; cpt++) {
+    if (machine->WriteMem(to + cpt, 1, from[cpt])) {
+      if (from[cpt] == '\0') return cpt;
+    } else
+      break;
+  }
+
+  machine->WriteMem(to + cpt, 1, '\0');
   return cpt;
 }
 #endif  // CHANGED
@@ -102,7 +125,8 @@ void ExceptionHandler(ExceptionType which) {
 #ifdef CHANGED
         case SC_Exit: {
           int returnStatus = machine->ReadRegister(4);
-          DEBUG('s', "Program %s exit with status code %d\n", currentThread->getName(), returnStatus);
+          DEBUG('s', "Program %s exit with status code %d\n",
+                currentThread->getName(), returnStatus);
           currentThread->Finish();
           break;
         }
@@ -122,7 +146,33 @@ void ExceptionHandler(ExceptionType which) {
             len = copyStringFromMachine(p, s, MAX_STRING_SIZE);
             consoledriver->PutString(s);
             if (len < MAX_STRING_SIZE - 1) break;
-            p += len;
+            p += (MAX_STRING_SIZE - 1);
+          }
+          break;
+        }
+        case SC_GetChar: {
+          DEBUG('s', "GetChar\n");
+          int c = consoledriver->GetChar();
+          machine->WriteRegister(2, c);
+          break;
+        }
+        case SC_GetString: {
+          DEBUG('s', "GetString\n");
+          int p = machine->ReadRegister(4);
+          int n = machine->ReadRegister(5);
+          char s[MAX_STRING_SIZE];
+
+          int len = 0;
+          while (true) {
+            int lengthToCopy = (n < MAX_STRING_SIZE)? n : MAX_STRING_SIZE;
+            // Get string and send it to user process
+            consoledriver->GetString(s, lengthToCopy);
+            len = copyStringToMachine(s, p, lengthToCopy);
+
+            // exit when the buffer is not full
+            if (len < MAX_STRING_SIZE - 1) break;
+            p += (MAX_STRING_SIZE - 1); // forward the pointer
+            n -= (MAX_STRING_SIZE - 1); // decrease remaining char to copy
           }
           break;
         }
