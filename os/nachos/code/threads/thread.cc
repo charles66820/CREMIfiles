@@ -234,7 +234,9 @@ void Thread::Finish() {
 //
 //      Similar to Thread::Sleep(), but a little different.
 //----------------------------------------------------------------------
-
+#ifdef CHANGED
+int changeContext = 1;
+#endif
 void Thread::Yield() {
   Thread *nextThread;
   IntStatus oldLevel = interrupt->SetLevel(IntOff);
@@ -243,9 +245,13 @@ void Thread::Yield() {
 
   DEBUG('t', "Yielding thread %p \"%s\"\n", this, getName());
 #ifdef CHANGED
-// TODO: 5.4 1/2 td01
-#endif
+// 5.4 1/2 td0
+  if (changeContext == 1)
+    nextThread = scheduler->FindNextToRun();
+  changeContext = !changeContext;
+#else
   nextThread = scheduler->FindNextToRun();
+#endif
   if (nextThread != NULL) {
     scheduler->ReadyToRun(this);
     scheduler->Run(nextThread);
