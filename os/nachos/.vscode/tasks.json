@@ -32,7 +32,10 @@
       },
       "presentation": {
         "reveal": "always"
-      }
+      },
+      "dependsOn": [
+          "make"
+      ]
     },
     {
       "label": "valgrind mem leak full check and verbose",
@@ -43,7 +46,10 @@
       },
       "presentation": {
         "reveal": "always"
-      }
+      },
+      "dependsOn": [
+          "make"
+      ]
     },
     {
       "label": "valgrind callgrind",
@@ -54,7 +60,10 @@
       },
       "presentation": {
         "reveal": "always"
-      }
+      },
+      "dependsOn": [
+          "make"
+      ]
     },
     {
       "label": "make",
