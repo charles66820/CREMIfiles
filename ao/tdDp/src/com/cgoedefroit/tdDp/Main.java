@@ -1,19 +1,19 @@
 package com.cgoedefroit.tdDp;
 
-import com.cgoedefroit.tdDp.Soldat.Cavalier;
-import com.cgoedefroit.tdDp.Soldat.Fantassin;
-import com.cgoedefroit.tdDp.Soldat.Soldat;
+import com.cgoedefroit.tdDp.Soldier.Knight;
+import com.cgoedefroit.tdDp.Soldier.Infantry;
+import com.cgoedefroit.tdDp.Soldier.Soldier;
 
 public class Main {
 
     public static void main(String[] args) {
-        Soldat c = new Cavalier(100);
-        Soldat f = new Fantassin(50);
+        Soldier c = new Knight(100);
+        Soldier f = new Infantry(50);
         int ncoups = 0;
         boolean vc = true;
         boolean vf = true;
 
-        for (; (vf = f.parer(c.force())) && (vc = c.parer(f.force())); ncoups++)
+        for (; (vf = f.wardOff(c.strength())) && (vc = c.wardOff(f.strength())); ncoups++)
             ;
 
         System.out.println("Mort du " + (vf ? "cavalier" : "fantassin")
