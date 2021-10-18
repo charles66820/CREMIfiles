@@ -13,13 +13,7 @@ import java.util.*;
 public class MyShop {
     private static Set<Stock> stocks = new HashSet<>();
 
-    private static Gson gson = new Gson();
-
-    public MyShop() {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Product.class, new InterfaceAdapter());
-        Gson gson = builder.create();
-    }
+    private static Gson gson;// = new Gson();
 
     static boolean addStock(String name, String address) {
         return stocks.add(new Stock(name, address));
@@ -40,7 +34,16 @@ public class MyShop {
         stocks.forEach(stock -> System.out.println(" * " + stock.toString()));
     }
 
+    private static void initGson() {
+        if (gson == null) {
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Product.class, new InterfaceAdapter());
+            gson = builder.create();
+        }
+    }
+
     public static void save() {
+        initGson();
         String jsonString = gson.toJson(stocks);
         try {
             FileWriter myWriter = new FileWriter("save.json");
@@ -53,6 +56,7 @@ public class MyShop {
     }
 
     public static boolean load() {
+        initGson();
         Set<Stock> tmpStocks;
         try {
             JsonReader reader = new JsonReader(new FileReader("save.json"));
