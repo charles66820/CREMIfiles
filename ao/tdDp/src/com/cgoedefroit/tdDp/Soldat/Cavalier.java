@@ -1,4 +1,4 @@
-package com.cgoedefroit.tdDp;
+package com.cgoedefroit.tdDp.Soldat;
 
 public class Cavalier extends SoldatAbstrait {
     private static final int FORCE_CAVALIER = 2;

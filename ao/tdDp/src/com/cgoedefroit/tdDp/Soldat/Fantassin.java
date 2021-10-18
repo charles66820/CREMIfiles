@@ -1,4 +1,4 @@
-package com.cgoedefroit.tdDp;
+package com.cgoedefroit.tdDp.Soldat;
 
 public class Fantassin extends SoldatAbstrait {
     private static final int FORCE_FANTASSIN = 1;

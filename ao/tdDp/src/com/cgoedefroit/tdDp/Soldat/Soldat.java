@@ -1,4 +1,4 @@
-package com.cgoedefroit.tdDp;
+package com.cgoedefroit.tdDp.Soldat;
 
 public interface Soldat {
     public int force();

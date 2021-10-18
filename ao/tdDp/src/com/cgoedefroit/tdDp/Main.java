@@ -1,5 +1,9 @@
 package com.cgoedefroit.tdDp;
 
+import com.cgoedefroit.tdDp.Soldat.Cavalier;
+import com.cgoedefroit.tdDp.Soldat.Fantassin;
+import com.cgoedefroit.tdDp.Soldat.Soldat;
+
 public class Main {
 
     public static void main(String[] args) {
