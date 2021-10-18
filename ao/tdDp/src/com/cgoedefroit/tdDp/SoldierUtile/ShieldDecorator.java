@@ -13,4 +13,9 @@ public class ShieldDecorator extends SoldierDecorator {
     public int hit() {
         return soldier.strength() * SHIELD_STRENGTH;
     }
+
+    @Override
+    public boolean wardOff(int strenght) {
+        return super.wardOff(strenght - SHIELD_RESISTANCE);
+    }
 }
