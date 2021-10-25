@@ -164,6 +164,20 @@ void AddrSpace::InitRegisters() {
   DEBUG('a', "Initializing stack register to 0x%x\n", numPages * PageSize - 16);
 }
 
+#ifdef CHANGED
+//----------------------------------------------------------------------
+// AddrSpace::AllocateUserStack
+//      Initialise the top address of the new allocated stack
+//----------------------------------------------------------------------
+
+void AddrSpace::AllocateUserStack() {
+  // TODO: support multiple thread with bitmap
+  machine->WriteRegister(StackReg, numPages * PageSize - 256);
+  DEBUG('a', "Initializing stack pointer to 0x%x\n", numPages * PageSize - 256);
+}
+
+#endif //CHANGED
+
 //----------------------------------------------------------------------
 // AddrSpace::Dump
 //      Dump program layout as SVG
