@@ -8,7 +8,8 @@ public class SoldierDecorator extends AbstractSoldierDecorator {
         super(soldier);
     }
 
-    public int hit() {
+    @Override
+    public int strength() {
         return soldier.strength() * SOLDIER_STRENGTH;
     }
 }

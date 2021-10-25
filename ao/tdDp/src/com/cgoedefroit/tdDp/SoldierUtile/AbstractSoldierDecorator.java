@@ -15,4 +15,8 @@ public abstract class AbstractSoldierDecorator implements Soldier {
     public boolean wardOff(int strength) {
         return soldier.wardOff(strength);
     }
+
+    public boolean isAlive() {
+        return soldier.isAlive();
+    }
 }

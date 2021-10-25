@@ -4,4 +4,6 @@ public interface Soldier {
     public int strength();
 
     public boolean wardOff(int force);
+
+    public boolean isAlive();
 }
