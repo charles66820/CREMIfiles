@@ -10,4 +10,8 @@ public class Infantry extends AbstraitSoldier {
     public int strength() {
         return INFANTTY_STRENGTH;
     }
+
+    public String getName() {
+        return "fantassin";
+    }
 }

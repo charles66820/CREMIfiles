@@ -6,4 +6,8 @@ public interface Soldier {
     public boolean wardOff(int force);
 
     public boolean isAlive();
+
+    public int getLifePoints();
+
+    public String getName();
 }

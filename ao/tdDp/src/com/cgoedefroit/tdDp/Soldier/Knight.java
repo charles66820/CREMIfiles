@@ -10,4 +10,8 @@ public class Knight extends AbstraitSoldier {
     public int strength() {
         return KNIGHT_STRENGTH;
     }
+
+    public String getName() {
+        return "cavalier";
+    }
 }

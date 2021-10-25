@@ -13,66 +13,47 @@ public class Main {
         System.out.println("Cavalier avec epee vs fantassin avec epee :");
         Soldier k = new SwordDecorator(new Knight(100));
         Soldier i = new SwordDecorator(new Infantry(50));
-
-        int ncoups = fight(k, i);
-        System.out.println("Mort du " + (k.isAlive() ? "cavalier" : "fantassin")
-                + " en " + ncoups + " coups");
+        doFight(k, i);
 
         System.out.println("Cavalier avec epee vs fantassin avec bouclier :");
         k = new SwordDecorator(new Knight(100));
         i = new ShieldDecorator(new Infantry(50));
-        ncoups = fight(k, i);
-        System.out.println("Mort du " + (k.isAlive() ? "cavalier" : "fantassin")
-                + " en " + ncoups + " coups");
+        doFight(k, i);
 
         System.out.println("Cavalier avec epee vs fantassin nu :");
         k = new SwordDecorator(new Knight(100));
         i = new SoldierDecorator(new Infantry(50));
-        ncoups = fight(k, i);
-        System.out.println("Mort du " + (k.isAlive() ? "cavalier" : "fantassin")
-                + " en " + ncoups + " coups");
+        doFight(k, i);
 
         System.out.println("Cavalier avec bouclier vs fantassin avec epee :");
         k = new ShieldDecorator(new Knight(100));
         i = new SwordDecorator(new Infantry(50));
-        ncoups = fight(k, i);
-        System.out.println("Mort du " + (k.isAlive() ? "cavalier" : "fantassin")
-                + " en " + ncoups + " coups");
+        doFight(k, i);
 
         System.out.println("Cavalier avec bouclier vs fantassin avec bouclier :");
         k = new ShieldDecorator(new Knight(100));
         i = new ShieldDecorator(new Infantry(50));
-        ncoups = fight(k, i);
-        System.out.println("Mort du " + (k.isAlive() ? "cavalier" : "fantassin")
-                + " en " + ncoups + " coups");
+        doFight(k, i);
 
         System.out.println("Cavalier avec bouclier vs fantassin nu :");
         k = new ShieldDecorator(new Knight(100));
         i = new SoldierDecorator(new Infantry(50));
-        ncoups = fight(k, i);
-        System.out.println("Mort du " + (k.isAlive() ? "cavalier" : "fantassin")
-                + " en " + ncoups + " coups");
+        doFight(k, i);
 
         System.out.println("Cavalier nu vs fantassin avec epee :");
         k = new SoldierDecorator(new Knight(100));
         i = new SwordDecorator(new Infantry(50));
-        ncoups = fight(k, i);
-        System.out.println("Mort du " + (k.isAlive() ? "cavalier" : "fantassin")
-                + " en " + ncoups + " coups");
+        doFight(k, i);
 
         System.out.println("Cavalier nu vs fantassin avec bouclier :");
         k = new SoldierDecorator(new Knight(100));
         i = new ShieldDecorator(new Infantry(50));
-        ncoups = fight(k, i);
-        System.out.println("Mort du " + (k.isAlive() ? "cavalier" : "fantassin")
-                + " en " + ncoups + " coups");
+        doFight(k, i);
 
         System.out.println("Cavalier nu vs fantassin nu :");
         k = new SoldierDecorator(new Knight(100));
         i = new SoldierDecorator(new Infantry(50));
-        ncoups = fight(k, i);
-        System.out.println("Mort du " + (k.isAlive() ? "cavalier" : "fantassin")
-                + " en " + ncoups + " coups");
+        doFight(k, i);
     }
 
     private static int fight(Soldier a, Soldier e) {
@@ -81,11 +62,24 @@ public class Main {
         boolean le = true;
         while (la && le) {
             ncoups++;
-            la = a.wardOff(e.strength());
+            System.out.println("coups " + ncoups);
+            int es = e.strength();
+            la = a.wardOff(es);
+            System.out.println(e.getName() + " inflige " + es + " au " + a.getName());
+            System.out.println(a.getName() + " a " + a.getLifePoints() + " pv");
             if (la) {
-                le = e.wardOff(a.strength());
+                int as = a.strength();
+                le = e.wardOff(as);
+                System.out.println(a.getName() + " inflige " + as + " au " + e.getName());
+                System.out.println(e.getName() + " a " + e.getLifePoints() + " pv");
             }
         }
         return ncoups;
+    }
+
+    private static void doFight(Soldier a, Soldier e) {
+        int ncoups = fight(a, e);
+        System.out.println("Mort du " + (a.isAlive() ? e.getName() : a.getName())
+                + " en " + ncoups + " coups\n");
     }
 }

@@ -15,4 +15,8 @@ abstract class AbstraitSoldier implements Soldier {
     public boolean isAlive() {
         return lifePoints > 0;
     }
+
+    public int getLifePoints() {
+        return lifePoints;
+    }
 }

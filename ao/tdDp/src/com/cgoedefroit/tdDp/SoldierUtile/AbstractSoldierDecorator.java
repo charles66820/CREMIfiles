@@ -19,4 +19,12 @@ public abstract class AbstractSoldierDecorator implements Soldier {
     public boolean isAlive() {
         return soldier.isAlive();
     }
+
+    public String getName() {
+        return soldier.getName();
+    }
+
+    public int getLifePoints() {
+        return soldier.getLifePoints();
+    }
 }
