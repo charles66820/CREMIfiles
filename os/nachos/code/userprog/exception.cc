@@ -164,15 +164,15 @@ void ExceptionHandler(ExceptionType which) {
 
           int len = 0;
           while (true) {
-            int lengthToCopy = (n < MAX_STRING_SIZE)? n : MAX_STRING_SIZE;
+            int lengthToCopy = (n < MAX_STRING_SIZE) ? n : MAX_STRING_SIZE;
             // Get string and send it to user process
             consoledriver->GetString(s, lengthToCopy);
             len = copyStringToMachine(s, p, lengthToCopy);
 
             // exit when the buffer is not full
             if (len < MAX_STRING_SIZE - 1) break;
-            p += (MAX_STRING_SIZE - 1); // forward the pointer
-            n -= (MAX_STRING_SIZE - 1); // decrease remaining char to copy
+            p += (MAX_STRING_SIZE - 1);  // forward the pointer
+            n -= (MAX_STRING_SIZE - 1);  // decrease remaining char to copy
           }
           break;
         }
