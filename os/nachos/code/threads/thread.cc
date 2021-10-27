@@ -248,6 +248,7 @@ void Thread::Yield() {
 // 5.4 1/2 td0
   if (changeContext == 1)
     nextThread = scheduler->FindNextToRun();
+  else nextThread = NULL;
   changeContext = !changeContext;
 #else
   nextThread = scheduler->FindNextToRun();
