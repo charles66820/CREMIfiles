@@ -4,8 +4,11 @@ import com.cgoedefroit.tdDp.Soldier.Soldier;
 
 public abstract class AbstractSoldierDecorator implements Soldier {
     protected Soldier soldier;
-    public AbstractSoldierDecorator(Soldier soldier) {
+    private int durability;
+
+    public AbstractSoldierDecorator(Soldier soldier, int durability) {
         this.soldier = soldier;
+        this.durability = durability;
     }
 
     public int strength() {
@@ -26,5 +29,13 @@ public abstract class AbstractSoldierDecorator implements Soldier {
 
     public int getLifePoints() {
         return soldier.getLifePoints();
+    }
+
+    public int getDurability() {
+        return durability;
+    }
+
+    protected final void degradation(int degradation) {
+        durability = Math.max(durability - degradation, 0);
     }
 }
