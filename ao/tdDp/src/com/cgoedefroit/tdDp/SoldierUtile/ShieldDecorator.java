@@ -2,7 +2,7 @@ package com.cgoedefroit.tdDp.SoldierUtile;
 
 import com.cgoedefroit.tdDp.Soldier.Soldier;
 
-public class ShieldDecorator extends SoldierDecorator {
+public class ShieldDecorator extends AbstractSoldierDecorator {
     private static final int SHIELD_STRENGTH = 7;
     private static final int SHIELD_RESISTANCE = 12;
 

@@ -2,7 +2,7 @@ package com.cgoedefroit.tdDp.SoldierUtile;
 
 import com.cgoedefroit.tdDp.Soldier.Soldier;
 
-public class SwordDecorator extends SoldierDecorator {
+public class SwordDecorator extends AbstractSoldierDecorator {
     private static final int SWORD_STRENGTH = 16;
     private static final int SWORD_RESISTANCE = 2;
 

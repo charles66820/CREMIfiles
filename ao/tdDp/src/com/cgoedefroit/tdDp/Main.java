@@ -4,7 +4,6 @@ import com.cgoedefroit.tdDp.Soldier.Knight;
 import com.cgoedefroit.tdDp.Soldier.Infantry;
 import com.cgoedefroit.tdDp.Soldier.Soldier;
 import com.cgoedefroit.tdDp.SoldierUtile.ShieldDecorator;
-import com.cgoedefroit.tdDp.SoldierUtile.SoldierDecorator;
 import com.cgoedefroit.tdDp.SoldierUtile.SoldierProxy;
 import com.cgoedefroit.tdDp.SoldierUtile.SwordDecorator;
 
@@ -56,7 +55,7 @@ public class Main {
 
         System.out.println("Cavalier avec epee vs fantassin nu :");
         k = new SwordDecorator(new Knight(100));
-        i = new SoldierDecorator(new Infantry(50));
+        i = new Infantry(50);
         doFight(k, i, debug);
 
         System.out.println("Cavalier avec bouclier vs fantassin avec epee :");
@@ -71,24 +70,23 @@ public class Main {
 
         System.out.println("Cavalier avec bouclier vs fantassin nu :");
         k = new ShieldDecorator(new Knight(100));
-        i = new SoldierDecorator(new Infantry(50));
+        i = new Infantry(50);
         doFight(k, i, debug);
 
         System.out.println("Cavalier nu vs fantassin avec epee :");
-        k = new SoldierDecorator(new Knight(100));
+        k = new Knight(100);
         i = new SwordDecorator(new Infantry(50));
         doFight(k, i, debug);
 
         System.out.println("Cavalier nu vs fantassin avec bouclier :");
-        k = new SoldierDecorator(new Knight(100));
+        k = new Knight(100);
         i = new ShieldDecorator(new Infantry(50));
         doFight(k, i, debug);
 
         System.out.println("Cavalier nu vs fantassin nu :");
-        k = new SoldierDecorator(new Knight(100));
-        i = new SoldierDecorator(new Infantry(50));
+        k = new Knight(100);
+        i = new Infantry(50);
         doFight(k, i, debug);
-
     }
 
     private static void proxyTests(boolean debug) {
