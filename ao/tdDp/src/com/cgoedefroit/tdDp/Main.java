@@ -5,12 +5,14 @@ import com.cgoedefroit.tdDp.Soldier.Infantry;
 import com.cgoedefroit.tdDp.Soldier.Soldier;
 import com.cgoedefroit.tdDp.SoldierUtile.ShieldDecorator;
 import com.cgoedefroit.tdDp.SoldierUtile.SoldierDecorator;
+import com.cgoedefroit.tdDp.SoldierUtile.SoldierProxy;
 import com.cgoedefroit.tdDp.SoldierUtile.SwordDecorator;
 
 public class Main {
 
     public static void main(String[] args) {
         decoratorTests(false);
+        proxyTests(true);
     }
 
     private static int fight(Soldier a, Soldier e, boolean debug) {
@@ -88,4 +90,28 @@ public class Main {
         doFight(k, i, debug);
 
     }
+
+    private static void proxyTests(boolean debug) {
+        System.out.println("==== Proxy tests ====");
+        System.out.println("Cavalier vs fantassin :");
+
+        SoldierProxy<Knight> k = new SoldierProxy<>(Knight.class, 100);
+        if (k.addSword()) {
+            if (debug) System.out.println("epee ajouter!");
+        } else if (debug) System.out.println("le soldat a deja une epee!");
+        if (k.addSword()) {
+            if (debug) System.out.println("epee ajouter!");
+        } else if (debug) System.out.println("le soldat a deja une epee!");
+        if (k.addShield()) {
+            if (debug) System.out.println("bouclier ajouter!");
+        } else if (debug) System.out.println("le soldat a deja une bouclier!");
+
+        SoldierProxy<Infantry> i = new SoldierProxy<>(Infantry.class, 50);
+        if (i.addShield()) {
+            if (debug) System.out.println("bouclier ajouter!");
+        } else if (debug) System.out.println("le soldat a deja une bouclier!");
+
+        doFight(k, i, debug);
+    }
+
 }
