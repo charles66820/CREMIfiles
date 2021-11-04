@@ -31,6 +31,13 @@ public class SoldierProxy<T extends Soldier> implements Soldier {
         return canBeAdd;
     }
 
+    public boolean addDagger() {
+        lazyLoad();
+        boolean canBeAdd = equipments.add("DAGGER");
+        if (canBeAdd) soldier = new DaggerDecorator(soldier);
+        return canBeAdd;
+    }
+
     private Soldier lazyLoad() {
         if (soldier == null) {
             try {

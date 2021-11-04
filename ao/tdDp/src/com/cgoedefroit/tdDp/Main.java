@@ -107,6 +107,9 @@ public class Main {
         } else if (debug) System.out.println("le soldat a deja une bouclier!");
 
         SoldierProxy<Infantry> i = new SoldierProxy<>(Infantry.class, 50);
+        if (i.addDagger()) {
+            if (debug) System.out.println("dague ajouter!");
+        } else if (debug) System.out.println("le soldat a deja une dague!");
         if (i.addShield()) {
             if (debug) System.out.println("bouclier ajouter!");
         } else if (debug) System.out.println("le soldat a deja une bouclier!");
