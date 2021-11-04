@@ -1,19 +1,18 @@
 package com.cgoedefroit.tdDp.SoldierUtile;
 
-import com.cgoedefroit.tdDp.Soldier.Infantry;
 import com.cgoedefroit.tdDp.Soldier.Soldier;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SoldierProxy implements Soldier {
+public class SoldierProxy<T extends Soldier> implements Soldier {
     private final int lifePoints;
-    private final Class<Soldier> soldierClass;
-    private static final Set<String> equipments = new HashSet<>();
+    private final Class<T> soldierClass;
+    private final Set<String> equipments = new HashSet<>();
     private Soldier soldier;
 
-    public SoldierProxy(Class<Soldier> soldierClass, int lifePoints) {
+    public SoldierProxy(Class<T> soldierClass, int lifePoints) {
         this.soldierClass = soldierClass;
         this.lifePoints = lifePoints;
     }
