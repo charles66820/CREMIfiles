@@ -4,6 +4,7 @@ import com.cgoedefroit.tdDp.Soldier.Knight;
 import com.cgoedefroit.tdDp.Soldier.Infantry;
 import com.cgoedefroit.tdDp.Soldier.Soldier;
 import com.cgoedefroit.tdDp.SoldierUtile.ShieldDecorator;
+import com.cgoedefroit.tdDp.SoldierUtile.SoldierComposite;
 import com.cgoedefroit.tdDp.SoldierUtile.SoldierProxy;
 import com.cgoedefroit.tdDp.SoldierUtile.SwordDecorator;
 
@@ -12,6 +13,7 @@ public class Main {
     public static void main(String[] args) {
         decoratorTests(false);
         proxyTests(true);
+        compositeTests(true);
     }
 
     private static int fight(Soldier a, Soldier e, boolean debug) {
@@ -113,6 +115,36 @@ public class Main {
         } else if (debug) System.out.println("le soldat a deja une bouclier!");
 
         doFight(k, i, debug);
+    }
+
+    private static void compositeTests(boolean debug) {
+        System.out.println("==== Compsite tests ====");
+
+        System.out.println("Test d'une armer avec 4 soldat (un chevalier avec 20 pv, un fantassin avec 10 pv et 2 soldat morts :");
+        SoldierComposite armay1 = new SoldierComposite("Armay1");
+        armay1.add(new Knight(0));
+        armay1.add(new Knight(30));
+        armay1.add(new Infantry(10));
+        armay1.add(new Infantry(-1));
+        System.out.println("L'armer a " + armay1.getLifePoints() + " pv et " + (armay1.isAlive() ? "est" : "n'est pas") + " en vie!");
+        System.out.println("On inflige 30 dommage a l'armer");
+        System.out.println(armay1.wardOff(30));
+        System.out.println("L'armer a " + armay1.getLifePoints() + " pv et " + (armay1.isAlive() ? "est" : "n'est pas") + " en vie!");
+        System.out.println("On inflige 5 dommage a l'armer");
+        System.out.println(armay1.wardOff(5));
+        System.out.println("L'armer a " + armay1.getLifePoints() + " pv et " + (armay1.isAlive() ? "est" : "n'est pas") + " en vie!");
+
+        System.out.println("\nTest de combat d'armers :");
+        SoldierComposite subArmay = new SoldierComposite("Subarmay");
+        subArmay.add(new Infantry(5));
+        subArmay.add(new Infantry(5));
+        SoldierComposite armay2 = new SoldierComposite("Armay2");
+        armay2.add(subArmay);
+        armay2.add(new Knight(5));
+        armay2.add(new Infantry(10));
+        armay2.add(new Infantry(5));
+
+        fight(armay1, armay2, debug);
     }
 
 }

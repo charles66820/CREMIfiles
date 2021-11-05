@@ -8,6 +8,12 @@ import java.util.List;
 public class SoldierComposite implements Soldier {
     private final List<Soldier> childSoldier = new ArrayList<>();
 
+    private final String name;
+
+    public SoldierComposite(String name) {
+        this.name = name;
+    }
+
     public void add(Soldier graphic) {
         childSoldier.add(graphic);
     }
@@ -16,25 +22,33 @@ public class SoldierComposite implements Soldier {
         childSoldier.remove(graphic);
     }
 
+    private int countAlive() {
+        return childSoldier.stream().reduce(0, (acc, s) -> s.isAlive() ? acc + 1 : acc, Integer::sum);
+    }
+
     @Override
     public int strength() {
         int strength = 0;
         for (Soldier s : childSoldier)
-            strength += s.strength();
+            if (s.isAlive())
+                strength += s.strength();
         return strength;
     }
 
     @Override
     public boolean wardOff(int strength) {
-        int sStrength = strength / childSoldier.size();
-        int remainder = strength % childSoldier.size();
-        int i = 0;
+        if (!isAlive()) return false;
+        int nbAlive = countAlive();
+        int sStrength = strength / nbAlive;
+        int remainder = strength % nbAlive;
         boolean hasHit = false;
-        for (Soldier s : childSoldier) {
-            if (i == childSoldier.size() - 1) sStrength += remainder;
-            hasHit = s.wardOff(sStrength);
-            i++;
-        }
+        int i = 0;
+        for (Soldier s : childSoldier)
+            if (s.isAlive()) {
+                if (i == nbAlive - 1) sStrength += remainder;
+                if (s.wardOff(sStrength)) hasHit = true;
+                i++;
+            }
         return hasHit;
     }
 
@@ -47,12 +61,12 @@ public class SoldierComposite implements Soldier {
     public int getLifePoints() {
         int lifePoints = 0;
         for (Soldier s : childSoldier)
-            lifePoints += s.getLifePoints();
+            if (s.isAlive()) lifePoints += s.getLifePoints();
         return lifePoints;
     }
 
     @Override
     public String getName() {
-        return "Armay";
+        return name;
     }
 }
