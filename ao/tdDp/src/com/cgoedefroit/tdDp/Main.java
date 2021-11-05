@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
         decoratorTests(false);
-        proxyTests(true);
+        proxyTests(false);
         compositeTests(true);
         visitorTests();
     }
