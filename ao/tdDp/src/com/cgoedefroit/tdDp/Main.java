@@ -8,6 +8,7 @@ import com.cgoedefroit.tdDp.soldierUtile.decorator.ShieldDecorator;
 import com.cgoedefroit.tdDp.soldierUtile.SoldierComposite;
 import com.cgoedefroit.tdDp.soldierUtile.SoldierProxy;
 import com.cgoedefroit.tdDp.soldierUtile.decorator.SwordDecorator;
+import com.cgoedefroit.tdDp.soldierUtile.visitor.CountArmyMemberVisitor;
 import com.cgoedefroit.tdDp.soldierUtile.visitor.ShowArmyVisitor;
 
 public class Main {
@@ -169,6 +170,9 @@ public class Main {
         System.out.println("==== Visitor tests ====");
         System.out.println("Afficher tous les membres d'une armée :\n");
         (new ShowArmyVisitor()).visit(army);
+
+        System.out.println("\nCompte le nombre d'une armée :");
+        (new CountArmyMemberVisitor()).visit(army);
     }
 
 }
