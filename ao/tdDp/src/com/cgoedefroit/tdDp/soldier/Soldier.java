@@ -1,6 +1,8 @@
 package com.cgoedefroit.tdDp.soldier;
 
-public interface Soldier {
+import com.cgoedefroit.tdDp.soldierUtile.visitor.VisitableSoldier;
+
+public interface Soldier extends VisitableSoldier {
     public int strength();
 
     public boolean wardOff(int strength);

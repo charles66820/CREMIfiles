@@ -38,4 +38,8 @@ public abstract class AbstractSoldierDecorator implements Soldier {
     protected final void degradation(int degradation) {
         durability = Math.max(durability - degradation, 0);
     }
+
+    public Soldier getSoldier() {
+        return soldier;
+    }
 }

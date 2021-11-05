@@ -4,6 +4,7 @@ import com.cgoedefroit.tdDp.soldier.Soldier;
 import com.cgoedefroit.tdDp.soldierUtile.decorator.DaggerDecorator;
 import com.cgoedefroit.tdDp.soldierUtile.decorator.ShieldDecorator;
 import com.cgoedefroit.tdDp.soldierUtile.decorator.SwordDecorator;
+import com.cgoedefroit.tdDp.soldierUtile.visitor.VisitableSoldierVisitor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
@@ -75,5 +76,13 @@ public class SoldierProxy<T extends Soldier> implements Soldier {
     @Override
     public String getName() {
         return lazyLoad().getName();
+    }
+
+    public void accept(VisitableSoldierVisitor visitor) {
+        visitor.visit((SoldierProxy<Soldier>) this);
+    }
+
+    public Soldier getSoldier() {
+        return soldier;
     }
 }

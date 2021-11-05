@@ -1,5 +1,7 @@
 package com.cgoedefroit.tdDp.soldier;
 
+import com.cgoedefroit.tdDp.soldierUtile.visitor.VisitableSoldierVisitor;
+
 public class Infantry extends AbstraitSoldier {
     private static final int INFANTRY_STRENGTH = 1;
 
@@ -13,5 +15,9 @@ public class Infantry extends AbstraitSoldier {
 
     public String getName() {
         return "fantassin";
+    }
+
+    public void accept(VisitableSoldierVisitor visitor) {
+        visitor.visit(this);
     }
 }
