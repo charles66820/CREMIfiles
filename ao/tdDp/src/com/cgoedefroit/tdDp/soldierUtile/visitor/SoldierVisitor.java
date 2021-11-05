@@ -9,7 +9,7 @@ import com.cgoedefroit.tdDp.soldierUtile.decorator.DaggerDecorator;
 import com.cgoedefroit.tdDp.soldierUtile.decorator.ShieldDecorator;
 import com.cgoedefroit.tdDp.soldierUtile.decorator.SwordDecorator;
 
-public interface VisitableSoldierVisitor {
+public interface SoldierVisitor {
     void visit(Infantry infantry);
     void visit(Knight knight);
     void visit(DaggerDecorator dagger);

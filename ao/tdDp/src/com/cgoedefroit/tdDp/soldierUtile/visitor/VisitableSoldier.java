@@ -1,5 +1,5 @@
 package com.cgoedefroit.tdDp.soldierUtile.visitor;
 
 public interface VisitableSoldier {
-    void accept(VisitableSoldierVisitor visitor);
+    void accept(SoldierVisitor visitor);
 }

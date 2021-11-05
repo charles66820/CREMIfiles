@@ -1,7 +1,7 @@
 package com.cgoedefroit.tdDp.soldierUtile.decorator;
 
 import com.cgoedefroit.tdDp.soldier.Soldier;
-import com.cgoedefroit.tdDp.soldierUtile.visitor.VisitableSoldierVisitor;
+import com.cgoedefroit.tdDp.soldierUtile.visitor.SoldierVisitor;
 
 public class SwordDecorator extends AbstractSoldierDecorator {
     private static final int SWORD_STRENGTH = 16;
@@ -28,7 +28,7 @@ public class SwordDecorator extends AbstractSoldierDecorator {
         } else return super.wardOff(strength);
     }
 
-    public void accept(VisitableSoldierVisitor visitor) {
+    public void accept(SoldierVisitor visitor) {
         visitor.visit(this);
     }
 }

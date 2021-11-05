@@ -1,7 +1,7 @@
 package com.cgoedefroit.tdDp.soldierUtile;
 
 import com.cgoedefroit.tdDp.soldier.Soldier;
-import com.cgoedefroit.tdDp.soldierUtile.visitor.VisitableSoldierVisitor;
+import com.cgoedefroit.tdDp.soldierUtile.visitor.SoldierVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +71,7 @@ public class SoldierComposite implements Soldier {
         return name;
     }
 
-    public void accept(VisitableSoldierVisitor visitor) {
+    public void accept(SoldierVisitor visitor) {
         visitor.visit(this);
     }
 
