@@ -3,10 +3,12 @@ package com.cgoedefroit.tdDp;
 import com.cgoedefroit.tdDp.soldier.Knight;
 import com.cgoedefroit.tdDp.soldier.Infantry;
 import com.cgoedefroit.tdDp.soldier.Soldier;
+import com.cgoedefroit.tdDp.soldierUtile.decorator.DaggerDecorator;
 import com.cgoedefroit.tdDp.soldierUtile.decorator.ShieldDecorator;
 import com.cgoedefroit.tdDp.soldierUtile.SoldierComposite;
 import com.cgoedefroit.tdDp.soldierUtile.SoldierProxy;
 import com.cgoedefroit.tdDp.soldierUtile.decorator.SwordDecorator;
+import com.cgoedefroit.tdDp.soldierUtile.visitor.ShowArmyVisitor;
 
 public class Main {
 
@@ -14,6 +16,7 @@ public class Main {
         decoratorTests(false);
         proxyTests(true);
         compositeTests(true);
+        visitorTests();
     }
 
     private static int fight(Soldier a, Soldier e, boolean debug) {
@@ -145,6 +148,27 @@ public class Main {
         army2.add(new Infantry(5));
 
         fight(army1, army2, debug);
+    }
+
+    private static void visitorTests() {
+        SoldierProxy<Infantry> specialSoldier = new SoldierProxy<>(Infantry.class, 10);
+        specialSoldier.addSword();
+        specialSoldier.addShield();
+
+        SoldierComposite subArmy = new SoldierComposite("Sub-army");
+        subArmy.add(new SwordDecorator(new Infantry(5)));
+        subArmy.add(new SwordDecorator(new Infantry(5)));
+
+        SoldierComposite army = new SoldierComposite("Army");
+        army.add(new DaggerDecorator(new Knight(0)));
+        army.add(new SwordDecorator(new Knight(30)));
+        army.add(subArmy);
+        army.add(specialSoldier);
+        army.add(new Infantry(-1));
+
+        System.out.println("==== Visitor tests ====");
+        System.out.println("Afficher tous les membres d'une armée :\n");
+        (new ShowArmyVisitor()).visit(army);
     }
 
 }
