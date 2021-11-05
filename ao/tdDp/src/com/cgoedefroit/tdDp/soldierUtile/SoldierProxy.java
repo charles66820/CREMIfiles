@@ -1,6 +1,9 @@
-package com.cgoedefroit.tdDp.SoldierUtile;
+package com.cgoedefroit.tdDp.soldierUtile;
 
-import com.cgoedefroit.tdDp.Soldier.Soldier;
+import com.cgoedefroit.tdDp.soldier.Soldier;
+import com.cgoedefroit.tdDp.soldierUtile.decorator.DaggerDecorator;
+import com.cgoedefroit.tdDp.soldierUtile.decorator.ShieldDecorator;
+import com.cgoedefroit.tdDp.soldierUtile.decorator.SwordDecorator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;

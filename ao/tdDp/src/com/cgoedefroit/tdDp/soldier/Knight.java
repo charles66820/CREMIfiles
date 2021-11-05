@@ -1,4 +1,4 @@
-package com.cgoedefroit.tdDp.Soldier;
+package com.cgoedefroit.tdDp.soldier;
 
 public class Knight extends AbstraitSoldier {
     private static final int KNIGHT_STRENGTH = 2;

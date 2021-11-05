@@ -1,4 +1,4 @@
-package com.cgoedefroit.tdDp.Soldier;
+package com.cgoedefroit.tdDp.soldier;
 
 public interface Soldier {
     public int strength();

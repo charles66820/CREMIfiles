@@ -1,6 +1,6 @@
-package com.cgoedefroit.tdDp.SoldierUtile;
+package com.cgoedefroit.tdDp.soldierUtile;
 
-import com.cgoedefroit.tdDp.Soldier.Soldier;
+import com.cgoedefroit.tdDp.soldier.Soldier;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.cgoedefroit.tdDp.Soldier;
+package com.cgoedefroit.tdDp.soldier;
 
 abstract class AbstraitSoldier implements Soldier {
     protected int lifePoints;

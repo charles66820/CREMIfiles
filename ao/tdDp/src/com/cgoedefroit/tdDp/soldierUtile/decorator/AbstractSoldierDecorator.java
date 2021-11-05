@@ -1,6 +1,6 @@
-package com.cgoedefroit.tdDp.SoldierUtile;
+package com.cgoedefroit.tdDp.soldierUtile.decorator;
 
-import com.cgoedefroit.tdDp.Soldier.Soldier;
+import com.cgoedefroit.tdDp.soldier.Soldier;
 
 public abstract class AbstractSoldierDecorator implements Soldier {
     protected Soldier soldier;

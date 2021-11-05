@@ -1,12 +1,12 @@
 package com.cgoedefroit.tdDp;
 
-import com.cgoedefroit.tdDp.Soldier.Knight;
-import com.cgoedefroit.tdDp.Soldier.Infantry;
-import com.cgoedefroit.tdDp.Soldier.Soldier;
-import com.cgoedefroit.tdDp.SoldierUtile.ShieldDecorator;
-import com.cgoedefroit.tdDp.SoldierUtile.SoldierComposite;
-import com.cgoedefroit.tdDp.SoldierUtile.SoldierProxy;
-import com.cgoedefroit.tdDp.SoldierUtile.SwordDecorator;
+import com.cgoedefroit.tdDp.soldier.Knight;
+import com.cgoedefroit.tdDp.soldier.Infantry;
+import com.cgoedefroit.tdDp.soldier.Soldier;
+import com.cgoedefroit.tdDp.soldierUtile.decorator.ShieldDecorator;
+import com.cgoedefroit.tdDp.soldierUtile.SoldierComposite;
+import com.cgoedefroit.tdDp.soldierUtile.SoldierProxy;
+import com.cgoedefroit.tdDp.soldierUtile.decorator.SwordDecorator;
 
 public class Main {
 
