@@ -17,12 +17,12 @@ public class Main {
     }
 
     private static int fight(Soldier a, Soldier e, boolean debug) {
-        int ncoups = 0;
+        int nCoups = 0;
         boolean la = true;
         boolean le = true;
         while (la && le) {
-            ncoups++;
-            if (debug) System.out.println("coups " + ncoups);
+            nCoups++;
+            if (debug) System.out.println("coups " + nCoups);
             int es = e.strength();
             la = a.wardOff(es);
             if (debug) System.out.println(e.getName() + " inflige " + es + " au " + a.getName());
@@ -34,13 +34,13 @@ public class Main {
                 if (debug) System.out.println(e.getName() + " a " + e.getLifePoints() + " pv");
             }
         }
-        return ncoups;
+        return nCoups;
     }
 
     private static void doFight(Soldier a, Soldier e, boolean debug) {
-        int ncoups = fight(a, e, debug);
+        int nCoups = fight(a, e, debug);
         System.out.println("Mort du " + (a.isAlive() ? e.getName() : a.getName())
-                + " en " + ncoups + " coups\n");
+                + " en " + nCoups + " coups\n");
     }
 
     private static void decoratorTests(boolean debug) {
@@ -118,33 +118,33 @@ public class Main {
     }
 
     private static void compositeTests(boolean debug) {
-        System.out.println("==== Compsite tests ====");
+        System.out.println("==== Composite tests ====");
 
         System.out.println("Test d'une armer avec 4 soldat (un chevalier avec 20 pv, un fantassin avec 10 pv et 2 soldat morts :");
-        SoldierComposite armay1 = new SoldierComposite("Armay1");
-        armay1.add(new Knight(0));
-        armay1.add(new Knight(30));
-        armay1.add(new Infantry(10));
-        armay1.add(new Infantry(-1));
-        System.out.println("L'armer a " + armay1.getLifePoints() + " pv et " + (armay1.isAlive() ? "est" : "n'est pas") + " en vie!");
+        SoldierComposite army1 = new SoldierComposite("Army1");
+        army1.add(new Knight(0));
+        army1.add(new Knight(30));
+        army1.add(new Infantry(10));
+        army1.add(new Infantry(-1));
+        System.out.println("L'armer a " + army1.getLifePoints() + " pv et " + (army1.isAlive() ? "est" : "n'est pas") + " en vie!");
         System.out.println("On inflige 30 dommage a l'armer");
-        System.out.println(armay1.wardOff(30));
-        System.out.println("L'armer a " + armay1.getLifePoints() + " pv et " + (armay1.isAlive() ? "est" : "n'est pas") + " en vie!");
+        System.out.println(army1.wardOff(30));
+        System.out.println("L'armer a " + army1.getLifePoints() + " pv et " + (army1.isAlive() ? "est" : "n'est pas") + " en vie!");
         System.out.println("On inflige 5 dommage a l'armer");
-        System.out.println(armay1.wardOff(5));
-        System.out.println("L'armer a " + armay1.getLifePoints() + " pv et " + (armay1.isAlive() ? "est" : "n'est pas") + " en vie!");
+        System.out.println(army1.wardOff(5));
+        System.out.println("L'armer a " + army1.getLifePoints() + " pv et " + (army1.isAlive() ? "est" : "n'est pas") + " en vie!");
 
-        System.out.println("\nTest de combat d'armers :");
-        SoldierComposite subArmay = new SoldierComposite("Subarmay");
-        subArmay.add(new Infantry(5));
-        subArmay.add(new Infantry(5));
-        SoldierComposite armay2 = new SoldierComposite("Armay2");
-        armay2.add(subArmay);
-        armay2.add(new Knight(5));
-        armay2.add(new Infantry(10));
-        armay2.add(new Infantry(5));
+        System.out.println("\nTest de combat d'armées :");
+        SoldierComposite subArmy = new SoldierComposite("Sub-army");
+        subArmy.add(new Infantry(5));
+        subArmy.add(new Infantry(5));
+        SoldierComposite army2 = new SoldierComposite("Army2");
+        army2.add(subArmy);
+        army2.add(new Knight(5));
+        army2.add(new Infantry(10));
+        army2.add(new Infantry(5));
 
-        fight(armay1, armay2, debug);
+        fight(army1, army2, debug);
     }
 
 }

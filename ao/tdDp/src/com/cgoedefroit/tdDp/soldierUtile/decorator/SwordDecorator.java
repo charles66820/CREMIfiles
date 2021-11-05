@@ -1,7 +1,6 @@
 package com.cgoedefroit.tdDp.soldierUtile.decorator;
 
 import com.cgoedefroit.tdDp.soldier.Soldier;
-import com.cgoedefroit.tdDp.soldierUtile.decorator.AbstractSoldierDecorator;
 
 public class SwordDecorator extends AbstractSoldierDecorator {
     private static final int SWORD_STRENGTH = 16;
@@ -21,10 +20,10 @@ public class SwordDecorator extends AbstractSoldierDecorator {
     }
 
     @Override
-    public boolean wardOff(int strenght) {
+    public boolean wardOff(int strength) {
         if (super.getDurability() > 0) {
             super.degradation(4);
-            return super.wardOff(strenght <= SWORD_RESISTANCE ? 0 : strenght - SWORD_RESISTANCE);
-        } else return super.wardOff(strenght);
+            return super.wardOff(strength <= SWORD_RESISTANCE ? 0 : strength - SWORD_RESISTANCE);
+        } else return super.wardOff(strength);
     }
 }
