@@ -15,12 +15,12 @@ public class SoldierComposite implements Soldier {
         this.name = name;
     }
 
-    public void add(Soldier graphic) {
-        childSoldier.add(graphic);
+    public void add(Soldier soldier) {
+        childSoldier.add(soldier);
     }
 
-    public void remove(Soldier graphic) {
-        childSoldier.remove(graphic);
+    public void remove(Soldier soldier) {
+        childSoldier.remove(soldier);
     }
 
     private int countAlive() {
@@ -43,12 +43,11 @@ public class SoldierComposite implements Soldier {
         int sStrength = strength / nbAlive;
         int remainder = strength % nbAlive;
         boolean hasHit = false;
-        int i = 0;
+        boolean isFirst = true;
         for (Soldier s : childSoldier)
             if (s.isAlive()) {
-                if (i == nbAlive - 1) sStrength += remainder;
-                if (s.wardOff(sStrength)) hasHit = true;
-                i++;
+                if (s.wardOff(isFirst ? sStrength + remainder : sStrength)) hasHit = true;
+                isFirst = false;
             }
         return hasHit;
     }

@@ -83,6 +83,6 @@ public class SoldierProxy<T extends Soldier> implements Soldier {
     }
 
     public Soldier getSoldier() {
-        return soldier;
+        return lazyLoad();
     }
 }
