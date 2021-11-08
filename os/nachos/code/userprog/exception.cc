@@ -128,7 +128,7 @@ void ExceptionHandler(ExceptionType which) {
           int returnStatus = machine->ReadRegister(4);
           DEBUG('s', "Program %s exit with status code %d\n",
                 currentThread->getName(), returnStatus);
-          currentThread->Finish();
+          interrupt->Powerdown();
           break;
         }
         case SC_PutChar: {
