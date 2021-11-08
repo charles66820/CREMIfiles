@@ -103,18 +103,40 @@ void Semaphore::V() {
 // the test case in the network assignment won't work!
 Lock::Lock(const char *debugName) {
   (void)debugName;
-  /* TODO */
+#ifdef CHANGED
+  S = new Semaphore(debugName, 1);
+#else
   ASSERT(FALSE);
+#endif
 }
 
-Lock::~Lock() {}
-void Lock::Acquire() {
-  /* TODO */
-  ASSERT(FALSE);
+Lock::~Lock() {
+#ifdef CHANGED
+  delete S;
+#endif
 }
-void Lock::Release() {
-  /* TODO */
+
+void Lock::Acquire() {
+#ifdef CHANGED
+  // SET TO BUSY (Get token)
+  S->P();
+  currentLockThread = currentThread;
+
+#else
   ASSERT(FALSE);
+#endif
+}
+
+void Lock::Release() {
+#ifdef CHANGED
+  if (currentLockThread == currentThread) {
+    currentLockThread = NULL;
+    // SET TO FREE (Add token)
+    S->V();
+  }
+#else
+  ASSERT(FALSE);
+#endif
 }
 
 Condition::Condition(const char *debugName) {
@@ -124,6 +146,7 @@ Condition::Condition(const char *debugName) {
 }
 
 Condition::~Condition() {}
+
 void Condition::Wait(Lock *conditionLock) {
   (void)conditionLock;
   /* TODO */
@@ -135,6 +158,7 @@ void Condition::Signal(Lock *conditionLock) {
   /* TODO */
   ASSERT(FALSE);
 }
+
 void Condition::Broadcast(Lock *conditionLock) {
   (void)conditionLock;
   /* TODO */
