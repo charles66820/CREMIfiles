@@ -16,7 +16,10 @@ int main () {
     int newThread = ThreadCreate(*f, arg);
     PutString("Try to use console in parall of the new thread\n");
     // Wait other thread
-    for(;;) ;
+    // for(;;) ;
+    ThreadExit();
+
+    return 0;
 }
 
 
