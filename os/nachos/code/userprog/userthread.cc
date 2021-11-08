@@ -30,6 +30,9 @@ static void StartUserThread(void *args) {
 
   free(args);
 
+  // Print the svg
+  machine->DumpMem("threads.svg");
+
   // Start execution of the thread
   machine->Run();
 
