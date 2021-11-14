@@ -5,7 +5,7 @@ void f (void *arg) {
     char c = *((char*) arg);
     PutChar(c);
     PutChar('\n');
-    ThreadExit();
+    ThreadExit(); // TEST: error without this syscall
 }
 
 int main () {
@@ -17,7 +17,7 @@ int main () {
     PutString("Try to use console in parall of the new thread\n");
     // Wait other thread
     // for(;;) ;
-    ThreadExit();
+    ThreadExit(); // TEST: with an without this syscall
 
     return 0;
 }

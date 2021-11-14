@@ -23,6 +23,10 @@
 #include "syscall.h"
 #include "system.h"
 
+#ifdef CHANGED
+#include "synch.h"
+#endif //CHANGED
+
 //----------------------------------------------------------------------
 // SwapHeader
 //      Do little endian to big endian conversion on the bytes in the
@@ -121,6 +125,14 @@ AddrSpace::AddrSpace(OpenFile *executable) {
   pageTable[0].valid = FALSE;  // Catch NULL dereference
 
   AddrSpaceList.Append(this);
+
+#ifdef CHANGED
+  // Init mutex for thread counter
+  mutex = new Lock("CounterProtection");
+
+  // Init thread counter
+  nbThreads = 1;
+#endif //CHANGED
 }
 
 //----------------------------------------------------------------------
@@ -133,6 +145,10 @@ AddrSpace::~AddrSpace() {
   pageTable = NULL;
 
   AddrSpaceList.Remove(this);
+
+#ifdef CHANGED
+  delete mutex;
+#endif //CHANGED
 }
 
 //----------------------------------------------------------------------
@@ -171,11 +187,30 @@ void AddrSpace::InitRegisters() {
 //----------------------------------------------------------------------
 
 void AddrSpace::AllocateUserStack() {
+  mutex->Acquire();
+  nbThreads += 1;
+  mutex->Release();
+
   // TODO: support multiple thread with bitmap
   machine->WriteRegister(StackReg, numPages * PageSize - 256);
   DEBUG('a', "Initializing stack pointer to 0x%x\n", numPages * PageSize - 256);
 }
 
+//----------------------------------------------------------------------
+// AddrSpace::DeallocateUserStack
+//      Deallocate the stack of the thread and if it is the last, it finish the process
+//----------------------------------------------------------------------
+
+void AddrSpace::DeallocateUserStack() {
+  mutex->Acquire();
+  // TODO: Deallocate stack
+
+  nbThreads -= 1;
+
+  // When is the last thread we do a powerdown interruption
+  if (nbThreads == 0) interrupt->Powerdown(); // TODO: see later to only exit the current process
+  mutex->Release();
+}
 #endif //CHANGED
 
 //----------------------------------------------------------------------

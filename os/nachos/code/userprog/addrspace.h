@@ -21,6 +21,10 @@
 
 #define UserStacksAreaSize 1024  // increase this as necessary!
 
+#ifdef CHANGED
+class Lock;
+#endif //CHANGED
+
 class AddrSpace : public dontcopythis {
  public:
   AddrSpace(OpenFile *executable);  // Create an address space,
@@ -33,6 +37,7 @@ class AddrSpace : public dontcopythis {
 
   #ifdef CHANGED
   void AllocateUserStack(void); // Initialise the top address of the new allocated stack
+  void DeallocateUserStack(void);
   #endif // CHANGED
 
   void SaveState();     // Save/restore address space-specific
@@ -49,6 +54,11 @@ class AddrSpace : public dontcopythis {
 
   TranslationEntry *pageTable;  // Page table
   unsigned int numPages;        // Number of pages in the page table
+
+#ifdef CHANGED
+  Lock *mutex;
+  unsigned int nbThreads;
+#endif //CHANGED
 };
 
 extern List AddrspaceList;

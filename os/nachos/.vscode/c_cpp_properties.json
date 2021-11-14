@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${default}",
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/code/*/*"
             ],
             "defines": ["USER_PROGRAM=1", "CHANGED=1", "FILESYS_NEEDED"],
             "compilerPath": "/usr/bin/gcc",

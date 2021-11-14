@@ -59,6 +59,8 @@ int do_ThreadCreate(int f, int arg) {
 
 void do_ThreadExit() {
   // TODO: update thread stack bitmap to free thread stack for other new thread
+  currentThread->space->DeallocateUserStack();
+
   currentThread->Finish();
 }
 
