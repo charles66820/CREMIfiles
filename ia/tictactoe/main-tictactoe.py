@@ -59,6 +59,8 @@ def miniMax(b):
   return
 
 def miniMaxCut(b):
+  # maxScore = alpha
+  # minScore = beta
   def aux(b, d, maxScore, minScore):
     countLeaf = 0
     countNodes = 1
