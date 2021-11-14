@@ -104,24 +104,31 @@ void Semaphore::V() {
 Lock::Lock(const char *debugName) {
   (void)debugName;
 #ifdef CHANGED
-  S = new Semaphore(debugName, 1);
+  name = debugName;
+  queue = new List;
+  currentLockThread = NULL;
 #else
   ASSERT(FALSE);
 #endif
 }
 
 Lock::~Lock() {
-#ifdef CHANGED
-  delete S;
-#endif
+  delete queue;
+  queue = NULL;
 }
 
 void Lock::Acquire() {
 #ifdef CHANGED
-  // SET TO BUSY (Get token)
-  S->P();
-  currentLockThread = currentThread;
+  IntStatus oldLevel = interrupt->SetLevel(IntOff);  // disable interrupts
 
+  while (currentLockThread != NULL) {
+    queue->Append((void *)currentThread);  // so go to sleep
+    currentThread->Sleep();
+  }
+
+  currentLockThread = currentThread;  // becomes the blocking thread
+
+  (void)interrupt->SetLevel(oldLevel);  // re-enable interrupts
 #else
   ASSERT(FALSE);
 #endif
@@ -129,11 +136,17 @@ void Lock::Acquire() {
 
 void Lock::Release() {
 #ifdef CHANGED
+  Thread *thread;
+  IntStatus oldLevel = interrupt->SetLevel(IntOff);
+
   if (currentLockThread == currentThread) {
+    thread = (Thread *)queue->Remove();
+    if (thread != NULL)
+      scheduler->ReadyToRun(thread);
     currentLockThread = NULL;
-    // SET TO FREE (Add token)
-    S->V();
   }
+
+  (void)interrupt->SetLevel(oldLevel);
 #else
   ASSERT(FALSE);
 #endif

@@ -81,7 +81,7 @@ class Lock : public dontcopythis {
   const char *name;  // for debugging
                      // plus some other stuff you'll need to define
 #ifdef CHANGED
-  Semaphore *S;
+  List *queue;
   Thread *currentLockThread;
 #endif
 };
