@@ -41,6 +41,7 @@ static void StartUserThread(void *args) {
 
   // Start execution of the thread
   machine->Run();
+  ASSERT(false);
 }
 
 int do_ThreadCreate(int f, int arg) {
@@ -53,6 +54,7 @@ int do_ThreadCreate(int f, int arg) {
   int stackIndex = newThread->space->AllocateUserStack();
   if (stackIndex == -1) {
     DEBUG('t', "Not enough memory to allocate the stack of the new thread !");
+    delete newThread;
     return 0;
   }
 
@@ -60,6 +62,7 @@ int do_ThreadCreate(int f, int arg) {
   int *args = (int *)malloc(3 * sizeof(int));
   if (args == NULL) {
     perror("Not enough memory");
+    delete newThread;
     return 0;
   }
   args[0] = f;
@@ -70,7 +73,6 @@ int do_ThreadCreate(int f, int arg) {
 }
 
 void do_ThreadExit() {
-  // TODO: update thread stack bitmap to free thread stack for other new thread
   currentThread->space->DeallocateUserStack();
 
   currentThread->Finish();
