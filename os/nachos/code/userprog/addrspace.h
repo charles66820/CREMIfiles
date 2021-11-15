@@ -20,8 +20,9 @@
 #include "translate.h"
 #ifdef CHANGED
 #include "bitmap.h"
-#endif //CHANGED
 
+#define UserStackSize 256
+#endif //CHANGED
 #define UserStacksAreaSize 1024  // increase this as necessary!
 
 #ifdef CHANGED

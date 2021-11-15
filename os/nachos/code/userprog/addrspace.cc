@@ -135,8 +135,12 @@ AddrSpace::AddrSpace(OpenFile *executable) {
   nbThreads = 1;
 
   // Allocate stack bitmap
-  int nbrMaxStack = UserStacksAreaSize / 256;
+  int nbrMaxStack = UserStacksAreaSize / UserStackSize;
   stackBitMap = new BitMap(nbrMaxStack);
+  // Mark the main thread
+  stackBitMap->Mark(0);
+  currentThread->SetStackIndex(0);
+
 #endif //CHANGED
 }
 
@@ -189,28 +193,30 @@ void AddrSpace::InitRegisters() {
 #ifdef CHANGED
 //----------------------------------------------------------------------
 // AddrSpace::AllocateUserStack
-//      Initialise the top address of the new allocated stack
+//      Determine where the stack of the thread will be allocated
 //----------------------------------------------------------------------
 
 int AddrSpace::AllocateUserStack() {
-  int stackStartPos;
-
   mutex->Acquire();
-  stackStartPos = 256 * nbThreads + 16;
-  if (stackStartPos >= UserStacksAreaSize) {
+  // Mark stack space used in stack bitmap
+  int index = stackBitMap->Find();
+  if (index == -1) {
+    mutex->Release();
+    return -1;
+  }
+  stackBitMap->Mark(index);
+
+  // Determine the thread stack address
+  if (UserStackSize * index + 16 >= UserStacksAreaSize) {
+    stackBitMap->Clear(index);
     mutex->Release();
     return -1;
   }
 
-  // Mark stack space used in stack bitmap
-  // TODO: support multiple thread with bitmap with fine()
-  // TODO: same the bitmap num of the stack in a var
-
   nbThreads += 1;
   mutex->Release();
 
-
-  return numPages * PageSize - stackStartPos;
+  return index;
 }
 
 //----------------------------------------------------------------------
@@ -220,7 +226,7 @@ int AddrSpace::AllocateUserStack() {
 
 void AddrSpace::DeallocateUserStack() {
   mutex->Acquire();
-  // TODO: Deallocate stack (clear at stack num in bitmap)
+  stackBitMap->Clear(currentThread->GetStackIndex());
 
   nbThreads -= 1;
 

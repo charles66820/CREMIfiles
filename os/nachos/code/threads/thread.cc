@@ -496,4 +496,12 @@ void DumpThreadsState(FILE *output, AddrSpace *space, unsigned ptr_x,
   }
 }
 
+#ifdef CHANGED
+  void Thread::SetStackIndex(int idx) {
+    stackIndex = idx;
+  }
+  int Thread::GetStackIndex() {
+    return stackIndex;
+  }
+#endif  // CHANGED
 #endif

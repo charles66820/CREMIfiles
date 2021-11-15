@@ -138,8 +138,13 @@ class Thread : public dontcopythis {
  public:
   void SaveUserState();     // save user-level register state
   void RestoreUserState();  // restore user-level register state
-
-  AddrSpace *space;  // Address space this thread is running in.
+  AddrSpace *space;         // Address space this thread is running in.
+#ifdef CHANGED
+  void SetStackIndex(int idx);
+  int GetStackIndex();
+ private:
+  int stackIndex;
+#endif  // CHANGED
 #endif
 };
 
