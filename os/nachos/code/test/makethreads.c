@@ -11,9 +11,11 @@ void f (void *arg) {
 int main () {
     char c = 'a';
     void * arg = &c;
+    int newThread;
+
     PutString("Use console before thread :\n");
     // Creation of a new thread
-    int newThread = ThreadCreate(*f, arg);
+    newThread = ThreadCreate(*f, arg);
     PutString("Try to use console in parall of the new thread\n");
     // Wait other thread
     // for(;;) ;

@@ -12,10 +12,11 @@ void f (void *arg) {
 int main () {
     char c = 'a';
     void *arg = (void *)(int)c;
+    int i;
+
     PutString("Main thread !\n");
 
     // Creation of multiple threads
-    int i;
     for (i = 0; i < 26; i++) {
         int newThread = ThreadCreate(*f, arg);
         c = c + 1;
