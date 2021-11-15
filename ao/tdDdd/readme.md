@@ -5,13 +5,11 @@
 Compiler :
 
 ```bash
-cd src
-javac com/cgoedefroit/tdDp/Main.java
+./gradlew build
 ```
 
 Lancer :
 
 ```bash
-cd src
-java com.cgoedefroit.tdDp.Main
+./gradlew run
 ```
