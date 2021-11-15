@@ -36,7 +36,7 @@ class AddrSpace : public dontcopythis {
   // before jumping to user code
 
   #ifdef CHANGED
-  void AllocateUserStack(void); // Initialise the top address of the new allocated stack
+  int AllocateUserStack(void); // Initialise the top address of the new allocated stack
   void DeallocateUserStack(void);
   #endif // CHANGED
 

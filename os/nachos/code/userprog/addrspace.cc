@@ -186,14 +186,21 @@ void AddrSpace::InitRegisters() {
 //      Initialise the top address of the new allocated stack
 //----------------------------------------------------------------------
 
-void AddrSpace::AllocateUserStack() {
+int AddrSpace::AllocateUserStack() {
+  int stackStartPos;
+
   mutex->Acquire();
+  stackStartPos = 256 * nbThreads + 16;
+  if (stackStartPos >= UserStacksAreaSize) {
+    mutex->Release();
+    return -1;
+  }
+
   nbThreads += 1;
   mutex->Release();
 
-  // TODO: support multiple thread with bitmap
-  machine->WriteRegister(StackReg, numPages * PageSize - 256);
-  DEBUG('a', "Initializing stack pointer to 0x%x\n", numPages * PageSize - 256);
+
+  return numPages * PageSize - stackStartPos;
 }
 
 //----------------------------------------------------------------------

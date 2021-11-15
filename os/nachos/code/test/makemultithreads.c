@@ -17,8 +17,10 @@ int main () {
     PutString("Main thread !\n");
 
     // Creation of multiple threads
-    for (i = 0; i < 26; i++) {
+    for (i = 0; i < 5; i++) {
         int newThread = ThreadCreate(*f, arg);
+        if (newThread == 0)
+            PutString("Error on creation of a new Thread\n");
         c = c + 1;
         arg = (void *)(int)c;
     }
