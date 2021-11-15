@@ -18,6 +18,9 @@
 #include "list.h"
 #include "noff.h"
 #include "translate.h"
+#ifdef CHANGED
+#include "bitmap.h"
+#endif //CHANGED
 
 #define UserStacksAreaSize 1024  // increase this as necessary!
 
@@ -58,6 +61,7 @@ class AddrSpace : public dontcopythis {
 #ifdef CHANGED
   Lock *mutex;
   unsigned int nbThreads;
+  BitMap *stackBitMap;
 #endif //CHANGED
 };
 

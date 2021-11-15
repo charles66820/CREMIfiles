@@ -16,8 +16,6 @@ static void StartUserThread(void *args) {
   int i;
   for (i = 0; i < NumTotalRegs; i++) machine->WriteRegister(i, 0);
 
-
-  // TODO: support multiple thread with bitmap
   // Set thread stack
   machine->WriteRegister(StackReg, stackAddress);
   DEBUG('a', "Initializing stack pointer to 0x%x\n", stackAddress);

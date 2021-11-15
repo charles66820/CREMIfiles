@@ -25,6 +25,7 @@
 
 #ifdef CHANGED
 #include "synch.h"
+#include "bitmap.h"
 #endif //CHANGED
 
 //----------------------------------------------------------------------
@@ -132,6 +133,10 @@ AddrSpace::AddrSpace(OpenFile *executable) {
 
   // Init thread counter
   nbThreads = 1;
+
+  // Allocate stack bitmap
+  int nbrMaxStack = UserStacksAreaSize / 256;
+  stackBitMap = new BitMap(nbrMaxStack);
 #endif //CHANGED
 }
 
@@ -148,6 +153,7 @@ AddrSpace::~AddrSpace() {
 
 #ifdef CHANGED
   delete mutex;
+  delete stackBitMap;
 #endif //CHANGED
 }
 
@@ -196,6 +202,10 @@ int AddrSpace::AllocateUserStack() {
     return -1;
   }
 
+  // Mark stack space used in stack bitmap
+  // TODO: support multiple thread with bitmap with fine()
+  // TODO: same the bitmap num of the stack in a var
+
   nbThreads += 1;
   mutex->Release();
 
@@ -210,7 +220,7 @@ int AddrSpace::AllocateUserStack() {
 
 void AddrSpace::DeallocateUserStack() {
   mutex->Acquire();
-  // TODO: Deallocate stack
+  // TODO: Deallocate stack (clear at stack num in bitmap)
 
   nbThreads -= 1;
 
