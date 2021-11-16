@@ -6,7 +6,7 @@ void f (void *arg) {
     PutString("Thread : ");
     PutChar(c);
     PutChar('!\n');
-    ThreadExit(); // TEST: error without this syscall
+    // ThreadExit(); // TEST: error without this syscall
 }
 
 int main () {

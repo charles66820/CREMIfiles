@@ -45,6 +45,31 @@ __start:
 	.long 0xffffffff
 	.long 0xffffffff
 
+
+/* -------------------------------------------------------------
+ * __thread
+ *	Initialize the code that call thread
+ * -------------------------------------------------------------
+ */
+
+	.org USER_THREAD_ADDRESS
+
+	.globl __thread
+	.ent	__thread
+__thread:
+	jal	$2
+	move	$4,$2
+	jal	ThreadExit	 /* if we return from thread function, exit the thread */
+	.end __thread
+
+/* -------------------------------------------------------------
+ * Exit-returning catcher
+ *	Catch Exit system call returning
+ * -------------------------------------------------------------
+ */
+	.long 0xffffffff
+	.long 0xffffffff
+
 /* -------------------------------------------------------------
  * System call stubs:
  *	Assembly language assist to make system calls to the Nachos kernel.

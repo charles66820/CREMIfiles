@@ -3,6 +3,7 @@
 #ifdef CHANGED
 #include <malloc.h>
 
+#include "syscall.h"
 #include "system.h"
 
 static void StartUserThread(void *args) {
@@ -11,6 +12,8 @@ static void StartUserThread(void *args) {
   int f = ((int *)args)[0];
   int arg = ((int *)args)[1];
   int stackIndex = ((int *)args)[2];
+
+  free(args);
 
   // Init registers
   // Reset register value
@@ -24,8 +27,10 @@ static void StartUserThread(void *args) {
   machine->WriteRegister(StackReg, stackAddress);
   DEBUG('a', "Initializing stack pointer to 0x%x\n", stackAddress);
 
-  // Initial program counter to user thread function
-  machine->WriteRegister(PCReg, f);
+  // Initialize program counter to user thread caller
+  machine->WriteRegister(PCReg, USER_THREAD_ADDRESS);
+  // Put the address of the user thread function in register 2 for the thread caller
+  machine->WriteRegister(2, f);
 
   // Add arg to registers
   machine->WriteRegister(4, arg);
@@ -33,8 +38,6 @@ static void StartUserThread(void *args) {
   // Need to also tell MIPS where next instruction is, because
   // of branch delay possibility
   machine->WriteRegister(NextPCReg, machine->ReadRegister(PCReg) + 4);
-
-  free(args);
 
   // Print the svg
   machine->DumpMem("threads.svg");
