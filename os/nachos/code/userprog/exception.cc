@@ -177,6 +177,30 @@ void ExceptionHandler(ExceptionType which) {
           }
           break;
         }
+        case SC_PutInt: {
+          DEBUG('s', "PutInt\n");
+          int c = machine->ReadRegister(4);
+          char buffer[12];
+          snprintf(buffer, 12, "%d", c);
+          consoledriver->PutString(buffer);
+          break;
+        }
+        case SC_GetInt: {
+          DEBUG('s', "GetInt\n");
+          int p = machine->ReadRegister(4);
+
+          // Get string with int
+          char s[12];
+          consoledriver->GetString(s, 12);
+
+          // Convert string in int
+          int i;
+          if (sscanf(s, "%d", &i) <= 0) i = 0;
+
+          // Write int in user space
+          machine->WriteMem(p, 4, i);
+          break;
+        }
         case SC_ThreadCreate: {
           DEBUG('s', "ThreadCreate\n");
           int f = machine->ReadRegister(4);

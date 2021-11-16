@@ -14,6 +14,7 @@ nachos/code/test/putstring
 nachos/code/test/putstring.s
 nachos/code/test/getchar
 nachos/code/test/getstring
+nachos/code/test/putint_getint
 nachos/code/test/makethreads
 nachos/code/test/makemultithreads
 nachos/code/test/halt.s

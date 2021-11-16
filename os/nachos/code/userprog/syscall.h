@@ -40,6 +40,8 @@
 #define SC_PutString 12
 #define SC_GetChar 13
 #define SC_GetString 14
+#define SC_GetInt 15
+#define SC_PutInt 16
 #define SC_ThreadCreate 17
 #define SC_ThreadExit 18
 #endif // CHANGED
@@ -149,6 +151,12 @@ int GetChar();
 
 /* Wait for an string to read it */
 int GetString(const char s[], int n);
+
+/* Wait for am int which can be write */
+void PutInt(int n);
+
+/* Wait for an int to read it  */
+void GetInt(int *n);
 
 /* Create a new thread */
 int ThreadCreate(void f(void *arg), void *arg);
