@@ -31,5 +31,6 @@ int main () {
     return 0;
 }
 
+// To run it: `cd code` and `userprog/nachos -d s -rs 12 -x test/makemultithreads`
 
 #endif // CHANGED

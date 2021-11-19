@@ -113,8 +113,10 @@ Lock::Lock(const char *debugName) {
 }
 
 Lock::~Lock() {
+#ifdef CHANGED
   delete queue;
   queue = NULL;
+#endif
 }
 
 void Lock::Acquire() {
@@ -141,8 +143,7 @@ void Lock::Release() {
 
   if (currentLockThread == currentThread) {
     thread = (Thread *)queue->Remove();
-    if (thread != NULL)
-      scheduler->ReadyToRun(thread);
+    if (thread != NULL) scheduler->ReadyToRun(thread);
     currentLockThread = NULL;
   }
 

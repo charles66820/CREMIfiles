@@ -5,7 +5,7 @@ void f (void *arg) {
     char c = *((char*) arg);
     PutChar(c);
     PutChar('\n');
-    ThreadExit(); // TEST: error without this syscall
+    // ThreadExit(); // TEST: error without this syscall
 }
 
 int main () {
@@ -24,5 +24,6 @@ int main () {
     return 0;
 }
 
+// To run it: `cd code` and `userprog/nachos -d s -rs 12 -x test/makethreads`
 
 #endif // CHANGED
