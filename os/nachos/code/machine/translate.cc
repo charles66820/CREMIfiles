@@ -203,7 +203,7 @@ ExceptionType Machine::Translate(int virtAddr, int *physAddr, int size,
   ASSERT(tlb == NULL || currentPageTable == NULL);
   ASSERT(tlb != NULL || currentPageTable != NULL);
 
-  // calculate the virtual page number, and offset within the page,
+  // calculate the Virtual Page Number, and offset within the page,
   // from the virtual address
   vpn = (unsigned)virtAddr / PageSize;
   offset = (unsigned)virtAddr % PageSize;

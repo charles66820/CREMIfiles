@@ -22,12 +22,12 @@
 #include "bitmap.h"
 
 #define UserStackSize 256
-#endif //CHANGED
+#endif                           // CHANGED
 #define UserStacksAreaSize 1024  // increase this as necessary!
 
 #ifdef CHANGED
 class Lock;
-#endif //CHANGED
+#endif  // CHANGED
 
 class AddrSpace : public dontcopythis {
  public:
@@ -39,10 +39,10 @@ class AddrSpace : public dontcopythis {
   void InitRegisters();  // Initialize user-level CPU registers,
   // before jumping to user code
 
-  #ifdef CHANGED
-  int AllocateUserStack(void); // Initialise the top address of the new allocated stack
+#ifdef CHANGED
+  int AllocateUserStack(void);
   void DeallocateUserStack(void);
-  #endif // CHANGED
+#endif  // CHANGED
 
   void SaveState();     // Save/restore address space-specific
   void RestoreState();  // info on a context switch
@@ -63,7 +63,7 @@ class AddrSpace : public dontcopythis {
   Lock *mutex;
   unsigned int nbThreads;
   BitMap *stackBitMap;
-#endif //CHANGED
+#endif  // CHANGED
 };
 
 extern List AddrspaceList;
