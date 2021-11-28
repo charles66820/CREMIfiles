@@ -124,7 +124,7 @@ def match1(b, debug):
     b.push(nextMove)
 
 def match2(b, debug):
-  if debug and not run_from_iPython(): print(debug)
+  if debug and not run_from_iPython(): print(b)
   while True:
     if debug: printBoard(b)
 
