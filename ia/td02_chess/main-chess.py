@@ -285,11 +285,11 @@ def main():
 
   print("Lancement de exhaustiveSearch :")
   board = chess.Board()
-  # try:
-  #   for i in range(10):
-  #     exhaustiveSearch(board, i, time.time() + 30)
-  # except TimeoutError:
-  #   print("Time is over")
+  try:
+    for i in range(10):
+      exhaustiveSearch(board, i, time.time() + 30)
+  except TimeoutError:
+    print("Time is over")
 
   # 1. En moins de 30 seconds on peut aller a une profondeur de `4`. On s'arrête a la 5ème.
 
@@ -302,7 +302,7 @@ def main():
 
   # 3.
   print("\nLancement de miniMaxID :")
-  # miniMaxID(chess.Board(), 8, chess.WHITE, 30, True)
+  miniMaxID(chess.Board(), 8, chess.WHITE, 30, True)
 
   print("\nTest niveau 1, 2 et 3 :")
   board = chess.Board()
@@ -312,19 +312,19 @@ def main():
 
   # 4.
   print("\nMatch Joueur Aléatoire contre Minimax niveau 3")
-  # match1(chess.Board(), True)
+  match1(chess.Board(), True)
 
   print("\nMatch Minimax niveau 1 contre Minimax niveau 3")
-  # match2(chess.Board(), True)
+  match2(chess.Board(), True)
 
   ## Partie 3
   # 1. J'ai coder l'`Iterative Deepening` (`alphaBetaID()`) avant de faire la comparaison. La comparaison est donc plus loin.
   print("\nMatch Minimax contre α − β")
-  # match3(chess.Board(), True)
+  match3(chess.Board(), True)
 
   # 2.
   print("\nLancement de alphaBetaID :")
-  # alphaBetaID(board, 8, chess.WHITE, 10, True)
+  alphaBetaID(board, 8, chess.WHITE, 10, True)
 
   # Comparaison de la question 1 :
   print("\nAvec une partie partie sans aucun coup jouer")
@@ -333,10 +333,10 @@ def main():
   printBoard(board)
 
   print("\nMiniMax :")
-  # miniMaxID(board, 8, chess.WHITE, 30, True)
+  miniMaxID(board, 8, chess.WHITE, 30, True)
 
   print("\nAlpha-beta :")
-  # alphaBetaID(board, 8, chess.WHITE, 10, True)
+  alphaBetaID(board, 8, chess.WHITE, 10, True)
 
   print("\nAvec une partie partie avec des coups jouer")
   board = chess.Board()
@@ -348,10 +348,10 @@ def main():
   printBoard(board)
 
   print("\nMiniMax :")
-  # miniMaxID(board, 8, chess.WHITE, 30, True)
+  miniMaxID(board, 8, chess.WHITE, 30, True)
 
   print("\nAlpha-beta :")
-  # alphaBetaID(board, 8, chess.WHITE, 10, True)
+  alphaBetaID(board, 8, chess.WHITE, 10, True)
 
 
   # On voit que pour uns profondeur de `0` et `1` il y a peu de différence de nœuds explorés.
