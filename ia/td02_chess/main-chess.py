@@ -109,12 +109,8 @@ def randomMove(b):
 
 def match1(b, debug):
   if debug and not run_from_iPython(): print(b)
-  while True:
+  while not b.is_game_over():
     if debug: printBoard(b)
-
-    if b.is_game_over():
-      print("Result : ", b.result())
-      break
 
     if b.turn == chess.WHITE:
       nextMove = randomMove(b)
@@ -122,15 +118,12 @@ def match1(b, debug):
       nextMove = MiniMax(b, 2, chess.BLACK)
 
     b.push(nextMove)
+  print("Result : ", b.result())
 
 def match2(b, debug):
   if debug and not run_from_iPython(): print(b)
-  while True:
+  while not b.is_game_over():
     if debug: printBoard(b)
-
-    if b.is_game_over():
-      print("Result : ", b.result())
-      break
 
     if b.turn == chess.WHITE:
       nextMove = MiniMax(b, 0, chess.WHITE)
@@ -138,6 +131,7 @@ def match2(b, debug):
       nextMove = MiniMax(b, 2, chess.BLACK)
 
     b.push(nextMove)
+  print("Result : ", b.result())
 
 def main():
   ## Partie 2
