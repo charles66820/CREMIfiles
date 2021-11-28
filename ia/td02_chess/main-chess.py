@@ -57,10 +57,12 @@ def Shanon(b):
              'p': 0, 'K': 0, 'Q': 0, 'R': 0, 'B': 0, 'N': 0, 'P': 0}
 
   for pos, pieces in b.piece_map().items():
-    nbPawns[pieces.symbol()] += 1
-    # chess.square_rank(63)
-
-  # TODO: Ajoutez un moyen d’exprimer qu’il est préférable d’avancer ses pions pour les mener éventuellement à la Reine
+    bonus = 0
+    if (pieces.symbol() == 'p'):
+      bonus = chess.square_rank(pos) / 10
+    elif (pieces.symbol() == 'P'):
+      bonus = (7 - chess.square_rank(pos)) / 10
+    nbPawns[pieces.symbol()] += 1 + bonus
 
   for key in pawnsValues:
     score += (pawnsValues[key] * (nbPawns[key] - nbPawns[key.upper()]))
