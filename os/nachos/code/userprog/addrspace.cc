@@ -24,9 +24,9 @@
 #include "system.h"
 
 #ifdef CHANGED
-#include "synch.h"
 #include "bitmap.h"
-#endif //CHANGED
+#include "synch.h"
+#endif  // CHANGED
 
 //----------------------------------------------------------------------
 // SwapHeader
@@ -47,6 +47,36 @@ static void SwapHeader(NoffHeader *noffH) {
   noffH->uninitData.virtualAddr = WordToHost(noffH->uninitData.virtualAddr);
   noffH->uninitData.inFileAddr = WordToHost(noffH->uninitData.inFileAddr);
 }
+
+#ifdef CHANGED
+//-----------------------------------------------------------------------
+// ReadAtVirtual
+//      Read from the executable position and writes at a virtual address
+//-----------------------------------------------------------------------
+static void ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes,
+                          int position, TranslationEntry *pageTable,
+                          unsigned numPages) {
+  if (numBytes <= 0) return;
+
+  char buffer[numBytes];
+  // Read the executable data and store in the buffer
+  executable->ReadAt(&buffer, numBytes, position);
+
+  // Save state and set it to the new process
+  TranslationEntry *savePageTable = machine->currentPageTable;
+  unsigned int saveNumPages = machine->currentPageTableSize;
+  machine->currentPageTable = pageTable;
+  machine->currentPageTableSize = numPages;
+
+  // Copy the data to the virtual memory of the futur process
+  for (uint i = 0; i < numBytes; i++)
+    if (!machine->WriteMem(virtualaddr + i, 1, buffer[i])) break;
+
+  // Restore state
+  machine->currentPageTable = savePageTable;
+  machine->currentPageTableSize = saveNumPages;
+}
+#endif  // CHANGED
 
 //----------------------------------------------------------------------
 // AddrSpaceList
@@ -110,14 +140,25 @@ AddrSpace::AddrSpace(OpenFile *executable) {
   if (noffH.code.size > 0) {
     DEBUG('a', "Initializing code segment, at 0x%x, size 0x%x\n",
           noffH.code.virtualAddr, noffH.code.size);
+#ifdef CHANGED
+    ReadAtVirtual(executable, noffH.code.virtualAddr, noffH.code.size,
+                  noffH.code.inFileAddr, pageTable, numPages);
+#else
     executable->ReadAt(&(machine->mainMemory[noffH.code.virtualAddr]),
                        noffH.code.size, noffH.code.inFileAddr);
+#endif  // CHANGED
   }
   if (noffH.initData.size > 0) {
     DEBUG('a', "Initializing data segment, at 0x%x, size 0x%x\n",
           noffH.initData.virtualAddr, noffH.initData.size);
+#ifdef CHANGED
+    ReadAtVirtual(executable, noffH.initData.virtualAddr, noffH.initData.size,
+                  noffH.initData.inFileAddr, pageTable, numPages);
+#else
     executable->ReadAt(&(machine->mainMemory[noffH.initData.virtualAddr]),
                        noffH.initData.size, noffH.initData.inFileAddr);
+
+#endif  // CHANGED
   }
 
   DEBUG('a', "Area for stacks at 0x%x, size 0x%x\n", size - UserStacksAreaSize,
@@ -141,7 +182,7 @@ AddrSpace::AddrSpace(OpenFile *executable) {
   stackBitMap->Mark(0);
   currentThread->SetStackIndex(0);
 
-#endif //CHANGED
+#endif  // CHANGED
 }
 
 //----------------------------------------------------------------------
@@ -158,7 +199,7 @@ AddrSpace::~AddrSpace() {
 #ifdef CHANGED
   delete mutex;
   delete stackBitMap;
-#endif //CHANGED
+#endif  // CHANGED
 }
 
 //----------------------------------------------------------------------
@@ -221,7 +262,8 @@ int AddrSpace::AllocateUserStack() {
 
 //----------------------------------------------------------------------
 // AddrSpace::DeallocateUserStack
-//      Deallocate the stack of the thread and if it is the last, it finish the process
+//      Deallocate the stack of the thread and if it is the last, it finish the
+//      process
 //----------------------------------------------------------------------
 
 void AddrSpace::DeallocateUserStack() {
@@ -231,10 +273,11 @@ void AddrSpace::DeallocateUserStack() {
   nbThreads -= 1;
 
   // When is the last thread we do a powerdown interruption
-  if (nbThreads == 0) interrupt->Powerdown(); // TODO: see later to only exit the current process
+  if (nbThreads == 0)
+    interrupt->Powerdown();  // TODO: see later to only exit the current process
   mutex->Release();
 }
-#endif //CHANGED
+#endif  // CHANGED
 
 //----------------------------------------------------------------------
 // AddrSpace::Dump
