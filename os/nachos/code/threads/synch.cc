@@ -155,26 +155,53 @@ void Lock::Release() {
 
 Condition::Condition(const char *debugName) {
   (void)debugName;
-  /* TODO */
+#ifdef CHANGED
+  name = debugName;
+  queue = new List;
+#else
   ASSERT(FALSE);
+#endif
 }
 
-Condition::~Condition() {}
+Condition::~Condition() {
+#ifdef CHANGED
+  delete queue;
+  queue = NULL;
+#endif
+}
 
 void Condition::Wait(Lock *conditionLock) {
   (void)conditionLock;
-  /* TODO */
+#ifdef CHANGED
+  queue->Append((void *)currentThread);  // so go to sleep
+  conditionLock->Release();
+  currentThread->Sleep();
+  conditionLock->Acquire();
+#else
   ASSERT(FALSE);
+#endif
 }
 
 void Condition::Signal(Lock *conditionLock) {
   (void)conditionLock;
-  /* TODO */
+#ifdef CHANGED
+  // TODO: add lock ?
+  if (!queue->IsEmpty())
+    scheduler->ReadyToRun((Thread *)queue->Remove());
+#else
+
   ASSERT(FALSE);
+#endif
+
 }
 
 void Condition::Broadcast(Lock *conditionLock) {
   (void)conditionLock;
-  /* TODO */
+#ifdef CHANGED
+  // TODO: add lock ?
+  while (!queue->IsEmpty())
+    scheduler->ReadyToRun((Thread *)queue->Remove());
+#else
   ASSERT(FALSE);
+#endif
 }

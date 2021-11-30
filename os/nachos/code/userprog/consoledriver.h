@@ -13,7 +13,7 @@ class ConsoleDriver : dontcopythis {
   ConsoleDriver(const char *readFile, const char *writeFile);
   ~ConsoleDriver();                // clean up
   void PutChar(int ch);            // Behaves like putchar(3S)
-  int GetChar();                   // Behaves like getchar(3S)
+  int GetChar(void);                   // Behaves like getchar(3S)
   void PutString(const char *s);   // Behaves like fputs(3S)
   void GetString(char *s, int n);  // Behaves like fgets(3S)
  private:

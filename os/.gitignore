@@ -18,6 +18,7 @@ nachos/code/test/putint_getint
 nachos/code/test/makethreads
 nachos/code/test/makemultithreads
 nachos/code/test/halt.s
+nachos/code/test/userpages0
 nachos/code/threads/nachos
 nachos/code/userprog/nachos
 !nachos/.vscode/tasks.json
