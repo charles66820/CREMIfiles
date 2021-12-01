@@ -63,7 +63,7 @@ void PageProvider::ReleasePage(int pageNum) {
 //      Give the disponible pages number
 //----------------------------------------------------------------------
 
-int PageProvider::NumAvailPage() {
+uint PageProvider::NumAvailPage() {
   return physicalPage->NumClear();
 }
 

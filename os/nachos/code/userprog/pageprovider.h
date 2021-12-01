@@ -13,7 +13,7 @@ class PageProvider {
   ~PageProvider();           // De-allocate a pageprovider
   int GetEmptyPage(void);    // Return a physical page number
   void ReleasePage(int pageNum);  // Free a page
-  int NumAvailPage(void);         // Give the disponible pages number
+  uint NumAvailPage(void);         // Give the disponible pages number
  private:
   BitMap *physicalPage;
   Lock *mutex;

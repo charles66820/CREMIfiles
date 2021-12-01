@@ -69,7 +69,7 @@ static void ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes,
   machine->currentPageTableSize = numPages;
 
   // Copy the data to the virtual memory of the futur process
-  for (uint i = 0; i < numBytes; i++)
+  for (int i = 0; i < numBytes; i++)
     if (!machine->WriteMem(virtualaddr + i, 1, buffer[i])) break;
 
   // Restore state
@@ -120,14 +120,34 @@ AddrSpace::AddrSpace(OpenFile *executable) {
   // to run anything too big --
   // at least until we have
   // virtual memory
-  if (numPages > NumPhysPages) throw std::bad_alloc();
+  if (numPages > pageProvider->NumAvailPage()) throw std::bad_alloc();
 
   DEBUG('a', "Initializing address space, num pages %d, total size 0x%x\n",
         numPages, size);
+
+  // get physical pages
+  int physicalPages[numPages];
+  for (i = 0; i < numPages; i++)
+    physicalPages[i] = pageProvider->GetEmptyPage();
+
+  bool randomizedPages = true;
+  if (randomizedPages) {
+    // rand the table
+    // shuffle fonction from https://stackoverflow.com/questions/6127503/shuffle-array-in-c
+    if (numPages > 1) {
+      for (uint k = 0; k < numPages - 1; k++) {
+        uint j = k + rand() / (RAND_MAX / (numPages - k) + 1);
+        uint t = physicalPages[j];
+        physicalPages[j] = physicalPages[k];
+        physicalPages[k] = t;
+      }
+    }
+  }
+
   // first, set up the translation
   pageTable = new TranslationEntry[numPages];
   for (i = 0; i < numPages; i++) {
-    pageTable[i].physicalPage = i+1;  // for now, phys page # = virtual page #
+    pageTable[i].physicalPage = physicalPages[i];
     pageTable[i].valid = TRUE;
     pageTable[i].use = FALSE;
     pageTable[i].dirty = FALSE;
@@ -191,6 +211,11 @@ AddrSpace::AddrSpace(OpenFile *executable) {
 //----------------------------------------------------------------------
 
 AddrSpace::~AddrSpace() {
+#ifdef CHANGED
+  for (unsigned int i = 0; i < numPages; i++) {
+    pageProvider->ReleasePage(pageTable[i].physicalPage);
+  }
+#endif  // CHANGED
   delete[] pageTable;
   pageTable = NULL;
 
