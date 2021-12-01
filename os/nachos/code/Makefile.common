@@ -1,14 +1,14 @@
 # This is part of a GNU Makefile, included by the Makefiles in
-# each of the subdirectories.  
+# each of the subdirectories.
 #
 # This file includes all of the baseline code provided by Nachos.
-# Whenever you add a .h or .cc file, put it in the appropriate 
+# Whenever you add a .h or .cc file, put it in the appropriate
 # _H,_C, or _O list.
 #
 # The dependency graph between assignments is:
 #   1. THREADS before everything else
 #   2. USERPROG must come before VM
-#   3. USERPROG can come before or after FILESYS, but if USERPROG comes 
+#   3. USERPROG can come before or after FILESYS, but if USERPROG comes
 #	before (as in this distribution), then it must define FILESYS_STUB
 #
 #   Other than that, you have complete flexibility.
@@ -19,7 +19,7 @@
 # you need to call some inline functions from the debugger.
 
 # Copyright (c) 1992 The Regents of the University of California.
-# All rights reserved.  See copyright.h for copyright notice and limitation 
+# All rights reserved.  See copyright.h for copyright notice and limitation
 # of liability and disclaimer of warranty provisions.
 
 ###########################################################################
@@ -31,7 +31,7 @@ THREAD_O	:=	main.o list.o scheduler.o synch.o synchlist.o \
 			stats.o sysdep.o timer.o
 
 USERPROG_O	:=	addrspace.o bitmap.o exception.o progtest.o console.o \
-			consoledriver.o userthread.o machine.o mipssim.o translate.o
+			consoledriver.o userthread.o machine.o pageprovider.o mipssim.o translate.o
 
 VM_O		:=
 

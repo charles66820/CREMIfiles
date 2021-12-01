@@ -4,6 +4,9 @@
 #ifndef PAGEPROVIDER_H
 #define PAGEPROVIDER_H
 
+#include "bitmap.h"
+#include "synch.h"
+
 class PageProvider {
  public:
   PageProvider(int nbPhysicalPage);  // Initialise a page provider, with "nbPhysicalPage" bits
