@@ -214,6 +214,11 @@ void ExceptionHandler(ExceptionType which) {
           do_ThreadExit();
           break;
         }
+        case SC_ForkExec: {
+          DEBUG('s', "ForkExec\n");
+          //TODO: exécuter un programme avec le fichier
+          break;
+        }
 #endif  // CHANGED
         default: {
           printf("Unimplemented system call %d\n", type);

@@ -42,6 +42,7 @@
 #define SC_PutInt 16
 #define SC_ThreadCreate 17
 #define SC_ThreadExit 18
+#define SC_ForkExec 19
 #endif // CHANGED
 
 #ifdef IN_USER_MODE
@@ -161,6 +162,9 @@ int ThreadCreate(void f(void *arg), void *arg);
 
 /* Finish a thread */
 void ThreadExit(void);
+
+/* Create a new process */
+int ForkExec(const char *s);
 #endif
 
 #endif  // IN_USER_MODE
