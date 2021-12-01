@@ -35,10 +35,12 @@ extern Machine *machine;  // user program memory and registers
 #ifdef CHANGED
 #include "consoledriver.h"
 extern ConsoleDriver *consoledriver;
+#include "pageprovider.h"
+extern PageProvider *pageProvider;
 
-#define MAX_STRING_SIZE 128 //size of local buffer
+#define MAX_STRING_SIZE 128  // size of local buffer
 
-#endif //CHANGED
+#endif  // CHANGED
 #endif
 
 #ifdef FILESYS_NEEDED  // FILESYS or FILESYS_STUB

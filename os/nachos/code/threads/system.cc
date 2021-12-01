@@ -6,6 +6,7 @@
 // of liability and disclaimer of warranty provisions.
 
 #include "system.h"
+
 #include <locale.h>
 
 #include "copyright.h"
@@ -36,7 +37,8 @@ SynchDisk *synchDisk;
 Machine *machine;    // user program memory and registers
 #ifdef CHANGED
 ConsoleDriver *consoledriver;
-#endif // CHANGED
+PageProvider *pageProvider;
+#endif  // CHANGED
 #endif
 
 #ifdef NETWORK
@@ -165,6 +167,9 @@ void Initialize(int argc, char **argv) {
 
 #ifdef USER_PROGRAM
   machine = new Machine(debugUserProg);  // this must come first
+#ifdef CHANGED
+  pageProvider = new PageProvider(NumPhysPages);
+#endif
 #endif
 
 #ifdef FILESYS
@@ -212,11 +217,11 @@ void Cleanup() {
     delete machine;
     machine = NULL;
   }
-  #ifdef CHANGED
+#ifdef CHANGED
   if (consoledriver) {
     delete consoledriver;
   }
-  #endif // CHANGED
+#endif  // CHANGED
 #endif
 
 #ifdef FILESYS_NEEDED
