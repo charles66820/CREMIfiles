@@ -202,6 +202,7 @@ AddrSpace::AddrSpace(OpenFile *executable) {
   stackBitMap->Mark(0);
   currentThread->SetStackIndex(0);
 
+  machine->DumpMem("addrspace.svg");
 #endif  // CHANGED
 }
 

@@ -24,6 +24,7 @@
 #include "copyright.h"
 #include "syscall.h"
 #include "system.h"
+#include "userproc.h"
 #include "userthread.h"
 
 //----------------------------------------------------------------------
@@ -216,7 +217,17 @@ void ExceptionHandler(ExceptionType which) {
         }
         case SC_ForkExec: {
           DEBUG('s', "ForkExec\n");
-          //TODO: exécuter un programme avec le fichier
+
+          // Get binary file path
+          int p = machine->ReadRegister(4);
+          char path[MAX_STRING_SIZE];
+          int len = copyStringFromMachine(p, path, MAX_STRING_SIZE);
+
+          int r = -1;
+          if (len > 0)
+            r = do_ProcCreate(path);
+
+          machine->WriteRegister(2, r);
           break;
         }
 #endif  // CHANGED

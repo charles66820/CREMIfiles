@@ -7,6 +7,8 @@
 static void StartUserProc(void *args) {
   DEBUG('t', "StartUserProc invoked\n");
 
+  (void)args;
+
   // Init registers
   currentThread->space->InitRegisters();
 
@@ -28,7 +30,7 @@ int do_ProcCreate(char *filename) {
     SetBold(stdout);
     printf("Unable to open file %s\n", filename);
     ClearColor(stdout);
-    return;
+    return 0;
   }
 
   AddrSpace *space = new AddrSpace(executable);
@@ -37,8 +39,6 @@ int do_ProcCreate(char *filename) {
   // Create the new thread
   Thread *newThreadProc = new Thread("process");
   newThreadProc->space = space;
-
-  // TODO: setMain ???
 
   newThreadProc->Start(StartUserProc, NULL);
 

@@ -29,7 +29,8 @@ static void StartUserThread(void *args) {
 
   // Initialize program counter to user thread caller
   machine->WriteRegister(PCReg, USER_THREAD_ADDRESS);
-  // Put the address of the user thread function in register 2 for the thread caller
+  // Put the address of the user thread function in register 2 for the thread
+  // caller
   machine->WriteRegister(2, f);
 
   // Add arg to registers
