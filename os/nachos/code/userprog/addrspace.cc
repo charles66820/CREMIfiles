@@ -134,7 +134,8 @@ AddrSpace::AddrSpace(OpenFile *executable) {
   bool randomizedPages = true;
   if (randomizedPages) {
     // rand the table
-    // shuffle fonction from https://stackoverflow.com/questions/6127503/shuffle-array-in-c
+    // shuffle fonction from
+    // https://stackoverflow.com/questions/6127503/shuffle-array-in-c
     if (numPages > 1) {
       for (uint k = 0; k < numPages - 1; k++) {
         uint j = k + rand() / (RAND_MAX / (numPages - k) + 1);
@@ -299,6 +300,16 @@ bool AddrSpace::DeallocateUserStack(Thread *thread) {
   mutex->Release();
 
   return userThreadList->IsEmpty();
+}
+
+void AddrSpace::CloseAllUserThread() {
+  bool isLastUserThread;
+  Thread *t;
+  do {
+    t = (Thread *)userThreadList->FirstElement()->item;
+    isLastUserThread = currentThread->space->DeallocateUserStack(t);
+    // if (t != currentThread) t->Finish(); // TODO: fix
+  } while (!isLastUserThread);
 }
 #endif  // CHANGED
 

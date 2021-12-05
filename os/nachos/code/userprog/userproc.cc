@@ -44,9 +44,33 @@ int do_ProcCreate(char *filename) {
   ASSERT(stackIndex != -1); // Not possible
   newThreadProc->SetStackIndex(stackIndex); // Defind as the first stack
 
+  processMutex->Acquire();
+  nbProcess += 1;
+  processMutex->Release();
+
   newThreadProc->Start(StartUserProc, NULL);
 
   return 1;
+}
+
+void do_ProcExit() {
+  processMutex->Acquire();
+  nbProcess -= 1;
+  processMutex->Release();
+
+  // When is the last process we do a powerdown interruption
+  if (nbProcess == 0) {
+    interrupt->Powerdown();
+    return;
+  }
+
+  // Close all proc threads
+  currentThread->space->CloseAllUserThread();
+
+  // remove the current process
+  delete currentThread->space;
+
+  currentThread->Finish();
 }
 
 #endif  // CHANGED

@@ -38,6 +38,8 @@ Machine *machine;    // user program memory and registers
 #ifdef CHANGED
 ConsoleDriver *consoledriver;
 PageProvider *pageProvider;
+uint nbProcess;
+Lock *processMutex;
 #endif  // CHANGED
 #endif
 
@@ -169,6 +171,8 @@ void Initialize(int argc, char **argv) {
   machine = new Machine(debugUserProg);  // this must come first
 #ifdef CHANGED
   pageProvider = new PageProvider(NumPhysPages);
+  nbProcess = 1;
+  processMutex = new Lock("processMutex");
 #endif
 #endif
 
@@ -225,6 +229,9 @@ void Cleanup() {
 #ifdef CHANGED
   if (pageProvider) {
     delete pageProvider;
+  }
+  if (processMutex) {
+    delete processMutex;
   }
 #endif  // CHANGED
 #endif

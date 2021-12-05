@@ -37,6 +37,9 @@ extern Machine *machine;  // user program memory and registers
 extern ConsoleDriver *consoledriver;
 #include "pageprovider.h"
 extern PageProvider *pageProvider;
+extern uint nbProcess;
+#include "synch.h"
+extern Lock *processMutex;
 
 #define MAX_STRING_SIZE 128  // size of local buffer
 
