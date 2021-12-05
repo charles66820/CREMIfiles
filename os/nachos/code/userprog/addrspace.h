@@ -42,7 +42,7 @@ class AddrSpace : public dontcopythis {
 
 #ifdef CHANGED
   int AllocateUserStack(Thread *newThread);
-  void DeallocateUserStack(Thread *thread);
+  bool DeallocateUserStack(Thread *thread);
 #endif  // CHANGED
 
   void SaveState();     // Save/restore address space-specific

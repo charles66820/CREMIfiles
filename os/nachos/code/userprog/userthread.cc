@@ -84,7 +84,11 @@ int do_ThreadCreate(int f, int arg) {
 }
 
 void do_ThreadExit() {
-  currentThread->space->DeallocateUserStack(currentThread);
+  bool isLastUserThread = currentThread->space->DeallocateUserStack(currentThread);
+
+  // When is the last thread we do a powerdown interruption
+  if (isLastUserThread)
+    interrupt->Powerdown();  // TODO: see later to only exit the current process
 
   currentThread->Finish();
 }

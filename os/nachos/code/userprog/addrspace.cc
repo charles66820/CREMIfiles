@@ -291,16 +291,14 @@ int AddrSpace::AllocateUserStack(Thread *newThread) {
 //      process
 //----------------------------------------------------------------------
 
-void AddrSpace::DeallocateUserStack(Thread *thread) {
+bool AddrSpace::DeallocateUserStack(Thread *thread) {
   mutex->Acquire();
   stackBitMap->Clear(thread->GetStackIndex());
 
   userThreadList->Remove(thread);
-
-  // When is the last thread we do a powerdown interruption
-  if (userThreadList->IsEmpty())
-    interrupt->Powerdown();  // TODO: see later to only exit the current process
   mutex->Release();
+
+  return userThreadList->IsEmpty();
 }
 #endif  // CHANGED
 
