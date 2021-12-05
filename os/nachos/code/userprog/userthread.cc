@@ -57,7 +57,8 @@ int do_ThreadCreate(int f, int arg) {
 
   int stackIndex = newThread->space->AllocateUserStack(newThread);
   if (stackIndex == 0) {
-    DEBUG('t', "Not enough memory space to allocate the stack of the new thread !");
+    DEBUG('t',
+          "Not enough memory space to allocate the stack of the new thread !");
     delete newThread;
     return 0;
   }
@@ -84,7 +85,8 @@ int do_ThreadCreate(int f, int arg) {
 }
 
 void do_ThreadExit() {
-  bool isLastUserThread = currentThread->space->DeallocateUserStack(currentThread);
+  bool isLastUserThread =
+      currentThread->space->DeallocateUserStack(currentThread);
 
   // When is the last thread we do a powerdown interruption
   if (isLastUserThread)
