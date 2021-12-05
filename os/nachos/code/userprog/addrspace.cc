@@ -26,6 +26,7 @@
 #ifdef CHANGED
 #include "bitmap.h"
 #include "synch.h"
+#include "thread.h"
 #endif  // CHANGED
 
 //----------------------------------------------------------------------
@@ -192,15 +193,12 @@ AddrSpace::AddrSpace(OpenFile *executable) {
   // Init mutex for thread counter
   mutex = new Lock("CounterProtection");
 
-  // Init thread counter
-  nbThreads = 1;
+  // Init thread list
+  userThreadList = new List();
 
   // Allocate stack bitmap
   int nbrMaxStack = UserStacksAreaSize / UserStackSize;
   stackBitMap = new BitMap(nbrMaxStack);
-  // Mark the main thread
-  stackBitMap->Mark(0);
-  currentThread->SetStackIndex(0);
 
   machine->DumpMem("addrspace.svg");
 #endif  // CHANGED
@@ -225,6 +223,7 @@ AddrSpace::~AddrSpace() {
 #ifdef CHANGED
   delete mutex;
   delete stackBitMap;
+  delete userThreadList;
 #endif  // CHANGED
 }
 
@@ -263,15 +262,16 @@ void AddrSpace::InitRegisters() {
 //      Determine where the stack of the thread will be allocated
 //----------------------------------------------------------------------
 
-int AddrSpace::AllocateUserStack() {
+int AddrSpace::AllocateUserStack(Thread *newThread) {
   mutex->Acquire();
   // Mark stack space used in stack bitmap
   int index = stackBitMap->Find();
   if (index == -1) {
     mutex->Release();
-    return -1;
+    return 0;
   }
   stackBitMap->Mark(index);
+  userThreadList->Append(newThread);
 
   // Determine the thread stack address
   if (UserStackSize * index + 16 >= UserStacksAreaSize) {
@@ -280,7 +280,6 @@ int AddrSpace::AllocateUserStack() {
     return -1;
   }
 
-  nbThreads += 1;
   mutex->Release();
 
   return index;
@@ -292,14 +291,14 @@ int AddrSpace::AllocateUserStack() {
 //      process
 //----------------------------------------------------------------------
 
-void AddrSpace::DeallocateUserStack() {
+void AddrSpace::DeallocateUserStack(Thread *thread) {
   mutex->Acquire();
-  stackBitMap->Clear(currentThread->GetStackIndex());
+  stackBitMap->Clear(thread->GetStackIndex());
 
-  nbThreads -= 1;
+  userThreadList->Remove(thread);
 
   // When is the last thread we do a powerdown interruption
-  if (nbThreads == 0)
+  if (userThreadList->IsEmpty())
     interrupt->Powerdown();  // TODO: see later to only exit the current process
   mutex->Release();
 }

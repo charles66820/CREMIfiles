@@ -222,6 +222,11 @@ void Cleanup() {
     delete consoledriver;
   }
 #endif  // CHANGED
+#ifdef CHANGED
+  if (pageProvider) {
+    delete pageProvider;
+  }
+#endif  // CHANGED
 #endif
 
 #ifdef FILESYS_NEEDED

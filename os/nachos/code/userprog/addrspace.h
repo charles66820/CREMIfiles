@@ -27,6 +27,7 @@
 
 #ifdef CHANGED
 class Lock;
+class Thread;
 #endif  // CHANGED
 
 class AddrSpace : public dontcopythis {
@@ -40,8 +41,8 @@ class AddrSpace : public dontcopythis {
   // before jumping to user code
 
 #ifdef CHANGED
-  int AllocateUserStack(void);
-  void DeallocateUserStack(void);
+  int AllocateUserStack(Thread *newThread);
+  void DeallocateUserStack(Thread *thread);
 #endif  // CHANGED
 
   void SaveState();     // Save/restore address space-specific
@@ -61,7 +62,7 @@ class AddrSpace : public dontcopythis {
 
 #ifdef CHANGED
   Lock *mutex;
-  unsigned int nbThreads;
+  List *userThreadList;
   BitMap *stackBitMap;
 #endif  // CHANGED
 };

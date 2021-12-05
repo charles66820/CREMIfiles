@@ -55,17 +55,24 @@ int do_ThreadCreate(int f, int arg) {
   Thread *newThread = new Thread("forked thread");
   newThread->space = currentThread->space;  // define as same memory space
 
-  int stackIndex = newThread->space->AllocateUserStack();
-  if (stackIndex == -1) {
-    DEBUG('t', "Not enough memory to allocate the stack of the new thread !");
+  int stackIndex = newThread->space->AllocateUserStack(newThread);
+  if (stackIndex == 0) {
+    DEBUG('t', "Not enough memory space to allocate the stack of the new thread !");
     delete newThread;
     return 0;
+  }
+  if (stackIndex == -1) {
+    DEBUG('t', "Not enough memory to allocate the stack of the new thread !");
+    newThread->space->DeallocateUserStack(newThread);
+    delete newThread;
+    return -1;
   }
 
   // Start the new thread
   int *args = (int *)malloc(3 * sizeof(int));
   if (args == NULL) {
     perror("Not enough memory");
+    newThread->space->DeallocateUserStack(newThread);
     delete newThread;
     return 0;
   }
@@ -77,7 +84,7 @@ int do_ThreadCreate(int f, int arg) {
 }
 
 void do_ThreadExit() {
-  currentThread->space->DeallocateUserStack();
+  currentThread->space->DeallocateUserStack(currentThread);
 
   currentThread->Finish();
 }

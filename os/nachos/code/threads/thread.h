@@ -143,7 +143,7 @@ class Thread : public dontcopythis {
   void SetStackIndex(int idx);
   int GetStackIndex();
  private:
-  int stackIndex;
+  int stackIndex = -1;
 #endif  // CHANGED
 #endif
 };

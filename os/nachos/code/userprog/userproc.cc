@@ -11,6 +11,7 @@ static void StartUserProc(void *args) {
 
   // Init registers
   currentThread->space->InitRegisters();
+  currentThread->space->RestoreState();   // load page table register
 
   // Print the svg
   machine->DumpMem("newProc.svg");
@@ -39,6 +40,9 @@ int do_ProcCreate(char *filename) {
   // Create the new thread
   Thread *newThreadProc = new Thread("process");
   newThreadProc->space = space;
+  int stackIndex = newThreadProc->space->AllocateUserStack(newThreadProc);
+  ASSERT(stackIndex != -1); // Not possible
+  newThreadProc->SetStackIndex(stackIndex); // Defind as the first stack
 
   newThreadProc->Start(StartUserProc, NULL);
 
