@@ -5,6 +5,7 @@
 
 #include "syscall.h"
 #include "system.h"
+#include "userproc.h"
 
 static void StartUserThread(void *args) {
   DEBUG('t', "StartUserThread invoked\n");
@@ -89,17 +90,7 @@ void do_ThreadExit() {
       currentThread->space->DeallocateUserStack(currentThread);
 
   // When is the last process thread we close the process
-  if (isLastUserThread) {
-    // remove the current process
-    delete currentThread->space;
-
-    // When is the last thread of the last process we do a powerdown
-    // interruption
-    if (ThreadList.Length() == 1) {
-      interrupt->Powerdown();
-      return;
-    }
-  }
+  if (isLastUserThread) do_ProcExit();
 
   currentThread->Finish();
 }
