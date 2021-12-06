@@ -311,7 +311,7 @@ void AddrSpace::CloseAllUserThread() {
   do {
     t = (Thread *)userThreadList->FirstElement()->item;
     isLastUserThread = currentThread->space->DeallocateUserStack(t);
-    // if (t != currentThread) t->Finish(); // TODO: fix
+    if (t != currentThread) t->Finish();
   } while (!isLastUserThread);
 }
 #endif  // CHANGED
