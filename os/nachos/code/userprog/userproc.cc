@@ -63,6 +63,8 @@ void do_ProcExit() {
 
   // When is the last process we do a powerdown interruption
   if (nbProcess == 0) {
+    // remove the current process
+    delete currentThread->space;
     interrupt->Powerdown();
     return;
   }
