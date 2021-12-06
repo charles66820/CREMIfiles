@@ -40,9 +40,12 @@ int do_ProcCreate(char *filename) {
   // Create the new thread
   Thread *newThreadProc = new Thread("process");
   newThreadProc->space = space;
-  int stackIndex = newThreadProc->space->AllocateUserStack(newThreadProc);
-  ASSERT(stackIndex != -1); // Not possible
-  newThreadProc->SetStackIndex(stackIndex); // Defind as the first stack
+  int ret = newThreadProc->space->AllocateUserStack(newThreadProc);
+  if (!ret) {
+    delete space;
+    delete newThreadProc;
+    return -1;
+  }
 
   processMutex->Acquire();
   nbProcess += 1;

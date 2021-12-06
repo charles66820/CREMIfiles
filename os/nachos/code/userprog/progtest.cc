@@ -35,9 +35,8 @@ void StartProcess(char *filename) {
   space = new AddrSpace(executable);
   currentThread->space = space;
 #ifdef CHANGED
-  int stackIndex = currentThread->space->AllocateUserStack(currentThread);
-  ASSERT(stackIndex != -1); // Not possible
-  currentThread->SetStackIndex(stackIndex); // Defind as the first stack
+  int ret = currentThread->space->AllocateUserStack(currentThread);
+  ASSERT(ret != -1); // Not possible
 #endif  // CHANGED
 
   delete executable;  // close file

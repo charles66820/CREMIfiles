@@ -280,10 +280,11 @@ int AddrSpace::AllocateUserStack(Thread *newThread) {
     mutex->Release();
     return -1;
   }
+  newThread->SetStackIndex(index);
 
   mutex->Release();
 
-  return index;
+  return 1;
 }
 
 //----------------------------------------------------------------------
@@ -297,6 +298,8 @@ bool AddrSpace::DeallocateUserStack(Thread *thread) {
   stackBitMap->Clear(thread->GetStackIndex());
 
   userThreadList->Remove(thread);
+
+  thread->SetStackIndex(-1);
   mutex->Release();
 
   return userThreadList->IsEmpty();
