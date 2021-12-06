@@ -306,6 +306,8 @@ bool AddrSpace::DeallocateUserStack(Thread *thread) {
 }
 
 void AddrSpace::CloseAllUserThread() {
+  if (userThreadList->IsEmpty()) return;
+
   bool isLastUserThread;
   Thread *t;
   do {
