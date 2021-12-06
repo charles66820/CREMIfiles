@@ -1,7 +1,8 @@
-package com.cgoedefroit.tdDdd.domain.repository;
+package com.cgoedefroit.tdDdd.infrastructure;
 
 import com.cgoedefroit.tdDdd.domain.aggregation.Aggregation;
 import com.cgoedefroit.tdDdd.domain.aggregation.Basket;
+import com.cgoedefroit.tdDdd.domain.repository.Repository;
 
 public class BasketRepository implements Repository {
 
