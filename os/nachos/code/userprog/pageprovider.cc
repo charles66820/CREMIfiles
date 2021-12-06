@@ -41,7 +41,7 @@ int PageProvider::GetEmptyPage() {
   physicalPage->Mark(index);
   mutex->Release();
 
-  memset(&machine->mainMemory[index], 0, PageSize);
+  memset(&machine->mainMemory[index * PageSize], 0, PageSize);
 
   return index;
 }

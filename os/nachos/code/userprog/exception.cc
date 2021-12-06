@@ -224,7 +224,9 @@ void ExceptionHandler(ExceptionType which) {
           char path[MAX_STRING_SIZE];
           int len = copyStringFromMachine(p, path, MAX_STRING_SIZE);
 
-          int r = -1;
+          DEBUG('s', "start new proc (%s)\n", path);
+
+          int r = -2;
           if (len > 0)
             r = do_ProcCreate(path);
 
