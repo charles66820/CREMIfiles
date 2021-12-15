@@ -22,5 +22,6 @@ int main() {
   ThreadCreate(f, THIS);
   f(THAT);
   ThreadExit();
+  return 1;
 }
 #endif  // CHANGED

@@ -15,6 +15,8 @@ int main() {
     GetInt(&i);
     PutInt(i);
     PutChar('\n');
+
+    return 6;
 }
 
 #endif // CHANGED
