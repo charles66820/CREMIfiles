@@ -156,9 +156,9 @@ AddrSpace::AddrSpace(OpenFile *executable) {
   pageTable = new TranslationEntry[numPages];
   for (i = 0; i < numPages; i++) {
 #ifdef CHANGED
-    pageTable[i].physicalPage = i;
-#else
     pageTable[i].physicalPage = physicalPages[i];
+#else
+    pageTable[i].physicalPage = i;
 #endif  // CHANGED
     pageTable[i].valid = TRUE;
     pageTable[i].use = FALSE;
