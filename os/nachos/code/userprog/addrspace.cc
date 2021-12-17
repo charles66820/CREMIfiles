@@ -121,11 +121,16 @@ AddrSpace::AddrSpace(OpenFile *executable) {
   // to run anything too big --
   // at least until we have
   // virtual memory
+#ifdef CHANGED
   if (numPages > pageProvider->NumAvailPage()) throw std::bad_alloc();
+#else
+  if (numPages > NumPhysPages) throw std::bad_alloc();
+#endif  // CHANGED
 
   DEBUG('a', "Initializing address space, num pages %d, total size 0x%x\n",
         numPages, size);
 
+#ifdef CHANGED
   // get physical pages
   int physicalPages[numPages];
   for (i = 0; i < numPages; i++)
@@ -145,11 +150,16 @@ AddrSpace::AddrSpace(OpenFile *executable) {
       }
     }
   }
+#endif  // CHANGED
 
   // first, set up the translation
   pageTable = new TranslationEntry[numPages];
   for (i = 0; i < numPages; i++) {
+#ifdef CHANGED
+    pageTable[i].physicalPage = i;
+#else
     pageTable[i].physicalPage = physicalPages[i];
+#endif  // CHANGED
     pageTable[i].valid = TRUE;
     pageTable[i].use = FALSE;
     pageTable[i].dirty = FALSE;
