@@ -8,7 +8,9 @@ int main() {
 #pragma omp parallel
   {
     int i;
-    for (i = 0; i < 100000; i++) k++;
+    for (i = 0; i < 100000; i++)
+#pragma omp critical
+      k++;
   }
 
   printf("nbthreads x 100000 = %d\n ", k);
