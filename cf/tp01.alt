@@ -1,0 +1,59 @@
+node Minimal
+edon
+
+node FIFO_V1
+  state nbMessages : [0,2]; // defined multiple states `nbMessages` with value between 0 and 2
+  init nbMessages :=0; // defined the initial state is `nbMessages = 0`
+  event put, get; // defined all the event
+  trans // describe transitions
+    nbMessages < 2 |- put -> nbMessages := nbMessages + 1; // put | 1 | 2 // like rewrite
+    nbMessages > 0 |- get -> nbMessages := nbMessages - 1; // get | 1 | 0 // like rewrite
+edon
+
+node FIFO_V2
+  state nbMessages : [0,2];
+  init nbMessages:=0;
+  event put, get;
+  trans
+    true |- put -> nbMessages:=nbMessages+1;
+    true |- get -> nbMessages:=nbMessages-1;
+edon
+
+node Switch
+  flow f1, f2 : [0, 1];
+  state on : bool : public;
+  init on ~= true;
+  event push;
+  trans
+    true |- push -> on := ~on;
+  assert
+    on => (f1=f2);
+edon
+
+node Generator
+flow plus, minus : [0, 1];
+  state ok : bool;
+  init ok := true;
+  event failure, repair;
+  trans
+    ok |- failure -> ok := false;
+    ~ok |- repair -> ok := true;
+  assert
+    plus=1;
+    ok=(minus=0);
+edon
+const testdsd;
+
+/*
+test
+*/
+
+node Lamplight
+  flow f1, f2 : [0, 1];
+  state on, ok : bool;
+  init ok := true;
+  event reaction;
+  trans
+    ok & (f1=1&f2=1) |- reaction -> ok := false, on := false;
+    ok & (on=(f1=f2)) |- reaction -> on := ~on;
+edon
