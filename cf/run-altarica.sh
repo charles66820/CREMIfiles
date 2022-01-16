@@ -65,5 +65,5 @@ case $(uname) in
 	;;
 esac
 
-eval docker run ${DOCKER_FLAGS} --rm --name alatarica-${IMAGE} -ti altarica/${IMAGE}:${TAG}
+eval docker run ${DOCKER_FLAGS} --rm --name altarica-${IMAGE} -ti altarica/${IMAGE}:${TAG}
 ${restore_xhost} && xhost -${IP}
