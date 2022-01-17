@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
   sum = 0;
   gettimeofday(&t1, NULL);
 
-  // TODO
+#pragma omp parallel for
   for (int i = 0; i < N; i++) sum += tab[i];
 
   gettimeofday(&t2, NULL);
@@ -48,8 +48,10 @@ int main(int argc, char *argv[]) {
   sum = 0;
   gettimeofday(&t1, NULL);
 
-  // TODO
-  for (int i = 0; i < N; i++) sum += tab[i];
+#pragma omp parallel for
+  for (int i = 0; i < N; i++)
+#pragma omp atomic
+    sum += tab[i];
 
   gettimeofday(&t2, NULL);
 

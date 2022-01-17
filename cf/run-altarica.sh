@@ -32,6 +32,7 @@ set -eu
 
 DOCKER_FLAGS="--net=host"
 DOCKER_FLAGS+=' -v "/tmp/.X11-unix:/tmp/.X11-unix"'
+DOCKER_FLAGS+=' -v "/usr/share/icons:/usr/share/icons:ro"'
 DOCKER_FLAGS+=' -v "${PWD}:/home/formaldesigner"'
 
 case $(uname) in

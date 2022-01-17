@@ -3,7 +3,7 @@ edon
 
 node FIFO_V1
   state nbMessages : [0,2]; // defined multiple states `nbMessages` with value between 0 and 2
-  init nbMessages :=0; // defined the initial state is `nbMessages = 0`
+  init nbMessages := 0; // defined the initial state is `nbMessages = 0`
   event put, get; // defined all the event
   trans // describe transitions
     nbMessages < 2 |- put -> nbMessages := nbMessages + 1; // put | 1 | 2 // like rewrite
@@ -12,7 +12,7 @@ edon
 
 node FIFO_V2
   state nbMessages : [0,2];
-  init nbMessages:=0;
+  init nbMessages:= 0;
   event put, get;
   trans
     true |- put -> nbMessages:=nbMessages+1;
@@ -31,16 +31,16 @@ node Switch
 edon
 
 node Generator
-flow plus, minus : [0, 1];
-  state ok : bool;
-  init ok := true;
+  flow plus, minus : [0, 1];
+  state on : bool;
+  init on := true;
   event failure, repair;
   trans
-    ok |- failure -> ok := false;
-    ~ok |- repair -> ok := true;
+    on |- failure -> on := false;
+    ~on |- repair -> on := true;
   assert
     plus=1;
-    ok=(minus=0);
+    on=(minus=0);
 edon
 
 node Lamplight
@@ -51,4 +51,15 @@ node Lamplight
   trans
     ok & (f1=1&f2=1) |- reaction -> ok := false, on := false;
     ok & (on=(f1=f2)) |- reaction -> on := ~on;
+edon
+
+node CircuitV1
+  sub
+    G : Generator;
+    S : Switch;
+    L : Lamplight;
+  assert
+    S.f1 = G.plus;
+    L.f1 = S.f2;
+    L.f2 = G.minus;
 edon
