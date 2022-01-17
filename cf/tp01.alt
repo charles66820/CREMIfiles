@@ -22,7 +22,7 @@ edon
 node Switch
   flow f1, f2 : [0, 1];
   state on : bool : public;
-  init on := ~true;
+  init on := true;
   event push;
   trans
     true |- push -> on := ~on;
@@ -32,11 +32,11 @@ edon
 
 node Generator
   flow plus, minus : [0, 1];
-  state on : bool;
+  state on : bool : public;
   init on := true;
   event failure, repair;
   trans
-    on |- failure -> on := false;
+    on  |- failure -> on := false;
     ~on |- repair -> on := true;
   assert
     plus=1;
@@ -49,7 +49,7 @@ node Lamplight
   init ok := true;
   event reaction;
   trans
-    ok & (f1=1&f2=1) |- reaction -> ok := false, on := false;
+    ok & (f1=1&f2=1)  |- reaction -> ok := false, on := false;
     ok & (on=(f1=f2)) |- reaction -> on := ~on;
 edon
 
@@ -62,4 +62,120 @@ node CircuitV1
     S.f1 = G.plus;
     L.f1 = S.f2;
     L.f2 = G.minus;
+edon
+
+node CircuitV2
+  sub
+    G : Generator;
+    S : Switch;
+    L : Lamplight;
+  state safe : bool;
+  init safe := false;
+  event begin, repair, end;
+  trans
+    ~safe & ~G.on |- begin -> safe := true;
+    safe          |- repair ->;
+    safe & ~G.on  |- end -> safe := false;
+  sync <repair, G.repair>;
+  assert
+    ~safe => (S.f1 = G.plus);
+    safe => (S.f1 = 0);
+    L.f1 = S.f2;
+    L.f2 = G.minus;
+edon
+
+node PoolOfJobs
+  state nbJobs : [0, 2] : public;
+  init nbJobs := 0;
+  event put, get;
+  trans
+    true |- put -> nbJobs := nbJobs + 1;
+    true |- get -> nbJobs := nbJobs - 1;
+edon
+
+node SchedulerRandom
+  sub PJ : PoolOfJobs[3];
+edon
+
+node SchedulerPriority
+  sub    PJ : PoolOfJobs[3];
+  event  run[3];
+  trans
+    true                            |- run[0] ->;
+    PJ[0].nbJobs=0                  |- run[1] ->;
+    PJ[0].nbJobs=0 & PJ[1].nbJobs=0 |- run[2] ->;
+  sync
+    <run[0], PJ[0].get>;
+    <run[1], PJ[1].get>;
+    <run[2], PJ[2].get>;
+edon
+
+node Scheduler
+  sub PJ : PoolOfJobs[3];
+  event run[3];
+  event
+    'run[0]' > 'run[1]';
+    'run[1]' > 'run[2]';
+  trans
+    true |- run[0] ->;
+    true |- run[1] ->;
+    true |- run[2] ->;
+  sync
+    <run[0], PJ[0].get>;
+    <run[1], PJ[1].get>;
+    <run[2], PJ[2].get>;
+edon
+
+node Teacher
+  state present : bool;
+  init present := false;
+  event in_out, speaks, paper;
+  trans
+    true    |- in_out -> present := ~present;
+    present |- speaks, paper ->;
+edon
+
+node Student
+  state present, havePencil : bool;
+  init  present := false, havePencil := true;
+  event in_out, listen, write;
+  trans
+    present  |- in_out -> present:=false, havePencil:=true;
+    ~present |- in_out -> present:=true, havePencil:=true;
+    ~present |- in_out -> present:=true, havePencil:=false;
+    present  |- listen ->;
+    present & havePencil |- write ->;
+edon
+
+node LessonDifficult
+  sub
+    T : Teacher;
+    S : Student[3];
+  sync
+    <T.speaks,S[0].listen,S[1].listen,S[2].listen>;
+    <T.paper,S[0].write,S[1].write>;
+    <T.paper,S[0].write,S[2].write>;
+    <T.paper,S[1].write,S[2].write>;
+edon
+
+node LessonUnpleasant
+  sub
+    T : Teacher;
+    S : Student[3];
+  sync
+    <T.speaks,S[0].listen,S[1].listen,S[2].listen>;
+    <T.speaks,S[0].listen,S[1].listen>;
+    <T.speaks,S[0].listen,S[2].listen>;
+    <T.speaks,S[1].listen,S[2].listen>;
+    <T.speaks,S[0].listen>;
+    <T.speaks,S[1].listen>;
+    <T.speaks,S[2].listen>;
+    <T.speaks>;
+    <T.paper,S[0].write,S[1].write>;
+    <T.paper,S[0].write,S[2].write>;
+    <T.paper,S[1].write,S[2].write>;
+    <T.paper,S[0].write>;
+    <T.paper,S[1].write>;
+    <T.paper,S[2].write>;
+    <T.paper>;
 edon
