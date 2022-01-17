@@ -22,7 +22,7 @@ edon
 node Switch
   flow f1, f2 : [0, 1];
   state on : bool : public;
-  init on ~= true;
+  init on := ~true;
   event push;
   trans
     true |- push -> on := ~on;
@@ -42,11 +42,6 @@ flow plus, minus : [0, 1];
     plus=1;
     ok=(minus=0);
 edon
-const testdsd;
-
-/*
-test
-*/
 
 node Lamplight
   flow f1, f2 : [0, 1];
