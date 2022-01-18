@@ -1,4 +1,4 @@
-package com.cgoedefroit.refactoring.model;
+package refactoring.model;
 import java.util.*;
 
 public class Customers

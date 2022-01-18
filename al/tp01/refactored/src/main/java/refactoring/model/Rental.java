@@ -1,4 +1,4 @@
-package com.cgoedefroit.refactoring.model;
+package refactoring.model;
 
 public class Rental {
     private Movie _movie;
