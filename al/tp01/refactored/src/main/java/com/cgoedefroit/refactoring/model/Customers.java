@@ -1,7 +1,5 @@
 package com.cgoedefroit.refactoring.model;
-
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.*;
 
 public class Customers
 {
