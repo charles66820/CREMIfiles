@@ -179,3 +179,74 @@ node LessonUnpleasant
     <T.paper,S[2].write>;
     <T.paper>;
 edon
+
+node LessonPriority
+  sub
+    T : Teacher;
+    S : Student[3];
+  event
+    pr012 > {pr01,pr02,pr12};
+    pr01 > {pr0, pr1};
+    pr02 > {pr0, pr2};
+    pr12 > {pr1, pr2};
+    pr_0 < {pr0, pr1, pr2};
+    st01 > {st0, st1};
+    st02 > {st0, st2};
+    st12 > {st1, st2};
+    st_0 < {st0, st1, st2};
+  trans
+    true |- pr012,pr01,pr02,pr12,pr0,pr1,pr2,pr_0 ->;
+    true |-       st01,st02,st12,st0,st1,st2,st_0 ->;
+  sync
+    <pr012,T.speaks,S[0].listen,S[1].listen,S[2].listen>;
+    <pr01, T.speaks,S[0].listen,S[1].listen>;
+    <pr02, T.speaks,S[0].listen,S[2].listen>;
+    <pr12, T.speaks,S[1].listen,S[2].listen>;
+    <pr0,  T.speaks,S[0].listen>;
+    <pr1,  T.speaks,S[1].listen>;
+    <pr2,  T.speaks,S[2].listen>;
+    <pr_0, T.speaks>;
+    <st01, T.paper,S[0].write,S[1].write>;
+    <st02, T.paper,S[0].write,S[2].write>;
+    <st12, T.paper,S[1].write,S[2].write>;
+    <st0,  T.paper,S[0].write>;
+    <st1,  T.paper,S[1].write>;
+    <st2,  T.paper,S[2].write>;
+    <st_0, T.paper>;
+edon
+
+node Lesson
+  sub
+    T : Teacher;
+    S : Student[3];
+  sync
+    <T.speaks,S[0].listen?,S[1].listen?,S[2].listen?>;
+    <T.paper,S[0].write?,S[1].write?,S[2].write?> <=2;
+edon
+
+const  LastLevel = 3;
+domain Levels = [0,LastLevel];
+// A comment that stops at the end of the line
+
+/* A 5 lines comment.
+ * No imbrication
+ *
+ *
+*/
+node A
+  state a : bool;
+edon
+
+node B
+  sub A1 : A;
+  state b : bool;
+  init b := true, A1.a := false;
+edon
+
+node C
+  sub
+    A2 : A;
+    B1 : B;
+  state c : bool;
+  init A2.a := true, B1.b := false, B1.A1.a := true;
+edon
