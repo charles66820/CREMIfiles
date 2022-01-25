@@ -1,18 +1,18 @@
 package model;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import refactoring.model.Customers;
 import refactoring.model.Movie;
 import refactoring.model.Rental;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 public class CustomersTest {
     private Customers oldCustomer;
     private refactored.model.Customers customer;
 
-    @BeforeEach
+    @Before
     public void setUp() throws Exception {
         oldCustomer = new Customers("Toto");
         oldCustomer.addRental(new Rental(new Movie("Rogue One", Movie.NEW_RELEASE), 5));
