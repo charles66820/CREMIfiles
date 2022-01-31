@@ -12,7 +12,6 @@ repositories {
 
 dependencies {
     testImplementation 'junit:junit:4.13.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 test {

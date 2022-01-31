@@ -1,5 +1,8 @@
 package refactored.model;
-import java.util.*;
 
+@Deprecated
 public class Customers extends Customer {
+    public Customers(String name) {
+        super(name);
+    }
 }
