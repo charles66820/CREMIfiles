@@ -1,0 +1,48 @@
+with Minimal do
+ quot()             >  '$NODENAME-quot.dot';
+ dot(any_s,any_t  ) >  '$NODENAME.dot';
+ show(all)          >  '$NODENAME.prop';
+ deadlock  := any_s - src(any_t - self_epsilon);
+ notResettable := any_s - coreach(initial,any_t);
+ test(deadlock,0)     >  '$NODENAME.res';
+ test(notResettable,0) >> '$NODENAME.res';
+done
+with FIFO_V1, FIFO_V2, Switch, Generator, Lamplight, PoolOfJobs, SchedulerRandom, SchedulerPriority, Scheduler, Teacher, Student, LessonDifficult, LessonUnpleasant, LessonPriority, Lesson, A, B, C do
+ quot()             >  '$NODENAME-quot.dot';
+ modes()             >  '$NODENAME-modes.dot';
+ dot(any_s,any_t - self_epsilon) >  '$NODENAME.dot';
+ show(all)          >  '$NODENAME.prop';
+ deadlock  := any_s - src(any_t - self_epsilon);
+ notResettable := any_s - coreach(initial,any_t);
+ test(deadlock,0)     >  '$NODENAME.res';
+ test(notResettable,0) >> '$NODENAME.res';
+done
+//set acheck.dot-diff-state-mode none
+with CircuitV1, CircuitV2, CircuitV1_OK do
+ dot(any_s,any_t - self_epsilon) >  '$NODENAME.dot';
+ quot()       >  '$NODENAME-quot.dot';
+ deadlock     := any_s - src(any_t - self_epsilon);
+ notResettable := any_s - coreach(initial,any_t);
+ // infinite reactions
+ instableE     := any_t & (label L.reaction | epsilon) - self_epsilon;
+ instable     := any_t & label L.reaction;
+ syst_instable -= instable & rtgt(src(syst_instable));
+ tr_instable  := trace(initial, any_t, src(syst_instable));
+ ex_instable  := reach(src(tr_instable),tr_instable | syst_instable);
+ dot(ex_instable, tr_instable | syst_instable) > '$NODENAME-instable.dot';
+ show(all)                >  '$NODENAME.prop';
+ test(deadlock,0)         >  '$NODENAME.res';
+ test(notResettable,0)    >> '$NODENAME.res';
+ test(syst_instable,0)    >> '$NODENAME.res';
+done
+with SchedulerRandom, SchedulerPriority, Scheduler do
+ bug := (label PJ[1].get & rsrc([PJ[0].nbJobs>0]))|
+        (label PJ[2].get & rsrc([PJ[0].nbJobs>0 | PJ[1].nbJobs>0]));
+ tr_bug := trace(initial, any_t, src(bug));
+ ce_bug := reach(src(tr_bug), bug|tr_bug);
+ dot(ce_bug, bug|tr_bug) > '$NODENAME-bug.dot';
+done
+flatten CircuitV1 > CircuitV1.flat
+flatten CircuitV2 > CircuitV2.flat
+validate Scheduler > Scheduler.validation
+validate Lesson > Lesson.validation

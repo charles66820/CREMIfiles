@@ -1,0 +1,60 @@
+const nbFloors = 4;
+node Door
+  state isClose : bool : public;
+  init isClose := true;
+  event open, close;
+  trans
+    true |- open -> isClose := false;
+    true |- close -> isClose := true;
+edon
+
+node Button
+  state lightOn : bool;
+  init lightOn := false;
+  event push, off;
+  trans
+    true |- push -> lightOn := true;
+    true |- off -> lightOn := false;
+edon
+
+node Floor
+  sub
+    B : Button;
+    D : Door;
+  event close, open;
+  trans
+    ~D.isClose |- close ->;
+    D.isClose |- open ->;
+  sync
+    <close, B.off, D.close>;
+    <open, D.open>;
+edon
+
+node Lift
+  sub
+    B : Button[nbFloors];
+    D : Door;
+  state level : [0, nbFloors-1];
+  init level := 0;
+  event close[nbFloors], open, down, up;
+  trans
+    ~D.isClose & level=0 |- close[0] ->;
+    ~D.isClose & level=1 |- close[1] ->;
+    ~D.isClose & level=2 |- close[2] ->;
+    ~D.isClose & level=3 |- close[3] ->;
+    D.isClose |- open ->;
+    D.isClose |- down -> level := level - 1;
+    D.isClose |- up -> level := level + 1;
+  sync
+    <close[0], D.close, B[0].off>;
+    <close[1], D.close, B[1].off>;
+    <close[2], D.close, B[2].off>;
+    <close[3], D.close, B[3].off>;
+    <open, D.open>;
+edon
+
+node Building
+  sub
+    F : Floor[nbFloors];
+    L : Lift;
+edon
