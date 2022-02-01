@@ -22,22 +22,24 @@ public class Rental {
 
         switch (_movie.getPriceCode()) {
             case Movie.REGULAR:
-                thisAmount += 2; // pris du forfait
-                if (_daysRented > 2) { // jour hore forfait
-                    thisAmount += (_daysRented - 2) * 1.5; // pris du forfait * nb days
-                }
+                thisAmount += getPrice(2, 1.5, 2, _daysRented);
                 break;
             case Movie.NEW_RELEASE:
-                thisAmount += _daysRented * 3; // pris du forfait * nb days
+                thisAmount += getPrice(_daysRented * 3, 0, 0, _daysRented);
                 break;
             case Movie.CHILDRENS:
-                thisAmount += 1.5; // pris du forfait
-                if (_daysRented > 3) // jour hore forfait
-                    thisAmount += (_daysRented - 3) * 1.5; // pris du forfait * nb days
+                thisAmount += getPrice(1.5, 1.5, 3, _daysRented);
                 break;
         }
 
         return thisAmount;
+    }
+
+    private double getPrice(double rentePrice, double renteExceedPrice, double AllowRenteDays, double daysRented) {
+        double price = rentePrice;
+        if (daysRented > AllowRenteDays)
+            price += (daysRented - AllowRenteDays) * renteExceedPrice;
+        return price;
     }
 
     public int frequentRenterPoints() {
