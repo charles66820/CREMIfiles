@@ -1,5 +1,10 @@
 package refactored.model;
 
+import refactored.model.pricing.ChildrenPricing;
+import refactored.model.pricing.NewReleasePricing;
+import refactored.model.pricing.Pricing;
+import refactored.model.pricing.RegularPricing;
+
 public class Movie {
     @Deprecated
     public static final Pricing CHILDRENS = new ChildrenPricing();

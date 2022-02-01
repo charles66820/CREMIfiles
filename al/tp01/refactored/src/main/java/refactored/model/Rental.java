@@ -1,5 +1,7 @@
 package refactored.model;
 
+import refactored.model.pricing.Pricing;
+
 public class Rental {
     private final Movie _movie;
     private final int _daysRented;

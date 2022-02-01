@@ -1,7 +1,7 @@
-package refactored.model;
+package refactored.model.pricing;
 
 
-interface Pricing extends Cloneable {
+public interface Pricing extends Cloneable {
     double getPrice(double daysRented);
     int frequentRenterPoints(double daysRented);
     Pricing clone();

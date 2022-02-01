@@ -1,9 +1,9 @@
-package refactored.model;
+package refactored.model.pricing;
 
 public class StandardPricing implements Pricing, Cloneable {
     protected double rentePrice;
-    protected double renteExceedPrice;
-    protected double allowRenteDays;
+    private double renteExceedPrice;
+    private double allowRenteDays;
 
     public StandardPricing(double rentePrice, double renteExceedPrice, double allowRenteDays) {
         this.rentePrice = rentePrice;

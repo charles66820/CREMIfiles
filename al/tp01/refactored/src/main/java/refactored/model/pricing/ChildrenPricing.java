@@ -1,4 +1,4 @@
-package refactored.model;
+package refactored.model.pricing;
 
 public class ChildrenPricing extends StandardPricing implements Cloneable {
     public ChildrenPricing() {

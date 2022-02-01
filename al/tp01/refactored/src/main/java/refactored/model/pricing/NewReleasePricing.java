@@ -1,4 +1,4 @@
-package refactored.model;
+package refactored.model.pricing;
 
 public class NewReleasePricing extends StandardPricing implements Cloneable {
     public NewReleasePricing() {
