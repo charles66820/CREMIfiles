@@ -1,22 +1,29 @@
 package refactored.model;
 
 public class Movie {
-    public static final int CHILDRENS = 2;
-    public static final int REGULAR = 0;
-    public static final int NEW_RELEASE = 1;
+    @Deprecated
+    public static final Pricing CHILDRENS = new ChildrenPricing();
+    @Deprecated
+    public static final Pricing REGULAR = new RegularPricing();
+    @Deprecated
+    public static final Pricing NEW_RELEASE = new NewReleasePricing();
 
     private final String _title;
+    @Deprecated
     private int _priceCode;
+    private Pricing _pricing;
 
-    public Movie(String title, int priceCode) {
+    public Movie(String title, Pricing pricing) {
         _title = title;
-        _priceCode = priceCode;
+        _pricing = pricing;
     }
 
+    @Deprecated
     public int getPriceCode() {
         return _priceCode;
     }
 
+    @Deprecated
     public void setPriceCode(int priceCode) {
         _priceCode = priceCode;
     }
@@ -25,4 +32,11 @@ public class Movie {
         return _title;
     }
 
+    public Pricing getPricing() {
+        return _pricing;
+    }
+
+    public void setPricing(Pricing pricing) {
+        this._pricing = pricing;
+    }
 }
