@@ -10,8 +10,9 @@ int k = 0;
 
 void tache(int i, int j) {
   volatile int x = random() % 1000000;
-  for (int z = 0; z < x; z++)
-    ;
+  for (int z = 0; z < x; z++);
+
+#pragma omp task firstprivate(i, j) depend(out: A[i][j]) depend(in: A[i-1][j], A[i][j-1])
 #pragma omp atomic capture
   A[i][j] = k++;
 }
