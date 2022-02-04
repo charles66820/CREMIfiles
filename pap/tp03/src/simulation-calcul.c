@@ -19,10 +19,10 @@ int main() {
 #pragma omp parallel // edit
 #pragma omp single // edit
   {
-#pragma omp task // edit
+#pragma omp task shared(x) // edit
     x = f(2);
 
-#pragma omp task // edit
+#pragma omp task shared(y)// edit
     y = g(3);
   }
 // #pragma omp taskwait // not need because implicit barrier after parallel
