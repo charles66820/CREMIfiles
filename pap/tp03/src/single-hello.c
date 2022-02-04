@@ -15,13 +15,11 @@ int main() {
 #pragma omp single
     {
       for (int i = 0; bonjour[i] != NULL; i++)
-#pragma omp task firstprivate(i) // edit
+#pragma omp task firstprivate(i) depend(out: bonjour[i]) // edit
         printf("%s (%d)\n", bonjour[i], omp_get_thread_num());
 
-#pragma omp taskwait // edit
-
       for (int i = 0; aurevoir[i] != NULL; i++)
-#pragma omp task firstprivate(i) // edit
+#pragma omp task firstprivate(i) depend(in: bonjour[i]) // edit
         printf("%s (%d)\n", aurevoir[i], omp_get_thread_num());
     }
   }
