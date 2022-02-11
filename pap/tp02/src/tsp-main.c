@@ -193,7 +193,7 @@ void tsp_task2(int etape, int lg, chemin_t chemin, int mask) {
     for (int i = 1; i < nbVilles; i++) {
       if (!present(i, mask))
       {
-        chemin_t* mon_chemin = malloc(etape * sizeof(*chemin)) ;
+        chemin_t* mon_chemin = malloc(nbVilles * sizeof(*chemin)) ;
         memcpy(mon_chemin, chemin, etape * sizeof(*chemin));
         #pragma omp task firstprivate(mon_chemin)
         {
@@ -304,7 +304,7 @@ int main(int argc, char **argv) {
     tsp_seq(1, 0, chemin, 1);
   else if (!strcmp(argv[argc - 1], "ompfor"))
     tsp_ompfor(1, 0, chemin, 1);
-  else if (!strcmp(argv[argc - 1], "task"))
+  else if (!strcmp(argv[argc - 1], "task1"))
     tsp_task(1, 0, chemin, 1);
   else if (!strcmp(argv[argc - 1], "task2"))
     tsp_task2(1, 0, chemin, 1);
