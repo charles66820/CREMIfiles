@@ -7,7 +7,8 @@ public class NewReleasePricing extends StandardPricing implements Cloneable {
 
     @Override
     public double getPrice(double daysRented) {
-        return daysRented * rentePrice;
+        return daysRented * super.getPrice(0);
+//        return daysRented * super.rentePrice;
     }
 
     @Override

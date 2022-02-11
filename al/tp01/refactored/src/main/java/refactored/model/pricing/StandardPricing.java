@@ -1,7 +1,7 @@
 package refactored.model.pricing;
 
 public class StandardPricing implements Pricing, Cloneable {
-    protected double rentePrice;
+    private double rentePrice;
     private double renteExceedPrice;
     private double allowRenteDays;
 
@@ -19,8 +19,7 @@ public class StandardPricing implements Pricing, Cloneable {
     }
 
     public int frequentRenterPoints(double daysRented) {
-        int frequentRenterPoints = 1;
-        return frequentRenterPoints;
+        return 1; // frequentRenterPoints
     }
 
     @Override
