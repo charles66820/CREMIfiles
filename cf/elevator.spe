@@ -1,4 +1,4 @@
-with Building do
+with BuildingV1 do
   dead := any_s - src(any_t - self_epsilon);
   notResettable := any_s - coreach(initial, any_t);
   /*
@@ -52,5 +52,35 @@ with Building do
              ([L.level!=2] - [F[2].D.isClose]) |
              ([L.level!=3] - [F[3].D.isClose])
            );
+
+  /*
+   * P5 : "The software opens the door at some floor only if there is some requests for that floor."
+   * P5 : si "The software opens the door at floor i" alors "there is some requests for floor i"
+   */
+  notP5 := (src(label open[0]) - [request[0]]) |
+           (src(label open[1]) - [request[1]]) |
+           (src(label open[2]) - [request[2]]) |
+           (src(label open[3]) - [request[3]]);
+
+  /*
+   * P6 : "If there is no request, the lift must stay at the same floor."
+   * P6 : si "there is no request "the lift must stay at the same floor"
+   * P6 : si "the lift can move" alors "there is some request"
+   */
+  notP6 := any_s & (src(label L.down | label L.up)) -
+           [request[0] | request[1] | request[2] | request[3]];
+
+
+  /*
+   * P7 : "When the lift moves, it mus stop where there is a request."
+   * P7 : si "the lift is at floor i and there is  request for i" alors "the lift must stop at the floor i"
+   */
+  notP7 := any_s & (
+             ([L.level=0 & request[0]] & src(label L.down | label L.up)) |
+             ([L.level=1 & request[1]] & src(label L.down | label L.up)) |
+             ([L.level=2 & request[2]] & src(label L.down | label L.up)) |
+             ([L.level=3 & request[3]] & src(label L.down | label L.up))
+           );
+
 done
 
