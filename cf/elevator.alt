@@ -149,7 +149,7 @@ node BuildingV2
     request : bool[nbFloors];
     requestDown, requestUp : bool;
   state lastMoveIsUp : bool;
-  init lastMoveIsUp := true;
+  init lastMoveIsUp := false;
   assert
     request[0] = (F[0].B.lightOn | L.B[0].lightOn);
     request[1] = (F[1].B.lightOn | L.B[1].lightOn);
