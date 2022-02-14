@@ -1,4 +1,4 @@
-with BuildingV1 do
+with BuildingV2 do
   dead := any_s - src(any_t - self_epsilon);
   notResettable := any_s - coreach(initial, any_t);
   /*
@@ -82,5 +82,16 @@ with BuildingV1 do
              ([L.level=3 & request[3]] & src(label L.down | label L.up))
            );
 
+  /*
+   * P8 : "When there are several requests, the software must (if necessary) continue in the same direction than its last move."
+   * P8 : si "" alors ""
+   */
+  notP8 := any_s &
+           (
+             (reach(tgt(label up), any_t - label down) &
+             [requestDown & requestUp] & src(label down)) |
+             (reach(tgt(label down), any_t - label up) &
+             [requestDown & requestUp] & src(label up))
+           );
 done
 
