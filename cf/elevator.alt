@@ -1,11 +1,25 @@
 const nbFloors = 4;
-node Door
+node DoorOld
   state isClose : bool : public;
   init isClose := true;
   event open, close;
   trans
     true |- open -> isClose := false;
     true |- close -> isClose := true;
+edon
+
+node Door
+  state
+    isClose : bool : public;
+    stucked : bool;
+  init isClose := true, stucked := false;
+  event open, close;
+  trans
+    ~stucked |- open -> isClose := false;
+    ~stucked |- close -> isClose := true;
+    ~stucked |- close, open -> stucked := true;
+    stucked |- open ->;
+    stucked |- close ->;
 edon
 
 node Button
