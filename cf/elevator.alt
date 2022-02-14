@@ -201,3 +201,52 @@ node BuildingV2
     <down, L.down>;
     <up, L.up>;
 edon
+
+node BuildingV3
+  sub
+    F : Floor[nbFloors];
+    L : Lift;
+  flow
+    request : bool[nbFloors];
+    requestDown, requestUp : bool;
+    doorsAreClosed : bool;
+  state lastMoveIsUp : bool;
+  init lastMoveIsUp := false;
+  assert
+    request[0] = (F[0].B.lightOn | L.B[0].lightOn);
+    request[1] = (F[1].B.lightOn | L.B[1].lightOn);
+    request[2] = (F[2].B.lightOn | L.B[2].lightOn);
+    request[3] = (F[3].B.lightOn | L.B[3].lightOn);
+    requestDown = (
+      (request[0] & L.level > 0)
+      | (request[1] & L.level > 1)
+      | (request[2] & L.level > 2)
+    );
+    requestUp = (
+      (request[3] & L.level < 3)
+      | (request[2] & L.level < 2)
+      | (request[1] & L.level < 1)
+    );
+    doorsAreClosed = (F[0].D.isClose & F[1].D.isClose & F[2].D.isClose & F[3].D.isClose);
+  event open[nbFloors] > {down, up};
+  trans
+    L.level=0 & request[0] |- open[0] ->;
+    L.level=1 & request[1] |- open[1] ->;
+    L.level=2 & request[2] |- open[2] ->;
+    L.level=3 & request[3] |- open[3] ->;
+    doorsAreClosed & ~lastMoveIsUp & requestDown |- down -> lastMoveIsUp := false;
+    doorsAreClosed & lastMoveIsUp & requestDown & ~requestUp |- down -> lastMoveIsUp := false;
+    doorsAreClosed & lastMoveIsUp & requestUp |- up -> lastMoveIsUp := true;
+    doorsAreClosed & ~lastMoveIsUp & requestUp & ~requestDown |- up -> lastMoveIsUp := true;
+  sync
+    <F[0].close, L.close[0]>;
+    <F[1].close, L.close[1]>;
+    <F[2].close, L.close[2]>;
+    <F[3].close, L.close[3]>;
+    <open[0], F[0].open, L.open>;
+    <open[1], F[1].open, L.open>;
+    <open[2], F[2].open, L.open>;
+    <open[3], F[3].open, L.open>;
+    <down, L.down>;
+    <up, L.up>;
+edon

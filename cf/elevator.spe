@@ -1,4 +1,4 @@
-with BuildingV2 do
+with BuildingV3 do
   dead := any_s - src(any_t - self_epsilon);
   notResettable := any_s - coreach(initial, any_t);
   /*
