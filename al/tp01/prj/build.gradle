@@ -29,6 +29,8 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
+mainClassName = 'UIMain'
+
 task runText(type: JavaExec) {
     group 'application'
     classpath = sourceSets.main.runtimeClasspath
@@ -39,5 +41,5 @@ task runText(type: JavaExec) {
 task runFX(type: JavaExec) {
     group 'application'
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'UIMain'
+    mainClassName = 'UIMain'
 }
