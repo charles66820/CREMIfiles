@@ -41,5 +41,10 @@ task runText(type: JavaExec) {
 task runFX(type: JavaExec) {
     group 'application'
     classpath = sourceSets.main.runtimeClasspath
-    mainClassName = 'UIMain'
+    mainClass = 'UIMain'
+    jvmArgs += [
+            '--add-modules',
+            'javafx.controls,javafx.fxml',
+            '--module-path', classpath.asPath
+    ]
 }
