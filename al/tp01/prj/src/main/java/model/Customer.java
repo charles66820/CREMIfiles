@@ -4,14 +4,14 @@ import java.util.*;
 
 public class Customer {
     private final String _name;
-    private final Set<Rental> _rentals = new HashSet<>();
+    private final Vector<Rental> _rentals = new Vector<>();
 
     public Customer(String name) {
         _name = name;
     }
 
     public void addRental(Rental rental) {
-        _rentals.add(rental);
+        _rentals.addElement(rental);
     }
 
     public String getName() {
@@ -24,7 +24,7 @@ public class Customer {
 
         StringBuilder result = new StringBuilder("Rental Record for " + getName() + "\n");
 
-        for (Rental rental : _rentals) {
+        for (Rental rental : new LinkedList<>(_rentals)) {
             double thisAmount = rental.amount();
             frequentRenterPoints += rental.frequentRenterPoints();
 
