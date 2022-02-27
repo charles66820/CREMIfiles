@@ -4,14 +4,14 @@ import java.util.*;
 
 public class Customer {
     private final String _name;
-    private final Vector<Rental> _rentals = new Vector<>();
+    private final Set<Rental> _rentals = new HashSet<>();
 
     public Customer(String name) {
         _name = name;
     }
 
     public void addRental(Rental rental) {
-        _rentals.addElement(rental);
+        _rentals.add(rental);
     }
 
     public String getName() {
@@ -22,12 +22,9 @@ public class Customer {
         double totalAmount = 0;
         int frequentRenterPoints = 0;
 
-        Enumeration<Rental> rentals = _rentals.elements();
         StringBuilder result = new StringBuilder("Rental Record for " + getName() + "\n");
 
-        while (rentals.hasMoreElements()) {
-            Rental rental = rentals.nextElement();
-
+        for (Rental rental : _rentals) {
             double thisAmount = rental.amount();
             frequentRenterPoints += rental.frequentRenterPoints();
 

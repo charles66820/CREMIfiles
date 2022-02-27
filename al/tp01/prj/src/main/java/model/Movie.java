@@ -5,6 +5,8 @@ import model.pricing.NewReleasePricing;
 import model.pricing.Pricing;
 import model.pricing.RegularPricing;
 
+import java.util.Objects;
+
 public class Movie {
     @Deprecated
     public static final Pricing CHILDRENS = new ChildrenPricing();
@@ -43,5 +45,18 @@ public class Movie {
 
     public void setPricing(Pricing pricing) {
         this._pricing = pricing;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return _title.equals(movie._title) && _pricing.equals(movie._pricing);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(_title, _pricing);
     }
 }

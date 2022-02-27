@@ -2,6 +2,8 @@ package model;
 
 import model.pricing.Pricing;
 
+import java.util.Objects;
+
 public class Rental {
     private final Movie _movie;
     private final int _daysRented;
@@ -27,5 +29,18 @@ public class Rental {
 
     public int frequentRenterPoints() {
         return _pricing.frequentRenterPoints(_daysRented);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rental rental = (Rental) o;
+        return _daysRented == rental._daysRented && _movie.equals(rental._movie) && _pricing.equals(rental._pricing);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(_movie, _daysRented, _pricing);
     }
 }

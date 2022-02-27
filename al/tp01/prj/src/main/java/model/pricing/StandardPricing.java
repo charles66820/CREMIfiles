@@ -1,5 +1,7 @@
 package model.pricing;
 
+import java.util.Objects;
+
 public class StandardPricing implements Pricing, Cloneable {
     private double rentePrice;
     private double renteExceedPrice;
@@ -33,5 +35,18 @@ public class StandardPricing implements Pricing, Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StandardPricing that = (StandardPricing) o;
+        return Double.compare(that.rentePrice, rentePrice) == 0 && Double.compare(that.renteExceedPrice, renteExceedPrice) == 0 && Double.compare(that.allowRenteDays, allowRenteDays) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rentePrice, renteExceedPrice, allowRenteDays);
     }
 }
