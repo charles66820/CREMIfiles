@@ -2,9 +2,9 @@ package model;
 
 import org.junit.Before;
 import org.junit.Test;
-import refactoring.model.Customers;
-import refactoring.model.Movie;
-import refactoring.model.Rental;
+import oldVersion.model.Customers;
+import oldVersion.model.Movie;
+import oldVersion.model.Rental;
 
 import static org.junit.Assert.*;
 
