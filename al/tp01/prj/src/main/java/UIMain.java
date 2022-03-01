@@ -21,7 +21,7 @@ public class UIMain extends Application {
         FxStatementBuilder statementBuilder = new FxStatementBuilder();
         c.completeBuilder(statementBuilder);
 
-        Scene scene = new Scene(statementBuilder.getResult(), 200, 200);
+        Scene scene = new Scene(statementBuilder.getResult(), 220, 100);
         primaryStage.setTitle(c.getName());
         primaryStage.setScene(scene);
         primaryStage.show();
