@@ -1,63 +1,28 @@
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-/**
- *
- * @author auber
- *  Attention il faut rendre la "library" javafx accessible
- *  http://stackoverflow.com/a/32062263/1495627
- */
+import model.Customer;
+import model.Movie;
+import model.Rental;
+import model.pricing.ChildrenPricing;
+import model.pricing.NewReleasePricing;
+import model.pricing.RegularPricing;
+import utile.FxStatementBuilder;
+
 public class UIMain extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        Customer c = new Customer("Toto");
+        c.addRental(new Rental(new Movie("Rogue One", new NewReleasePricing()), 5));
+        c.addRental(new Rental(new Movie("Reine des neiges", new ChildrenPricing()), 7));
+        c.addRental(new Rental(new Movie("Star Wars III", new RegularPricing()), 4));
 
-        // Build a first grid
-        GridPane grid1 = new GridPane();
-        grid1.setGridLinesVisible(true); // Useful for debug
+        FxStatementBuilder statementBuilder = new FxStatementBuilder();
+        c.completeBuilder(statementBuilder);
 
-        // Create and add text to the grid
-        Text header = new Text("Number one");
-        grid1.add(header, 0, 0);
-
-        // This text is adjusted through CSS
-        Text another = new Text("Number two");
-        another.setStyle("-fx-font: 24 arial;");
-        grid1.add(another, 1, 1);
-
-        // Build a second grid
-        GridPane grid2 = new GridPane();
-        grid2.setGridLinesVisible(true);
-
-        // Adjust the grid style
-        grid2.setHgap(10);
-        grid2.setVgap(10);
-        grid2.setPadding(new Insets(0, 10, 0, 10));
-
-        // Simpler API only for rows
-        grid2.addRow(0, new Text("Row one"));
-        grid2.addRow(1, new Text("Row two"));
-        grid2.addColumn(1, new Text("Col three"));
-
-        // Put the two grids in a column
-        VBox col = new VBox();
-        col.setAlignment(Pos.CENTER);
-        col.getChildren().add(grid1);
-        col.getChildren().add(grid2);
-
-        // Also add a text which will be centered
-        col.getChildren().add(new Text("Hello JavaFX"));
-
-        // JavaFX uses Scenes for content
-        Scene scene = new Scene(col, 200, 200);
-
-        // Scenes are displayed by a Stage
-        primaryStage.setTitle("Hello World!");
+        Scene scene = new Scene(statementBuilder.getResult(), 200, 200);
+        primaryStage.setTitle(c.getName());
         primaryStage.setScene(scene);
         primaryStage.show();
     }
