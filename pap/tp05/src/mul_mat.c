@@ -25,9 +25,9 @@ void mulMat1() {
 void mulMat2() {
   int i, j, k;
   bzero(c, N * N);
-  for (j = 0; j < N; j++) {
+  for (i = 0; i < N; i++) {
     for (k = 0; k < N; k++) {
-      for (i = 0; i < N; i++) c[i][j] += a[i][k] * b[k][j];
+      for (j = 0; j < N; j++) c[i][j] += a[i][k] * b[k][j];
     }
   }
 }
