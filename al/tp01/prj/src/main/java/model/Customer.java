@@ -1,5 +1,7 @@
 package model;
 
+import utile.HtmlStatementBuilder;
+import utile.StatementBuilder;
 import utile.StringStatementBuilder;
 
 import java.util.*;
@@ -23,6 +25,14 @@ public class Customer {
     @Deprecated
     public String statement() {
         StringStatementBuilder statementBuilder = new StringStatementBuilder();
+        statementBuilder.setName(_name);
+        statementBuilder.setRental(new LinkedList<>(_rentals));
+        return statementBuilder.getResult();
+    }
+
+    @Deprecated
+    public String statementHTML() {
+        HtmlStatementBuilder statementBuilder = new HtmlStatementBuilder();
         statementBuilder.setName(_name);
         statementBuilder.setRental(new LinkedList<>(_rentals));
         return statementBuilder.getResult();
