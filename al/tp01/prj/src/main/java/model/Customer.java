@@ -22,6 +22,11 @@ public class Customer {
         return _name;
     }
 
+    public void completeBuilder(StatementBuilder statementBuilder) {
+        statementBuilder.setName(_name);
+        statementBuilder.setRental(new LinkedList<>(_rentals));
+    }
+
     @Deprecated
     public String statement() {
         StringStatementBuilder statementBuilder = new StringStatementBuilder();
