@@ -6,7 +6,7 @@ int caseResult(int a, int b, int c)
         return 0;
     if (a <= b && a <= c)
         return 1;
-    if (b <= a && a <= c)
+    if (b <= a && b <= c)
         return 2;
     if (c <= a && c <= b)
         return 3;
