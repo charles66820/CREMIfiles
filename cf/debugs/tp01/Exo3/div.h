@@ -1,5 +1,8 @@
 #include "limits.h"
 
-/*@ ensures \result == a/b;
+/*@
+  requires b != 0;
+  requires a / b <= 2147483647;
+  ensures \result == a/b;
 */
 int div(int a, int b);
