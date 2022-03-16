@@ -6,3 +6,4 @@ apps/
 other/a.out
 /poo/tp1/*.svg
 .svn/
+.frama-c/
