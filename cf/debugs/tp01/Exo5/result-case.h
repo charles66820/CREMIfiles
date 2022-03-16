@@ -4,9 +4,21 @@
 
 /*@
   ensures \result >= 0 || \result <= 3;
-  ensures a==b || b==c || a==c ==> \result == 0; // \result == 0 when a==b || b==c || a==c
-  ensures smallerThen(a, b, c) ==> \result == 1; // \result == 1 when a < b&&c
-  ensures smallerThen(b, a, c) ==> \result == 2; // \result == 2 when b < a&&c
-  ensures smallerThen(c, a, b) ==> \result == 3; // \result == 3 when c < a&&b
+
+  behavior twoEq:
+    assumes a==b || b==c || a==c; // when a==b || b==c || a==c
+    ensures \result == 0;
+  behavior smallA:
+    assumes smallerThen(a, b, c); // when a < b&&c
+    ensures \result == 1;
+  behavior smallB:
+    assumes smallerThen(b, a, c); // when b < a&&c
+    ensures \result == 2;
+  behavior smallC:
+    assumes smallerThen(c, a, b); // when c < a&&b
+    ensures \result == 3;
+
+  complete behaviors;
+  disjoint behaviors twoEq,smallA,smallB,smallC;
 */
 int caseResult(int a, int b, int c);
