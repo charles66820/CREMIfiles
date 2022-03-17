@@ -2,7 +2,7 @@
 
 /*@ requires 0 < size;
   @ requires \valid(tab + (0 .. size-1));
-  @ 
+  @
   @ behavior sucess:
   @ 	assumes 0 <= index < size;
   @ 	assigns tab[index];
