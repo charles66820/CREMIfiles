@@ -11,12 +11,12 @@
     ensures *res == a / b;
     ensures \result == 0;
 
-  behavior faillure:
-    assumes b == 0;
+  behavior failure:
+    assumes b == 0 || (a == INT_MIN && b == -1);
     ensures \result == -1;
 
   complete behaviors;
-  disjoint behaviors success,faillure;
+  disjoint behaviors success,failure;
 
 // Cette fonction place le quotient de a et b dans *res et renvoie 0 en cas de succès et -1 en cas d’échec.
 // Indication: pour les overflow, pensez que INT_MIN = -INT_MAX - 1 !
@@ -43,13 +43,12 @@ int div(int a, int b, int *res);
     ensures *res == a + b;
     ensures \result == 0;
 
-  behavior faillure:
-    assumes a + b > INT_MAX;
-    assumes a + b < INT_MIN;
+  behavior failure:
+    assumes a + b > INT_MAX || a + b < INT_MIN;
     ensures \result == -1;
 
   complete behaviors;
-  disjoint behaviors success,faillure;
+  disjoint behaviors success,failure;
 
 //Cette fonction place la somme de a et b dans *res et renvoie 0 en cas de succès et -1 en cas d’échec.
 //Dans quel cas peut-il y avoir un overflow ? Que se passe-t’il dans ce cas pour le résultat ?
