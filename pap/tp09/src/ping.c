@@ -58,6 +58,7 @@ int main(int argc, char **argv)
       buf[0]='i';
       gettimeofday(&t1,NULL);
       MPI_Send(buf,N,MPI_CHAR,1,0,MPI_COMM_WORLD);
+      MPI_Recv(buf,N,MPI_CHAR,1,0,MPI_COMM_WORLD,&status);
       gettimeofday(&t2,NULL);
       fprintf(stderr,"envoyé %ld\n",TIME_DIFF(t1,t2));
     }
@@ -65,6 +66,7 @@ int main(int argc, char **argv)
     {
       gettimeofday(&t1,NULL);
       MPI_Recv(buf,N,MPI_CHAR,0,0,MPI_COMM_WORLD,&status);
+      MPI_Send(buf,N,MPI_CHAR,0,0,MPI_COMM_WORLD);
       gettimeofday(&t2,NULL);
       fprintf(stderr,"reçu %ld\n",TIME_DIFF(t1,t2));
     }

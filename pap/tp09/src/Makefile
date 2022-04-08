@@ -1,5 +1,5 @@
 CC=mpicc
-MPIRUN=mpirun 
+MPIRUN=mpirun
 MACHINES=mymachines
 CFLAGS=-g -Wall -Og
 SOURCE=$(wildcard *.c)
@@ -13,7 +13,7 @@ clean:
 	rm -f $(OBJ) $(PROG)
 
 run: $(PROG)
-	$(MPIRUN)  --oversubscribe --mca btl tcp,self -hostfile $(MACHINES) --map-by node -np $(NP) ./$(PROG)
+	$(MPIRUN) --oversubscribe --mca btl tcp,self -hostfile $(MACHINES) --map-by node -np $(NP) ./$(PROG)
 
 lrun: $(PROG)
 	$(MPIRUN) --mca btl tcp,self -np $(NP) ./$(PROG)
