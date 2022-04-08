@@ -1,9 +1,10 @@
 .vscode/*
+!c_cpp_properties.json
 .idea/
 node_modules/
 .env
-apps/
-other/a.out
+/apps/
+/other/a.out
 /poo/tp1/*.svg
 .svn/
 .frama-c/

@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+              "${workspaceFolder}/**",
+              "/usr/lib/x86_64-linux-gnu/openmpi/include",
+              "/usr/include"
+            ],
+            "defines": [
+                "_XOPEN_SOURCE=700"
+            ],
+            // "compilerPath": "/net/ens/gcc/gcc_10.2.0/bin/gcc",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c99",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}
