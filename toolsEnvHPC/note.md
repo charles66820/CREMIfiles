@@ -4,14 +4,16 @@
 
 ```bash
 mkdir plafrimProjects
-sshfs plafrim:/home/cisd-goedefr/projects plafrimProjects
+sshfs plafrim_CISD:/home/cisd-goedefr/projects plafrimProjects
 ```
 
 ```bash
-fusermount -u testDir
+fusermount -u plafrimProjects
 ```
 
 ## PlaFRIM
+
+> slurm
 
 ```bash
 sinfo # nodes list
@@ -19,11 +21,12 @@ salloc -p <partition> -N <nbNodes> # alloc some nodes
 sbatch <batch script> # alloc some nodes
 squeue [-u login name] # show allocated nodes
 scontrol show jobid <job id>
-
+scancel <job id>
 ```
 
 ```bash
 srun -C haswell --time=03:00:00 --pty bash -i
+srun -N 1 --time=03:00:00 --pty bash -i
 ```
 
 ## Environnement list
