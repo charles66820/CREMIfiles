@@ -56,4 +56,3 @@ module switch <moduleName1> <moduleName2>
 module show <moduleName> # display module info
 module purge # unload all modules
 ```
-
