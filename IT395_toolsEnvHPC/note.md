@@ -29,6 +29,14 @@ srun -C haswell --time=03:00:00 --pty bash -i
 srun -N 1 --time=03:00:00 --pty bash -i
 ```
 
+salloc -proutage -n1 -c12 make -j24
+
+- `-N, --nodes <nbNodes>` number of nodes
+- `-p, --partition <partitionName>` partition name routage
+- `-n, --ntasks <nbTasks>` number of MPI process
+- `-c, --cpus-per-task <nbCores>` Number de coeurs par process MPI
+- `-x` exclusive
+
 ## Environnement list
 
 - module
@@ -48,3 +56,4 @@ module switch <moduleName1> <moduleName2>
 module show <moduleName> # display module info
 module purge # unload all modules
 ```
+
