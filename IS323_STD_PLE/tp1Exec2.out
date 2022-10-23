@@ -1,0 +1,60 @@
+22/10/14 10:22:34 INFO mapreduce.Job: Counters: 53
+	File System Counters
+		FILE: Number of bytes read=799813
+		FILE: Number of bytes written=2089033
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=2471665
+		HDFS: Number of bytes written=597762
+		HDFS: Number of read operations=8
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+	Job Counters 
+		Launched map tasks=1
+		Launched reduce tasks=1
+		Rack-local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=41508
+		Total time spent by all reduces in occupied slots (ms)=26664
+		Total time spent by all map tasks (ms)=6918
+		Total time spent by all reduce tasks (ms)=4444
+		Total vcore-milliseconds taken by all map tasks=6918
+		Total vcore-milliseconds taken by all reduce tasks=4444
+		Total megabyte-milliseconds taken by all map tasks=42504192
+		Total megabyte-milliseconds taken by all reduce tasks=27303936
+	Map-Reduce Framework
+		Map input records=52710
+		Map output records=421738
+		Map output bytes=4156198
+		Map output materialized bytes=799813
+		Input split bytes=115
+		Combine input records=421738
+		Combine output records=51588
+		Reduce input groups=51588
+		Reduce shuffle bytes=799813
+		Reduce input records=51588
+		Reduce output records=51588
+		Spilled Records=103176
+		Shuffled Maps =1
+		Failed Shuffles=0
+		Merged Map outputs=1
+		GC time elapsed (ms)=520
+		CPU time spent (ms)=8720
+		Physical memory (bytes) snapshot=2872344576
+		Virtual memory (bytes) snapshot=12851339264
+		Total committed heap usage (bytes)=3125805056
+		Peak Map Physical memory (bytes)=2582024192
+		Peak Map Virtual memory (bytes)=5510057984
+		Peak Reduce Physical memory (bytes)=290320384
+		Peak Reduce Virtual memory (bytes)=7341281280
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=2471550
+	File Output Format Counters 
+		Bytes Written=597762
