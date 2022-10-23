@@ -37,6 +37,11 @@ yarn application -list -appStates ALL
 
 - done.
 - done.
+
+```bash
+yarn jar wordcounter-0.0.1.jar LesMiserables.txt worldCounterLM
+```
+
 - done. The result value of the reducer is store in `part-r-00000`. The jop exit statue is save as a file ex: `_SUCCESS`.
 - The output data is 5 times less the input. It's mean the reducer work and aggregate all the words.
 - done.
@@ -69,4 +74,30 @@ Reduce output records=51588
 Spilled Records=103176
 
 ## step 4 : MapReduce in Python
+
+```bash
+hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar \
+-file mapreduce_wordcounter_python/mapper.py \
+-mapper mapreduce_wordcounter_python/mapper.py \
+-file mapreduce_wordcounter_python/reducer.py \
+-reducer mapreduce_wordcounter_python/reducer.py \
+-input LesMiserables.txt \
+-output worldCounterLMJava
+```
+
+```bash
+hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar \
+-file mapreduce_wordcounter_python/mapper.py \
+-mapper mapreduce_wordcounter_python/mapper.py \
+-file mapreduce_wordcounter_python/reducer.py \
+-reducer mapreduce_wordcounter_python/reducer.py \
+-file mapreduce_wordcounter_python/reducer.py \
+-combiner mapreduce_wordcounter_python/reducer.py \
+-input LesMiserables.txt \
+-output worldCounterLMJavaComB
+```
+
+- With python the execution time is more than 3 time bigger, use more memory and more CPU time.
+
+## step 5 : World city populations
 
