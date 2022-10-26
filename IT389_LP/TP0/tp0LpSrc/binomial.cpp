@@ -9,7 +9,8 @@
 /*
 
 Pour compiler
-g++-9  -o binomial  binomial.c -fopenmp -O3
+g++-9  -o binomial  binomial.cpp -O3
+g++-9  -o binomial-omp  binomial.cpp -fopenmp -O3
 
 ./binomial 10
 
@@ -42,13 +43,14 @@ int main(int argc, char **argv) {
   }
 
 #pragma omp parallel
+  {
 #pragma omp single
-  for (int row = 1; row <= n; row++) {
-    array[row][row] = 1;
-    array[row][1] = 1;
-    for (int col = 2; col < row; col++) {
-      #pragma omp task firstprivate(row, col) shared(array)
-      {
+    // #pragma omp for schedule(dynamic)
+    for (int row = 1; row <= n; row++) {
+      array[row][row] = 1;
+      array[row][1] = 1;
+#pragma omp task firstprivate(row) shared(array)
+      for (int col = 2; col < row; col++) {
         array[row][col] = array[row - 1][col - 1] + array[row - 1][col];
       }
     }

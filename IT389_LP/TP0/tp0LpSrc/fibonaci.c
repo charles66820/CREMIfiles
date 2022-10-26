@@ -23,7 +23,7 @@ long comp_fib_numbers(int n) {
 
 int main() {
   long result;
-  int n = 25;
+  int n = 40;
   int nthreads;
 
 #pragma omp parallel
