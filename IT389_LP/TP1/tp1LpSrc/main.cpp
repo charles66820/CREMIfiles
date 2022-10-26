@@ -110,7 +110,7 @@ int main() {
             << std::endl;
   check_results(particles_ref_mut, particles);
 
-    clear_results(particles);
+  clear_results(particles);
   start = std::chrono::system_clock::now();
   compute_near_mutual_task(grid);
   end = std::chrono::system_clock::now();

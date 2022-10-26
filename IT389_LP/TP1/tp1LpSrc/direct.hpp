@@ -63,6 +63,7 @@ void p2p_outer(const int n, ParticleT *part, const int n_s, ParticleT *part_s) {
 
 void p2p_mutual(const int n, ParticleT *part, const int n_s,
                 ParticleT *part_s) {
+#pragma omp simd
   for (int i = 0; i < n; ++i) {
     auto &x1 = part[i].pos;
     auto q1 = part[i].q;
@@ -109,6 +110,7 @@ void compute_near_seq(std::vector<LeafT> &grid) {
     p2p_inner(n1, my_part);
   }
 }
+
 void compute_near_mutual_seq(std::vector<LeafT> &grid) {
   for (int k = 0; k < grid.size(); ++k) {
     auto my_part = grid[k].particles;
@@ -142,7 +144,7 @@ void compute_near_for(std::vector<LeafT> &grid) {
 void compute_near_taskloop(std::vector<LeafT> &grid) {
 #pragma omp parallel
 #pragma omp single
-#pragma omp taskloop
+#pragma omp taskloop  // grainsize(8)
   for (int k = 0; k < grid.size(); ++k) {
     auto my_part = grid[k].particles;
     auto n1 = grid[k].nb_part;
@@ -197,7 +199,7 @@ void compute_near_mutual_task(std::vector<LeafT> &grid) {
 #pragma omp parallel
 #pragma omp single
   for (int k = 0; k < grid.size(); ++k) {
-#pragma omp task firstprivate(k) untied
+// #pragma omp task firstprivate(k) untied
     {
       auto my_part = grid[k].particles;
       auto n1 = grid[k].nb_part;

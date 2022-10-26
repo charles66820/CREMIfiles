@@ -66,6 +66,7 @@ double compute_pi_taskloop(long num_steps) {
 
 #pragma omp parallel shared(step)
   {
+#pragma omp single
 #pragma omp taskloop private(x) reduction(+ : sum)  // grainsize(200)
     for (int i = start; i <= end; i++) {
       x = (i - 0.5) * step;
