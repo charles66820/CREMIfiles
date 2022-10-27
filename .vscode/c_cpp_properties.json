@@ -8,7 +8,9 @@
               "/usr/include"
             ],
             "defines": [
-                "_XOPEN_SOURCE=700"
+                "_XOPEN_SOURCE=700",
+                "_OPENMP",
+                "OMP"
             ],
             // "compilerPath": "/net/ens/gcc/gcc_10.2.0/bin/gcc",
             "compilerPath": "/usr/bin/gcc",

@@ -101,3 +101,5 @@ hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar \
 
 ## step 5 : World city populations
 
+- done.
+- 
