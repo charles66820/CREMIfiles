@@ -49,6 +49,7 @@ yarn jar wordcounter-0.0.1.jar LesMiserables.txt worldCounterLM
 
 ### Without combiner
 
+```txt
 FILE: Number of bytes read=4999680
 FILE: Number of bytes written=10488391
 
@@ -59,9 +60,11 @@ Reduce shuffle bytes=4999680
 Reduce input records=421738
 Reduce output records=51588
 Spilled Records=843476
+```
 
 ### With combiner
 
+```txt
 FILE: Number of bytes read=799813
 FILE: Number of bytes written=2089033
 
@@ -72,6 +75,7 @@ Reduce shuffle bytes=799813
 Reduce input records=51588
 Reduce output records=51588
 Spilled Records=103176
+```
 
 ## step 4 : MapReduce in Python
 
