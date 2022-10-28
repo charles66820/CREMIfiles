@@ -2,7 +2,6 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -13,7 +12,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 
 public class CityPop {
     public static class CityPopMapper extends Mapper<Object, Text, IntWritable, IntWritable> {
@@ -32,7 +30,12 @@ public class CityPop {
         }
     }
 
-    public static class CityPopReducer extends Reducer<IntWritable, IntWritable, IntWritable, MapWritable> {
+    public static class CityPopReducer extends Reducer<IntWritable, IntWritable, IntWritable, Text> {
+
+        public void setup(Context context) throws IOException, InterruptedException {
+            context.write(null, new Text("\tcount\tavg\tmax\tmin"));
+        }
+
         public void reduce(IntWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             int sum = 0;
             int count = 0;
@@ -47,12 +50,7 @@ public class CityPop {
                 min = Math.min(min, val);
             }
 
-            MapWritable ret = new MapWritable();
-            ret.put(new Text("count"), new IntWritable(count));
-            ret.put(new Text("avg"), new IntWritable(sum / count));
-            ret.put(new Text("max"), new IntWritable(max));
-            ret.put(new Text("min"), new IntWritable(min));
-            context.write(key, ret);
+            context.write(key, new Text(count + "\t" + (sum / count) + "\t" + max + "\t" + min));
         }
     }
 
@@ -70,7 +68,7 @@ public class CityPop {
 
         job.setReducerClass(CityPopReducer.class);
         job.setOutputKeyClass(IntWritable.class);
-        job.setOutputValueClass(MapWritable.class);
+        job.setOutputValueClass(ArrayWritable.class);
 
         job.setOutputFormatClass(TextOutputFormat.class);
         job.setInputFormatClass(TextInputFormat.class);
