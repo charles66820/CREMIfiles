@@ -106,4 +106,8 @@ hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar \
 ## step 5 : World city populations
 
 - done.
-- 
+- done.
+- done.
+- The minimum data send is the number of city with non-null population. Or `k * nbMapper` if we use the cleanup method in the Mapper.
+- Yes if mappers send all the data with the same key to do one big data shorting.
+- done.
