@@ -9,3 +9,4 @@ node_modules/
 .svn/
 .frama-c/
 .Rhistory
+IT390_Multicoeurs/Linux_Intel64/*
