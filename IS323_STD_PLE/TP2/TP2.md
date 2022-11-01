@@ -16,6 +16,12 @@ yarn application -list -appStates ALL
 
 ### step 1 : top 10 keywords
 
+```bash
+yarn jar topkeywords-0.0.1.jar /user/fzanonboito/CISD/IEEEdata.csv topkeywords_out
+```
+
+
+
 ### step 2 : add new data
 
 ## Report
