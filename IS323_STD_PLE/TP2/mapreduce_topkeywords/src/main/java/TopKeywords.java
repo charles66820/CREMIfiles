@@ -37,6 +37,8 @@ public class TopKeywords {
 
             //TODO: check the the whole period or the decade
 
+            keywords = keywords.replace("\"", "");
+
             if (keywords.equals("")) return;
             String[] keywordsTab = keywords.split(";");
             if (keywordsTab.length == 0) return;
