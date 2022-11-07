@@ -4,7 +4,9 @@ Une page max pour le rapport, à rendre au + tard le 7 novembre (avant 8h).
 
 ## Analyse en composantes principales
 
-Le chois entre l'ACP et l'ACP normé ce fair on fonction de si on veut gardé ou non des variables. L'ACP normé donne le même pois à toute les variables.
+Sur la matrice de corrélation une valeur qui ce rapproche de `1` indique que les variables mesurent la même caractéristique. A l'inverse une valeur qui ce rapproche de `-1` indique que les variables mesurent des caractéristiques différentes.
+
+Le chois entre l'ACP et l'ACP normé ce fait on fonction de si on veut gardé ou non des variables. L'ACP normé donne le même pois à toute les variables.
 
 La valeur propre `λ_d` avec `d` la dimension (la variance empirique).
 

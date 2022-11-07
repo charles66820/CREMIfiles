@@ -11,7 +11,7 @@ print(X)
 # Calcul de la moyenne et de l’écart type des variables
 mean <- apply(X, 2, mean)
 std <- apply(X, 2, sd) # standard deviation
-stat <- rbind(mean, std)
+stat <- rbind(mean, std) # row bind
 # Affichage
 print(stat, digits=4)
 

@@ -85,7 +85,7 @@ intpred <- predict(simpleLinearReg, data.frame(x1=seqx1), interval="prediction")
 intconf <- predict(simpleLinearReg, data.frame(x1=seqx1), interval="confidence")[,c("lwr", "upr")]
 plot(data$y~data$x1, xlab="x1", ylab="y")
 abline(simpleLinearReg, lwd=2, col="red")
-# cbind(a, b) = Combine a & b ; lty = Line sTYle (1: line, 2: dashed, 3: dotted...)
+# cbind(a, b) = column bund, combine a & b ; lty = Line sTYle (1: line, 2: dashed, 3: dotted...)
 matlines(seqx1, cbind(intconf, intpred), lty=c(2, 2, 3, 3), col=c("green3", "green3", "blue", "blue"), lwd=c(2, 2))
 legend("topright", lty=c(1, 2, 3), lwd=c(2, 2, 2), c("linearReg", "conf", "pred"), col=c("red", "green3", "blue"))
 
