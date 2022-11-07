@@ -12,7 +12,9 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,19 +25,30 @@ public class TopKeywords {
                 return;
 
             // String[] rowTab = value.toString().split(","); // BUG: don't support csv escape char
-
             // Regex csv split found at https://gist.github.com/awwsmm/886ac0ce0cef517ad7092915f708175f
-
             List<String> listMatches = new ArrayList<String>();
             Pattern CSV_PATTERN = Pattern.compile("(?:,|\n|^)(\"(?:(?:\"\")*[^\"]*)*\"|[^\",\n]*|(?:\n|$))");
             Matcher m = CSV_PATTERN.matcher(value.toString());
             while (m.find()) listMatches.add(m.group(1));
 
-            String year = listMatches.get(3);
-            String month = listMatches.get(10);
+            String rawYear = listMatches.get(3);
             String keywords = listMatches.get(8);
 
-            //TODO: check the the whole period or the decade
+            // Ignore undefined year and undefined keywords.
+            if (rawYear == null || rawYear.equals("") || keywords == null || keywords.equals(""))
+                return;
+
+            // Clean data
+            rawYear = rawYear.replaceAll("\"", "");
+
+            int year;
+            try {
+                year = Integer.parseInt(rawYear);
+            } catch (NumberFormatException ex) {
+                return;
+            }
+
+            int decade = year / 10;
 
             keywords = keywords.replace("\"", "");
 
@@ -44,18 +57,21 @@ public class TopKeywords {
             if (keywordsTab.length == 0) return;
 
             for (String keyword : keywordsTab)
-                context.write(new Text(keyword), new IntWritable(1));
+                context.write(new Text(keyword), new IntWritable(decade));
         }
     }
 
-    public static class TopKeywordsReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class TopKeywordsReducer extends Reducer<Text, IntWritable, Text, Text> {
         public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+            final TreeMap<Integer, Integer> decates = new TreeMap<Integer, Integer>();
             int totalNbInPapers = 0;
             for (IntWritable value : values) {
-                int nb = value.get();
-                totalNbInPapers += nb;
+                int decate = value.get();
+                decates.put(decate, decates.containsKey(decate) ? decates.get(decate) + 1 : 1);
+                totalNbInPapers += 1;
             }
-            context.write(key, new IntWritable(totalNbInPapers));
+
+            context.write(key, new Text(totalNbInPapers + " " + Arrays.toString(decates.values().toArray())));
         }
     }
 
@@ -75,7 +91,7 @@ public class TopKeywords {
 
         job.setReducerClass(TopKeywordsReducer.class);
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
+        job.setOutputValueClass(Text.class);
 
         job.setOutputFormatClass(TextOutputFormat.class);
         job.setInputFormatClass(TextInputFormat.class);

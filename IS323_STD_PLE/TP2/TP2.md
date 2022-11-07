@@ -20,6 +20,9 @@ yarn application -list -appStates ALL
 yarn jar topkeywords-0.0.1.jar /user/fzanonboito/CISD/IEEEdata.csv topkeywords_out
 ```
 
+Top 10 des mots pour tous les articles et pour chaque décennies.
+
+En analysent les donnés j'ai vue qu'il n'y as pas de `keywords` pour certains articles. J'ai décidé de drop les articles sans `keywords`.
 
 
 ### step 2 : add new data
