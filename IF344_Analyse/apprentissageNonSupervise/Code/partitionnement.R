@@ -5,7 +5,7 @@ setwd("/home/charles/github/CREMIfiles/IF344_Analyse/Code")
 library("FactoMineR")
 
 # Données sur les fromages
-X <- read.table("../Data/fromage.txt", sep="", header=TRUE, row.names=1)
+X <- read.table("../../Data/fromage.txt", sep="", header=TRUE, row.names=1)
 print(X)
 
 # Calcul de la moyenne et de l’écart type des variables

@@ -7,7 +7,7 @@ library(PCAmixdata) # install.packages("PCAmixdata")
 library(GGally) # install.packages("GGally")
 
 # Chargement des données
-load("../Data/eaux.RData")
+load("../../Data/eaux.RData")
 # Affichage des données
 print(data, digits=4)
 
