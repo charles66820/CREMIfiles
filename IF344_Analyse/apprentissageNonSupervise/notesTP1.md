@@ -1,4 +1,4 @@
-# TP1 : Apprentissage non supervisé.
+# TP1 : Apprentissage non supervisé
 
 Une page max pour le rapport, à rendre au + tard le 7 novembre (avant 8h).
 

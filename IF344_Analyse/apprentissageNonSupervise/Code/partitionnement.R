@@ -1,5 +1,5 @@
 # Adresse du dossier où vous travaillez
-setwd("/home/charles/github/CREMIfiles/IF344_Analyse/Code")
+setwd("/home/charles/github/CREMIfiles/IF344_Analyse/apprentissageNonSupervise/Code")
 
 # Packages utilisés dans la suite
 library("FactoMineR")
