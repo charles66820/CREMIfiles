@@ -63,15 +63,15 @@ public class TopKeywords {
 
     public static class TopKeywordsReducer extends Reducer<Text, IntWritable, Text, Text> {
         public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
-            final TreeMap<Integer, Integer> decates = new TreeMap<Integer, Integer>();
+            final TreeMap<Integer, Integer> decades = new TreeMap<Integer, Integer>();
             int totalNbInPapers = 0;
             for (IntWritable value : values) {
-                int decate = value.get();
-                decates.put(decate, decates.containsKey(decate) ? decates.get(decate) + 1 : 1);
+                int decade = value.get();
+                decades.put(decade, decades.containsKey(decade) ? decades.get(decade) + 1 : 1);
                 totalNbInPapers += 1;
             }
 
-            context.write(key, new Text(totalNbInPapers + " " + Arrays.toString(decates.values().toArray())));
+            context.write(key, new Text(totalNbInPapers + " " + Arrays.toString(decades.values().toArray())));
         }
     }
 
