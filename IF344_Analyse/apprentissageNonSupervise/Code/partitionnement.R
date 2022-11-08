@@ -23,7 +23,7 @@ Xnorm <- sweep(Xnorm, 2, std, "/")
 print(Xnorm, digits=4)
 
 # Nombre de clusters souhaité
-numcluster <- 5
+numcluster <- 4
 
 ## KMEANS
 # Algorithme des kmeans (avec affichage)
@@ -32,6 +32,11 @@ print(km)
 # Algorithme des kmeans sur données centrées-réduites (avec affichage)
 kmnorm <- kmeans(Xnorm, numcluster, nstart=50)
 print(kmnorm)
+
+#library(factoextra)
+
+#fviz_cluster(km, data = scale(X), geom = c("point"), ellipse.type = "euclid")
+#fviz_cluster(kmnorm, data = scale(Xnorm), geom = c("point"), ellipse.type = "euclid")
 
 # Concatenation des données avec leur résultat de cluster
 cluster <- as.factor(km$cluster)
@@ -79,7 +84,7 @@ plot(tree)
 
 # Classification hiérarchique de Ward sur données centrées-réduites
 dnorm <- dist(Xnorm)
-treenorm <- hclust(dnorm^2,method="ward.D2")
+treenorm <- hclust(dnorm^2, method="ward.D2")
 plot(treenorm)
 
 # Concatenation des données avec leur résultat de cluster

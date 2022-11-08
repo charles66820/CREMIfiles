@@ -56,3 +56,39 @@ On a une bonne qualité de la projection et contribution des variables avec `3` 
 ![Alt text](varContrib.png)
 
 ## Partitionnement
+
+Les individues sont mieux répartie pour visuellement voire les clusters avec le `k-mean` brute.
+
+`K-mean` sur les données brute :
+![Alt text](ACP_km_5clusters_ind.png)
+`K-mean` sur les données centrées-réduites :
+![Alt text](ACP_kmnorm_5clusters_ind.png)
+
+On distingue mieux les variables avec le `K-mean` centrées-réduites.
+
+`K-mean` sur les données brute :
+![Alt text](ACP_km_5clusters_var.png)
+`K-mean` sur les données centrées-réduites :
+![Alt text](ACP_kmnorm_5clusters_var.png)
+
+## Partitionnement hiérarchique (distance de Ward)
+
+Le découpage est plus distinct avec les données centrées-réduites.
+
+Classification hiérarchique de Ward sur les données brutes :
+![Alt text](tree.png)
+Classification hiérarchique de Ward sur les données centrées-réduites :
+![Alt text](treeNorm.png)
+
+Avec la `distance de Ward` sur les données centrées-réduites on vois que les cluster sont mieux répartie et définit.
+
+`distance de Ward` sur les données brute :
+![Alt text](ACP_dw_5clusters_ind.png)
+![Alt text](ACP_dw_5clusters_var.png)
+![Alt text](ACP_dw_sndPF_5clusters_ind.png)
+![Alt text](ACP_dw_sndPF_5clusters_var.png)
+`distance de Ward` sur les données centrées-réduites :
+![Alt text](ACP_dwnorm_5clusters_ind.png)
+![Alt text](ACP_dwnorm_5clusters_var.png)
+![Alt text](ACP_dwnorm_sndPF_5clusters_ind.png)
+![Alt text](ACP_dwnorm_sndPF_5clusters_var.png)
