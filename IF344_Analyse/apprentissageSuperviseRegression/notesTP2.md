@@ -17,7 +17,7 @@
 - Avec le test de normalité (`Shapiro-Wilk`) on obtient bien la même `p-value` (`< 2.2e-16`). `W = 0.87857` ???
 - La validation croisée, un moindre carré (MSE : la moyenne des résidu au carré), nous donne `38.8901`.
 
-### régression non linéaire
+### régression non linéaire : Cas polynomial
 
 - La **p-value** : on rejette (A0) car $< 2.2e-16 < 0.05$.
 - La **t-value** :
@@ -31,5 +31,9 @@ On as plusieurs $\beta$ (e.g. `poly(x1, degpoly)1`, `poly(x1, degpoly)2`) on peu
 - Le $R^2$ vos `0.6407` et le $R^2$ ajusté vos `0.6393`.
 - Avec le test de normalité (`Shapiro-Wilk`) on obtient une `p-value` plus élevé mais toujours en dessous de 5% (`6.101e-14`). `W = 0.93583` ???
 - La validation croisée, un moindre carré (MSE : la moyenne des résidu au carré), nous donne `30.73622`.
+
+### régression non linéaire : Cas spline
+
+### régression non linéaire : Cas smoothing spline
 
 TODO: comparaison
