@@ -30,10 +30,34 @@ On as plusieurs $\beta$ (e.g. `poly(x1, degpoly)1`, `poly(x1, degpoly)2`) on peu
   - on rejette (A0) pour $\beta_2$ car `0` n'est pas dans l'intervale `[53.37485 ; 75.07963]`.
 - Le $R^2$ vos `0.6407` et le $R^2$ ajusté vos `0.6393`.
 - Avec le test de normalité (`Shapiro-Wilk`) on obtient une `p-value` plus élevé mais toujours en dessous de 5% (`6.101e-14`). `W = 0.93583` ???
-- La validation croisée, un moindre carré (MSE : la moyenne des résidu au carré), nous donne `30.73622`.
+- La validation croisée (MSE) nous donne `30.73622`.
 
 ### régression non linéaire : Cas spline
 
+- La **p-value** : on rejette (A0) car $< 2.2e-16 < 0.05$.
+- La **t-value** :
+  - on rejette (A0) pour $\beta_1$ car $|-19.61| > 1.964682$.
+  - on rejette (A0) pour $\beta_2$ car $|-19.61| > 1.964682$.
+  - on rejette (A0) pour $\beta_3$ car $|-18.78| > 1.964682$.
+  - on rejette (A0) pour $\beta_3$ car $|-11.32| > 1.964682$.
+- La **statistique de Fisher** (F-statistic) : on rejette (A0) car $269 > 5.054041$
+- L'intervalle de confiance :
+  - on rejette (A0) pour $\beta_1$ car `0` n'est pas dans l'intervale `[-27.60653 ; -22.57836]`.
+  - on rejette (A0) pour $\beta_2$ car `0` n'est pas dans l'intervale `[-31.08023 ; -25.42030]`.
+  - on rejette (A0) pour $\beta_3$ car `0` n'est pas dans l'intervale `[-64.08628 ; -51.94713]`.
+  - on rejette (A0) pour $\beta_4$ car `0` n'est pas dans l'intervale `[-27.62415 ; -19.45475]`.
+- Le $R^2$ vos `0.6823` et le $R^2$ ajusté vos `0.6797`.
+- Avec le test de normalité (`Shapiro-Wilk`) on obtient une `p-value` plus élevé mais toujours en dessous de 5% (`1.413e-15`). `W = 0.92153` ???
+- La validation croisée (MSE) nous donne `27.39948`.
+
 ### régression non linéaire : Cas smoothing spline
 
+- La **statistique de Fisher** (F-statistic) : on rejette (A0) car $269 > 5.054041$
+- Avec le test de normalité (`Shapiro-Wilk`) on obtient une `p-value` plus élevé mais toujours en dessous de 5% (`1.02e-14`). `W = 0.92929` ???
+- La validation croisée (MSE) nous donne `27.95281`.
+
 TODO: comparaison
+
+## Régression multiple
+
+

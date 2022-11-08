@@ -146,3 +146,70 @@ MSE <- MSE/n
 # Valeur du résidu avec la validation croisée
 print(MSE)
 
+## Et le non linéaire ?
+## Cas spline (simple = une variable)
+degoffreedom <- 4
+simpleSplineReg <- lm(y~ns(x1, degoffreedom), data=data)
+
+# Risque à 5 % (pour la t-value / la statistique de Fisher)
+qt(1-alpha/2, n-2)
+qf(1-alpha/2, 1, n-2)
+
+# Intervalle de confiance des paramètres estimés
+# Risque à 5 % avec l’intervalle de confiance
+confint(simpleSplineReg)
+
+# Adéquation au modèle avec le R^2
+summary(simpleSplineReg)
+
+# Affichage de l’intervalle de confiance et de prédiction
+seqx1 <- seq(min(data$x1), max(data$x1), length=50)
+intpred <- predict(simpleSplineReg, data.frame(x1=seqx1), interval="prediction")[,c("lwr", "upr")]
+intconf <- predict(simpleSplineReg, data.frame(x1=seqx1), interval="confidence")[,c("lwr", "upr")]
+plot(data$y~data$x1, xlab="x1", ylab="y")
+pred <- predict(simpleSplineReg, data.frame(x1=sort(data$x1)))
+lines(sort(data$x1), pred, lwd=2, col="red")
+matlines(seqx1, cbind(intconf, intpred), lty=c(2, 2, 3, 3), col=c("green3", "green3", "blue", "blue"), lwd=c(2, 2))
+legend("topright", lty=c(1, 2, 3), lwd=c(2, 2, 2), c("linearReg", "conf", "pred"), col=c("red", "green3", "blue"))
+
+# Test de normalité des résidus
+shapiro.test(resid(simpleSplineReg))
+
+# Validation du modèle par validation croisée
+MSE <- 0
+for (i in 1:n) {
+  datatopredict <- data$y[i]
+  datatemp <- data[-c(i),]
+  reg <- lm(y~ns(x1,degoffreedom), data=datatemp)
+  predictedvalue <- predict(reg,data.frame(x1=data$x1[i]), interval="prediction")
+  MSE <- MSE+(datatopredict-predictedvalue[1])^2
+}
+MSE <- MSE/n
+# Valeur du résidu avec la validation croisée
+print(MSE)
+
+## Cas smoothing spline (simple = une variable)
+degoffreedom <- 6
+simpleSmoothSplineReg <- smooth.spline(data$x1, data$y, df=degoffreedom)
+
+# Affichage de l’intervalle de confiance et de prédiction
+plot(data$y~data$x1, xlab="x1", ylab="y")
+pred <- predict(simpleSmoothSplineReg, sort(data$x1))
+lines(pred, lwd=2, col="red")
+
+# Test de normalité des résidus
+shapiro.test(resid(simpleSmoothSplineReg))
+
+# Validation du modèle par validation croisée
+MSE <- 0
+for (i in 1:n)
+{
+  datatopredict <- data$y[i]
+  datatemp <- data[-c(i),]
+  reg <- smooth.spline(datatemp$x1,datatemp$y, df=degoffreedom)
+  predictedvalue <- predict(reg, data$x1[i])
+  MSE <- MSE+(datatopredict-predictedvalue$y)^2
+}
+MSE <- MSE/n
+# Valeur du résidu avec la validation croisée
+print(MSE)
