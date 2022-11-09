@@ -44,8 +44,12 @@ The missing informations is the normals.
 
 ### Question 9
 
-
+![Alt text](img/Q9img1.png)
 
 ### Question 10
 
+![Alt text](img/Q10img1.png)
+
 ### Question 11
+
+![Alt text](img/Q11img1.png)
