@@ -5,7 +5,7 @@
 
 #include "mipp.h"
 
-#define N 206      // M width
+#define N 208      // M width 206
 #define SIZE N* N  // M total mem SIZE : 42436
 
 // 3 Matrix mem SIZE : 127308
@@ -75,6 +75,19 @@ void printM(type* M) {
   printf("]\n");
 }
 
+void printXM(type* M, int X) {
+  for (size_t i = 0; i < X; i++)
+    for (size_t j = 0; j < X; j++) {
+      if (j != 0)
+        std::cout << ", ";
+      else
+        std::cout << "[ ";
+      std::cout << M[i * N + j];
+      // printf("%f", M[i * N + j]);
+      if (j == X-1) std::cout << ", ... ]" << std::endl;
+    }
+}
+
 int main(int argc, char const* argv[]) {
   type* A = (type*)valloc(SIZE * sizeof(type));
   type* B = (type*)valloc(SIZE * sizeof(type));
@@ -94,8 +107,6 @@ int main(int argc, char const* argv[]) {
   dgemm(A, B, C);
   TIMER_END("dgemm seq")
 
-  // printM(C);
-
   // transpose
   for (size_t i = 0; i < N; ++i)
     for (size_t j = 0; j < N; ++j) Bt[j * N + i] = B[i * N + j];
@@ -104,10 +115,12 @@ int main(int argc, char const* argv[]) {
   dgemm_MIPP(A, Bt, C2);
   TIMER_END("dgemm seq MIPP")
 
-  // printM(C);
   for (size_t i = 0; i < SIZE; i++)
     if (C[i] != C2[i]) {
       std::cout << "C and C2 differ" << std::endl;
+      printXM(C, 4);
+      std::cout << std::endl;
+      printXM(C2, 4);
       break;
     }
 
