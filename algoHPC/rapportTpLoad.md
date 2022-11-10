@@ -39,7 +39,7 @@ Avec l'algo `uniformly_random` la répartition des tâches est n'est pas bonne a
 
 ## 2
 
-J'ai trouvé un cas compliqué pour le `list\_scheduler`. Ce cas est avec `8` tâches, `2` resources. Les tâche on les charges suivante : `[4, 3, 3, 2, 4, 1, 3, 4]`. L'algo `list\_scheduler` reparti `14` charge sur la premiére resource et `10` sur la seconde. Il existe une mayeur configuration avec `12` charge sur chaque resources.
+J'ai trouvé un cas compliqué (adversary case) pour le `list\_scheduler`. Ce cas est avec `8` tâches, `2` resources. Les tâche on les charges suivante : `[4, 3, 3, 2, 4, 1, 3, 4]`. L'algo `list\_scheduler` reparti `14` charge sur la premiére resource et `10` sur la seconde. Il existe une mayeur configuration avec `12` charge sur chaque resources.
 
 ![Alt text](img/adversary_scenario_list_scheduler.png)
 
@@ -65,3 +65,22 @@ Les algos `list_scheduler` et `lpt` sont assé similaire on le constate avec qua
 | ![Alt text](img/scenario_lpt_T200_R16.png) | ![Alt text](img/scenario_list_scheduler_T200_R16.png) |
 
 ## 5
+
+J'ai complété la fonction `lpt_with_limits` et elle passe le test unitaire.
+
+## 6
+
+Je n'ai pas trouvé de différence °~°.
+
+|                   `lpt`                    |                   `list_scheduler`                    |
+| :----------------------------------------: | :---------------------------------------------------: |
+|  ![Alt text](img/scenario_lpt_T20_R4.png)  |  ![Alt text](img/scenario_lpt_with_limits_T20_R4.png)  |
+| ![Alt text](img/scenario_lpt_T20_R16.png)  | ![Alt text](img/scenario_lpt_with_limits_T20_R16.png)  |
+| ![Alt text](img/scenario_lpt_T200_R4.png)  | ![Alt text](img/scenario_lpt_with_limits_T200_R4.png)  |
+| ![Alt text](img/scenario_lpt_T200_R16.png) | ![Alt text](img/scenario_lpt_with_limits_T200_R16.png) |
+
+## 7
+
+Je n'ai pas trouvé de cas compliqué (adversary case) °~°.
+
+## 8
