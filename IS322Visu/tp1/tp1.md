@@ -53,3 +53,50 @@ The missing informations is the normals.
 ### Question 11
 
 ![Alt text](img/Q11img1.png)
+
+### Question 12
+
+![Alt text](img/Q12img1.png)
+
+### Question 13
+
+![Alt text](img/Q13img1.png)
+
+### Question 14
+
+![Alt text](img/Q14img1.png)
+
+en rouge un `iso volume` (filtre `iso volume`).
+en bleu un `interval` (filtre `threshold`).
+
+![Alt text](img/Q14img2.png)
+
+en bleu clair une `iso surface` (filtre `contour`).
+
+### Question 15
+
+![Alt text](img/Q15img1..png)
+
+### Question 16
+
+
+
+### Question 17
+
+### Question 18
+
+### Question 19
+
+### Question 20
+
+### Question 21
+
+### Question 22
+
+### Question 23
+
+### Question 24
+
+### Question 25
+
+### Question 26
