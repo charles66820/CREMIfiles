@@ -83,4 +83,18 @@ Algos `uniformly_random` avec `200` tâches sur `16` resources :
 
 ## 2
 
+J'ai trouvé un cas compliqué pour le `list\_scheduler`. Ce cas est avec `8` tâches, `2` resources. Les tâche on les charges suivante : `[4, 3, 3, 2, 4, 1, 3, 4]`. L'algo `list\_scheduler` reparti `14` charge sur la premiére resource et `10` sur la seconde. Il existe une mayeur configuration avec `12` charge sur chaque resources.
 
+![Alt text](study-load-balancing/adversary_scenario_list_scheduler.png)
+
+![Alt text](PXL_20221110_100114783.jpg)
+
+## 3
+
+J'ai complété la fonction `lpt` et elle passe le test unitaire.
+
+Le `lpt` résous bien le cas compliqué que le `list\_scheduler` résous pas bien.
+
+![Alt text](study-load-balancing/adversary_scenario_lpt.png)
+
+## 4 
