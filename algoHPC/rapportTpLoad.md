@@ -85,4 +85,4 @@ Je n'ai pas trouvé de cas compliqué (adversary case) °~°.
 
 ## 8
 
-J'ai implémenté l'algo `list_scheduler_for_uniform_resources` mais mon implémentation ne passe las les tests.
+J'ai implémenté l'algo `list_scheduler_for_uniform_resources`, mon implémentation passe las les tests grâce au saint `2`.
