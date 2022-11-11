@@ -11,22 +11,19 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TopKeywords {
-    public static class TopKeywordsMapper extends Mapper<Object, Text, Text, IntWritable> {
+    public static class TopKeywordsMapper extends Mapper<Object, Text, IntWritable, Text> {
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             if (value.toString().equals("\"author\",\"booktitle\",\"title\",\"year\",\"volume\",\"number\",\"pages\",\"abstract\",\"keywords\",\"doi\",\"month\",\"journal\",\"issn\",\"publisher\",\"isbn\",\"url\",\"order\",\"digital-lib\""))
                 return;
 
             // String[] rowTab = value.toString().split(","); // BUG: don't support csv escape char
             // Regex csv split found at https://gist.github.com/awwsmm/886ac0ce0cef517ad7092915f708175f
-            List<String> listMatches = new ArrayList<String>();
+            List<String> listMatches = new ArrayList<>();
             Pattern CSV_PATTERN = Pattern.compile("(?:,|\n|^)(\"(?:(?:\"\")*[^\"]*)*\"|[^\",\n]*|(?:\n|$))");
             Matcher m = CSV_PATTERN.matcher(value.toString());
             while (m.find()) listMatches.add(m.group(1));
@@ -57,21 +54,33 @@ public class TopKeywords {
             if (keywordsTab.length == 0) return;
 
             for (String keyword : keywordsTab)
-                context.write(new Text(keyword), new IntWritable(decade));
+                context.write(new IntWritable(decade), new Text(keyword));
         }
     }
 
-    public static class TopKeywordsReducer extends Reducer<Text, IntWritable, Text, Text> {
-        public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
-            final TreeMap<Integer, Integer> decades = new TreeMap<Integer, Integer>();
-            int totalNbInPapers = 0;
-            for (IntWritable value : values) {
-                int decade = value.get();
-                decades.put(decade, decades.containsKey(decade) ? decades.get(decade) + 1 : 1);
-                totalNbInPapers += 1;
+    public static class DecadeCombiner extends Reducer<IntWritable, Text, Text, Text> {
+        public void reduce(IntWritable decade, Iterable<Text> keywords, Context context) throws IOException, InterruptedException {
+            // Count number of paper for each keyword
+            Map<String, Integer> keywordsCount = new HashMap<>();
+            for (Text value : keywords) {
+                String keyword = value.toString();
+                keywordsCount.merge(keyword, 1, Integer::sum);
             }
 
-            context.write(key, new Text(totalNbInPapers + " " + Arrays.toString(decades.values().toArray())));
+            // Top keywords by decades
+            final TreeMap<Integer, String> topKeywords = new TreeMap<>(
+                    Comparator.reverseOrder());
+            for (Map.Entry<String, Integer> entry : keywordsCount.entrySet())
+                topKeywords.put(entry.getValue(), entry.getKey());
+
+            int decadeTopK = 1;
+            for (Map.Entry<Integer, String> entry : topKeywords.entrySet()) {
+                Integer nbPaperInDecade = entry.getKey();
+                String keyword = entry.getValue();
+                // keyword decade nbPaperInDecade decadeTopK
+                context.write(new Text(keyword), new Text(decade.get() + "\t" + nbPaperInDecade + "\t" + decadeTopK));
+                decadeTopK += 1;
+            }
         }
     }
 
@@ -84,13 +93,13 @@ public class TopKeywords {
         job.setJarByClass(TopKeywords.class);
 
         job.setMapperClass(TopKeywordsMapper.class);
-        job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(IntWritable.class);
+        job.setMapOutputKeyClass(IntWritable.class);
+        job.setMapOutputValueClass(Text.class);
 
-        // job.setCombinerClass(TopKeywordsReducer.class);
+        // job.setCombinerClass(DecadeCombiner.class);
 
-        job.setReducerClass(TopKeywordsReducer.class);
-        job.setOutputKeyClass(Text.class);
+        job.setReducerClass(DecadeCombiner.class);
+        job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(Text.class);
 
         job.setOutputFormatClass(TextOutputFormat.class);
