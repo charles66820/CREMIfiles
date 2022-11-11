@@ -84,3 +84,5 @@ Je n'ai pas trouvé de différence °~°.
 Je n'ai pas trouvé de cas compliqué (adversary case) °~°.
 
 ## 8
+
+J'ai implémenté l'algo `list_scheduler_for_uniform_resources` mais mon implémentation ne passe las les tests.
