@@ -198,8 +198,8 @@ Le code de mon algo :
     return mapping
 ```
 
-J'ai choisi un scénario avec `200` tâches sur `4` resources. Pour les vitesse j'ai choisi d'avoir `2` resources rapide et `2` resources lente, les resources rapide vont deux fois plus vite (`[8, 8, 4, 4]`).
+J'ai choisi un scénario avec `200` tâches sur `4` ressources. Pour les vitesses, j'ai choisi d'avoir `2` ressources rapide et `2` ressources lente, les ressources rapides vont deux fois plus vite (`[8, 8, 4, 4]`).
 
-J'obtient la répatition des charge suivante : `[178, 175, 86, 87]` avec les 2 premiers qui corresponde aux resources rapide et les 2 suivante au resources lente. On peut voire que les resources rapide sont bien deux fois plus rapide que les lente.
+J'obtiens la réputation des charges suivante : `[178, 175, 86, 87]` avec les `2` premiers qui correspondent aux ressources rapides et les `2` suivantes aux ressources lentes. On peut voir que les ressources rapides sont bien deux fois plus rapide que les lentes.
 
 ![Alt text](img/scenario_list_scheduler_for_uniform_resources_T200_R4.png)
