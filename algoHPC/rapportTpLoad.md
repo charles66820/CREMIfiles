@@ -2,7 +2,7 @@
 
 ## 0
 
-Ce que je comprends des résultat de `python3 complete_example.py` :
+Ce que je comprends des résultats de `python3 complete_example.py` :
 
 - On voit tous les paramètres (nombre de tâches, nombre de ressources, les tâches avec leur charge).
 - On voit le mapping trouvé et la répartition par ressource.
@@ -15,31 +15,31 @@ Ma comparaison des performances :
 
 Avec l'algo `Compact`, la répartition des tâches est plutôt moyenne pour les cas où il y a plutôt beaucoup de tâches et quand il y a peu de tâches et peu de ressources. On voit aussi que la répartition n'est pas bonne pour peu de tâches sur beaucoup de ressources.
 
-| ressources $\downarrow$ |                  20  tâches                   |                   200 tâches                   |
-| :---------------------: | :-------------------------------------------: | :--------------------------------------------: |
-|            4            | ![Alt text](img/scenario_compact_T20_R4.png)  | ![Alt text](img/scenario_compact_T200_R4.png)  |
-|           16            | ![Alt text](img/scenario_compact_T20_R16.png) | ![Alt text](img/scenario_compact_T200_R16.png) |
+| ressources ↓ |                  20  tâches                   |                   200 tâches                   |
+| :----------: | :-------------------------------------------: | :--------------------------------------------: |
+|      4       | ![Alt text](img/scenario_compact_T20_R4.png)  | ![Alt text](img/scenario_compact_T200_R4.png)  |
+|      16      | ![Alt text](img/scenario_compact_T20_R16.png) | ![Alt text](img/scenario_compact_T200_R16.png) |
 
 Avec l'algo `List_scheduler`, la répartition des tâches est vraiment bonne quand il y a beaucoup de tâches, moyenne avec peu de tâches et peu de ressources et assez inégale quand il y a peu de tâches et beaucoup de ressources.
 
-| ressources $\downarrow$ |                      20  tâches                      |                      200 tâches                       |
-| :---------------------: | :--------------------------------------------------: | :---------------------------------------------------: |
-|            4            | ![Alt text](img/scenario_list_scheduler_T20_R4.png)  | ![Alt text](img/scenario_list_scheduler_T200_R4.png)  |
-|           16            | ![Alt text](img/scenario_list_scheduler_T20_R16.png) | ![Alt text](img/scenario_list_scheduler_T200_R16.png) |
+| ressources ↓ |                      20  tâches                      |                      200 tâches                       |
+| :----------: | :--------------------------------------------------: | :---------------------------------------------------: |
+|      4       | ![Alt text](img/scenario_list_scheduler_T20_R4.png)  | ![Alt text](img/scenario_list_scheduler_T200_R4.png)  |
+|      16      | ![Alt text](img/scenario_list_scheduler_T20_R16.png) | ![Alt text](img/scenario_list_scheduler_T200_R16.png) |
 
 Avec l'algo `Round_robin`, la répartition des tâches n'est pas bonne avec beaucoup de ressources, moyenne avec beaucoup de tâches et peu de ressources et légèrement inégale quand il y a peu de tâches et peu de ressources.
 
-| ressources $\downarrow$ |                    20  tâches                     |                     200 tâches                     |
-| :---------------------: | :-----------------------------------------------: | :------------------------------------------------: |
-|            4            | ![Alt text](img/scenario_round_robin_T20_R4.png)  | ![Alt text](img/scenario_round_robin_T200_R4.png)  |
-|           16            | ![Alt text](img/scenario_round_robin_T20_R16.png) | ![Alt text](img/scenario_round_robin_T200_R16.png) |
+| ressources ↓ |                    20  tâches                     |                     200 tâches                     |
+| :----------: | :-----------------------------------------------: | :------------------------------------------------: |
+|      4       | ![Alt text](img/scenario_round_robin_T20_R4.png)  | ![Alt text](img/scenario_round_robin_T200_R4.png)  |
+|      16      | ![Alt text](img/scenario_round_robin_T20_R16.png) | ![Alt text](img/scenario_round_robin_T200_R16.png) |
 
 Avec l'algo `Uniformly_random` la répartition des tâches n'est pas bonne avec beaucoup de ressources, pareil avec peu de tâches et peu de ressources et assez inégale quand il y a beaucoup de tâches et peu de ressources.
 
-| ressources $\downarrow$ |                       20  tâches                       |                       200 tâches                        |
-| :---------------------: | :----------------------------------------------------: | :-----------------------------------------------------: |
-|            4            | ![Alt text](img/scenario_uniformly_random_T20_R4.png)  | ![Alt text](img/scenario_uniformly_random_T200_R4.png)  |
-|           16            | ![Alt text](img/scenario_uniformly_random_T20_R16.png) | ![Alt text](img/scenario_uniformly_random_T200_R16.png) |
+| ressources ↓ |                       20  tâches                       |                       200 tâches                        |
+| :----------: | :----------------------------------------------------: | :-----------------------------------------------------: |
+|      4       | ![Alt text](img/scenario_uniformly_random_T20_R4.png)  | ![Alt text](img/scenario_uniformly_random_T200_R4.png)  |
+|      16      | ![Alt text](img/scenario_uniformly_random_T20_R16.png) | ![Alt text](img/scenario_uniformly_random_T200_R16.png) |
 
 ## 2
 
@@ -174,7 +174,7 @@ for i in range(60, 0, -1):
 
 ## 8
 
-J'ai implémenté l'algo `list_scheduler_for_uniform_resources`, mon implémentation passe les tests. Ma solution tris les resources par rapport à leurs vitesse pour les premiéres tâches affecté puis selection la ressource qui a la plus petite valeur quant on divise ça charge avec la vitesse.
+J'ai implémenté l'algo `list_scheduler_for_uniform_resources`, mon implémentation passe les tests. Ma solution trie les ressources par rapport à leur vitesse pour les premières tâches affectées puis, sélectionne la ressource qui a la plus petite valeur quand on divise ça charge avec la vitesse.
 
 Le code de mon algo :
 
@@ -198,8 +198,8 @@ Le code de mon algo :
     return mapping
 ```
 
-J'ai choisi un scénario avec `200` tâches sur `4` ressources. Pour les vitesses, j'ai choisi d'avoir `2` ressources rapide et `2` ressources lente, les ressources rapides vont deux fois plus vite (`[8, 8, 4, 4]`).
+J'ai choisi un scénario avec `200` tâches sur `4` ressources. Pour les vitesses, j'ai choisi d'avoir `2` ressources rapides et `2` ressources lentes, les ressources rapides vont deux fois plus vite (`[8, 8, 4, 4]`).
 
-J'obtiens la réputation des charges suivante : `[178, 175, 86, 87]` avec les `2` premiers qui correspondent aux ressources rapides et les `2` suivantes aux ressources lentes. On peut voir que les ressources rapides sont bien deux fois plus rapide que les lentes.
+J'obtiens la répartition des charges suivante : `[178, 175, 86, 87]` avec les `2` premiers qui correspondent aux ressources rapides et les `2` suivantes aux ressources lentes. On peut voir que les ressources rapides sont bien deux fois plus rapide que les lentes.
 
 ![Alt text](img/scenario_list_scheduler_for_uniform_resources_T200_R4.png)
