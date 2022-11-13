@@ -182,3 +182,8 @@ y    37.42    45.59    63.59    64.78    69.70    70.05    70.05    70.56
 X    95.08     96.78     98.21     99.51    100.00
 y    70.57     70.89     71.30     73.21     74.06
 ```
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
+</script>
