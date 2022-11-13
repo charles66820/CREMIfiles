@@ -100,16 +100,6 @@ public class TopKeywords {
         private final Map<Integer, MapWritable> topKeywords = new TreeMap<>(
                 Comparator.reverseOrder());
 
-        public void cleanup(Context context) throws IOException, InterruptedException {
-            int decadeTop = 1;
-            for (Map.Entry<Integer, MapWritable> entry : topKeywords.entrySet()) {
-                MapWritable data = entry.getValue();
-                data.put(new Text("top"), new IntWritable(decadeTop));
-                context.write(NullWritable.get(), data);
-                decadeTop += 1;
-            }
-        }
-
         public void reduce(Text keyword, Iterable<Text> values, Context context) throws InterruptedException {
             MapWritable data = new MapWritable();
             data.put(new Text("keyword"), new Text(keyword.toString()));
@@ -127,6 +117,16 @@ public class TopKeywords {
 
             data.put(new Text("totalNbInPaper"), new IntWritable(totalNbInPaper));
             topKeywords.put(totalNbInPaper, data);
+        }
+
+        public void cleanup(Context context) throws IOException, InterruptedException {
+            int decadeTop = 1;
+            for (Map.Entry<Integer, MapWritable> entry : topKeywords.entrySet()) {
+                MapWritable data = entry.getValue();
+                data.put(new Text("top"), new IntWritable(decadeTop));
+                context.write(NullWritable.get(), data);
+                decadeTop += 1;
+            }
         }
     }
 
