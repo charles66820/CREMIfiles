@@ -1,3 +1,5 @@
+import com.google.common.collect.Ordering;
+import com.google.common.collect.TreeMultimap;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -6,8 +8,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class KeywordReducer extends Reducer<Text, Text, NullWritable, Text> {
-    private final Map<Integer, Map<String, String>> topKeywords = new TreeMap<>(
-            Comparator.reverseOrder());
+    private final TreeMultimap<Integer, Map<String, String>> topKeywords = TreeMultimap.create(Ordering.natural().reverse(), (m1, m2) -> 1);
     SortedSet<Integer> decateSet = new TreeSet<>();
 
     public void reduce(Text keyword, Iterable<Text> values, Context context) {
@@ -36,7 +37,7 @@ public class KeywordReducer extends Reducer<Text, Text, NullWritable, Text> {
         context.write(NullWritable.get(), new Text(header.toString()));
 
         int top = 1;
-        for (Map.Entry<Integer, Map<String, String>> entry : topKeywords.entrySet()) {
+        for (Map.Entry<Integer, Map<String, String>> entry : topKeywords.entries()) {
             Map<String, String> data = entry.getValue();
 
             StringBuilder keywordRow = new StringBuilder();

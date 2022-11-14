@@ -1,15 +1,16 @@
+import com.google.common.collect.Ordering;
+import com.google.common.collect.TreeMultimap;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
-public class DecadeReducer extends Reducer<Text, Text, Text, Text> {
+public class DecadeReducer extends Reducer<Text, Text, NullWritable, Text> {
     public void setup(Context context) throws IOException, InterruptedException {
-        context.write( new Text("decade"), new Text("keyword;nbPaperInDecade;decadeTop"));
+        context.write(NullWritable.get(), new Text("decade;keyword;nbPaperInDecade;decadeTop"));
     }
 
     public void reduce(Text decade, Iterable<Text> keywords, Context context) throws IOException, InterruptedException {
@@ -21,17 +22,16 @@ public class DecadeReducer extends Reducer<Text, Text, Text, Text> {
         }
 
         // Top keywords by decades
-        final TreeMap<Integer, String> topKeywords = new TreeMap<>(
-                Comparator.reverseOrder());
+        final TreeMultimap<Integer, String> topKeywords = TreeMultimap.create(Ordering.natural().reverse(), Ordering.natural());
         for (Map.Entry<String, Integer> entry : keywordsCount.entrySet())
             topKeywords.put(entry.getValue(), entry.getKey());
 
         int decadeTop = 1;
-        for (Map.Entry<Integer, String> entry : topKeywords.entrySet()) {
+        for (Map.Entry<Integer, String> entry : topKeywords.entries()) {
             Integer nbPaperInDecade = entry.getKey();
             String keyword = entry.getValue();
             // decade : keyword ; nbPaperInDecade ; decadeTop
-            context.write(new Text(decade), new Text(keyword + ";" + nbPaperInDecade + ";" + decadeTop));
+            context.write(NullWritable.get(), new Text(decade + ";" + keyword + ";" + nbPaperInDecade + ";" + decadeTop));
             decadeTop += 1;
         }
     }

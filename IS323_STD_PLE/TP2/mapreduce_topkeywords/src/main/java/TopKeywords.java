@@ -10,21 +10,21 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class TopKeywords {
     public static void main(String[] args) throws Exception {
-        if (args.length < 4) {
-            System.err.println("Usage: " + args[0] + " <dataCsvFile> [<decadeTopInputFolder>] <decadeTopOutputFolder> <keywordTopOutputFolder>");
+        if (args.length < 3) {
+            System.err.println("Usage: yarn jar topkeywords-0.0.1.jar <dataCsvFile> [<decadeTopInputFolder>] <decadeTopOutputFolder> <keywordTopOutputFolder>");
             System.exit(128);
         }
-        String dataCsvFile = args[1];
+        String dataCsvFile = args[0];
         String decadeTopInputFolder;
         String decadeTopOutputFolder;
         String keywordTopOutputFolder;
-        if (args.length == 4) {
+        if (args.length == 3) {
+            decadeTopOutputFolder = args[1];
+            keywordTopOutputFolder = args[2];
+        } else {
+            decadeTopInputFolder = args[1];
             decadeTopOutputFolder = args[2];
             keywordTopOutputFolder = args[3];
-        } else {
-            decadeTopInputFolder = args[2];
-            decadeTopOutputFolder = args[3];
-            keywordTopOutputFolder = args[4];
         }
 
 
@@ -42,7 +42,7 @@ public class TopKeywords {
 //        decadeJob.setCombinerClass(DecadeCombiner.class);
 
         decadeJob.setReducerClass(DecadeReducer.class);
-        decadeJob.setOutputKeyClass(Text.class);
+        decadeJob.setOutputKeyClass(NullWritable.class);
         decadeJob.setOutputValueClass(Text.class);
 
         FileOutputFormat.setOutputPath(decadeJob, new Path(decadeTopOutputFolder));
