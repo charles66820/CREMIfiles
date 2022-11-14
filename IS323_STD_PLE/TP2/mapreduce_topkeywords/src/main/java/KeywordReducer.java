@@ -42,12 +42,18 @@ public class KeywordReducer extends Reducer<Text, Text, NullWritable, Text> {
 
             StringBuilder keywordRow = new StringBuilder();
             keywordRow.append(data.get("keyword"));
+            keywordRow.append(";");
             keywordRow.append(top);
-            keywordRow.append(data.get("totalNbInPaper"));
+            keywordRow.append(";");
+            keywordRow.append(entry.getKey());
 
             for (Integer decade : decateSet) {
-                keywordRow.append(data.get("topDecade" + decade));
-                keywordRow.append(data.get("nbDecade" + decade));
+                String topDecade = data.get("topDecade" + decade);
+                String nbDecade = data.get("nbDecade" + decade);
+                keywordRow.append(";");
+                if (topDecade != null) keywordRow.append(topDecade);
+                keywordRow.append(";");
+                if (nbDecade != null) keywordRow.append(nbDecade);
             }
 
             context.write(NullWritable.get(), new Text(keywordRow.toString()));

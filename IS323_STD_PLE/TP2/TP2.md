@@ -17,7 +17,11 @@ yarn application -list -appStates ALL
 ### step 1 : top 10 keywords
 
 ```bash
-yarn jar topkeywords-0.0.1.jar /user/fzanonboito/CISD/IEEEdata.csv topkeywords_out
+yarn jar topkeywords-0.0.1.jar /user/fzanonboito/CISD/IEEEdata.csv decadeTopOutput keywordTopOutput
+```
+
+```bash
+hdfs dfs -cat keywordTopOutput/part-r-00000
 ```
 
 Top 10 des mots pour tous les articles et pour chaque décennies.
