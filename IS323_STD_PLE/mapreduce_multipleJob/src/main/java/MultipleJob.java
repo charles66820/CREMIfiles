@@ -20,6 +20,7 @@ public class MultipleJob {
         job1.setMapperClass(MultipleJobMapper1.class);
         job1.setMapOutputKeyClass(Text.class);
         job1.setMapOutputValueClass(Text.class);
+
         job1.setReducerClass(DecadeReducer1.class);
         job1.setOutputKeyClass(Text.class);
         job1.setOutputValueClass(Text.class);
@@ -40,6 +41,7 @@ public class MultipleJob {
         job2.setMapperClass(MultipleJobMapper2.class);
         job2.setMapOutputKeyClass(Text.class);
         job2.setMapOutputValueClass(Text.class);
+
         job2.setReducerClass(DecadeReducer2.class);
         job2.setOutputKeyClass(Text.class);
         job2.setOutputValueClass(Text.class);
