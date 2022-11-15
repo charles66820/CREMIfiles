@@ -8,6 +8,7 @@ public class DecadeMapper extends Mapper<Object, Text, Text, Text> {
         if (value.toString().equals("decade;keyword;nbPaperInDecade;decadeTop")) return;
 
         String[] rowTab = value.toString().split(";");
+        if(rowTab.length < 4) return;
 
         String decade = rowTab[0];
         String keyword = rowTab[1];

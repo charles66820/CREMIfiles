@@ -1,3 +1,4 @@
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RawDataMapper extends Mapper<Object, Text, Text, Text> {
+public class RawDataMapper extends Mapper<Object, Text, IntWritable, Text> {
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         if (value.toString().equals("\"author\",\"booktitle\",\"title\",\"year\",\"volume\",\"number\",\"pages\",\"abstract\",\"keywords\",\"doi\",\"month\",\"journal\",\"issn\",\"publisher\",\"isbn\",\"url\",\"order\",\"digital-lib\""))
             return;
@@ -45,6 +46,6 @@ public class RawDataMapper extends Mapper<Object, Text, Text, Text> {
         if (keywordsTab.length == 0) return;
 
         for (String keyword : keywordsTab)
-            context.write(new Text(String.valueOf(decade)), new Text(keyword));
+            context.write(new IntWritable(decade), new Text(keyword));
     }
 }

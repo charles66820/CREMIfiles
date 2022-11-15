@@ -1,5 +1,6 @@
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -35,7 +36,7 @@ public class TopKeywords {
         decadeJob.setInputFormatClass(TextInputFormat.class);
 
         decadeJob.setMapperClass(RawDataMapper.class);
-        decadeJob.setMapOutputKeyClass(Text.class);
+        decadeJob.setMapOutputKeyClass(IntWritable.class);
         decadeJob.setMapOutputValueClass(Text.class);
 
 //        decadeJob.setCombinerClass(DecadeCombiner.class);
@@ -50,30 +51,30 @@ public class TopKeywords {
         if (!decadeJob.waitForCompletion(true))
             System.exit(1);
 
-        Configuration keyWordConf = new Configuration();
-        Job keyWordJob = Job.getInstance(keyWordConf, "TopKeyWord");
-        keyWordJob.setNumReduceTasks(1);
-        keyWordJob.setJarByClass(TopKeywords.class);
+        Configuration keywordConf = new Configuration();
+        Job keywordJob = Job.getInstance(keywordConf, "TopKeyword");
+        keywordJob.setNumReduceTasks(1);
+        keywordJob.setJarByClass(TopKeywords.class);
 
-        FileInputFormat.addInputPath(keyWordJob, new Path(decadeTopOutputFolder));
-        keyWordJob.setInputFormatClass(TextInputFormat.class);
+        FileInputFormat.addInputPath(keywordJob, new Path(decadeTopOutputFolder));
+        keywordJob.setInputFormatClass(TextInputFormat.class);
 
-        keyWordJob.setMapperClass(DecadeMapper.class);
-        keyWordJob.setMapOutputKeyClass(Text.class);
-        keyWordJob.setMapOutputValueClass(Text.class);
+        keywordJob.setMapperClass(DecadeMapper.class);
+        keywordJob.setMapOutputKeyClass(Text.class);
+        keywordJob.setMapOutputValueClass(Text.class);
 
-//        keyWordJob.setCombinerClass(DecadeCombiner.class);
+//        keywordJob.setCombinerClass(DecadeCombiner.class);
 
-        keyWordJob.setReducerClass(KeywordReducer.class);
-        keyWordJob.setOutputKeyClass(NullWritable.class);
-        keyWordJob.setOutputValueClass(Text.class);
+        keywordJob.setReducerClass(KeywordReducer.class);
+        keywordJob.setOutputKeyClass(NullWritable.class);
+        keywordJob.setOutputValueClass(Text.class);
 
-        keyWordJob.setOutputFormatClass(TextOutputFormat.class);
-        keyWordJob.setInputFormatClass(TextInputFormat.class);
+        keywordJob.setOutputFormatClass(TextOutputFormat.class);
+        keywordJob.setInputFormatClass(TextInputFormat.class);
 
-        FileOutputFormat.setOutputPath(keyWordJob, new Path(keywordTopOutputFolder));
-        keyWordJob.setOutputFormatClass(TextOutputFormat.class);
+        FileOutputFormat.setOutputPath(keywordJob, new Path(keywordTopOutputFolder));
+        keywordJob.setOutputFormatClass(TextOutputFormat.class);
 
-        System.exit(keyWordJob.waitForCompletion(true) ? 0 : 1);
+        System.exit(keywordJob.waitForCompletion(true) ? 0 : 1);
     }
 }

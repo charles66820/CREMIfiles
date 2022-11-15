@@ -1,5 +1,6 @@
 import com.google.common.collect.Ordering;
 import com.google.common.collect.TreeMultimap;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -8,12 +9,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DecadeReducer extends Reducer<Text, Text, NullWritable, Text> {
+public class DecadeReducer extends Reducer<IntWritable, Text, NullWritable, Text> {
     public void setup(Context context) throws IOException, InterruptedException {
         context.write(NullWritable.get(), new Text("decade;keyword;nbPaperInDecade;decadeTop"));
     }
 
-    public void reduce(Text decade, Iterable<Text> keywords, Context context) throws IOException, InterruptedException {
+    public void reduce(IntWritable decade, Iterable<Text> keywords, Context context) throws IOException, InterruptedException {
         // Count number of paper for each keyword
         Map<String, Integer> keywordsCount = new HashMap<>();
         for (Text value : keywords) {
