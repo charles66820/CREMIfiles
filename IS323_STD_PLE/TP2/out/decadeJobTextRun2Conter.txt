@@ -1,4 +1,4 @@
-File System Counters
+	File System Counters
 		FILE: Number of bytes read=24362368
 		FILE: Number of bytes written=49458190
 		FILE: Number of read operations=0
@@ -13,14 +13,14 @@ File System Counters
 		Launched map tasks=2
 		Launched reduce tasks=1
 		Rack-local map tasks=2
-		Total time spent by all maps in occupied slots (ms)=103482
-		Total time spent by all reduces in occupied slots (ms)=35868
-		Total time spent by all map tasks (ms)=17247
-		Total time spent by all reduce tasks (ms)=5978
-		Total vcore-milliseconds taken by all map tasks=17247
-		Total vcore-milliseconds taken by all reduce tasks=5978
-		Total megabyte-milliseconds taken by all map tasks=105965568
-		Total megabyte-milliseconds taken by all reduce tasks=36728832
+		Total time spent by all maps in occupied slots (ms)=134178
+		Total time spent by all reduces in occupied slots (ms)=46794
+		Total time spent by all map tasks (ms)=22363
+		Total time spent by all reduce tasks (ms)=7799
+		Total vcore-milliseconds taken by all map tasks=22363
+		Total vcore-milliseconds taken by all reduce tasks=7799
+		Total megabyte-milliseconds taken by all map tasks=137398272
+		Total megabyte-milliseconds taken by all reduce tasks=47917056
 	Map-Reduce Framework
 		Map input records=123490
 		Map output records=1060964
@@ -37,15 +37,15 @@ File System Counters
 		Shuffled Maps =2
 		Failed Shuffles=0
 		Merged Map outputs=2
-		GC time elapsed (ms)=1147
-		CPU time spent (ms)=23720
-		Physical memory (bytes) snapshot=5849358336
-		Virtual memory (bytes) snapshot=18369867776
-		Total committed heap usage (bytes)=6288834560
-		Peak Map Physical memory (bytes)=2739019776
-		Peak Map Virtual memory (bytes)=5517152256
-		Peak Reduce Physical memory (bytes)=522100736
-		Peak Reduce Virtual memory (bytes)=7338885120
+		GC time elapsed (ms)=1168
+		CPU time spent (ms)=28810
+		Physical memory (bytes) snapshot=5838446592
+		Virtual memory (bytes) snapshot=18389118976
+		Total committed heap usage (bytes)=6287261696
+		Peak Map Physical memory (bytes)=2738548736
+		Peak Map Virtual memory (bytes)=5538398208
+		Peak Reduce Physical memory (bytes)=510648320
+		Peak Reduce Virtual memory (bytes)=7337889792
 	Shuffle Errors
 		BAD_ID=0
 		CONNECTION=0
