@@ -67,7 +67,15 @@ TODO: do the modification.
 
 ## Report
 
-- present and explain your solution in details.
+TODO: the expected size
+J'ai calculé la taille des données aux quelle je m'attendé pour m'assuré du résultat.
+
+le premier job à 4 mapper et 2 reducer. %TODO: Map-Reduce jobs check data
+
+TODO: performance is expected to change if we increase/decrease
+
 - analyze your solution: what is the expected size of intermediate and output data, how many Map-Reduce jobs were used and why, how many reducers were used in each job and why, how its performance is expected to change if we increase/decrease the number of available machines and/or papers, etc.
-- discuss intermediate data representation: text vs. integer values (for counters). You may, for example, add some results that compare alternatives to support your choice.
-- if relevant, discuss the limitations of your solutions and how it could be improved.
+
+TODO: discuss intermediate data representation: text vs. integer values (for counters).
+
+TODO: if relevant, discuss the limitations of your solutions and how it could be improved.
