@@ -1,0 +1,60 @@
+	File System Counters
+		FILE: Number of bytes read=1023219210
+		FILE: Number of bytes written=2058664092
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=6560310984
+		HDFS: Number of bytes written=5592127
+		HDFS: Number of read operations=152
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+	Job Counters 
+		Launched map tasks=49
+		Launched reduce tasks=1
+		Data-local map tasks=36
+		Rack-local map tasks=13
+		Total time spent by all maps in occupied slots (ms)=9305796
+		Total time spent by all reduces in occupied slots (ms)=473646
+		Total time spent by all map tasks (ms)=1550966
+		Total time spent by all reduce tasks (ms)=78941
+		Total vcore-milliseconds taken by all map tasks=1550966
+		Total vcore-milliseconds taken by all reduce tasks=78941
+		Total megabyte-milliseconds taken by all map tasks=9529135104
+		Total megabyte-milliseconds taken by all reduce tasks=485013504
+	Map-Reduce Framework
+		Map input records=5186580
+		Map output records=44560488
+		Map output bytes=934091970
+		Map output materialized bytes=1023219498
+		Input split bytes=5586
+		Combine input records=0
+		Combine output records=0
+		Reduce input groups=7
+		Reduce shuffle bytes=1023219498
+		Reduce input records=44560488
+		Reduce output records=168787
+		Spilled Records=89120976
+		Shuffled Maps =49
+		Failed Shuffles=0
+		Merged Map outputs=49
+		GC time elapsed (ms)=75248
+		CPU time spent (ms)=1656680
+		Physical memory (bytes) snapshot=135489966080
+		Virtual memory (bytes) snapshot=277910904832
+		Total committed heap usage (bytes)=152228593664
+		Peak Map Physical memory (bytes)=2754568192
+		Peak Map Virtual memory (bytes)=5540118528
+		Peak Reduce Physical memory (bytes)=1672077312
+		Peak Reduce Virtual memory (bytes)=7334625280
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=6560305398
+	File Output Format Counters 
+		Bytes Written=5592127

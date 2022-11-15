@@ -1,0 +1,59 @@
+	File System Counters
+		FILE: Number of bytes read=5929958
+		FILE: Number of bytes written=12347071
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=5592253
+		HDFS: Number of bytes written=6961050
+		HDFS: Number of read operations=8
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+	Job Counters 
+		Launched map tasks=1
+		Launched reduce tasks=1
+		Rack-local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=41844
+		Total time spent by all reduces in occupied slots (ms)=34002
+		Total time spent by all map tasks (ms)=6974
+		Total time spent by all reduce tasks (ms)=5667
+		Total vcore-milliseconds taken by all map tasks=6974
+		Total vcore-milliseconds taken by all reduce tasks=5667
+		Total megabyte-milliseconds taken by all map tasks=42848256
+		Total megabyte-milliseconds taken by all reduce tasks=34818048
+	Map-Reduce Framework
+		Map input records=168787
+		Map output records=168786
+		Map output bytes=5592232
+		Map output materialized bytes=5929958
+		Input split bytes=126
+		Combine input records=0
+		Combine output records=0
+		Reduce input groups=130364
+		Reduce shuffle bytes=5929958
+		Reduce input records=168786
+		Reduce output records=130365
+		Spilled Records=337572
+		Shuffled Maps =1
+		Failed Shuffles=0
+		Merged Map outputs=1
+		GC time elapsed (ms)=761
+		CPU time spent (ms)=12180
+		Physical memory (bytes) snapshot=3149230080
+		Virtual memory (bytes) snapshot=12847079424
+		Total committed heap usage (bytes)=3478126592
+		Peak Map Physical memory (bytes)=2582609920
+		Peak Map Virtual memory (bytes)=5509824512
+		Peak Reduce Physical memory (bytes)=566620160
+		Peak Reduce Virtual memory (bytes)=7337254912
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=5592127
+	File Output Format Counters 
+		Bytes Written=6961050
