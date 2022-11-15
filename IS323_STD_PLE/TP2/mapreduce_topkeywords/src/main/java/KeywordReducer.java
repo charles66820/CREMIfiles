@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class KeywordReducer extends Reducer<Text, Text, NullWritable, Text> {
-    private final TreeMultimap<Integer, Map<String, String>> topKeywords = TreeMultimap.create(Ordering.natural().reverse(), (m1, m2) -> 1);
+    private final TreeMultimap<Integer, Map<String, String>> topKeywords = TreeMultimap.create(Ordering.natural().reverse(), Comparator.comparing(m -> m.get("keyword")));
     SortedSet<Integer> decateSet = new TreeSet<>();
 
     public void reduce(Text keyword, Iterable<Text> values, Context context) {

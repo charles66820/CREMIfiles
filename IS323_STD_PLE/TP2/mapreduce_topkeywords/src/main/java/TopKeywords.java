@@ -27,7 +27,6 @@ public class TopKeywords {
             keywordTopOutputFolder = args[3];
         }
 
-
         Configuration decadeConf = new Configuration();
         Job decadeJob = Job.getInstance(decadeConf, "TopDecade");
         decadeJob.setJarByClass(TopKeywords.class);
