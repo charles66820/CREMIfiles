@@ -2,14 +2,6 @@
 
 ## notes
 
-jar folder : `/usr/hdp/current/hadoop-mapreduce-client/`
-
-list tasks :
-
-```bash
-yarn application -list -appStates ALL
-```
-
 `/user/fzanonboito/CISD/IEEEdata.csv`
 
 ## Data processing
@@ -61,10 +53,8 @@ yarn jar topkeywords-0.0.1.jar IEEE_Newdata.csv decadeTopOutput decadeTopOutput_
 
 Pour que cela fontionne il faut ajouté un mapper qui fait que chargé les donnés déjà calculé en plus des nouvlle donnés. Le reste devais fonctionné correctement.
 
-TODO:
-Pb copie sans modifications des décennie précédente dans le nouveaux dossier de sortie `decadeTopOutput_withNewData`.
 
-TODO: do the modification.
+TODO: do the modification. `decadeTopOutput_withNewData`.
 
 ## Report
 
@@ -75,11 +65,23 @@ Avec un script python j'ai déterminé que le nombre de mots clef différant est
 
 J'ai aussi déterminé que le nombre de mots clef total (avec duplication) qui est `1060969`. J’obtiens `1060964` avec les compteurs (Map output records et Reduce input records) qui montre les données qui passe du mapper `DecadeMapper` au reducer `KeywordReducer`, il y à une différance de `5` mais je n'ai pas trouvé pourquoi.
 
-### différant 
+### différant / perfs
 
-TODO: performance is expected to change if we increase/decrease
+J'ai testé mon implémentation en augmentent artificiellement le nombre de papiers. Pour augmenté le nombre de papiés j'ai concaténé plusieurs fois le fichier `IEEEdata.csv` avec lui même. Le fichier est passé de `123490` lignes à `5186580` lignes.
+J'ai vue (la diff)
+Le premier job `TopDecade` lis beaucoup plus de données et en écrit plus. Il utilise maintenant `49` tâches mapper et toujours `1` tâche reducer. Les données manipulé par le mapper et transmi au reducer sont bien plus nombreuse par-contre le nombre de données en sortie du reducer `DecadeReducer` reste le même car il y à toujours le même nombres de mots lié au même décennie. Le temp d'éxécution est de `1`minute `21`secondes ce qui est `1`minute plus long que le temp d'éxécution avec les données de base qui est `21`secondes. Quand j'augmente le nombre de tâches reducer le temps d'éxécution diminue, il passe à `48`secondes avec `8` tâches (la différance avec les données de base est plus que de `27` secondes). le fait d'augmenté le nombre de tâches fait peut augmenté le nombre d'octets écrit mais augmente le nombre de fichiers. Ces augmentation on un impacte très faible sur le job suivant (`TopKeyword`), de moins d'une secondes pour `8` tâches.
 
-- analyze your solution: what is the expected size of intermediate and output data, how many Map-Reduce jobs were used and why, how many reducers were used in each job and why, how its performance is expected to change if we increase/decrease the number of available machines and/or papers, etc.
+> `NB_REDUCE_TASKS=8 yarn jar topkeywords-0.0.1.jar testIEEEdata.csv decadeTopOutput keywordTopOutput`
+
+J'ai testé différant nombres de tâches reducer pour trouvés le mailleur. J'ai fait qu'une seul éxécution par nombre.
+
+| nombre de tâches  | 1  | 6  | 8  | 10 | 12 | 14 | 16 | 18 | 20 | 48 |
+|:------------------|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| temps en secondes | 81 | 54 | 48 | 38 | 38 | 36 | 36 | 35 | 34 | 39 |
+
+Plus on à de tâches et plus le reducer `DecadeReducer` vas vite. La limite de ce gain de vitésse est certainement le nombre de mapper.
+
+Le second job `TopKeyword` lis est écrit plus de données car les valeurs sont plus grandes. Il utilise toujours `1` tâche mapper et `1` tâche reducer. Le temp d'éxécution ne change pas est reste de `18`secondes. Quand on défini plus de reducer au job `TopDecade` il y a plus de fichiers donc plus de mapper mais le temps d'éxécution est le même.
 
 ### perf int text
 
@@ -89,6 +91,10 @@ Conteur du nombre d'octets écrit par le job `TopDecade`. Version Text à gauche
 
 ![textVsIntWritable](textVsIntWritable.png)
 
-Par-contre je n'ai pas vue de différance significatif sur la performance, je ne sais pas si c'est du à mon implémentation on non. J'ai seulement fait 4 run (2 pour la version text et 2 pour la version integer).
+Par-contre je n'ai pas vue de différance significatif sur la performance. Cette différance est du au fait que l'on écrits diréctement les entiés en binaire et non caractéres par caractéres, ce qui fait que les nombre qui on plus de 4 caractéres sont écrit sur 4 octets qu'il pourais rentré largement sur 4 octets en étant sous la form d'un int32. Donc avec plus de données il pourrais y avoir un impact sur les performance car plus d'octets serai écrite. J'ai seulement fait 4 run (2 pour la version text et 2 pour la version integer).
 
-TODO: if relevant, discuss the limitations of your solutions and how it could be improved.
+### limitations
+
+Une limitation de ma solution est que je n'utilise pas de combiner ce qui pourrais faire diminué le temps d'exécution.
+
+Pour le cas ou on veux ajouté de nouvelles donnés sans recalculé les ancienne, ma solution charge toute les donnés et copie dans le nouveaux dossier de sortie certaine décennies qui ne sont pas modifié ce qui peut amené a une perte de performance en lecture / écriture.

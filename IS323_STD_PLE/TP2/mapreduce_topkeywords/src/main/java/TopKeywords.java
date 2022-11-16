@@ -30,6 +30,8 @@ public class TopKeywords {
 
         Configuration decadeConf = new Configuration();
         Job decadeJob = Job.getInstance(decadeConf, "TopDecade");
+        String nbReduceTasks = System.getenv("NB_REDUCE_TASKS");
+        if (nbReduceTasks != null) decadeJob.setNumReduceTasks(Integer.parseInt(nbReduceTasks));
         decadeJob.setJarByClass(TopKeywords.class);
 
         FileInputFormat.addInputPath(decadeJob, new Path(dataCsvFile));
