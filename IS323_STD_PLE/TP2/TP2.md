@@ -58,11 +58,11 @@ J'ai créé un fichier `IEEE_Newdata.csv` avec des faux articles qui ont pour mo
 
 ![Alt text](img/dataOutTopDiff.png)
 
-On vois que sur le top de la décénnie `2000-2010` il n'y à pas eu de changement dans les données :
+On voit que sur le top de la décennie `2000-2010` il n'y a pas eu de changement dans les données :
 
 ![Alt text](img/dataOutTopDiff200.png)
 
-Pour finir on vois que sur le top de la décénnie `2020-2030` à bien été mis à jour :
+Pour finir, on voit que sur le top de la décennie `2020-2030` a bien été mis à jour :
 
 ![Alt text](img/dataOutTopDiff202.png)
 
@@ -70,12 +70,12 @@ Pour finir on vois que sur le top de la décénnie `2020-2030` à bien été mis
 
 ### La taille des données
 
-J'ai calculé la taille des données aux quelle je m'attendé pour m'assuré du résultat.
-Avec un script python j'ai déterminé que le nombre de mots-clefs différant est `130364`. J’obtiens `130365` avec le compteur (Reduce output records) de mon reducer `KeywordReducer`, il y à une différance de `1` car j'écrit une entéte dans le fichier de sortie.
+J'ai calculé la taille des données auxquelles je m'attendé pour m'assurer du résultat.
+Avec un script python, j'ai déterminé que le nombre de mots-clefs différant est `130364`. J’obtiens `130365` avec le compteur (`Reduce output records`) de mon reducer `KeywordReducer`, il y a une différence de `1` qui est du a une entête que j'écris dans le fichier de sortie.
 
-J'ai aussi déterminé que le nombre de mots-clefs total (avec duplication) qui est `1060969`. J’obtiens `1060964` avec les compteurs (Map output records et Reduce input records) qui montre les données qui passe du mapper `DecadeMapper` au reducer `KeywordReducer`, il y à une différance de `5` mais je n'ai pas trouvé pourquoi.
+J'ai aussi déterminé que le nombre de mots-clefs total (avec duplication) qui est `1060969`. J’obtiens `1060964` avec les compteurs (`Map output records` et `Reduce input records`) qui montrent les données qui passent du mapper `DecadeMapper` au reducer `KeywordReducer`, il y a une différence de `5` mais je n'ai pas trouvé pourquoi.
 
-### différant / performances
+### Différant / performances
 
 J'ai testé mon implémentation en augmentent artificiellement le nombre de papiers. Pour augmenté le nombre de papiés j'ai concaténé plusieurs fois le fichier `IEEEdata.csv` avec lui même. Le fichier est passé de `123490` lignes à `5186580` lignes.
 J'ai vue (la diff) %TODO: rm
