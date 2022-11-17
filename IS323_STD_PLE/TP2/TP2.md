@@ -26,20 +26,20 @@ Le second job récupère les données par décennies du job précédent pour fai
 
 - Le mapper `DecadeMapper` vérifie que les données sont bien présente et que le nombre de papier est bien un entier, ensuite, il retourne en clef le mot-clef et en valeur le nombre de papier par décennie ainsi que la décennie en question et le top dans la décennie. Il peut y avoir plusieurs mapper de ce type en parallèle.
 
-- Le reducer `KeywordReducer` fait la somme du nombre de papier pour chaque mot-clef, il regroupe aussi les données. Ensuite, il fait le top grâce à la somme totale. Ce reducer retourne les données sous la forme d'une ligne CSV séparée par des points-virgules. Cette ligne a pour éléments le mot-clef, le top global, le nombre global de papier ou apparaît le mot-clef ainsi que chaque top et nombre papier par décennie. J'ai décidé de mettre le top de chaque décennie dans le fichier final et donc de garder toutes les lignes de tous les mots. Je pense que se chois n'impacte pas les performances, mais juste la taille du fichier final. Je trouve qu'il est plus pratique de voir les tops de chaque décennie dans ce fichier, car il suffit de trier la colonne voulue. Les donnés sont trillé du mot-clef le plus fréquent aux moins fréquents puis par ordre alphabétique pour les mots-clefs. Il ne peut y avoir qu'un seul reducer de ce type, c'est nécessaire pour faire le top global.
+- Le reducer `KeywordReducer` fait la somme du nombre de papier pour chaque mot-clef, il regroupe aussi les données. Ensuite, il fait le top grâce à la somme totale. Ce reducer retourne les données sous la forme d'une ligne CSV séparée par des points-virgules. Cette ligne a pour éléments le mot-clef, le top global, le nombre global de papier ou apparaît le mot-clef ainsi que chaque top et nombre de papier par décennie. J'ai décidé de mettre le top de chaque décennie dans le fichier final et donc de garder toutes les lignes de tous les mots. Je pense que se chois n'impacte pas les performances, mais juste la taille du fichier final. Je trouve qu'il est plus pratique de voir les tops de chaque décennie dans ce fichier, car il suffit de trier la colonne voulue. Les donnés sont trillé du mot-clef le plus fréquent aux moins fréquents puis par ordre alphabétique pour les mots-clefs. Il ne peut y avoir qu'un seul reducer de ce type, c'est nécessaire pour faire le top global.
 
 Les données finales qu'on obtient :
 
 ![Alt text](img/dataOutTop.png)
 
-Il est facile de trier le top d'une décennie en particulier. Par exemple avec les années `2000-2010` :
+Il est facile de trier le top d'une décennie en particulier avec un tableur, python... Par exemple avec les années `2000-2010` :
 
 ![Alt text](img/dataOutTop200.png)
 
 Exemple d'où visualiser le fichier de sortie :
 
 ```bash
-hdfs dfs -cat keywordTopOutput/part-r-00000
+hdfs dfs -head keywordTopOutput/part-r-00000
 ```
 
 ## 2. Ajout de nouvelle données
@@ -62,7 +62,7 @@ On voit que sur le top de la décennie `2000-2010` il n'y a pas eu de changement
 
 ![Alt text](img/dataOutTopDiff200.png)
 
-Pour finir, on voit que sur le top de la décennie `2020-2030` a bien été mis à jour :
+Pour finir, on voit que le top de la décennie `2020-2030` a bien été mis à jour :
 
 ![Alt text](img/dataOutTopDiff202.png)
 
@@ -75,7 +75,7 @@ Avec un script python, j'ai déterminé que le nombre de mots-clefs différant e
 
 J'ai aussi déterminé que le nombre de mots-clefs total (avec duplication) qui est `1060969`. J’obtiens `1060964` avec les compteurs (`Map output records` et `Reduce input records`) qui montrent les données qui passent du mapper `DecadeMapper` au reducer `KeywordReducer`, il y a une différence de `5` mais je n'ai pas trouvé pourquoi.
 
-### Différant / performances
+### Performances
 
 J'ai testé mon implémentation en augmentant artificiellement le nombre de papiers. Pour augmenter le nombre de papier, j'ai concaténé plusieurs fois le fichier `IEEEdata.csv` avec lui-même. Le fichier est passé de `123490` lignes à `5186580` lignes.
 J'ai vu les différences suivantes :
