@@ -17,10 +17,19 @@ public class DecadeReducer extends Reducer<IntWritable, Text, NullWritable, Text
     public void reduce(IntWritable decade, Iterable<Text> keywords, Context context) throws IOException, InterruptedException {
         // Count number of paper for each keyword
         Map<String, Integer> keywordsCount = new HashMap<>();
+//        boolean isNew = false;
         for (Text value : keywords) {
             String keyword = value.toString();
-            keywordsCount.merge(keyword, 1, Integer::sum);
+            String[] keywordsTab = keyword.split(";");
+//            if (keywordsTab.length == 1) isNew = true;
+            keywordsCount.merge(keywordsTab[0], 1, Integer::sum);
         }
+
+//        if (!isNew) {
+//            for (Text keyword : keywords)
+//                context.write(NullWritable.get(), new Text(decade + ";" + keyword.toString()));
+//            return;
+//        }
 
         // Top keywords by decades
         final TreeMultimap<Integer, String> topKeywords = TreeMultimap.create(Ordering.natural().reverse(), Ordering.natural());

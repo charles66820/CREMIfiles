@@ -48,7 +48,7 @@ Pour prendre en compte l'ajout de nouveau papier publié après la première exe
 Par example avec la commande si dessous on à les nouvelle donnés (`IEEE_Newdata.csv`) suivie des données déjà calculé (dans `decadeTopOutput`) puis le dossier qui recevra les décennies mis à jour et toujours le dossier de sortie final :
 
 ```bash
-yarn jar topkeywords-0.0.1.jar IEEE_Newdata.csv decadeTopOutput decadeTopOutput_withNewData keywordTopOutput
+yarn jar topkeywords-0.0.1.jar IEEE_Newdata.csv decadeTopOutput decadeTopOutput_withNewData keywordTopOutput2
 ```
 
 Pour que cela fontionne il faut ajouté un mapper qui fait que chargé les donnés déjà calculé en plus des nouvlle donnés. Le reste devais fonctionné correctement.

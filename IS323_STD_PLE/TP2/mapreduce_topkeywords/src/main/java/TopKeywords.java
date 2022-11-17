@@ -5,6 +5,7 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
@@ -16,7 +17,7 @@ public class TopKeywords {
             System.exit(128);
         }
         String dataCsvFile = args[0];
-        String decadeTopInputFolder;
+        String decadeTopInputFolder = null;
         String decadeTopOutputFolder;
         String keywordTopOutputFolder;
         if (args.length == 3) {
@@ -34,10 +35,14 @@ public class TopKeywords {
         if (nbReduceTasks != null) decadeJob.setNumReduceTasks(Integer.parseInt(nbReduceTasks));
         decadeJob.setJarByClass(TopKeywords.class);
 
-        FileInputFormat.addInputPath(decadeJob, new Path(dataCsvFile));
-        decadeJob.setInputFormatClass(TextInputFormat.class);
-
-        decadeJob.setMapperClass(RawDataMapper.class);
+        if (decadeTopInputFolder != null) {
+            MultipleInputs.addInputPath(decadeJob, new Path(dataCsvFile), TextInputFormat.class, RawDataMapper.class);
+            MultipleInputs.addInputPath(decadeJob, new Path(decadeTopInputFolder), TextInputFormat.class, ExistingDataDecadeMapper.class);
+        } else {
+            FileInputFormat.addInputPath(decadeJob, new Path(dataCsvFile));
+            decadeJob.setInputFormatClass(TextInputFormat.class);
+            decadeJob.setMapperClass(RawDataMapper.class);
+        }
         decadeJob.setMapOutputKeyClass(IntWritable.class);
         decadeJob.setMapOutputValueClass(Text.class);
 
