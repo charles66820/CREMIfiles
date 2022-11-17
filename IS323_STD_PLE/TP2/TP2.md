@@ -105,6 +105,6 @@ Par-contre je n'ai pas vue de différance significatif sur la performance. Cette
 
 ## Les limitations
 
-Une limitation de ma solution est que je n'utilise pas de combiner ce qui pourrais faire diminué le temps d'exécution.
+Une limitation de ma solution est que je n'utilise pas de `combiner` ce qui pourrait faire diminuer le temps d'exécution.
 
-Pour le cas ou on veux ajouté de nouvelles donnés sans recalculé les ancienne, ma solution charge toute les donnés et copie dans le nouveaux dossier de sortie certaine décennies qui ne sont pas modifié ce qui peut amené a une perte de performance en lecture / écriture.
+Pour le cas où on veut ajouter de nouvelles donnés sans recalculer les anciennes, ma solution charge toute les donnés et copie dans le nouveau dossier de sortie certaine décennies qui ne sont pas modifiées ce qui peut amener à une perte de performance en lecture/écriture.
