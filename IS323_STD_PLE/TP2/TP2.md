@@ -25,7 +25,7 @@ Le premier job récupère les mots clef et fait le top pour les décennies, pour
 
 - Mon mapper `RawDataMapper` traite les données en enlevents les lignes sans mots clef ou sans date et retourne en clef la décennies et en valeur un mots clef. Pour calculé la décennie je fais simplement une division sctricte par 10 pour récupéré la décennies par rapport a l'ans 0 (e.g. 1998 => 199, -212 => -21), cette solution est inexacte pour les date entre `-10` et `10` car cela donne la décennie `0` mais ce cas n'arrive pas dans nos données qui commance à partire de l'année `1962`. Il peut y avoir plusieurs mapper de ce type en parallel.
 
-![Alt text](nullKw.png)
+![Alt text](img/nullKw.png)
 
 - Mon réduceur `DecadeReducer` compte pour chaque décennies le nombre de fois qu'un mots clef apparé puis fait le top de chaque mots clef. La sortie de ce réducer est sous la forme d'une ligne CSV séparé par des points virgule. Le premié élément est la décennie suivie du mots clef puis du nombre de papier ou il apparé dans la décennie et pour finir le top dans la décennie. Les lignes de chaque décennies sont trillé du plus féquant aux moins frécant puis par ordre alphabetique pour les mots clef par-contre les décennies peuvet être dans n'importe quelle ordre mais toute les linges d'une décennie ce suive. Il peut y avoir plusieurs reducer de ce type en parallel et chacun produit sont propre fichier. Je garde le nombre de papier où apparé le mot clef pour permetre le top global.
 
@@ -34,6 +34,15 @@ Le second job récupère les données par décennies du job précédent pour fai
 - Mon mapper `DecadeMapper` vérifie que les données sont bien présente et que nombre de papier est bien un entier ensuite il retourne en clef le mots clef et en valeur le nombre de papier par décennie ainsi que la décennie en question et le top dans la décennie. Il peut y avoir plusieurs mapper des ce type en parallel.
 
 - Mon réduceur `KeywordReducer` fait la some du nombre de papier pour chaque mots clef, il regroupe aussi les données. Ensuiste il fait le top grace à la some total. Ce réducer retourne les donnée sous la forme d'une ligne CSV séparé par des points virgule. Cette ligne à pour éléments le mots clef, le top glibale, le nombre globale de papier ou apparé le mots ainsi que que chaque top et nomber papier par décennie. J'ai decidé de mettre le top de chaque décennie dans le fichier final et donc de gardé toute les lignes de tous les mots. Je pense que ce chois n'impacte pas les performance mais juste la taille du fichier final. Je touve qu'il est plus pratique de voire les top de chaque décennie dans ce fichier car il suffie de trillé la colonne voulue. Les donnés sont trillé du plus féquant aux moins frécant puis par ordre alphabetique pour les mots clef. Il peut y avoir qu'**un** seul reducer de ce type, c'est néssaisaire pour faire le top.
+
+Les données final qu'on obtien :
+
+![Alt text](img/dataOutTop.png)
+
+Il est facile de triller le top d'une décénnie en particulié. Par exemple avec les années `2000-2010` :
+
+![Alt text](img/dataOutTop200.png)
+
 
 Example de où visualisé le fichier de sortie :
 
@@ -51,10 +60,19 @@ Par example avec la commande si dessous on à les nouvelle donnés (`IEEE_Newdat
 yarn jar topkeywords-0.0.1.jar IEEE_Newdata.csv decadeTopOutput decadeTopOutput_withNewData keywordTopOutput2
 ```
 
-Pour que cela fontionne il faut ajouté un mapper qui fait que chargé les donnés déjà calculé en plus des nouvlle donnés. Le reste devais fonctionné correctement.
+Pour que cela fontionne il faut ajouté un nouveau mapper (`ExistingDataDecadeMapper`) qui fait que chargé les donnés déjà calculé. J'ai ajouté ce nouveau mapper au job `TopDecade` sur l'argument `decadeTopOutput` et on garde l'ancien mapper pour l'argument `IEEE_Newdata.csv`. J'utilise un `MultipleInputs` pour avoir plusieurs mappers sur le job `TopDecade`. J'ai aussi modifier le reducer `DecadeReducer` pour qu'il ignore les décénnie déja calculer.
 
+J'ai crée un fichier `IEEE_Newdata.csv` avec des faux articles qui on pour mots clef `Energy consumption`, `Hardware` et `Software`. Après l'execution on vois que le mots clef `Energy consumption` passe bien du top `34` au top `20` :
 
-TODO: do the modification. `decadeTopOutput_withNewData`.
+![Alt text](img/dataOutTopDiff.png)
+
+On vois que sur le top de la décénnie `2000-2010` il n'y à pas eu de changement dans les données :
+
+![Alt text](img/dataOutTopDiff200.png)
+
+Pour finir on vois que sur le top de la décénnie `2020-2030` à bien été mis à jour :
+
+![Alt text](img/dataOutTopDiff202.png)
 
 ## Report
 
@@ -89,7 +107,7 @@ J'ai comparais les représentations intermédiaire des données. J'ai vue une se
 
 Conteur du nombre d'octets écrit par le job `TopDecade`. Version Text à gauche et version Integer à droit :
 
-![textVsIntWritable](textVsIntWritable.png)
+![textVsIntWritable](img/textVsIntWritable.png)
 
 Par-contre je n'ai pas vue de différance significatif sur la performance. Cette différance est du au fait que l'on écrits diréctement les entiés en binaire et non caractéres par caractéres, ce qui fait que les nombre qui on plus de 4 caractéres sont écrit sur 4 octets qu'il pourais rentré largement sur 4 octets en étant sous la form d'un int32. Donc avec plus de données il pourrais y avoir un impact sur les performance car plus d'octets serai écrite. J'ai seulement fait 4 run (2 pour la version text et 2 pour la version integer).
 
