@@ -77,21 +77,24 @@ J'ai aussi déterminé que le nombre de mots-clefs total (avec duplication) qui 
 
 ### Différant / performances
 
-J'ai testé mon implémentation en augmentent artificiellement le nombre de papiers. Pour augmenté le nombre de papiés j'ai concaténé plusieurs fois le fichier `IEEEdata.csv` avec lui même. Le fichier est passé de `123490` lignes à `5186580` lignes.
-J'ai vue (la diff) %TODO: rm
-Le premier job `TopDecade` lis beaucoup plus de données et en écrit plus. Il utilise maintenant `49` tâches mapper et toujours `1` tâche reducer. Les données manipulé par le mapper et transmi au reducer sont bien plus nombreuse par-contre le nombre de données en sortie du reducer `DecadeReducer` reste le même car il y à toujours le même nombres de mots lié au même décennie. Le temp d'éxécution est de `1`minute `21`secondes ce qui est `1`minute plus long que le temp d'éxécution avec les données de base qui est `21`secondes. Quand j'augmente le nombre de tâches reducer le temps d'éxécution diminue, il passe à `48`secondes avec `8` tâches (la différance avec les données de base est plus que de `27` secondes). le fait d'augmenté le nombre de tâches fait peut augmenté le nombre d'octets écrit mais augmente le nombre de fichiers. Ces augmentation on un impacte très faible sur le job suivant (`TopKeyword`), de moins d'une secondes pour `8` tâches.
+J'ai testé mon implémentation en augmentant artificiellement le nombre de papiers. Pour augmenter le nombre de papier, j'ai concaténé plusieurs fois le fichier `IEEEdata.csv` avec lui-même. Le fichier est passé de `123490` lignes à `5186580` lignes.
+J'ai vu les différences suivantes :
+
+- Le premier job `TopDecade` lis beaucoup plus de données et en écrit plus. Il utilise maintenant `49` tâches mapper et toujours `1` tâche reducer.
+- Les données manipulées par le mapper et transmise au reducer sont bien plus nombreuse par contre le nombre de données en sortie du reducer `DecadeReducer` reste le même, car il y a toujours le même nombre de mots lié aux mêmes décennies.
+- Le temps d'exécution est de `1`minute `21`secondes ce qui est `1`minute plus long que le temps d'exécution avec les données de base qui est `21`secondes. Quand j'augmente le nombre de tâches reducer le temps d'exécution diminue, il passe à `48`secondes avec `8` tâches (la différence avec les données de base est plus que de `27` secondes). Le fais d'augmenté le nombre de tâches fait peut augmenter le nombre d'octets écrit, mais augmente le nombre de fichiers. Ces augmentations ont un impact très faible sur le job suivant (`TopKeyword`), de moins d'une seconde pour `8` tâches.
 
 > `NB_REDUCE_TASKS=8 yarn jar topkeywords-0.0.1.jar testIEEEdata.csv decadeTopOutput keywordTopOutput`
 
-J'ai testé différant nombres de tâches reducer pour trouvés le mailleur. J'ai fait qu'une seul éxécution par nombre.
+J'ai testé différant nombre de tâches reducer pour trouver le meilleur. Je n'ai fait qu'une seule exécution par nombre de tâches.
 
 | nombre de tâches  | 1  | 6  | 8  | 10 | 12 | 14 | 16 | 18 | 20 | 48 |
 |:------------------|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
 | temps en secondes | 81 | 54 | 48 | 38 | 38 | 36 | 36 | 35 | 34 | 39 |
 
-Plus on à de tâches et plus le reducer `DecadeReducer` vas vite. La limite de ce gain de vitésse est certainement le nombre de mapper.
+Plus on a de tâches et plus le reducer `DecadeReducer` vas vite. La limite de ce gain de vitesse est certainement le nombre de mapper.
 
-Le second job `TopKeyword` lis est écrit plus de données car les valeurs sont plus grandes. Il utilise toujours `1` tâche mapper et `1` tâche reducer. Le temp d'éxécution ne change pas est reste de `18`secondes. Quand on défini plus de reducer au job `TopDecade` il y a plus de fichiers donc plus de mapper mais le temps d'éxécution est le même.
+Le second job `TopKeyword` lis est écrit plus de données, car les valeurs sont plus grandes. Il utilise toujours `1` tâche mapper et `1` tâche reducer. Le temps d'exécution ne change pas est reste de `18`secondes. Quand on défini plus de reducer au job `TopDecade` il y a plus de fichiers donc plus de mapper, mais le temps d'exécution est le même.
 
 ### performances entre les représentation des données `IntWritalbe` et `Text`
 
