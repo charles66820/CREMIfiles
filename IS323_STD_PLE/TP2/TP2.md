@@ -28,33 +28,33 @@ Le second job récupère les données par décennies du job précédent pour fai
 
 - Le reducer `KeywordReducer` fait la somme du nombre de papier pour chaque mot-clef, il regroupe aussi les données. Ensuite, il fait le top grâce à la somme totale. Ce reducer retourne les données sous la forme d'une ligne CSV séparée par des points-virgules. Cette ligne a pour éléments le mot-clef, le top global, le nombre global de papier ou apparaît le mot-clef ainsi que chaque top et nombre papier par décennie. J'ai décidé de mettre le top de chaque décennie dans le fichier final et donc de garder toutes les lignes de tous les mots. Je pense que se chois n'impacte pas les performances, mais juste la taille du fichier final. Je trouve qu'il est plus pratique de voir les tops de chaque décennie dans ce fichier, car il suffit de trier la colonne voulue. Les donnés sont trillé du mot-clef le plus fréquent aux moins fréquents puis par ordre alphabétique pour les mots-clefs. Il ne peut y avoir qu'un seul reducer de ce type, c'est nécessaire pour faire le top global.
 
-Les données final qu'on obtien :
+Les données finales qu'on obtient :
 
 ![Alt text](img/dataOutTop.png)
 
-Il est facile de triller le top d'une décénnie en particulié. Par exemple avec les années `2000-2010` :
+Il est facile de trier le top d'une décennie en particulier. Par exemple avec les années `2000-2010` :
 
 ![Alt text](img/dataOutTop200.png)
 
-Example de où visualisé le fichier de sortie :
+Exemple d'où visualiser le fichier de sortie :
 
 ```bash
 hdfs dfs -cat keywordTopOutput/part-r-00000
 ```
 
-## 2. ajout de nouvelle données
+## 2. Ajout de nouvelle données
 
-Pour prendre en compte l'ajout de nouveau papier publié après la première execution j'ai ajouté un quatième argument. Celui-ci permet de chargé les données des décennies déjà calculé.
+Pour prendre en compte l'ajout de nouveau papier publié après la première exécution, j'ai ajouté un quatrième argument. Celui-ci permet de charger les données des décennies déjà calculées.
 
-Par example avec la commande si dessous on à les nouvelle donnés (`IEEE_Newdata.csv`) suivie des données déjà calculé (dans `decadeTopOutput`) puis le dossier qui recevra les décennies mis à jour et toujours le dossier de sortie final :
+Par exemple avec la commande ci-dessous, on a les nouvelles données (`IEEE_Newdata.csv`) suivie des données déjà calculé (dans `decadeTopOutput`) puis le dossier qui recevra les décennies mis à jour et toujours le dossier de sortie final :
 
 ```bash
 yarn jar topkeywords-0.0.1.jar IEEE_Newdata.csv decadeTopOutput decadeTopOutput_withNewData keywordTopOutput2
 ```
 
-Pour que cela fontionne il faut ajouté un nouveau mapper (`ExistingDataDecadeMapper`) qui fait que chargé les donnés déjà calculé. J'ai ajouté ce nouveau mapper au job `TopDecade` sur l'argument `decadeTopOutput` et on garde l'ancien mapper pour l'argument `IEEE_Newdata.csv`. J'utilise un `MultipleInputs` pour avoir plusieurs mappers sur le job `TopDecade`. J'ai aussi modifier le reducer `DecadeReducer` pour qu'il ignore les décénnie déja calculer.
+Pour que l'ajout de nouveau papier publié fonctionne, il faut ajouter un nouveau mapper (`ExistingDataDecadeMapper`) qui vas seulement charger les donnés déjà calculé. J'ai ajouté ce nouveau mapper au job `TopDecade` sur l'argument `decadeTopOutput` et on garde l'ancien mapper pour l'argument `IEEE_Newdata.csv`. J'utilise un `MultipleInputs` pour avoir plusieurs mappers sur le job `TopDecade`. J'ai aussi modifié le reducer `DecadeReducer` pour qu'il ignore les décennies déjà calculées.
 
-J'ai crée un fichier `IEEE_Newdata.csv` avec des faux articles qui on pour mots-clefs `Energy consumption`, `Hardware` et `Software`. Après l'execution on vois que le mots-clefs `Energy consumption` passe bien du top `34` au top `20` :
+J'ai créé un fichier `IEEE_Newdata.csv` avec des faux articles qui ont pour mots-clefs `Energy consumption`, `Hardware` et `Software`. Après l'exécution, on voit que le mots-clefs `Energy consumption` passe bien du top `34` au top `20` :
 
 ![Alt text](img/dataOutTopDiff.png)
 
