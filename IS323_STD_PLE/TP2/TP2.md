@@ -96,15 +96,16 @@ Plus on a de tâches et plus le reducer `DecadeReducer` vas vite. La limite de c
 
 Le second job `TopKeyword` lis est écrit plus de données, car les valeurs sont plus grandes. Il utilise toujours `1` tâche mapper et `1` tâche reducer. Le temps d'exécution ne change pas est reste de `18`secondes. Quand on défini plus de reducer au job `TopDecade` il y a plus de fichiers donc plus de mapper, mais le temps d'exécution est le même.
 
-### performances entre les représentation des données `IntWritalbe` et `Text`
+### Performances entre les représentations des données `IntWritalbe` et `Text`
 
-J'ai comparais les représentations intermédiaire des données. J'ai vue une seul différance qui est le nombre d'octets écrit, `21` octets de plus avec la version integer.
+J'ai comparais les représentations intermédiaires des données. J'ai vu une seul différence qui est le nombre d'octets écrit, `21` octets de plus avec la version `IntWritalbe`.
 
-Conteur du nombre d'octets écrit par le job `TopDecade`. Version Text à gauche et version Integer à droit :
+Conteur du nombre d'octets écrit par le job `TopDecade`. Version `Text` à gauche et version `IntWritalbe` à droite :
 
 ![textVsIntWritable](img/textVsIntWritable.png)
 
-Par-contre je n'ai pas vue de différance significatif sur la performance. Cette différance est du au fait que l'on écrits diréctement les entiés en binaire et non caractéres par caractéres, ce qui fait que les nombre qui on plus de 4 caractéres sont écrit sur 4 octets qu'il pourais rentré largement sur 4 octets en étant sous la form d'un int32. Donc avec plus de données il pourrais y avoir un impact sur les performance car plus d'octets serai écrite. J'ai seulement fait 4 run (2 pour la version text et 2 pour la version integer).
+La différence qui peut exister est due au fait que l'on écrits directement les entiers en binaire et non caractères par caractères, ce qui fait que les nombres qui ont plus de 4 caractères sont écrit sur 4 octets alors qu'il pourrait rentrer largement sur 4 octets en étant sous la forme d'un `int32`. Donc avec plus de données, il pourrait y avoir un impact sur les performances, car plus d'octets seraient écrits.
+Par contre je n'ai pas vu de différence significative sur la performance. J'ai seulement fait 4 run (2 pour la version `Text` et 2 pour la version `IntWritalbe`).
 
 ## Les limitations
 
