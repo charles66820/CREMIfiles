@@ -70,8 +70,8 @@ Pour finir, on voit que le top de la décennie `2020-2030`, a bien été mis à 
 
 ### La taille des données
 
-J'ai calculé la taille des données auxquelles je m'attendé pour m'assurer du résultat.
-Avec un script python, j'ai déterminé que le nombre de mots-clefs différant est `130364`. J’obtiens `130365` avec le compteur (`Reduce output records`) de mon reducer `KeywordReducer`, il y a une différence de `1` qui est du a une entête que j'écris dans le fichier de sortie.
+J'ai calculé la taille des données auxquelles je m'attendais pour m'assurer du résultat.
+Avec un script python, j'ai déterminé que le nombre de mots-clefs différents est `130364`. J’obtiens `130365` avec le compteur (`Reduce output records`) de mon reducer `KeywordReducer`, il y a une différence de `1` qui est du a une entête que j'écris dans le fichier de sortie.
 
 J'ai aussi déterminé que le nombre de mots-clefs total (avec duplication) qui est `1060969`. J’obtiens `1060964` avec les compteurs (`Map output records` et `Reduce input records`) qui montrent les données qui passent du mapper `DecadeMapper` au reducer `KeywordReducer`, il y a une différence de `5` mais je n'ai pas trouvé pourquoi.
 
@@ -86,7 +86,7 @@ J'ai vu les différences suivantes :
 
 > `NB_REDUCE_TASKS=8 yarn jar topkeywords-0.0.1.jar testIEEEdata.csv decadeTopOutput keywordTopOutput`
 
-J'ai testé différant nombre de tâches reducer pour trouver le meilleur. Je n'ai fait qu'une seule exécution par nombre de tâches.
+J'ai testé différents nombres de tâches reducer pour trouver le meilleur. Je n'ai fait qu'une seule exécution par nombre de tâches.
 
 | nombre de tâches  | 1  | 6  | 8  | 10 | 12 | 14 | 16 | 18 | 20 | 48 |
 |:------------------|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
@@ -111,4 +111,4 @@ Par contre je n'ai pas vu de différence significative sur la performance. J'ai 
 
 Une limitation de ma solution est que je n'utilise pas de `combiner` ce qui pourrait faire diminuer le temps d'exécution.
 
-Pour le cas où on veut ajouter de nouvelles donnés sans recalculer les anciennes, ma solution charge toute les donnés et copie dans le nouveau dossier de sortie certaine décennies qui ne sont pas modifiées ce qui peut amener à une perte de performance en lecture/écriture.
+Pour le cas où on veut ajouter de nouvelles données sans recalculer les anciennes, ma solution charge toutes les données et copie dans le nouveau dossier de sortie, certaines décennies qui ne sont pas modifiées, ce qui peut amener à une perte de performance en lecture / écriture.
