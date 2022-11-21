@@ -110,3 +110,32 @@ for (n in c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)) {
   errorRateAndConfusionMatrix(data_test_predict, data_test$y)
 }
 
+# k plus proches voisins avec les probas
+data_test_predict_with_proba <- knn(train=data_train_x, test=data_test_x, cl=data_train$y, k=num_of_neigh, prob=TRUE)
+
+# Calcul du score
+score <- attr(data_test_predict_with_proba, "prob")
+score <- ifelse(data_test_predict_with_proba == "1", 1-score, score)
+
+# Courbe ROC
+pred_knn <- prediction(score, data_test$y)
+perf <- performance(pred_knn, "tpr", "fpr")
+par(mfrow=c(1, 1))
+plot(perf, colorize=TRUE)
+par(new=T)
+plot(c(0, 1), c(0, 1), type="l", ann=FALSE)
+
+# Aire sous la courbe
+AUC <- performance(pred_knn, "auc")@y.values[[1]]
+cat("AUC = ", AUC)
+
+# Choix du seuil
+result <- NULL
+threshold <- seq(0,1, len=11)
+for (s in threshold) {
+  test <- as.integer(score>=s)+1
+  result <- c(result, 1-mean(test != data_test$y))
+}
+plot(threshold, result, type="l")
+cat("Meilleur seuil ", threshold[which.max(result)])
+

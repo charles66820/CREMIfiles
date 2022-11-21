@@ -7,7 +7,7 @@
 Sur la première prediction `knn` avec `10` voisins on obtiens un taux d'erreurs de `0.06`.
 Quand on refait la prédiction avec les données de `test` on on obtiens un taux d'erreurs de `0.085`. On vois bien les erreurs sur le graphique (les triangles).
 
-![Alt text](Code/knn1Test.png)
+![Alt text](img/knn1Test.png)
 
 Dans le cas de patients malades il vaux mieux de faux positifs.
 Dans notre cas on as pas de faut positifs mais `17` faux négatifs, donc 17 personnes malades non identifié.
@@ -22,17 +22,54 @@ Je pense que quand on as seulement un seul voisin on cole mieux aux données mai
 Plus on prend de voisins en compte plus la frontière englobe des patients malades dans les patients sain (Plus on à de faux positifs).
 Pour choisir `k` on fait varier `k` de `0` à `10` car on vois sur le graphique que quand `k` est plus grand que 10 on perd en précision. Puis on calcule pour chaque `k` le `knn` sur des données d’entraînement et de test et on calcule le taux d'erreurs de prédiction. On choisi ensuite le `k` qui minimise le taux d'erreurs. On vois avec la `Confusion Matrix` que le `k` qui minimise le taux d'erreurs minimise le nombre de faux négatifs.
 
-![Alt text](Code/kgridgraph.png)
+![Alt text](img/kgridgraph.png)
 
-TODO: 12.
+Dans ce cas le `k` qui minimise le taux d'erreurs est égale à `3`.
+
+La matrice de confusion de cette méthode est :
+
+|  | 1  | 2  |
+|--|:--:|:--:|
+|1 | 55 | 2  |
+|2 | 7  | 136|
+
+Le taux d'erreurs avec les données des test est de `0.045`
+
+Avec la courbe `ROC` et grâce au calcule on détermine que le meilleur seuil est `0.7`.
+
+![Alt text](img/ROC1.png)
+
+![Alt text](img/ROC2.png)
 
 ### Arbres de classification
 
+> méthode CART
 
+La matrice de confusion de cette méthode est :
+
+|  | 1  | 2  |
+|--|:--:|:--:|
+|1 | 25 | 1  |
+|2 | 37 | 137|
+
+Le taux d'erreurs avec les données des test est de `0.19`
+
+Avec l'arbre complet on obtient le graphique des cross validation suivant :
+
+![Alt text](img/crossValidatedGraph.png)
 
 ### Forêts aléatoires
 
+La matrice de confusion de cette méthode est :
 
+|  | 1  | 2  |
+|--|:--:|:--:|
+|1 | 54 | 2  |
+|2 | 8  | 136|
+
+Le taux d'erreurs avec les données des test est de `0.05`
+
+L'algorithme de forêt aléatoire est mieux que la méthode `CART` mais légèrement moins bien que `k-plus`.
 
 ## Classification - Approches basées sur un modèle
 
