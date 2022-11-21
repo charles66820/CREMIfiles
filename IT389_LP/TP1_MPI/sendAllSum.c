@@ -17,9 +17,11 @@ int main(int argc, char *argv[]) {
   int sumR;
   for (size_t i = 0; i < N; i++) sum += i;
 
-  printf("P%d send : %d\n", rank, sum);
   for (size_t i = 0; i < N; i++) {
-    if (rank != i) MPI_Send(&sum, size, MPI_FLOAT, i, 100, MPI_COMM_WORLD);
+    if (rank != i) {
+        printf("P%d to %ld send : %d\n", rank, i, sum);
+        MPI_Send(&sum, size, MPI_FLOAT, i, 100, MPI_COMM_WORLD);
+    }
   }
 
   for (size_t i = 0; i < N - 1; i++) {
