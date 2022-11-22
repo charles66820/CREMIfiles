@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Comm_size(MPI_COMM_WORLD, &N);
 
-  size_t size = 10;
+  size_t size = 1;
   MPI_Status status;
 
   int sum = 0;
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
              &status);
     printf("P%d receive (src=%d, tag=%d, err=%d) : %d\n", rank,
            status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR, sumR);
-  }  // TODO:
+  }
 
   MPI_Finalize();
 
