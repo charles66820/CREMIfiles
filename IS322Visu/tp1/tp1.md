@@ -79,9 +79,11 @@ en bleu clair une `iso surface` (filtre `contour`).
 
 ### Question 16
 
-
+![Alt text](img/Q16img1.png)
 
 ### Question 17
+
+![Alt text](img/Q17img1.png)
 
 ### Question 18
 
