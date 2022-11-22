@@ -8,7 +8,7 @@ Start interactive shell :
 spark-shell --master yarn
 ```
 
-Submit an compile program :
+Submit a compiled program :
 
 ```bash
 spark-submit --master yarn <program.jar|program.py> [--num-executors <nb>]
@@ -34,7 +34,7 @@ val dataStingsList = dataClean.map(_.split(','))
 
 ## 2. count lines (observation)
 
-Is `280280` observations.
+It is `280280` observations.
 
 ```scala
 dataStingsList.count()
@@ -42,7 +42,7 @@ dataStingsList.count()
 
 ## 3. Count the number of years
 
-Is `118` years.
+It is `118` years.
 
 ```scala
 val years = dataStingsList.map(x => x(40)).distinct()
@@ -51,7 +51,7 @@ years.count()
 
 ## 4. The oldest and the most recent years of observation
 
-The oldest years is `1662` and the most recent years is `1855`.
+The oldest year is `1662` and the most recent year is `1855`.
 
 ```scala
 years.map(_.toInt).min()
@@ -70,20 +70,35 @@ nbObservationsByYears.min()
 nbObservationsByYears.max()
 ```
 
-## 6.
+## 6. Count the distinct departure places
 
-Methods 1 :
+> 14 is VoyageFrom column
+
+Methods 1 `distinct` :
 
 ```scala
-dataStingsList.map(x => x(14))
-
-distinct()
-```
-
-Methods 2 :
+val tBegin = System.nanoTime
+dataStingsList.map(x => x(14)).distinct().count()
+val tEnd = (System.nanoTime - tBegin) / 1e9d
 
 ```
-reduceByKey()
+
+Methods 2 `reduceByKey` :
+
+```scala
+val tBegin = System.nanoTime
+dataStingsList.map(x => (x(14), 1)).reduceByKey(_+_).count()
+val tEnd = (System.nanoTime - tBegin) / 1e9d
+
 ```
 
-TODO: mesure time
+I obtain `996` from the two methods.
+
+The execution time of the two methods looks similar (`1.54` for Methods 1 and `1.60` for Methods 2).
+
+## 7. the 10 most popular departure places
+
+TODO:
+
+## 8.
+
