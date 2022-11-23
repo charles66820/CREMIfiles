@@ -16,29 +16,29 @@
 //#include "../common/book.h"
 #include <math.h>
 
-#include "../common/cpu_anim.h"
+#include "common/cpu_anim.h"
 
 #define DIM 1024
 #define PI 3.1415926535897932f
 #define THREAD 16
 
-void kernel(unsigned char *ptr, int ticks) {
+__global__ void kernel(unsigned char *ptr, int ticks) {
   // map from threadIdx/BlockIdx to pixel position
-  int offset;
-  for (int x = 0; x < DIM; x++)
-    for (int y = 0; y < DIM; y++) {
-      offset = x + y * DIM;
-      float fx = x - DIM / 2;
-      float fy = y - DIM / 2;
-      float d = sqrtf(fx * fx + fy * fy);
-      unsigned char grey =
-          (unsigned char)(128.0f + 127.0f * cos(d / 10.0f - ticks / 7.0f) /
-                                       (d / 10.0f + 1.0f));
-      ptr[offset * 4 + 0] = grey;
-      ptr[offset * 4 + 1] = grey;
-      ptr[offset * 4 + 2] = grey;
-      ptr[offset * 4 + 3] = 255;
-    }
+  int x = (DIM / THREAD) * threadIdx.x +
+          blockIdx.x;  // oui = blockDim.x * (nbBlocks / nbThread)
+  int y = (DIM / THREAD) * threadIdx.y +
+          blockIdx.y;  // oui = blockDim.y * (nbBlocks / nbThread)
+  int offset = x + y * DIM;
+  float fx = x - DIM / 2;
+  float fy = y - DIM / 2;
+  float d = sqrtf(fx * fx + fy * fy);
+  unsigned char grey =
+      (unsigned char)(128.0f + 127.0f * cos(d / 10.0f - ticks / 7.0f) /
+                                   (d / 10.0f + 1.0f));
+  ptr[offset * 4 + 0] = grey;
+  ptr[offset * 4 + 1] = grey;
+  ptr[offset * 4 + 2] = grey;
+  ptr[offset * 4 + 3] = 255;
 }
 
 struct DataBlock {
@@ -47,18 +47,27 @@ struct DataBlock {
 };
 
 void generate_frame(DataBlock *d, int ticks) {
-  //    dim3    blocks(DIM/16,DIM/16);
-  //    dim3    threads(16,16);
-  kernel(d->bitmap->get_ptr(), ticks);
+  dim3 blocks(DIM / THREAD, DIM / THREAD);
+  dim3 threads(THREAD, THREAD);
+  kernel<<<blocks, threads>>>(d->dev_bitmap, ticks);
+  cudaMemcpy(d->bitmap->get_ptr(), d->dev_bitmap, d->bitmap->image_size(),
+             cudaMemcpyDeviceToHost);
 }
 
 // clean up memory allocated on the GPU
-void cleanup(DataBlock *d) { free(d->bitmap->get_ptr()); }
+void cleanup(DataBlock *d) {
+  cudaFree(d->dev_bitmap);
+  free(d->bitmap->get_ptr());
+}
 
 int main(void) {
   DataBlock data;
   CPUAnimBitmap bitmap(DIM, DIM, &data);
   data.bitmap = &bitmap;
+
+  unsigned char *dev_bitmap;
+  cudaMalloc(&dev_bitmap, bitmap.image_size());
+  data.dev_bitmap = dev_bitmap;
 
   bitmap.anim_and_exit((void (*)(void *, int))generate_frame,
                        (void (*)(void *))cleanup);

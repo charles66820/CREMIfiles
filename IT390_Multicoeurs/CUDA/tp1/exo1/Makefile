@@ -10,7 +10,7 @@ NVCFLAGS= -I $(CUDA_HOME)/include -I$(CUDASDK)
 CFLAGS= -L $(CUDA_HOME)/lib64 -L $(CUDANVIDIA)
 
 deviceQuery: deviceQuery.o
-	$(NVCC) $(CFLAGS)  -o $@ $^ 
+	$(NVCC) $(CFLAGS)  -o $@ $^
 
 clean:
 	rm -f *.o *.linkinfo deviceQuery

@@ -9,7 +9,7 @@ NVCFLAGS= -I $(CUDA_HOME)/include -I$(CUDASDK)
 
 CFLAGS= -L $(CUDA_HOME)/lib64 -L $(CUDANVIDIA)
 
-OBJS := ${SRCS:.c=.o} 
+OBJS := ${SRCS:.c=.o}
 OBJS_CUDA := ${SRCS:.cu=.o}
 
 gemm_omp: matmul_openMP.o
@@ -22,7 +22,7 @@ gemm_tiled: matmul_tiled.o
 	$(NVCC) $(CFLAGS)  -o $@ $^
 
 gemm_cublas: matmul_cublas.o
-	$(NVCC) $(CFLAGS) -lcublas -o $@ $^ 
+	$(NVCC) $(CFLAGS) -lcublas -o $@ $^
 
 clean:
 	rm -f *.o *.linkinfo matmul

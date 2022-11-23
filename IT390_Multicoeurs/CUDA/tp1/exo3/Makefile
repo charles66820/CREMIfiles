@@ -13,7 +13,7 @@ saxpy: saxpy.o
 	$(NVCC) $(CFLAGS) -o $@ $^
 
 clean:
-	rm -f *.o *.linkinfo deviceQuery
+	rm -f *.o *.linkinfo saxpy
 
 %.o: %.cu
 	$(NVCC) $(NVCFLAGS) -c -o $@ $<

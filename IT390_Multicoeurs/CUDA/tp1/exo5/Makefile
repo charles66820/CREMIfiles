@@ -9,11 +9,14 @@ NVCFLAGS= -I $(CUDA_HOME)/include -I$(CUDASDK)
 
 CFLAGS= -L $(CUDA_HOME)/lib64 -L $(CUDANVIDIA)
 
-inversion: inversion_shared_solution.o
-	$(NVCC) $(CFLAGS)  -o $@ $^ 
+inversion_no_shared: inversion_no_shared.o
+	$(NVCC) $(CFLAGS)  -o $@ $^
+
+inversion_shared: inversion_shared.o
+	$(NVCC) $(CFLAGS)  -o $@ $^
 
 clean:
-	rm -f *.o *.linkinfo deviceQuery
+	rm -f *.o *.linkinfo inversion_no_shared inversion_shared
 
 %.o: %.cu
 	$(NVCC) $(NVCFLAGS) -c -o $@ $<
