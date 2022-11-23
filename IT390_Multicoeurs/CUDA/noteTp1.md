@@ -4,6 +4,8 @@
 
 `/net/cremi/amguermouche/coursCuda/exo1`
 
+<https://cours-ag.gitlabpages.inria.fr/cisd-cuda/>
+
 La latence est le délai entre le moment où une opération est initiée, et le moment où ses effets deviennent détectable.
 
 Throughput (débit) est la quantité de travail effectué sur une durée.
@@ -51,3 +53,6 @@ Done.
 
 ## exo4
 
+Done.
+
+## exo5
