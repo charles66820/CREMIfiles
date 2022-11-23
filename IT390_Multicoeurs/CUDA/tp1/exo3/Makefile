@@ -9,8 +9,8 @@ NVCFLAGS= -I $(CUDA_HOME)/include -I$(CUDASDK)
 
 CFLAGS= -L $(CUDA_HOME)/lib64 -L $(CUDANVIDIA)
 
-saxpy: saxpy_solution.o
-	$(NVCC) $(CFLAGS)  -o $@ $^ 
+saxpy: saxpy.o
+	$(NVCC) $(CFLAGS) -o $@ $^
 
 clean:
 	rm -f *.o *.linkinfo deviceQuery
