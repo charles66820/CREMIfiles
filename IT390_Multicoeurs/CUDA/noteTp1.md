@@ -42,3 +42,12 @@ Test PASSED
 `nvcc helloWorld.cu -o helloWorld`
 
 ## exo2
+
+Done.
+
+## exo3
+
+Done.
+
+## exo4
+
