@@ -72,4 +72,78 @@ P3 receive (src=2, tag=100, err=0) : 0.000000
 
 ## Exercice 6
 
+![Alt text](commTime.png)
 
+## Exercice 7
+
+```bash
+mpirun ringComm
+P0 send : 1
+P1 receive (src=0, tag=100, err=0) : 1
+P1 send : 2
+P2 receive (src=1, tag=100, err=0) : 2
+P2 send : 3
+P3 receive (src=2, tag=100, err=0) : 3
+P3 send : 4
+P0 receive (src=3, tag=100, err=0) : 4
+```
+
+## Exercice 8
+
+```bash
+mpirun sendTab
+P0 send : {20, 1, 14, 22, 27, 22, 4, 27, 2, 34}
+P1 receive (src=0, tag=100, err=0) : {20, 1, 14, 22, 27, 22, 4, 27, 2, 34}
+P2 receive (src=0, tag=100, err=0) : {20, 1, 14, 22, 27, 22, 4, 27, 2, 34}
+P3 receive (src=0, tag=100, err=0) : {20, 1, 14, 22, 27, 22, 4, 27, 2, 34}
+```
+
+## Exercice 9
+
+```bash
+mpirun sendAllSum
+P2 to 0 send : 6
+P3 to 0 send : 6
+P3 to 1 send : 6
+P3 to 2 send : 6
+P2 to 1 send : 6
+P2 to 3 send : 6
+P3 receive (src=2, tag=100, err=0) : 6
+P2 receive (src=3, tag=100, err=0) : 6
+P0 to 1 send : 6
+P0 to 2 send : 6
+P0 to 3 send : 6
+P0 receive (src=3, tag=100, err=0) : 6
+P0 receive (src=2, tag=100, err=0) : 6
+P2 receive (src=0, tag=100, err=0) : 6
+P1 to 0 send : 6
+P1 to 2 send : 6
+P1 to 3 send : 6
+P1 receive (src=3, tag=100, err=0) : 6
+P1 receive (src=2, tag=100, err=0) : 6
+P1 receive (src=0, tag=100, err=0) : 6
+P3 receive (src=0, tag=100, err=0) : 6
+P3 receive (src=1, tag=100, err=0) : 6
+P0 receive (src=1, tag=100, err=0) : 6
+P2 receive (src=1, tag=100, err=0) : 6
+```
+
+## Exercice 10
+
+TODO:
+
+## Exercice 11
+
+TODO:
+
+## Exercice 12
+
+TODO:
+
+## Exercice 13
+
+TODO:
+
+## Exercice 14
+
+TODO:

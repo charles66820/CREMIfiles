@@ -1,0 +1,10 @@
+exo1/deviceQuery
+exo1/helloWorld
+*.o
+exo2/julia/julia_gpu
+exo3/saxpy
+exo5/inversion
+exo4/vague
+exo6/gemm_cublas
+exo6/gemm_omp
+exo6/matmul_tiled

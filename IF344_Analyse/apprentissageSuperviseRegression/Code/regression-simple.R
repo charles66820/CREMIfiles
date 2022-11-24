@@ -213,3 +213,4 @@ for (i in 1:n)
 MSE <- MSE/n
 # Valeur du résidu avec la validation croisée
 print(MSE)
+
