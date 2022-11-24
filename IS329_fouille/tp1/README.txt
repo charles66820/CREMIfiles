@@ -6,7 +6,7 @@
 # 5 - activez l'environnement : conda activate tp1
 
 # --- JupyterLab ---
-# 6 - installez les modules nécessaires au TP : pip install -r requirements.txt 
+# 6 - installez les modules nécessaires au TP : pip install -r requirements.txt
 # 7 - lancez jupyter-lab : jupyter-lab --ip=0.0.0.0
 # 8 - identifiez le port sur lequel il s'est lancé (normalement 8888) ou précisez --port 8888
 # 9 - depuis votre machine locale faites un port forwarding pour accéder au port (8888) de votre noeud : ssh -L 8888:mirielXXX:8888 formation
@@ -32,5 +32,5 @@ host miriel*
 # 8 Connectez votre VSCode en ssh sur le miriel alloué en 0
 # 9 Installez l'extension python : ms-python.python
 # 10 F1 : "select interpreter to start jupyter" Sélectionnez conda du tp1
-# 11 installez les modules nécessaires au TP : pip install -r requirements-vscode.txt 
-# 12 - C'est parti ! 
+# 11 installez les modules nécessaires au TP : pip install -r requirements-vscode.txt
+# 12 - C'est parti !
