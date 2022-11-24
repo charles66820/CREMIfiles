@@ -75,7 +75,7 @@ en bleu clair une `iso surface` (filtre `contour`).
 
 ### Question 15
 
-![Alt text](img/Q15img1..png)
+![Alt text](img/Q15img1.png)
 
 ### Question 16
 
@@ -87,7 +87,11 @@ en bleu clair une `iso surface` (filtre `contour`).
 
 ### Question 18
 
+![Alt text](img/Q18img1.png)
+
 ### Question 19
+
+![Alt text](img/Q19img1.png)
 
 ### Question 20
 
