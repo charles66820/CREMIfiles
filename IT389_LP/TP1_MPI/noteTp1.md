@@ -130,15 +130,52 @@ P2 receive (src=1, tag=100, err=0) : 6
 
 ## Exercice 10
 
-TODO:
+```bash
+mpirun exo10
+Exec with size 990
+Exec with size 991
+Exec with size 992
+Exec with size 993
+Exec with size 994
+Exec with size 995
+Exec with size 996
+Exec with size 997
+Exec with size 998
+Exec with size 999
+Exec with size 1000
+Exec with size 1001
+Exec with size 1002
+Exec with size 1003
+Exec with size 1004
+Exec with size 1005
+Exec with size 1006
+Exec with size 1007
+Exec with size 1008
+Exec with size 1009
+Exec with size 1010
+```
+
+Avec mon petit program qui envois des messages sans que personne les reçois je vois que le protocole `eager` est utiliser pour une taille de `1` à `1010` pui on passe au protocole sur `rendez-vous`.
 
 ## Exercice 11
 
-TODO:
+```bash
+mpirun exo11
+P0 send : {4, 15, 30, 38, 27, 18, 18, 25, 36, 0}
+P0 receive : {18, 11, 2, 31, 25, 6, 12, 17, 8, 3}
+P1 send : {18, 11, 2, 31, 25, 6, 12, 17, 8, 3}
+P1 receive : {4, 15, 30, 38, 27, 18, 18, 25, 36, 0}
+```
 
 ## Exercice 12
 
-TODO:
+```bash
+mpirun exo12
+P0 send : {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+P1 receive : {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+P1 send : {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+P0 receive : {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+```
 
 ## Exercice 13
 

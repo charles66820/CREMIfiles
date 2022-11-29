@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 
   srand((unsigned int)time(NULL));
 
- int rank, N;
+  int rank, N;
 
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Comm_size(MPI_COMM_WORLD, &N);
