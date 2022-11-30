@@ -95,14 +95,29 @@ en bleu clair une `iso surface` (filtre `contour`).
 
 ### Question 20
 
+![Alt text](img/Q20img1.png)
+
 ### Question 21
+
+![Alt text](img/Q21img1.png)
 
 ### Question 22
 
+![Alt text](img/Q22img1.png)
+
 ### Question 23
+
+![Alt text](img/Q23img1.png)
 
 ### Question 24
 
+![Alt text](img/Q23img2.png)
+
+
 ### Question 25
 
+
+
 ### Question 26
+
+
