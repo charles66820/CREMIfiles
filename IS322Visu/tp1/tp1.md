@@ -113,10 +113,9 @@ en bleu clair une `iso surface` (filtre `contour`).
 
 ![Alt text](img/Q23img2.png)
 
-
 ### Question 25
 
-
+![Alt text](img/Q25img1.png)
 
 ### Question 26
 
