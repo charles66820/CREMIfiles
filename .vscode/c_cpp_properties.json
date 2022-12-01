@@ -13,7 +13,7 @@
                 "OMP"
             ],
             // "compilerPath": "/net/ens/gcc/gcc_10.2.0/bin/gcc",
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "/usr/bin/cc",
             "cStandard": "c99",
             "cppStandard": "c++17",
             "intelliSenseMode": "gcc-x64"
