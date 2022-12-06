@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include<unistd.h>
+#include <unistd.h>
 
 #define RAND_TYPE(minVal, maxVal) (rand() % (maxVal - minVal)) + minVal;
 
