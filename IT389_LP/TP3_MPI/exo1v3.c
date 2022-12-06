@@ -5,7 +5,7 @@
 #include <time.h>
 #include <unistd.h>
 
-void userSum(int *r, int *l, int *len, MPI_Datatype *dType) { *r += *l; }
+void userSum(int *r, int *l, int *len, MPI_Datatype *dType) { *l += *r; }
 
 int main(int argc, char *argv[]) {
   srand((unsigned int)time(NULL));

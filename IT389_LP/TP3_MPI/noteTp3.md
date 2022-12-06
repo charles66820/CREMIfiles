@@ -30,8 +30,6 @@ P1 receive the sum : 6
 P2 receive the sum : 6
 ```
 
-FIXME:
-
 ## Exercice 2
 
 ```bash
