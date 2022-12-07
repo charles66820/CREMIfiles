@@ -1,4 +1,4 @@
-CC=nvcc
+CC=cc
 
 CUDA_HOME=/net/ens/nvhpc/hpc_sdk/21.3/Linux_x86_64/21.3/cuda/
 CUDASDK=/net/ens/nvhpc/hpc_sdk/21.3/Linux_x86_64/21.3/examples/OpenACC/SDK/include/
@@ -12,7 +12,7 @@ CFLAGS= -L $(CUDA_HOME)/lib64 -L $(CUDANVIDIA)
 OBJS := ${SRCS:.c=.o}
 OBJS_CUDA := ${SRCS:.cu=.o}
 
-gemm_omp: matmul_openMP.o
+gemm_omp: matmul_openMP_solution.o
 	$(CC) -o $@ $^ -fopenmp
 
 gemm: matmul.o
@@ -25,7 +25,7 @@ gemm_cublas: matmul_cublas.o
 	$(NVCC) $(CFLAGS) -lcublas -o $@ $^
 
 clean:
-	rm -f *.o *.linkinfo matmul
+	rm -f *.o *.linkinfo matmul gemm_cublas gemm_omp matmul_tiled gemm_cublas_solution gemm_omp_solution matmul_tiled_solution
 
 %.o: %.cu
 	$(NVCC) $(NVCFLAGS) -c -o $@ $<

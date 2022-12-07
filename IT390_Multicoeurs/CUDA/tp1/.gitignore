@@ -11,3 +11,6 @@ exo4/vague
 exo6/gemm_cublas
 exo6/gemm_omp
 exo6/matmul_tiled
+exo6/gemm_cublas_solution
+exo6/gemm_omp_solution
+exo6/matmul_tiled_solution

@@ -22,7 +22,7 @@ inversion_shared_solution: inversion_shared_solution.o
 	$(NVCC) $(CFLAGS)  -o $@ $^
 
 clean:
-	rm -f *.o *.linkinfo inversion_no_shared inversion_shared
+	rm -f *.o *.linkinfo inversion_no_shared inversion_shared inversion_no_shared_solution inversion_shared_solution
 
 %.o: %.cu
 	$(NVCC) $(NVCFLAGS) -c -o $@ $<
