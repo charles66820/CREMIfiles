@@ -62,7 +62,7 @@ int main(void)
   /* Affichage des 12 premiers éléments*/
   for (i=N-12; i < N; i++)
     printf("%d\n", x[i]);
-	   
+  printf("\n");
   for (i = 0; i < min(12, N); i++)
     printf("%d\n", y[i]);
 

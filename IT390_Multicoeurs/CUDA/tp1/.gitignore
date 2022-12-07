@@ -3,7 +3,10 @@ exo1/helloWorld
 *.o
 exo2/julia/julia_gpu
 exo3/saxpy
-exo5/inversion
+exo5/inversion_no_shared
+exo5/inversion_shared
+exo5/inversion_no_shared_solution
+exo5/inversion_shared_solution
 exo4/vague
 exo6/gemm_cublas
 exo6/gemm_omp

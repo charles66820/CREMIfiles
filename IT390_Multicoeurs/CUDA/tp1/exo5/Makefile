@@ -15,6 +15,12 @@ inversion_no_shared: inversion_no_shared.o
 inversion_shared: inversion_shared.o
 	$(NVCC) $(CFLAGS)  -o $@ $^
 
+inversion_no_shared_solution: inversion_no_shared_solution.o
+	$(NVCC) $(CFLAGS)  -o $@ $^
+
+inversion_shared_solution: inversion_shared_solution.o
+	$(NVCC) $(CFLAGS)  -o $@ $^
+
 clean:
 	rm -f *.o *.linkinfo inversion_no_shared inversion_shared
 

@@ -24,10 +24,8 @@
 
 __global__ void kernel(unsigned char *ptr, int ticks) {
   // map from threadIdx/BlockIdx to pixel position
-  // d = blockDim.x * (nbBlocks / nbThread)
-  int x = (DIM / THREAD) * threadIdx.x + blockIdx.x;
-  // d = blockDim.y * (nbBlocks / nbThread)
-  int y = (DIM / THREAD) * threadIdx.y + blockIdx.y;
+  int x = gridDim.x * threadIdx.x + blockIdx.x;
+  int y = gridDim.y * threadIdx.y + blockIdx.y;
   int offset = x + y * DIM;
   float fx = x - DIM / 2;
   float fy = y - DIM / 2;
