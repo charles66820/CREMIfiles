@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene>
+
+ <color name="background" value="0.2, 0.2, 0.2"/>
+
+ <integrator type="whitted">
+    <integer name="maxRecursion" value="8"/>
+ </integrator>
+
+ <camera type="perspective">
+   <float name="fieldOfView" value="45.0" /> 
+   <integer name="width" value="400"/>
+   <integer name="height" value="400"/>
+   <integer name="samples" value="8"/>
+   <transform name="toWorld">
+     <rotate value="-0.345636, -0.170808, -0.42652, -0.818194"/>
+     <translate value="2.47398, -1.58066, 3.85207"/>
+   </transform>
+ </camera>
+
+ <shape type="sphere">
+   <float name="radius" value="0.4"/>
+   <material type="phong">
+     <color name="diffuse" value="0.2, 0.2, 0.2" />
+     <color name="reflectivity" value="0.7, 0.7, 0.7"/>
+     <color name="specular" value="1, 1, 1" />
+     <float name="exponent" value="200"/>
+     <string name="texture" value="rayure.exr" />
+     <integer name="mode" value="0" />
+     <float name="scale" value="0.1" />
+   </material>
+   <point name="center" value="-0.4, -0.4, 0.4"/>
+ </shape>
+
+  <shape type="sphere">
+   <float name="radius" value="0.4"/>
+   <material type="phong">
+     <color name="diffuse" value="0.4, 0.4, 0.4" />
+     <color name="reflectivity" value="0.7, 0.7, 0.7"/>
+     <color name="specular" value="1, 1, 1" />
+     <float name="exponent" value="200"/>
+     <string name="texture" value="rayure.exr" />
+     <integer name="mode" value="0" />
+     <float name="scale" value="0.3" />
+   </material>
+   <point name="center" value="0.1, 0.4, 0.4"/>
+ </shape>
+
+  <shape type="sphere">
+   <float name="radius" value="0.1"/>
+   <material type="phong">
+     <color name="diffuse" value="0.8, 0.5, 0.0" />
+     <color name="reflectivity" value="0.0, 0.0, 0.0"/>
+     <color name="specular" value="0.3, 0.2, 0.1" />
+     <float name="exponent" value="4"/>
+   </material>
+   <point name="center" value="0.4, -0.6, 0.1"/>
+ </shape>
+ 
+ <shape type="plane">
+  <material type="diffuse">
+    <color name="diffuse" value="1.0, 0.9, 0.5" />
+    <string name="texture" value="checkboard.exr" />
+    <integer name="mode" value="0" />
+    <float name="scale" value="1.0" />
+  </material>
+ </shape>
+
+ <shape type="plane">
+  <point name="position" value="0.0, 1.0, 0.0"/>
+  <vector name="normal" value="0.0, -1.0, 0.0"/>
+  <material type="phong">
+    <color name="diffuse" value="0.0, 0.0, 0.9" />
+    <color name="reflectivity" value="0.7, 0.7, 0.7"/>
+    <color name="specular" value="0.0, 0.0, 0.0" />
+    <float name="exponent" value="128"/>
+  </material>
+ </shape>
+
+ <shape type="plane">
+  <point name="position" value="-1.0, 0.0, 0.0"/>
+  <vector name="normal" value="1.0, 0.0, 0.0"/>
+  <material type="phong">
+    <color name="diffuse" value="0.9, 0.0, 0.0" />
+    <color name="reflectivity" value="0.7, 0.7, 0.7"/>
+    <color name="specular" value="0.0, 0.0, 0.0" />
+    <float name="exponent" value="32"/>
+  </material>
+ </shape>
+
+ <light type="directionalLight">
+   <vector name="direction" value="-0.3, 0.5, -0.6" />
+   <color name="intensity" value="0.6, 0.6, 0.6" />
+ </light>
+
+ <light type="pointLight">
+  <point name="position" value="0.5, 0.5, 1.0" />
+  <color name="intensity" value="0.7, 0.7, 0.7" />
+ </light>
+
+</scene>

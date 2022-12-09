@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<scene>
+  <color name="background" value="0.0, 0.0, 0.0"/>
+
+ <!-- Use the direct illumination integrator -->
+ <integrator type="direct"/>
+
+ <!-- Use Whitted integrator -->
+ <!--  <integrator type="whitted">
+    <integer name="maxRecursion" value="4"/>
+ </integrator>  -->
+
+ <!-- Render the scene as viewed by a perspective camera -->
+ <camera type="perspective">
+   <float name="fieldOfView" value="45.0" /> 
+   <integer name="width" value="400"/>
+   <integer name="height" value="400"/>
+   <integer name="samples" value="1"/>
+   <transform name="toWorld">
+     <rotate value="0, 0, 0, 1"/>
+     <translate value="0, -0, 8.0"/>
+   </transform>
+ </camera> 
+
+ <shape type="sphere">
+   <float name="radius" value="0.9"/>
+   <material type="phong">
+     <color name="diffuse" value="0.1, 0.4, 0.1" />
+     <color name="reflectivity" value="0.0, 0.0, 0.0"/>
+     <color name="specular" value="0.0, 0.0, 0.0" />
+     <float name="exponent" value="4"/>
+   </material>
+   <point name="center" value="-2.0, 2.0, 0.0"/>
+ </shape>
+
+<shape type="sphere">
+   <float name="radius" value="0.9"/>
+   <material type="phong">
+     <color name="diffuse" value="0.1, 0.4, 0.1" />
+     <color name="reflectivity" value="0.02, 0.02, 0.02"/>
+     <color name="specular" value="0.6, 0.6, 0.6" />
+     <float name="exponent" value="4"/>
+   </material>
+   <point name="center" value="0.0, 2.0, 0.0"/>
+ </shape>
+
+ <shape type="sphere">
+   <float name="radius" value="0.9"/>
+   <material type="phong">
+     <color name="diffuse" value="0.1, 0.4, 0.1" />
+     <color name="reflectivity" value="0.05, 0.05, 0.05"/>
+     <color name="specular" value="0.6, 0.6, 0.6" />
+     <float name="exponent" value="8"/>
+   </material>
+   <point name="center" value="2.0, 2.0, 0.0"/>
+ </shape>
+
+ <shape type="sphere">
+   <float name="radius" value="0.9"/>
+   <material type="phong">
+     <color name="diffuse" value="0.1, 0.4, 0.1" />
+     <color name="reflectivity" value="0.1, 0.1, 0.1"/>
+     <color name="specular" value="0.6, 0.6, 0.6" />
+     <float name="exponent" value="16"/>
+   </material>
+   <point name="center" value="-2.0, 0.0, 0.0"/>
+ </shape>
+ 
+ <shape type="sphere">
+   <float name="radius" value="0.9"/>
+   <material type="phong">
+     <color name="diffuse" value="0.1, 0.4, 0.1" />
+     <color name="reflectivity" value="0.2, 0.2, 0.2"/>
+     <color name="specular" value="0.6, 0.6, 0.6" />
+     <float name="exponent" value="32"/>
+   </material>
+   <point name="center" value="0.0, 0.0, 0.0"/>
+ </shape>
+
+ <shape type="sphere">
+   <float name="radius" value="0.9"/>
+   <material type="phong">
+     <color name="diffuse" value="0.1, 0.4, 0.1" />
+     <color name="reflectivity" value="0.3, 0.3, 0.3"/>
+     <color name="specular" value="0.6, 0.6, 0.6" />
+     <float name="exponent" value="64"/>
+   </material>
+   <point name="center" value="2.0, 0.0, 0.0"/>
+ </shape>
+
+ <shape type="sphere">
+   <float name="radius" value="0.9"/>
+   <material type="phong">
+     <color name="diffuse" value="0.1, 0.4, 0.1" />
+     <color name="reflectivity" value="0.4, 0.4, 0.4"/>
+     <color name="specular" value="0.6, 0.6, 0.6" />
+     <float name="exponent" value="128"/>
+   </material>
+   <point name="center" value="-2.0, -2.0, 0.0"/>
+ </shape>
+
+ <shape type="sphere">
+   <float name="radius" value="0.9"/>
+   <material type="phong">
+     <color name="diffuse" value="0.1, 0.4, 0.1" />
+     <color name="reflectivity" value="0.7, 0.7, 0.1"/>
+     <color name="specular" value="0.6, 0.6, 0.6" />
+     <float name="exponent" value="256"/>
+   </material>
+   <point name="center" value="0.0, -2.0, 0.0"/>
+ </shape>
+
+ <shape type="sphere">
+   <float name="radius" value="0.9"/>
+   <material type="phong">
+     <color name="diffuse" value="0.1, 0.4, 0.1" />
+     <color name="specular" value="0.6, 0.6, 0.6" />
+     <color name="reflectivity" value="1.0, 1.0, 1.0"/>
+     <float name="exponent" value="512"/>
+   </material>
+   <point name="center" value="2.0, -2.0, 0.0"/>
+ </shape>
+
+ <light type="directionalLight">
+   <vector name="direction" value="-0.5, -0.5, -0.5" />
+   <color name="intensity" value="1.2, 1.2, 1.2" />
+ </light>
+
+</scene>

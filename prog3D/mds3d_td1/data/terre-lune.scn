@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene>
+
+ <color name="background" value="0.1, 0.1, 0.1"/>
+
+ <integrator type="direct"/>
+
+ <camera type="perspective">
+   <float name="fieldOfView" value="45.0" /> 
+   <integer name="width" value="400"/>
+   <integer name="height" value="400"/>
+   <integer name="samples" value="8"/>
+   <transform name="toWorld">
+     <rotate value="0.877728, -0.0769274, 0.114999, -0.45875"/>
+     <translate value="9.84792, 20.1248, -11.6756"/>
+   </transform>
+ </camera>
+
+ <shape type="sphere">
+   <float name="radius" value="6.4"/>
+   <material type="phong">
+     <color name="diffuse" value="0.1, 0.1, 0.8" />
+     <color name="specular" value="0.1, 0.1, 0.1" />
+     <float name="exponent" value="4"/>
+     <string name="texture" value="terre.exr" />
+     <integer name="mode" value="1" />
+     <float name="scale" value="1" />
+   </material>
+  </shape>
+
+  <shape type="sphere">
+   <float name="radius" value="2.4"/>
+   <point name="center" value="9.0, 8.0, 0.5"/>
+   <material type="phong">
+     <color name="diffuse" value="0.5, 0.5, 0.5" />
+     <color name="specular" value="0.1, 0.1, 0.1" />
+     <float name="exponent" value="4"/>
+     <string name="texture" value="lune.exr" />
+     <integer name="mode" value="1" />
+     <float name="scale" value="1" />
+   </material>
+  </shape>
+
+ <light type="directionalLight">
+   <vector name="direction" value="-1.4, -1.0, 0.0" />
+   <color name="intensity" value="2, 2, 2" />
+ </light>
+
+</scene>
