@@ -45,10 +45,40 @@ object Tweets_Scala {
     val dataJsonMap = data.map(jsonStrToMap(_))
 
     val dataTab = dataJsonMap.map(getData)
-    // dataTab.take(1).foreach(println)
+    println("Number of tweets:")
+    println(dataTab.count())
 
-    println("Oui :")
-		println(dataTab.count())
-		dataTab.take(10).foreach(println)
+    // x(0).asInstanceOf[String]
+    // x(1).asInstanceOf[int]
+    // x(2).asInstanceOf[String]
+    // x(3).asInstanceOf[int]
+    // x(4).asInstanceOf[List[String]]
+
+    val hashtags = dataTab.flatMap(x => x(4).asInstanceOf[List[String]])
+
+    val hashtagsCount = hashtags.map(x => (x, 1)).reduceByKey(_+_)
+
+    println("20 most popular hashtags:")
+    hashtagsCount.map(x => (x._2, x._1)).top(20).foreach(println)
+
+    // println("Number of hashtags:")
+    // println(hashtags.distinct().count())
+
+    val hashtagsByTweet = dataTab.map(_(4).asInstanceOf[List[String]]).filter(_.nonEmpty)
+    val hashtagsCombByTweet = hashtagsByTweet.map(_.combinations(2).toList.map(x => (x(0), x(1))))
+    val hashtagsPermByTweet = hashtagsByTweet.map(_.combinations(2).map(_.permutations.toList.map(x => (x(0), x(1)))).toList).flatMap(x => x)
+
+    val hashtagsValPBT = hashtagsPermByTweet.flatMap(x => x).map((_, 1))
+    // val hashtagsValPBT = hashtagsPermByTweet.flatMap(x => x.map((_, 1))) check perfs
+
+    val groupAll = hashtagsValPBT.groupBy(x => x._1._1)
+    val cleanVals = groupAll.map(x => (x._1, x._2.map(y => (y._1._2, y._2))))
+
+    val sumAll = cleanVals.mapValues(_.groupBy(_._1).map(x => (x._1, x._2.foldLeft(0)((sum, i) => sum + i._2))))
+
+    sumAll.take(20).foreach(println)
+    sumAll.filter(_._1 == "#BTS").collect()(0)._2.foreach(println)
+    sumAll.filter(_._1 == "#BTS").flatMap(_._2).map(x => (x._2, x._1)).top(100).foreach(println)
+
 	}
 }
