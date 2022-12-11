@@ -8,6 +8,16 @@ Start interactive shell :
 spark-shell --master yarn
 ```
 
+Build and start spark app :
+
+```bash
+cd tweets_scala
+mvn package
+scp target/tweets_scala-0.0.1.jar lsd_remote:
+ssh lsd_remote
+spark-submit --master yarn tweets_scala-0.0.1.jar
+```
+
 `/user/fzanonboito/CISD/smaller_twitter.json`
 `/user/fzanonboito/CISD/tiny_twitter.json`
 
@@ -33,11 +43,8 @@ def getData(x: Map[String, Any]): Array[Any] = {
   else retweeted_status.asInstanceOf[Map[String, Any]]("retweet_count")
 
   val user = x.getOrElse("user", None)
-  if (user == None) {
-    val screen_name = None
-  } else {
-    val screen_name = user.asInstanceOf[Map[String, Any]]("screen_name")
-  }
+  val screen_name = if (user == None) None
+  else user.asInstanceOf[Map[String, Any]]("screen_name")
 
   val followers_count = if (user == None) 0
   else user.asInstanceOf[Map[String, Any]]("followers_count")
