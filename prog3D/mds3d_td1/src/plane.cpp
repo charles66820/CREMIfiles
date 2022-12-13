@@ -16,8 +16,19 @@ Plane::~Plane()
 
 bool Plane::intersect(const Ray& ray, Hit& hit) const
 {
-    /// TODO
+    //TODO: here
+    float dot = normal.dot(ray.direction);
+    if (dot == 0) return false; // check si le ray est parallèle au plan
 
+    // la distance parcouru par le ray
+    float t = normal.dot(point - ray.origin) / dot;
+
+    Point3f pointIntersectBetweenPlaneAndRay = ray.at(t);
+
+    if (pointIntersectBetweenPlaneAndRay == NULL) return false;
+    hit.shape(this);
+    hit.setT(t);
+    hit.setNormal(normal);
     return true;
 }
 

@@ -93,5 +93,7 @@ sumAll.take(20).foreach(println)
 sumAll.filter(_._1 == "#BTS").collect()(0)._2.foreach(println)
 sumAll.filter(_._1 == "#BTS").flatMap(_._2).map(x => (x._2, x._1)).top(100).foreach(println)
 
+sumAll.count()
+
 // TODO: join `hashtags.distinct() and hashtagsByTweet`
 ```

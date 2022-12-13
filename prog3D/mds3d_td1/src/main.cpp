@@ -18,11 +18,46 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
     Vector3f camY = -camera->up() * tanfovy2 * camera->nearDist();
     Vector3f camF = camera->direction() * camera->nearDist();
 
-    /// TODO:
+    // camF : distance focal ?
+    // camX, camY : axes sur l'image
+
+    /// TODO: here
     ///  1. iterate over the image pixels
-    ///  2. generate a primary ray
-    ///  3. call the integartor to compute the color along this ray
-    ///  4. write this color in the result image
+    uint width = camera->vpWidth();
+    uint height = camera->vpHeight();
+    Point3f origin = camera->position() + camF - camX - camY; // axe optique
+    for (uint i = 0; i < width; i++)
+        for (uint j = 0; j < height; j++) {
+            Point3f position; // P_{i,j}
+            position = 2 * (i / width - 0.5) * camX + 2 * (j / height - 0.5) * camY;
+            // p = camera->position() + Vector3f(x, y, 0);
+            Vector3f direction;
+            // d = (p - origin);
+            direction = camF + 2 * (i / width - 0.5) * camX + 2 * (j / height - 0.5) * camY;
+            // printf("oui\n");
+            // std::cout << d;
+            direction.normalize(); // \frac{d}{||d||_2}
+            // std::cout << d;
+
+            // if (x == 0 && y == 0) {
+            //     Vector3f vpX = camX;
+            //     vpX.normalize();
+            //     vpX *= camX.norm() / width * 2;
+            //     Vector3f vpY = camY;
+            //     vpY.normalize();
+            //     vpY *= camY.norm() / height * 2;
+            // }
+
+
+            /// 2. generate a primary ray
+            Ray ray = Ray(origin, direction);
+
+            ///  3. call the integartor to compute the color along this ray
+            Color3f color;// = getColor(ray);
+
+            ///  4. write this color in the result image
+            // result->put(position, color);
+        }
 
     t = clock() - t;
     std::cout << "Raytracing time : " << float(t)/CLOCKS_PER_SEC << "s"<<std::endl;
