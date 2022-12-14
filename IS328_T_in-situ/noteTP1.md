@@ -9,8 +9,7 @@ $HOME/projects/TPs_In_Situ/exaStamp/scripts/configure-plafrim.sh
 > build path : `/home/cisd-goedefr/projects/TPs_In_Situ/build`
 
 ```bash
-cd $HOME/projects/TPs_In_Situ/build
-source setup-env.sh
+source $HOME/projects/TPs_In_Situ/build/setup-env.sh
 salloc -proutage -n1 -c12 make -j24
 ```
 

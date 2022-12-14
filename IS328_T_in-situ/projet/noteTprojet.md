@@ -11,3 +11,33 @@ double A = direction.x, B=direction.y, C=direction.z;
 double D = -(A*origin.x + B*origin.y + C*origin.z);
 // assert(A*origin.x + B*origin.y + C*origin.z + D == 0);
 ```
+
+## instructions
+
+1. Git :
+
+```bash
+  # créé ça branche "enseirb-<username>"
+  # mettre à jour ça branche
+  git pull origin master
+```
+
+2. build / exec
+
+```bash
+source ~/build/setup-env.sh
+salloc -proutage -n1 -c12 make -j24
+# copier le fichier de test dans sont dossier
+cd ..
+cp exaStamp/data/samples/tutorial_slice_plot.msp project/
+cd project
+salloc -proutage --exclusive -N4 -n4 -c24 mpirun ~/build/xstampv2 tutorial_slice_plot.msp --profiling-vite trace.vite
+```
+
+Le fichier où ce trouve le code est `exaStamp/src/tutorial/slice_plot.cpp`
+
+Le paramètre `domain` défini la géométrie du domain.
+
+les consignes sont sur le moodle.
+
+Le code dois être push sur la sa branch git et le rapport dois être envoyer pour la fin janvier.

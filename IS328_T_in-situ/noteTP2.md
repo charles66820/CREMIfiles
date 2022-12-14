@@ -12,8 +12,7 @@ build :
 > build path : `/home/cisd-goedefr/projects/TPs_In_Situ/build`
 
 ```bash
-cd $HOME/projects/TPs_In_Situ/build
-source setup-env.sh
+source $HOME/projects/TPs_In_Situ/build/setup-env.sh
 salloc -proutage -n1 -c12 make -j24
 ```
 
@@ -21,8 +20,7 @@ Load env to RUN :
 
 ```bash
 OLD_PWD=`pwd`
-cd $HOME/projects/TPs_In_Situ/build
-source setup-env.sh
+source $HOME/projects/TPs_In_Situ/build/setup-env.sh
 cd $OLD_PWD
 unset $OLD_PWD
 ```

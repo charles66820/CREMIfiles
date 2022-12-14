@@ -26,13 +26,13 @@ scancel <job id>
 
 ```bash
 srun -C haswell --time=03:00:00 --pty bash -i
-srun -N 1 --time=03:00:00 --pty bash -i
+srun -N 1 -n 12 --exclusive --time=03:00:00 --pty bash -i
+salloc -proutage --exclusive -N4 -n4 -c24 mpirun ./prog
+salloc -proutage -n1 -c24 make -j24
 ```
 
-salloc -proutage -n1 -c12 make -j24
-
-- `-N, --nodes <nbNodes>` number of nodes
 - `-p, --partition <partitionName>` partition name routage
+- `-N, --nodes <nbNodes>` number of nodes
 - `-n, --ntasks <nbTasks>` number of MPI process
 - `-c, --cpus-per-task <nbCores>` Number de coeurs par process MPI
 - `-x` exclusive
