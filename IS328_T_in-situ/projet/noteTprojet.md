@@ -17,8 +17,8 @@ double D = -(A*origin.x + B*origin.y + C*origin.z);
 1. Git :
 
 ```bash
-  # créé ça branche "enseirb-<username>"
-  # mettre à jour ça branche
+  # créer sa branche "enseirb-${USER}"
+  # mettre à jour sa branche
   git pull origin master
 ```
 
@@ -30,6 +30,8 @@ salloc -proutage -n1 -c12 make -j24
 # copier le fichier de test dans sont dossier
 cd ..
 cp exaStamp/data/samples/tutorial_slice_plot.msp project/
+# plus grosse simu
+cp exaStamp/data/samples/tutorial_slice_plot_mj.msp project/
 cd project
 salloc -proutage --exclusive -N4 -n4 -c24 mpirun ~/build/xstampv2 tutorial_slice_plot.msp --profiling-vite trace.vite
 ```
@@ -40,4 +42,11 @@ Le paramètre `domain` défini la géométrie du domain.
 
 les consignes sont sur le moodle.
 
-Le code dois être push sur la sa branch git et le rapport dois être envoyer pour la fin janvier.
+Rendre le code et le rapport par email avant le 31 janvier 23h59.
+Pour le code utilisé les `git bundle`. On peut aussi push ça branche en plus.
+
+```bash
+git bundle create <nom>-<prenom>.bundle master~20..enseirb-${USER}
+```
+
+l'email du prof `thierry.carrard@cea.fr`.
