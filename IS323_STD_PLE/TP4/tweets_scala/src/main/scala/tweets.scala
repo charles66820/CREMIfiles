@@ -71,14 +71,14 @@ object Tweets_Scala {
     val hashtagsValPBT = hashtagsPermByTweet.flatMap(x => x).map((_, 1))
     // val hashtagsValPBT = hashtagsPermByTweet.flatMap(x => x.map((_, 1))) check perfs
 
-    val groupAll = hashtagsValPBT.groupBy(x => x._1._1)
-    val cleanVals = groupAll.map(x => (x._1, x._2.map(y => (y._1._2, y._2))))
+    val hashtagsCountByPair = hashtagsValPBT.reduceByKey(_+_)
+    // map form ((#1, #2), nb) to (#1, (#2, nb))
+    val hashtagsCountList = hashtagsCountByPair.map(x => (x._1._1, (x._1._2, x._2)))
 
-    val sumAll = cleanVals.mapValues(_.groupBy(_._1).map(x => (x._1, x._2.foldLeft(0)((sum, i) => sum + i._2))))
+    val groupedHashtags = hashtagsCountList.groupByKey
 
-    sumAll.take(20).foreach(println)
-    sumAll.filter(_._1 == "#BTS").collect()(0)._2.foreach(println)
-    sumAll.filter(_._1 == "#BTS").flatMap(_._2).map(x => (x._2, x._1)).top(100).foreach(println)
+    groupedHashtags.take(20).foreach(println)
 
+    println(groupedHashtags.count())
 	}
 }

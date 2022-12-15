@@ -77,7 +77,7 @@ println("20 most popular hashtags:")
 hashtagsCount.map(x => (x._2, x._1)).top(20).foreach(println)
 
 // println("Number of hashtags:")
-// println(hashtagsByTweet.distinct().count())
+// println(hashtags.distinct().count())
 
 val hashtagsByTweet = dataTab.map(_(4).asInstanceOf[List[String]]).filter(_.nonEmpty)
 val hashtagsCombByTweet = hashtagsByTweet.map(_.combinations(2).toList.map(x => (x(0), x(1))))
@@ -93,8 +93,6 @@ val hashtagsCountList = hashtagsCountByPair.map(x => (x._1._1, (x._1._2, x._2)))
 val groupedHashtags = hashtagsCountList.groupByKey
 
 groupedHashtags.take(20).foreach(println)
-
-groupedHashtags.filter(_._1 == "#BTS").flatMap(_._2).map(x => (x._2, x._1)).top(100).foreach(println)
 
 groupedHashtags.count()
 
