@@ -8,6 +8,12 @@ Start interactive shell :
 spark-shell --master yarn
 ```
 
+> en python
+
+```bash
+pyspark --master yarn
+```
+
 Submit a compiled program :
 
 ```bash
