@@ -2,7 +2,54 @@ import vtk
 
 dataPath = "data/"
 
-def createWindow(renderer, lut):
+def addScalarBarWidget(interactor, lut):
+  scalarBar = vtk.vtkScalarBarActor()
+  scalarBar.SetOrientationToHorizontal()
+  scalarBar.SetLookupTable(lut)
+
+  scalarBarWidget = vtk.vtkScalarBarWidget()
+  scalarBarWidget.SetInteractor(interactor)
+  scalarBarWidget.SetScalarBarActor(scalarBar)
+  scalarBarWidget.On()
+  return scalarBarWidget
+
+
+def addSliderWidget(interactor):
+  slider = vtk.vtkSliderRepresentation2D();
+
+  slider.SetMinimumValue(0.0);
+  slider.SetMaximumValue(181.6048126220703);
+  # slider.SetValue(tessellate.GetChordError());
+  slider.SetTitleText("Contour value");
+
+  slider.GetPoint1Coordinate().SetCoordinateSystemToNormalizedDisplay();
+  slider.GetPoint1Coordinate().SetValue(0.1, 0.1);
+  slider.GetPoint2Coordinate().SetCoordinateSystemToNormalizedDisplay();
+  slider.GetPoint2Coordinate().SetValue(0.9, 0.1);
+
+  slider.SetTubeWidth(0.008);
+  slider.SetSliderLength(0.008);
+  slider.SetTitleHeight(0.04);
+  slider.SetLabelHeight(0.04);
+
+  sliderWidget = vtk.vtkSliderWidget()
+  sliderWidget.SetInteractor(interactor);
+  sliderWidget.SetRepresentation(slider);
+  sliderWidget.SetAnimationModeToAnimate();
+  sliderWidget.EnabledOn();
+
+  # sliderWidget.AddObserver(vtkCommand::InteractionEvent, callbackChordError);
+
+def createWindow(renderer):
+  # addConeActor(renderer)
+  lut = addHeadActor(renderer)
+
+  camera = renderer.GetActiveCamera()
+  camera.SetRoll(180)
+  camera.Elevation(90)
+  camera.Azimuth(0)
+  renderer.ResetCamera()
+
   window = vtk.vtkRenderWindow()
   window.SetSize(500, 500)
   window.SetWindowName("VTK Viewer")
@@ -12,14 +59,9 @@ def createWindow(renderer, lut):
   interactor.SetInteractorStyle(vtk.vtkInteractorStyleTrackballCamera())
   interactor.SetRenderWindow(window)
 
-  scalarBar = vtk.vtkScalarBarActor()
-  scalarBar.SetOrientationToHorizontal()
-  scalarBar.SetLookupTable(lut)
+  scalarBarWidget = addScalarBarWidget(interactor, lut)
 
-  scalarBarWidget = vtk.vtkScalarBarWidget()
-  scalarBarWidget.SetInteractor(interactor)
-  scalarBarWidget.SetScalarBarActor(scalarBar)
-  scalarBarWidget.On()
+  # addSliderWidget(interactor)
 
   window.Render()
   interactor.Start()
@@ -59,12 +101,12 @@ def getHeadMapper():
   mapper.SetInputConnection(contour.GetOutputPort())
   return mapper
 
-def main():
-  # cone
+def addConeActor(renderer):
   coneActor = vtk.vtkActor()
   coneActor.SetMapper(getConeMapper())
+  renderer.AddActor(coneActor)
 
-  # head
+def addHeadActor(renderer):
   headMapper = getHeadMapper()
 
   lut = vtk.vtkLookupTable()
@@ -75,20 +117,15 @@ def main():
   headActor.SetMapper(headMapper)
   # show the edges of the image grid
   # headActor.GetProperty().SetRepresentationToWireframe()
+  renderer.AddActor(headActor)
+  return lut
 
+def main():
   # render
   renderer = vtk.vtkRenderer()
   renderer.SetBackground(0.0, 0.0, 0.0)
-  renderer.AddActor(headActor)
-  # renderer.AddActor(coneActor)
 
-  camera = renderer.GetActiveCamera()
-  camera.SetRoll(180)
-  camera.Elevation(90)
-  camera.Azimuth(0)
-  renderer.ResetCamera()
-
-  createWindow(renderer, lut)
+  createWindow(renderer)
 
 if __name__ == "__main__":
   main()
