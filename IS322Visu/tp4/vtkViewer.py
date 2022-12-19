@@ -44,6 +44,7 @@ def addScalarBarWidget(interactor, objMapper):
   scalarBar = vtk.vtkScalarBarActor()
   scalarBar.SetOrientationToHorizontal()
   scalarBar.SetLookupTable(lut)
+  scalarBar.SetTitle("Density range")
 
   scalarBarWidget = vtk.vtkScalarBarWidget()
   scalarBarWidget.SetInteractor(interactor)
