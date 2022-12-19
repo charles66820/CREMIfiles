@@ -2,7 +2,21 @@ import vtk
 
 dataPath = "data/"
 
-def addScalarBarWidget(interactor, lut):
+contour = vtk.vtkContourFilter()
+
+class SliderObserver(object):
+  def __init__(self, slider, contour):
+    self.slider = slider
+    self.contour = contour
+
+  def __call__(self, caller, ev):
+    self.contour.SetValue(0, self.slider.GetValue())
+
+def addScalarBarWidget(interactor, objMapper):
+  lut = vtk.vtkLookupTable()
+  lut.Build()
+  objMapper.SetLookupTable(lut)
+
   scalarBar = vtk.vtkScalarBarActor()
   scalarBar.SetOrientationToHorizontal()
   scalarBar.SetLookupTable(lut)
@@ -14,19 +28,19 @@ def addScalarBarWidget(interactor, lut):
   return scalarBarWidget
 
 
-def addSliderWidget(interactor):
-  slider = vtk.vtkSliderRepresentation2D();
+def addSliderWidget(interactor, objMapper):
+  slider = vtk.vtkSliderRepresentation2D()
 
-  #TODO: min, max, initial
-  slider.SetMinimumValue(0.0);
-  slider.SetMaximumValue(181.6048126220703);
-  # slider.SetValue(tessellate.GetChordError());
-  slider.SetTitleText("Contour value");
+  objScalarRange = objMapper.GetScalarRange()
+  slider.SetMinimumValue(objScalarRange[0])
+  slider.SetMaximumValue(objScalarRange[1])
+  slider.SetValue(contour.GetValue(0))
+  slider.SetTitleText("Contour value")
 
-  slider.GetPoint1Coordinate().SetCoordinateSystemToNormalizedDisplay();
-  slider.GetPoint1Coordinate().SetValue(0.1, 0.1);
-  slider.GetPoint2Coordinate().SetCoordinateSystemToNormalizedDisplay();
-  slider.GetPoint2Coordinate().SetValue(0.4, 0.1);
+  slider.GetPoint1Coordinate().SetCoordinateSystemToNormalizedDisplay()
+  slider.GetPoint1Coordinate().SetValue(0.1, 0.1)
+  slider.GetPoint2Coordinate().SetCoordinateSystemToNormalizedDisplay()
+  slider.GetPoint2Coordinate().SetValue(0.4, 0.1)
 
   slider.SetTubeWidth(0.008)
   slider.SetSliderLength(0.008)
@@ -35,18 +49,17 @@ def addSliderWidget(interactor):
   slider.SetLabelHeight(0.04)
 
   sliderWidget = vtk.vtkSliderWidget()
-  sliderWidget.SetInteractor(interactor);
-  sliderWidget.SetRepresentation(slider);
-  sliderWidget.SetAnimationModeToAnimate();
-  sliderWidget.EnabledOn();
+  sliderWidget.SetInteractor(interactor)
+  sliderWidget.SetRepresentation(slider)
+  sliderWidget.SetAnimationModeToAnimate()
+  sliderWidget.EnabledOn()
 
-  # sliderWidget.AddObserver(vtkCommand::InteractionEvent, callbackChordError);
-  #TODO:
+  sliderWidget.AddObserver("InteractionEvent", SliderObserver(slider, contour))
   return sliderWidget
 
 def createWindow(renderer):
   # addConeActor(renderer)
-  lut = addHeadActor(renderer)
+  headActor = addHeadActor(renderer)
 
   camera = renderer.GetActiveCamera()
   camera.SetRoll(180)
@@ -63,9 +76,9 @@ def createWindow(renderer):
   interactor.SetInteractorStyle(vtk.vtkInteractorStyleTrackballCamera())
   interactor.SetRenderWindow(window)
 
-  scalarBarWidget = addScalarBarWidget(interactor, lut)
-
-  sliderWidget = addSliderWidget(interactor)
+  headMapper = headActor.GetMapper()
+  scalarBarWidget = addScalarBarWidget(interactor, headMapper)
+  sliderWidget = addSliderWidget(interactor, headMapper)
 
   window.Render()
   interactor.Start()
@@ -94,7 +107,7 @@ def getHeadMapper():
   vtk.vtkContourFilter()
 
   ## iso-surface
-  contour = vtk.vtkContourFilter()
+  # contour = vtk.vtkContourFilter()
   contour.SetInputData(reader.GetOutput())
   contour.SetValue(0, 20)
 
@@ -109,20 +122,15 @@ def addConeActor(renderer):
   coneActor = vtk.vtkActor()
   coneActor.SetMapper(getConeMapper())
   renderer.AddActor(coneActor)
+  return coneActor
 
 def addHeadActor(renderer):
-  headMapper = getHeadMapper()
-
-  lut = vtk.vtkLookupTable()
-  lut.Build()
-  headMapper.SetLookupTable(lut)
-
   headActor = vtk.vtkActor()
-  headActor.SetMapper(headMapper)
+  headActor.SetMapper(getHeadMapper())
   # show the edges of the image grid
   # headActor.GetProperty().SetRepresentationToWireframe()
   renderer.AddActor(headActor)
-  return lut
+  return headActor
 
 def main():
   # render
