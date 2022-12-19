@@ -17,6 +17,7 @@ def addScalarBarWidget(interactor, lut):
 def addSliderWidget(interactor):
   slider = vtk.vtkSliderRepresentation2D();
 
+  #TODO: min, max, initial
   slider.SetMinimumValue(0.0);
   slider.SetMaximumValue(181.6048126220703);
   # slider.SetValue(tessellate.GetChordError());
@@ -25,12 +26,13 @@ def addSliderWidget(interactor):
   slider.GetPoint1Coordinate().SetCoordinateSystemToNormalizedDisplay();
   slider.GetPoint1Coordinate().SetValue(0.1, 0.1);
   slider.GetPoint2Coordinate().SetCoordinateSystemToNormalizedDisplay();
-  slider.GetPoint2Coordinate().SetValue(0.9, 0.1);
+  slider.GetPoint2Coordinate().SetValue(0.4, 0.1);
 
-  slider.SetTubeWidth(0.008);
-  slider.SetSliderLength(0.008);
-  slider.SetTitleHeight(0.04);
-  slider.SetLabelHeight(0.04);
+  slider.SetTubeWidth(0.008)
+  slider.SetSliderLength(0.008)
+  slider.SetSliderWidth(0.08)
+  slider.SetTitleHeight(0.04)
+  slider.SetLabelHeight(0.04)
 
   sliderWidget = vtk.vtkSliderWidget()
   sliderWidget.SetInteractor(interactor);
@@ -39,6 +41,8 @@ def addSliderWidget(interactor):
   sliderWidget.EnabledOn();
 
   # sliderWidget.AddObserver(vtkCommand::InteractionEvent, callbackChordError);
+  #TODO:
+  return sliderWidget
 
 def createWindow(renderer):
   # addConeActor(renderer)
@@ -61,7 +65,7 @@ def createWindow(renderer):
 
   scalarBarWidget = addScalarBarWidget(interactor, lut)
 
-  # addSliderWidget(interactor)
+  sliderWidget = addSliderWidget(interactor)
 
   window.Render()
   interactor.Start()
