@@ -34,8 +34,9 @@ salloc -proutage -n1 -c24 make -j24
 - `-p, --partition <partitionName>` partition name routage
 - `-N, --nodes <nbNodes>` number of nodes
 - `-n, --ntasks <nbTasks>` number of MPI process
-- `-c, --cpus-per-task <nbCores>` Number de coeurs par process MPI
-- `-x` exclusive
+- `-c, --cpus-per-task <nbCores>` number of cores by process
+- `-x, --exclusive` exclusive
+- `--time <d-hh:mm:ss>` ex: `0-03:00:00`
 
 ## Environnement list
 
