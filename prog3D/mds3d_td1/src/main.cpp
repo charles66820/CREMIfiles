@@ -34,7 +34,6 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
             Vector3f direction;
             // d = (p - origin);
             direction = camF + 2 * (i / width - 0.5) * camX + 2 * (j / height - 0.5) * camY;
-            // printf("oui\n");
             // std::cout << d;
             direction.normalize(); // \frac{d}{||d||_2}
             // std::cout << d;
@@ -55,7 +54,13 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
             ///  3. call the integartor to compute the color along this ray
             Color3f color;// = getColor(ray);
 
+            printf("oui\n");
             ///  4. write this color in the result image
+            if (i % 10 && j % 10)
+              result->put(Vector2f(i, j), Color3f(1, 0, 0));
+            else
+              result->put(Vector2f(i, j), Color3f(0, 0, 1));
+
             // result->put(position, color);
         }
 
