@@ -18,9 +18,38 @@ Sphere::~Sphere()
 
 bool Sphere::intersect(const Ray& ray, Hit& hit) const
 {
-    /// TODO: compute ray-sphere intersection
+    /// FIXME: compute ray-sphere intersection
 
-    throw RTException("Sphere::intersect not implemented yet.");
+    auto c = m_center;
+    auto r = m_radius;
+    auto o = ray.origin;
+    auto d = ray.direction;
+
+    // d*d * t^2 + (2 * d.dot(o - c)) * t + (||o - c||^2 - r^2) = 0
+    auto a = d.dot(d);
+    auto b = 2 * d.dot(o - c);
+    auto v = (o - c).norm();
+    auto c_ = (v * v) - (r * r);
+
+    auto delta = (b * b) - 4 * a * c_;
+
+    if (delta > 0) {
+        auto t1 = (-b - sqrt(delta)) / (2 * a);
+        auto t2 = (-b + sqrt(delta)) / (2 * a);
+
+        hit.setShape(this);
+        hit.setT(t1 <= t2 ? t1 : t2);
+        // hit.setNormal(m_normal);
+        return true;
+    } else if (delta == 0) {
+        auto t = -(b / (2 * a));
+        hit.setShape(this);
+        hit.setT(t);
+        // hit.setNormal(m_normal);
+        return true;
+    }
+
+    // throw RTException("Sphere::intersect not implemented yet.");
 
     return false;
 }

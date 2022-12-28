@@ -22,9 +22,9 @@ bool Plane::intersect(const Ray& ray, Hit& hit) const {
     // la distance parcouru par le ray
     float t = 1.0;//m_normal.dot(point - ray.origin) / dot;
 
-    // Point3f pointIntersectBetweenPlaneAndRay = ray.at(t);
+    Point3f OpDxT = ray.at(t);
+    // if (OpDxT.norm() == 0) return false;
 
-    // if (pointIntersectBetweenPlaneAndRay == NULL) return false;
     hit.setShape(this);
     hit.setT(t);
     hit.setNormal(m_normal);

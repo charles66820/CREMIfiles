@@ -21,22 +21,27 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
     // camF : distance focal ?
     // camX, camY : axes sur l'image
 
-    /// TODO: here
+    /// FIXME: here
     ///  1. iterate over the image pixels
     uint width = camera->vpWidth();
     uint height = camera->vpHeight();
     Point3f origin = camera->position() + camF - camX - camY; // axe optique
+
+    std::cout << "width :" << width << std::endl;
+    std::cout << "height :" << height << std::endl;
+    std::cout << "camera pos :" << camera->position().toString() << std::endl;
+    std::cout << "camF :" << camF.toString() << std::endl;
+    std::cout << "camX :" << camX.toString() << std::endl;
+    std::cout << "camY :" << camY.toString() << std::endl;
+    std::cout << "origin :" << origin.toString() << std::endl;
+
     for (uint i = 0; i < width; i++)
         for (uint j = 0; j < height; j++) {
-            Point3f position; // P_{i,j}
-            position = 2 * (i / width - 0.5) * camX + 2 * (j / height - 0.5) * camY;
-            // p = camera->position() + Vector3f(x, y, 0);
             Vector3f direction;
-            // d = (p - origin);
             direction = camF + 2 * (i / width - 0.5) * camX + 2 * (j / height - 0.5) * camY;
-            // std::cout << d;
-            direction.normalize(); // \frac{d}{||d||_2}
-            // std::cout << d;
+            // std::cout << "direction :" << direction.toString() << std::endl;
+            direction.normalize(); // \frac{d}{||d||}
+            // std::cout << "direction :" << direction.toString() << std::endl;
 
             // if (x == 0 && y == 0) {
             //     Vector3f vpX = camX;
@@ -52,16 +57,10 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
             Ray ray = Ray(origin, direction);
 
             ///  3. call the integartor to compute the color along this ray
-            Color3f color;// = getColor(ray);
+            Color3f color = integrator->Li(scene, ray);
 
-            printf("oui\n");
             ///  4. write this color in the result image
-            if (i % 10 && j % 10)
-              result->put(Vector2f(i, j), Color3f(1, 0, 0));
-            else
-              result->put(Vector2f(i, j), Color3f(0, 0, 1));
-
-            // result->put(position, color);
+            result->put(Vector2f(i, j), color);
         }
 
     t = clock() - t;
