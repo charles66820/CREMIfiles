@@ -38,20 +38,8 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
     for (uint i = 0; i < width; i++)
         for (uint j = 0; j < height; j++) {
             Vector3f direction;
-            direction = camF + 2 * (i / width - 0.5) * camX + 2 * (j / height - 0.5) * camY;
-            // std::cout << "direction :" << direction.toString() << std::endl;
-            direction.normalize(); // \frac{d}{||d||}
-            // std::cout << "direction :" << direction.toString() << std::endl;
-
-            // if (x == 0 && y == 0) {
-            //     Vector3f vpX = camX;
-            //     vpX.normalize();
-            //     vpX *= camX.norm() / width * 2;
-            //     Vector3f vpY = camY;
-            //     vpY.normalize();
-            //     vpY *= camY.norm() / height * 2;
-            // }
-
+            direction = camF + 2 * (i / (width - 0.5)) * camX + 2 * (j / (height - 0.5)) * camY;
+            direction.normalize();
 
             /// 2. generate a primary ray
             Ray ray = Ray(origin, direction);

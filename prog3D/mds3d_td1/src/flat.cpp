@@ -20,7 +20,7 @@ public:
             return color;
         }
 
-        return scene->backgroundColor();
+        return Color3f(0.f); //scene->backgroundColor();
     }
 
     std::string toString() const {
