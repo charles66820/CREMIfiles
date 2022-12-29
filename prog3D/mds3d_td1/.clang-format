@@ -1,0 +1,142 @@
+---
+Language: Cpp
+# BasedOnStyle: Microsoft
+#AlignAfterOpenBracket: Align
+AlignConsecutiveMacros: AcrossComments
+AlignConsecutiveAssignments: false # true var assign align
+AlignConsecutiveDeclarations: false # true var type align
+AlignEscapedNewlines: Left
+AlignOperands: true
+#AlignTrailingComments: Always #FIXME:
+#AllowAllArgumentsOnNextLine: false # fun args
+#AllowAllParametersOfDeclarationOnNextLine: false # fun args
+AllowShortBlocksOnASingleLine: Never # Empty: {}, Never: {\n}
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: None # Empty: {}, None: {\n}
+AllowShortLambdasOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: false # break for if [Never, WithoutElse, AllIfsAndElse]
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None # None SEP_STD # deprecated
+AlwaysBreakAfterReturnType: None # None SEP_STD [None, AllDefinitions]
+AlwaysBreakBeforeMultilineStrings: false
+AlwaysBreakTemplateDeclarations: Yes # No SEP_STD
+BinPackArguments: false # f(a,\n? b) break line
+BinPackParameters: false # f(int a,\n? int b) break line
+BraceWrapping: # new line after brace {}
+  AfterCaseLabel: false # false SEP_STD
+  AfterClass: true # false SEP_STD
+  AfterControlStatement: Never # [Never, Always] SEP_STD (if/for/while/switch...)
+  AfterEnum: false
+  AfterFunction: true # false SEP_STD # Wrap function definitions
+  AfterNamespace: true # false SEP_STD
+  AfterObjCDeclaration: true # false SEP_STD
+  AfterStruct: false # false SEP_STD
+  AfterUnion: false # false SEP_STD
+  AfterExternBlock: false # false SEP_STD
+  BeforeCatch: false # false SEP_STD
+  BeforeElse: false # false SEP_STD
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Linux # Attach SEP_STD # [Attach, Linux, Mozilla]
+BreakInheritanceList: BeforeColon # [BeforeColon, AfterComma]
+BreakBeforeTernaryOperators: false # ? :
+#BreakConstructorInitializersBeforeComma: false
+BreakConstructorInitializers: BeforeColon # AfterColon
+BreakStringLiterals: false # true see for break
+CompactNamespaces: false
+PackConstructorInitializers: Never # clang-format 14
+#AllowAllConstructorInitializersOnNextLine: false # deprecated 14
+#ConstructorInitializerAllOnOneLineOrOnePerLine: true # deprecated 14
+ConstructorInitializerIndentWidth: 4 # TAB_SIZE_BLOCK
+ContinuationIndentWidth: 4 # TAB_SIZE_BLOCK
+Cpp11BracedListStyle: true
+DeriveLineEnding: true
+#DerivePointerAlignment: false
+PointerAlignment: Right
+QualifierAlignment: Left # clang-format 14
+#ExperimentalAutoDetectBinPacking: false
+FixNamespaceComments: true
+ForEachMacros: [foreach, Q_FOREACH, BOOST_FOREACH]
+IndentAccessModifiers: true
+AccessModifierOffset: 0 # -3
+IndentCaseLabels: true
+IndentGotoLabels: true
+IndentPPDirectives: BeforeHash # [None, BeforeHash] SEP_STD
+IndentWidth: 4 # 4 TAB_SIZE
+TabWidth: 4 # 4 TAB_SIZE
+IndentWrappedFunctionNames: false
+JavaScriptQuotes: Leave # [Leave: Double] SEP_STD
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: None
+PenaltyBreakAssignment: 2
+PenaltyBreakBeforeFirstCallParameter: 19
+ColumnLimit: 120 # 80
+PenaltyBreakComment: 120
+PenaltyBreakFirstLessLess: 120
+PenaltyBreakString: 120
+PenaltyBreakTemplateDeclaration: 10
+PenaltyExcessCharacter: 120
+PenaltyReturnTypeOnItsOwnLine: 120
+ReflowComments: false # true
+SortUsingDeclarations: true
+SpaceAfterCStyleCast: false # true
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: true
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceInEmptyBlock: true # false {} | { }
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: Never # [Never, Always] <> | < >
+SpacesInConditionalStatement: false
+SpacesInCStyleCastParentheses: false
+SpacesInContainerLiterals: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpaceBeforeSquareBrackets: false
+Standard: Auto # Latest
+UseTab: Never
+#UseCRLF: false
+SortIncludes: true
+IncludeBlocks: Preserve
+#IncludeCategories:
+#  - Regex: '^"(llvm|llvm-c|clang|clang-c)/'
+#    Priority: 1
+#    SortPriority: 0
+#  - Regex: '^<.*\.h>'
+#    Priority: 2
+#  - Regex: "^<.*"
+#    Priority: 3
+#  - Regex: '^(<|"(gtest|gmock|isl|json)/)'
+#    Priority: 4
+#    SortPriority: 0
+#  - Regex: ".*"
+#    Priority: 4
+#    SortPriority: 0
+#IncludeIsMainRegex: "(Test)?$"
+#IncludeIsMainSourceRegex: ""
+#CommentPragmas: "^ IWYU pragma:" # DON'T BREAK SOM COMMENTS
+#MacroBlockBegin: ""
+#MacroBlockEnd: ""
+#StatementMacros:
+#  - Q_UNUSED
+#  - QT_REQUIRE_VERSION
+---
+Language: JavaScript
+JavaScriptWrapImports: true
+DisableFormat: true
+---
+Language: ObjC
+ObjCBinPackProtocolList: Always
+ObjCBlockIndentWidth: 2
+ObjCSpaceAfterProperty: false
+ObjCSpaceBeforeProtocolList: false

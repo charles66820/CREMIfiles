@@ -8,17 +8,17 @@ Sphere::Sphere(float radius)
 
 Sphere::Sphere(const PropertyList &propList)
 {
-    m_radius = propList.getFloat("radius",1.f);
-    m_center = propList.getPoint("center",Point3f(0,0,0));
+    m_radius = propList.getFloat("radius", 1.f);
+    m_center = propList.getPoint("center", Point3f(0, 0, 0));
 }
 
 Sphere::~Sphere()
 {
 }
 
-bool Sphere::intersect(const Ray& ray, Hit& hit) const
+bool Sphere::intersect(const Ray &ray, Hit &hit) const
 {
-    /// FIXME: compute ray-sphere intersection
+    // compute ray-sphere intersection
 
     auto c = m_center;
     auto r = m_radius;
