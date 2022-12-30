@@ -4,7 +4,8 @@
   <color name="background" value="0.5, 0.5, 0.5"/>
 
  <!-- Use the flat color integrator -->
- <integrator type="flat"/>
+ <!-- <integrator type="flat"/> -->
+ <integrator type="normals" />
 
  <!-- Render the scene as viewed by a perspective camera -->
  <camera type="perspective">

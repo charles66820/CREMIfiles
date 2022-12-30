@@ -33,19 +33,20 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
 
     auto delta = (b * b) - 4 * a * c_;
 
-    if (delta > 0) {
-        auto t1 = (-b - sqrt(delta)) / (2 * a);
-        auto t2 = (-b + sqrt(delta)) / (2 * a);
+    if (delta >= 0) {
+        float t;
+        if (delta > 0) {
+            float t1 = (-b - sqrt(delta)) / (2 * a);
+            float t2 = (-b + sqrt(delta)) / (2 * a);
+            t = t1 <= t2 ? t1 : t2;
+        } else if (delta == 0) {
+            t = -(b / (2 * a));
+        }
 
-        hit.setShape(this);
-        hit.setT(t1 <= t2 ? t1 : t2);
-        // hit.setNormal(m_normal);
-        return true;
-    } else if (delta == 0) {
-        auto t = -(b / (2 * a));
+        Point3f intersectPoint = ray.at(t);
         hit.setShape(this);
         hit.setT(t);
-        // hit.setNormal(m_normal);
+        hit.setNormal(intersectPoint);
         return true;
     }
 

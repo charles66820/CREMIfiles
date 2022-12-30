@@ -41,13 +41,13 @@ bool Plane::intersect(const Ray& ray, Hit& hit) const
     // t == 0 ⟹ le rayon est confondu avec le plan
     // t > 0 ⟹ intersection devant la caméra
     if (t == 0 || t > 0) {
+        Point3f intersectPoint = ray.at(t);
         hit.setShape(this);
         hit.setT(t);
-        // hit.setNormal(m_normal);
+        hit.setNormal(intersectPoint);
         return true;
     }
 
-    // Point3f OpDxT = ray.at(t);
     // if (OpDxT.norm() == 0) return false;
 
     return false;
