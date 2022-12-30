@@ -46,7 +46,7 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
         Point3f intersectPoint = ray.at(t);
         hit.setShape(this);
         hit.setT(t);
-        hit.setNormal(intersectPoint);
+        hit.setNormal((intersectPoint - c).normalized());
         return true;
     }
 
