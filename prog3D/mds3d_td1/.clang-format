@@ -56,13 +56,13 @@ ContinuationIndentWidth: 4 # TAB_SIZE_BLOCK
 Cpp11BracedListStyle: true
 DeriveLineEnding: true
 #DerivePointerAlignment: false
-PointerAlignment: Right
+PointerAlignment: Left
 QualifierAlignment: Left # clang-format 14
 #ExperimentalAutoDetectBinPacking: false
 FixNamespaceComments: true
 ForEachMacros: [foreach, Q_FOREACH, BOOST_FOREACH]
-IndentAccessModifiers: true
-AccessModifierOffset: 0 # -3
+IndentAccessModifiers: false
+AccessModifierOffset: -4
 IndentCaseLabels: true
 IndentGotoLabels: true
 IndentPPDirectives: BeforeHash # [None, BeforeHash] SEP_STD

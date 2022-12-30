@@ -3,7 +3,7 @@
 class PointLight : public Light
 {
 public:
-    PointLight(const PropertyList &propList)
+    PointLight(const PropertyList& propList)
         : Light(propList.getColor("intensity", Color3f(1.f)))
     {
         m_position = propList.getPoint("position", Point3f::UnitX());
@@ -25,13 +25,14 @@ public:
         return Color3f(0.f);
     }
 
-    std::string toString() const {
-        return tfm::format(
-            "PointLight[\n"
-            "  intensity = %s\n"
-            "  position = %s\n"
-            "]", m_intensity.toString(),
-                 ::toString(m_position));
+    std::string toString() const
+    {
+        return tfm::format("PointLight[\n"
+                           "  intensity = %s\n"
+                           "  position = %s\n"
+                           "]",
+                           m_intensity.toString(),
+                           ::toString(m_position));
     }
 
 protected:
