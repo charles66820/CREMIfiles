@@ -1,5 +1,6 @@
 #include "viewer.h"
 
+// #include "contentPanel.h" TODO: mouve move camera
 #include "parser.h"
 
 #include <filesystem/resolver.h>
@@ -18,6 +19,7 @@ Viewer::Viewer() :
 
     /* Add some UI elements to adjust the exposure value */
     using namespace nanogui;
+    // m_panel = new ContentPanel(this); TODO: mouve move camera
     m_panel = new Widget(this);
     m_panel->setLayout(new BoxLayout(Orientation::Horizontal, Alignment::Middle, 10, 10));
     m_checkbox = new CheckBox(m_panel,"srgb");
@@ -239,6 +241,37 @@ void Viewer::loadImage(const std::string &filename)
 
 bool Viewer::keyboardEvent(int key, int scancode, int action, int modifiers)
 {
+    auto startRender = [&]() {
+        if (m_scene && m_renderingDone) {
+            m_renderingDone = false;
+            /* Determine the filename of the output bitmap */
+            std::string outputName = m_curentFilename;
+            size_t lastdot = outputName.find_last_of(".");
+            if (lastdot != std::string::npos)
+                outputName.erase(lastdot, std::string::npos);
+            outputName += ".exr";
+
+            /* Allocate memory for the entire output image */
+            if (m_resultImage)
+                delete m_resultImage;
+            m_resultImage = new ImageBlock(m_scene->camera()->outputSize());
+
+            std::thread render_thread(render, m_scene, m_resultImage, outputName, &m_renderingDone);
+            render_thread.detach();
+            m_button1->setEnabled(true);
+            m_button2->setEnabled(true);
+        }
+    };
+
+    auto moveCamera = [&](Point3f delta) {
+        if (m_scene) {
+            auto c = m_scene->camera();
+            c->setPosition(c->position() + delta);
+            startRender();
+            return true;
+        }
+    };
+
     if(action == GLFW_PRESS) {
         switch(key)
         {
@@ -254,28 +287,23 @@ bool Viewer::keyboardEvent(int key, int scancode, int action, int modifiers)
         }
         case GLFW_KEY_R:
         {
-            if(m_scene && m_renderingDone) {
-                m_renderingDone = false;
-                /* Determine the filename of the output bitmap */
-                std::string outputName = m_curentFilename;
-                size_t lastdot = outputName.find_last_of(".");
-                if (lastdot != std::string::npos)
-                    outputName.erase(lastdot, std::string::npos);
-                outputName += ".exr";
-
-                /* Allocate memory for the entire output image */
-                if(m_resultImage)
-                    delete m_resultImage;
-                m_resultImage = new ImageBlock(m_scene->camera()->outputSize());
-
-                std::thread render_thread(render,m_scene,m_resultImage,outputName,&m_renderingDone);
-                render_thread.detach();
-                m_button1->setEnabled(true);
-                m_button2->setEnabled(true);
-            }
+            startRender();
             return true;
         }
+        case GLFW_KEY_KP_6:
+            return moveCamera(Point3f(0.1, 0, 0));
+        case GLFW_KEY_KP_4:
+            return moveCamera(Point3f(-0.1, 0, 0));
+        case GLFW_KEY_KP_8:
+            return moveCamera(Point3f(0, 0.1, 0));
+        case GLFW_KEY_KP_2:
+            return moveCamera(Point3f(0, -0.1, 0));
+        case GLFW_KEY_KP_7:
+            return moveCamera(Point3f(0, 0, -0.1));
+        case GLFW_KEY_KP_9:
+            return moveCamera(Point3f(0, 0, 0.1));
         case GLFW_KEY_ESCAPE:
+        case GLFW_KEY_Q:
             exit(0);
         default:
             break;

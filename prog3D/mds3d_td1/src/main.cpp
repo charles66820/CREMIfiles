@@ -19,10 +19,9 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
     Vector3f camY = -camera->up() * tanfovy2 * camera->nearDist();
     Vector3f camF = camera->direction() * camera->nearDist();
 
-    // camF : distance focal ?
+    // camF : distance focal
     // camX, camY : axes sur l'image
 
-    /// FIXME: here
     ///  1. iterate over the image pixels
     uint width = camera->vpWidth();
     uint height = camera->vpHeight();

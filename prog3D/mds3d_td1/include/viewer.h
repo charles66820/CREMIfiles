@@ -1,6 +1,7 @@
 #ifndef VIEWER_H
 #define VIEWER_H
 
+// #include "contentPanel.h" TODO: mouve move camera
 #include "scene.h"
 #include "block.h"
 
