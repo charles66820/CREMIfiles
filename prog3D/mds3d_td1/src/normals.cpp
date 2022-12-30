@@ -19,9 +19,9 @@ public:
             auto normal = hit.normal();
 
             // [1, -1] => [1, 0]
-            float r = (normal.x() + 1) / 2;
-            float g = (normal.y() + 1) / 2;
-            float b = (normal.z() + 1) / 2;
+            float r = (abs(normal.x())) / 2;
+            float g = (abs(normal.y())) / 2;
+            float b = (abs(normal.z())) / 2;
 
             return Color3f(r, g, b);
         }
