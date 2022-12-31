@@ -1,6 +1,5 @@
 #include "viewer.h"
 
-// #include "contentPanel.h" TODO: mouve move camera
 #include "parser.h"
 
 #include <filesystem/resolver.h>
@@ -19,7 +18,6 @@ Viewer::Viewer() :
 
     /* Add some UI elements to adjust the exposure value */
     using namespace nanogui;
-    // m_panel = new ContentPanel(this); TODO: mouve move camera
     m_panel = new Widget(this);
     m_panel->setLayout(new BoxLayout(Orientation::Horizontal, Alignment::Middle, 10, 10));
     m_checkbox = new CheckBox(m_panel,"srgb");

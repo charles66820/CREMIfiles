@@ -20,10 +20,8 @@ public:
     ContentPanel(nanogui::Screen* screen);
     ~ContentPanel();
 
-    // virtual bool mouseButtonEvent(const Vector2i& p, int button, bool down, int modifiers);
-    virtual bool mouseMotionEvent(const Vector2i& p, const Vector2i& rel, int button, int modifiers);
-    // virtual bool mouseDragEvent(const Vector2i& p, const Vector2i& rel, int button, int modifiers);
-    // virtual bool mouseEnterEvent(const Vector2i& p, bool enter);
+    virtual void draw(NVGcontext *ctx) override;
+    // virtual bool mouseMotionEvent(const Vector2i& p, const Vector2i& rel, int button, int modifiers);
 };
 
 #endif // CONTENTPANEL_H

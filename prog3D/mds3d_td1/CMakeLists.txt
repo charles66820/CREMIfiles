@@ -45,7 +45,6 @@ set(SRCS
     include/vector.h
     include/block.h
     include/viewer.h
-    # include/contentPanel.h TODO: mouve move camera
     include/bitmap.h
     include/camera.h
     include/ray.h
@@ -84,7 +83,6 @@ set(SRCS
     src/flat.cpp
     src/normals.cpp
     src/direct.cpp
-    # src/contentPanel.cpp TODO: mouve move camera
 )
 
 add_executable(mds3d_raytracer ${SRCS})

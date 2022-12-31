@@ -12,7 +12,6 @@
 ContentPanel::ContentPanel(nanogui::Screen* screen)
     : nanogui::Widget(screen)
 {
-    using namespace nanogui;
     m_screen = screen;
 }
 
@@ -20,31 +19,21 @@ ContentPanel::~ContentPanel()
 {
 }
 
-int prevMouseX = 0;
-int prevMouseY = 0;
-int sensitivity = 100;
-
-// bool ContentPanel::mouseButtonEvent(const Vector2i& p, int button, bool down, int modifiers)
-// {
-//     std::cout << "mouseButtonEvent" << std::endl;
-//     std::cout << p << std::endl;
-// }
-bool ContentPanel::mouseMotionEvent(const Vector2i& p, const Vector2i& rel, int button, int modifiers)
+void ContentPanel::draw(NVGcontext* ctx)
 {
-    std::cout << "mouseMotionEvent" << std::endl;
-    std::cout << p << std::endl;
+    nvgSave(ctx);
+    nvgTranslate(ctx, mPos.x(), mPos.y());
+    nvgBeginPath(ctx);
+    nvgRect(ctx, 0, 0, mSize.x(), mSize.y());
+    nvgFillColor(ctx, nanogui::Color(255, 0, 0, 255));
+    nvgFill(ctx);
+    nvgRestore(ctx);
+    nanogui::Widget::draw(ctx);
 }
-// bool ContentPanel::mouseDragEvent(const Vector2i& p, const Vector2i& rel, int button, int modifiers)
-// {
-//     std::cout << "mouseDragEvent" << std::endl;
-//     std::cout << p << std::endl;
-// }
-// bool ContentPanel::mouseEnterEvent(const Vector2i& p, bool enter)
-// {
-//     std::cout << "mouseEnterEvent" << std::endl;
-//     std::cout << p << std::endl;
-// }
 
+// int prevMouseX = 0;
+// int prevMouseY = 0;
+// int sensitivity = 100;
 // bool ContentPanel::mouseMotionEvent(const Vector2i& p, const Vector2i& rel, int button, int modifiers)
 // {
     // std::cout << "toto" << std::endl;
