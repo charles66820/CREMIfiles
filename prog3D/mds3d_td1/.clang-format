@@ -69,7 +69,6 @@ IndentPPDirectives: BeforeHash # [None, BeforeHash] SEP_STD
 IndentWidth: 4 # 4 TAB_SIZE
 TabWidth: 4 # 4 TAB_SIZE
 IndentWrappedFunctionNames: false
-JavaScriptQuotes: Leave # [Leave: Double] SEP_STD
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: None
@@ -132,6 +131,7 @@ IncludeBlocks: Preserve
 #  - QT_REQUIRE_VERSION
 ---
 Language: JavaScript
+JavaScriptQuotes: Leave # [Leave: Double] SEP_STD
 JavaScriptWrapImports: true
 DisableFormat: true
 ---

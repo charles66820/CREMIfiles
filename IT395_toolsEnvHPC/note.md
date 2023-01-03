@@ -37,6 +37,7 @@ salloc -proutage -n1 -c24 make -j24
 - `-c, --cpus-per-task <nbCores>` number of cores by process
 - `-x, --exclusive` exclusive
 - `--time <d-hh:mm:ss>` ex: `0-03:00:00`
+- `--mpi=pmi2` choose mpi imp
 
 ## Environnement list
 
