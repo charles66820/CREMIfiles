@@ -10,3 +10,4 @@ node_modules/
 .frama-c/
 .Rhistory
 IT390_Multicoeurs/Linux_Intel64/*
+__pycache__
