@@ -29,6 +29,7 @@ srun -C haswell --time=03:00:00 --pty bash -i
 srun -N 1 -n 12 --exclusive --time=03:00:00 --pty bash -i
 salloc -proutage --exclusive -N4 -n4 -c24 mpirun ./prog
 salloc -proutage -n1 -c24 make -j24
+salloc -proutage -N 3 --exclusive mpirun --map-by ppr:4:node hostname
 ```
 
 - `-p, --partition <partitionName>` partition name routage
