@@ -58,14 +58,15 @@ object Tweets_Scala {
 
     val hashtagsCount = hashtags.map(x => (x, 1)).reduceByKey(_+_)
 
-    println("20 most popular hashtags:")
-    hashtagsCount.map(x => (x._2, x._1)).top(20).foreach(println)
+    println("\n20 most popular hashtags:")
+    val res = hashtagsCount.map(x => (x._2, x._1)).top(20)
+    res.zipWithIndex.foreach(x => println("%2d. %d %s".format(x._2 + 1, x._1._1, x._1._2)))
 
     // println("Number of hashtags:")
     // println(hashtags.distinct().count())
 
     val hashtagsByTweet = dataTab.map(_(4).asInstanceOf[List[String]]).filter(_.nonEmpty)
-    val hashtagsCombByTweet = hashtagsByTweet.map(_.combinations(2).toList.map(x => (x(0), x(1))))
+    // val hashtagsCombByTweet = hashtagsByTweet.map(_.combinations(2).toList.map(x => (x(0), x(1))))
     val hashtagsPermByTweet = hashtagsByTweet.map(_.combinations(2).map(_.permutations.toList.map(x => (x(0), x(1)))).toList).flatMap(x => x)
 
     val hashtagsValPBT = hashtagsPermByTweet.flatMap(x => x).map((_, 1))
@@ -77,8 +78,14 @@ object Tweets_Scala {
 
     val groupedHashtags = hashtagsCountList.groupByKey
 
-    groupedHashtags.take(20).foreach(println)
+    println("\n20 hashtags with related hashtags:")
+    val res2 = groupedHashtags.take(20)
+    res2.zipWithIndex.foreach(x => println("%2d. %s [%s]".format(x._2 + 1, x._1._1, x._1._2.toList.sortBy(x => x).map(x => x._2 + " " + x._1).toString.replaceAll("^List\\(|\\)$", ""))))
 
+    println("\nNumber of hashtags with related hashtags:")
     println(groupedHashtags.count())
+
+    println("\nNumber of hashtags:")
+    println(hashtags.distinct().count())
 	}
 }
