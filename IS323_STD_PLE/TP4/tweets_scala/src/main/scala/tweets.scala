@@ -42,11 +42,25 @@ object Tweets_Scala {
 		sc.setLogLevel("ERROR")
 
     val data = sc.textFile("/user/fzanonboito/CISD/tiny_twitter.json")
+
+    println("Number of partitions:")
+    println(data.getNumPartitions)
+
+    println("Number of executors:")
+    val nbExecutors = sc.statusTracker.getExecutorInfos.length-1
+    println(nbExecutors)
+    // println(sc.getConf.get("spark.executor.instances"))
+
+    println("Number of cores by executors:")
+    println(sc.defaultParallelism / nbExecutors)
+
     val dataJsonMap = data.map(jsonStrToMap(_))
 
     val dataTab = dataJsonMap.map(getData)
-    println("Number of tweets:")
+    println("\nNumber of tweets:")
+    var tBegin = System.nanoTime
     println(dataTab.count())
+    println("exec in " + ((System.nanoTime - tBegin) / 1e9d))
 
     // x(0).asInstanceOf[String]
     // x(1).asInstanceOf[int]
@@ -59,7 +73,9 @@ object Tweets_Scala {
     val hashtagsCount = hashtags.map(x => (x, 1)).reduceByKey(_+_)
 
     println("\n20 most popular hashtags:")
+    tBegin = System.nanoTime
     val res = hashtagsCount.map(x => (x._2, x._1)).top(20)
+    println("exec in " + ((System.nanoTime - tBegin) / 1e9d))
     res.zipWithIndex.foreach(x => println("%2d. %d %s".format(x._2 + 1, x._1._1, x._1._2)))
 
     // println("Number of hashtags:")
@@ -79,13 +95,19 @@ object Tweets_Scala {
     val groupedHashtags = hashtagsCountList.groupByKey
 
     println("\n20 hashtags with related hashtags:")
+    tBegin = System.nanoTime
     val res2 = groupedHashtags.take(20)
+    println("exec in " + ((System.nanoTime - tBegin) / 1e9d))
     res2.zipWithIndex.foreach(x => println("%2d. %s [%s]".format(x._2 + 1, x._1._1, x._1._2.toList.sortBy(x => x).map(x => x._2 + " " + x._1).toString.replaceAll("^List\\(|\\)$", ""))))
 
     println("\nNumber of hashtags with related hashtags:")
+    tBegin = System.nanoTime
     println(groupedHashtags.count())
+    println("exec in " + ((System.nanoTime - tBegin) / 1e9d))
 
     println("\nNumber of hashtags:")
+    tBegin = System.nanoTime
     println(hashtags.distinct().count())
+    println("exec in " + ((System.nanoTime - tBegin) / 1e9d))
 	}
 }

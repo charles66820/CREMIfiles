@@ -16,6 +16,7 @@ mvn package
 scp target/tweets_scala-0.0.1.jar lsd_remote:
 ssh lsd_remote
 spark-submit --master yarn tweets_scala-0.0.1.jar
+spark-submit --num-executors 2 --executor-cores 2 --master yarn tweets_scala-0.0.1.jar
 ```
 
 `/user/fzanonboito/CISD/smaller_twitter.json`
@@ -33,6 +34,13 @@ def jsonStrToMap(jsonStr: String): Map[String, Any] = {
 }
 
 val data = sc.textFile("/user/fzanonboito/CISD/tiny_twitter.json")
+
+println("Number of partitions:")
+println(data.getNumPartitions)
+println("Number of executors:")
+println(sc.getConf.get("spark.executor.instances"))
+println(sc.statusTracker.getExecutorInfos.length)
+
 val dataJsonMap = data.map(jsonStrToMap(_))
 
 def getData(x: Map[String, Any]): Array[Any] = {
@@ -60,7 +68,7 @@ def getData(x: Map[String, Any]): Array[Any] = {
 }
 
 val dataTab = dataJsonMap.map(getData)
-println("Number of tweets:")
+println("\nNumber of tweets:")
 println(dataTab.count())
 
 // x(0).asInstanceOf[String]
