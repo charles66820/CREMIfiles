@@ -14,3 +14,6 @@ exo6/matmul_tiled
 exo6/gemm_cublas_solution
 exo6/gemm_omp_solution
 exo6/matmul_tiled_solution
+exo7/test1
+exo7/test2
+exo7/test3
