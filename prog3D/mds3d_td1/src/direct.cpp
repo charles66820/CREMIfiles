@@ -17,25 +17,25 @@ public:
         if (hit.foundIntersection()) {
             auto shape = hit.shape();
             auto material = shape->material();
-            auto normal = hit.normal();
-            // auto viewDir = ;
-            // auto lightDir = ;
-            // auto uv = material->texture();
+            Point3f intersectPoint = ray.at(hit.t());
 
-            // scene->lightList();
+            auto n = hit.normal();
+            auto v = ray.direction; // ray direction is the view direction
+            Vector2f uv = NULL; // material->texture();
 
-            Color3f ambient = material->ambientColor();
-            // material->diffuseColor(uv);
-            // material->brdf(viewDir, lightDir, normal, uv);
-            Color3f reflection = material->reflectivity();
+            // The total Reflection (the final color to the view point)
+            Color3f R = Color3f();
+            // ∑_i(ρ⋅max(⟨l_i⋅n⟩,0)I_i)
+            for (auto light : scene->lightList()) {
+                Vector3f l = light->direction(intersectPoint); // direction
+                Color3f I = light->intensity(intersectPoint);  // intensity
+                Color3f rho = material->brdf(v, l, n, uv);
+                R += rho * std::max(l.dot(n), 0.f) * I;
+            }
 
-            float r = (abs(normal.x())) / 2;
-            float g = (abs(normal.y())) / 2;
-            float b = (abs(normal.z())) / 2;
-            Color3f absolute = Color3f(r, g, b);
+            // Color3f reflectivity = material->reflectivity();
 
-            Color3f color = ambient + reflection + absolute;
-            return color;
+            return R;
         }
 
         return scene->backgroundColor();

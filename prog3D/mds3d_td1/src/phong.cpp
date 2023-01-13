@@ -18,11 +18,24 @@ Phong::Phong(const PropertyList& propList)
 
 Color3f Phong::brdf(const Vector3f& viewDir, const Vector3f& lightDir, const Normal3f& normal, const Vector2f& uv) const
 {
-    /// TODO: implement Phong brdf
+    Vector3f v = viewDir;
+    Vector3f l = lightDir;
+    auto n = normal;
 
-    throw RTException("Phong::brdf not implemented yet.");
+    Color3f md = this->diffuseColor(uv); // (m_d) material diffuse color
+    Color3f ms = m_specularColor;        // (m_s) material specular color
 
-    return Color3f(0.f);
+    Color3f rho_d = md; // (ρ_d) diffuse part
+
+    Vector3f r = l - 2 * (n.dot(l)) * n; // The vector l reflected about the normal n
+    auto s = m_exponent; // The shine of the object (m_exponent because is the exponent i the equation)
+
+    // ρ_s = m_s(cos(α))^s = m_s(max(r * v, 0))^s
+    Color3f rho_s = ms * pow(std::max(r.dot(v), 0.f), s); // (ρ_s) specular part
+
+    auto rho = rho_d + rho_s; // ρ
+
+    return rho;
 }
 
 std::string Phong::toString() const
