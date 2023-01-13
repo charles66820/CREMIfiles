@@ -13,6 +13,8 @@ public:
     {
         auto xl = m_position; // x_l
 
+        *dist = (xl - x).norm();
+
         // (x_l-x)/||x_l-x||^2
         return (xl-x)/(xl-x).norm();
     }
@@ -23,7 +25,7 @@ public:
         auto Il = m_intensity; // I_l
 
         // I_l/||x-x_l||^2
-        return m_intensity / (x-xl).norm();
+        return m_intensity / (x - xl).squaredNorm();
     }
 
     std::string toString() const

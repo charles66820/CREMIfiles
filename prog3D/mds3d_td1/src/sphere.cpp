@@ -42,11 +42,13 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
             t = -(b / (2 * a));
         }
 
-        Point3f intersectPoint = ray.at(t);
-        hit.setShape(this);
-        hit.setT(t);
-        hit.setNormal((intersectPoint - c).normalized());
-        return true;
+        if (t > 0.f) {
+            Point3f intersectPoint = ray.at(t);
+            hit.setShape(this);
+            hit.setT(t);
+            hit.setNormal((intersectPoint - c).normalized());
+            return true;
+        }
     }
 
     // throw RTException("Sphere::intersect not implemented yet.");
