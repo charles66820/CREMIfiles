@@ -32,6 +32,7 @@ void Viewer::reshape(int w, int h)
     _winWidth = w;
     _winHeight = h;
     _cam.setViewport(w, h);
+    glViewport(0, 0, _winWidth, _winHeight);
 }
 
 /*!
@@ -39,7 +40,13 @@ void Viewer::reshape(int w, int h)
  */
 void Viewer::drawScene()
 {
-    // TODO
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glClearColor(0.5f, 0.5f, 0.5f, 1);
+
+    _shader.activate();
+    _mesh.draw(_shader);
+    _shader.deactivate();
 }
 
 void Viewer::updateAndDrawScene()

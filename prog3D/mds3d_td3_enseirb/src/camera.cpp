@@ -14,7 +14,7 @@ void Camera::lookAt(const Vector3f& position, const Vector3f& target, const Vect
 {
     mTarget = target;
 
-    // TODO
+    // TODO:
 }
 
 void Camera::setPerspective(float fovY, float near, float far)
@@ -38,7 +38,7 @@ void Camera::zoom(float x)
 
 void Camera::rotateAroundTarget(float angle, Vector3f axis)
 {
-    // TODO
+    // TODO:
 }
 
 Camera::~Camera() {}
