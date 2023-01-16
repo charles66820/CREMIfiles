@@ -13,7 +13,7 @@ AlignOperands: true
 AllowShortBlocksOnASingleLine: Never # Empty: {}, Never: {\n}
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortEnumsOnASingleLine: true
-AllowShortFunctionsOnASingleLine: None # Empty: {}, None: {\n}
+AllowShortFunctionsOnASingleLine: Empty # Empty: {}, None: {\n}
 AllowShortLambdasOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: false # break for if [Never, WithoutElse, AllIfsAndElse]
 AllowShortLoopsOnASingleLine: false
@@ -92,7 +92,7 @@ SpaceBeforeCtorInitializerColon: true
 SpaceBeforeInheritanceColon: true
 SpaceBeforeParens: ControlStatements
 SpaceBeforeRangeBasedForLoopColon: true
-SpaceInEmptyBlock: true # false {} | { }
+SpaceInEmptyBlock: false # false {} | { }
 SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 1
 SpacesInAngles: Never # [Never, Always] <> | < >

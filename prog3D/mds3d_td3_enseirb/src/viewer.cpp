@@ -9,9 +9,7 @@ Viewer::Viewer()
 {
 }
 
-Viewer::~Viewer()
-{
-}
+Viewer::~Viewer() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // GL stuff
@@ -116,6 +114,4 @@ void Viewer::mouseScroll(double /*x*/, double y)
     _cam.zoom(-0.1 * y);
 }
 
-void Viewer::charPressed(int /*key*/)
-{
-}
+void Viewer::charPressed(int /*key*/) {}

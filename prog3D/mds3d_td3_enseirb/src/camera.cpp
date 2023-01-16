@@ -41,9 +41,7 @@ void Camera::rotateAroundTarget(float angle, Vector3f axis)
     // TODO
 }
 
-Camera::~Camera()
-{
-}
+Camera::~Camera() {}
 
 const Matrix4f& Camera::viewMatrix() const
 {
