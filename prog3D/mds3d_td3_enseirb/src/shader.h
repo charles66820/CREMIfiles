@@ -4,7 +4,6 @@
 #include "opengl.h"
 #include <iostream>
 
-
 /** Permet de manipuler des shaders en GLSL
     Exemple d'utilisation:
     \code
@@ -25,8 +24,9 @@ class Shader
 {
 public:
     Shader()
-      : mIsValid(false)
-    {}
+        : mIsValid(false)
+    {
+    }
 
     /** Compiles and links the shader from 2 source files
         \param fileV vertex shader ("" if no vertex shader)
@@ -69,14 +69,19 @@ public:
     int getAttribLocation(const char* name) const;
 
     /** \returns the OpenGL object id of the GLSL program */
-    int id() const { return mProgramID; }
-    
-    bool valid() const { return mIsValid; }
+    int id() const
+    {
+        return mProgramID;
+    }
+
+    bool valid() const
+    {
+        return mIsValid;
+    }
 
     void dumpInfos() const;
 
 protected:
-
     bool mIsValid;
     static void printProgramInfoLog(GLuint objectID);
     static void printShaderInfoLog(GLuint objectID);

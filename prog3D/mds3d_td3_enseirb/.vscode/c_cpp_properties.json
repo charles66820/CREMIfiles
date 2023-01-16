@@ -3,9 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
-              "${workspaceFolder}/**"//,
-              // "/usr/lib/x86_64-linux-gnu/openmpi/include",
-              // "/usr/include"
+              "${workspaceFolder}/**"
             ],
             "defines": [
                 "DATA_DIR=1"

@@ -1,24 +1,22 @@
 #include "shader.h"
+#include <assert.h>
+#include <fstream>
 #include <iostream>
 #include <string>
-#include <fstream>
-#include <assert.h>
 
 std::string loadSourceFromFile(const std::string& filename)
 {
     std::string source = "";
 
-    std::ifstream in(filename.c_str(),std::ios::in);
-    if(!in)
-    {
+    std::ifstream in(filename.c_str(), std::ios::in);
+    if (!in) {
         std::cerr << "File not found " << filename << std::endl;
         return source;
     }
 
     const int maxBuffersize = 2048;
     char buffer[maxBuffersize];
-    while(in.getline(buffer, maxBuffersize))
-    {
+    while (in.getline(buffer, maxBuffersize)) {
         source += std::string(buffer) + "\n";
     }
 
@@ -30,7 +28,7 @@ bool Shader::loadFromFiles(const std::string& fileV, const std::string& fileF)
 {
     std::string vsrc = loadSourceFromFile(fileV);
     std::string fsrc = loadSourceFromFile(fileF);
-    return loadSources(vsrc,fsrc);
+    return loadSources(vsrc, fsrc);
 }
 //--------------------------------------------------------------------------------
 bool Shader::loadSources(const std::string& vsrc, const std::string& fsrc)
@@ -43,17 +41,17 @@ bool Shader::loadSources(const std::string& vsrc, const std::string& fsrc)
     {
         GLuint shaderID = glCreateShader(GL_VERTEX_SHADER);
 
-        const GLchar * arbSource = vsrc.c_str();
+        const GLchar* arbSource = vsrc.c_str();
 
-        glShaderSource(shaderID, 1, (const GLchar **)&arbSource, 0);
+        glShaderSource(shaderID, 1, (const GLchar**)&arbSource, 0);
         glCompileShader(shaderID);
 
         int compiled;
-        glGetShaderiv(shaderID,GL_COMPILE_STATUS,&compiled);
+        glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compiled);
         allIsOk = allIsOk && compiled;
         printShaderInfoLog(shaderID);
 
-        if(compiled)
+        if (compiled)
             glAttachShader(mProgramID, shaderID);
     }
 
@@ -61,17 +59,17 @@ bool Shader::loadSources(const std::string& vsrc, const std::string& fsrc)
     {
         GLuint shaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-        const GLchar * arbSource = fsrc.c_str();
+        const GLchar* arbSource = fsrc.c_str();
 
-        glShaderSource(shaderID, 1, (const GLchar **)&arbSource, 0);
+        glShaderSource(shaderID, 1, (const GLchar**)&arbSource, 0);
         glCompileShader(shaderID);
         int compiled;
-        glGetShaderiv(shaderID,GL_COMPILE_STATUS,&compiled);
+        glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compiled);
 
         allIsOk = allIsOk && compiled;
         printShaderInfoLog(shaderID);
 
-        if(compiled)
+        if (compiled)
             glAttachShader(mProgramID, shaderID);
     }
 
@@ -81,9 +79,9 @@ bool Shader::loadSources(const std::string& vsrc, const std::string& fsrc)
     glGetProgramiv(mProgramID, GL_LINK_STATUS, &isLinked);
     allIsOk = allIsOk && isLinked;
     mIsValid = (isLinked == (int)GL_TRUE);
-    if(allIsOk)
+    if (allIsOk)
         printProgramInfoLog(mProgramID);
-    
+
     return allIsOk;
 }
 //--------------------------------------------------------------------------------
@@ -116,29 +114,30 @@ int Shader::getAttribLocation(const char* name) const
     return glGetAttribLocation(mProgramID, name);
 }
 //--------------------------------------------------------------------------------
-void Shader::dumpInfos() const {
+void Shader::dumpInfos() const
+{
     GLint nbAttrs;
     glGetProgramiv(mProgramID, GL_ACTIVE_ATTRIBUTES, &nbAttrs);
 
     GLchar name[128];
     GLint size;
     GLenum type;
-    for(GLint i=0; i<nbAttrs; ++i) {
+    for (GLint i = 0; i < nbAttrs; ++i) {
         glGetActiveAttrib(mProgramID, i, 128, NULL, &size, &type, name);
-        std::cout << "Attrib " << glGetAttribLocation(mProgramID, name) << ": " << name << ", " << size << ", " << (unsigned int) type << "\n";
+        std::cout << "Attrib " << glGetAttribLocation(mProgramID, name) << ": " << name << ", " << size << ", "
+                  << (unsigned int)type << "\n";
     }
 }
 //--------------------------------------------------------------------------------
 void Shader::printProgramInfoLog(GLuint objectID)
 {
     int infologLength = 0, charsWritten = 0;
-    GLchar *infoLog;
-    glGetProgramiv(objectID,GL_INFO_LOG_LENGTH, &infologLength);
-    if(infologLength > 0)
-    {
+    GLchar* infoLog;
+    glGetProgramiv(objectID, GL_INFO_LOG_LENGTH, &infologLength);
+    if (infologLength > 0) {
         infoLog = new GLchar[infologLength];
         glGetProgramInfoLog(objectID, infologLength, &charsWritten, infoLog);
-        if (charsWritten>0)
+        if (charsWritten > 0)
             std::cerr << "program info : \n" << infoLog << std::endl;
         delete[] infoLog;
     }
@@ -147,13 +146,12 @@ void Shader::printProgramInfoLog(GLuint objectID)
 void Shader::printShaderInfoLog(GLuint objectID)
 {
     int infologLength = 0, charsWritten = 0;
-    GLchar *infoLog;
-    glGetShaderiv(objectID,GL_INFO_LOG_LENGTH, &infologLength);
-    if(infologLength > 0)
-    {
+    GLchar* infoLog;
+    glGetShaderiv(objectID, GL_INFO_LOG_LENGTH, &infologLength);
+    if (infologLength > 0) {
         infoLog = new GLchar[infologLength];
         glGetShaderInfoLog(objectID, infologLength, &charsWritten, infoLog);
-        if (charsWritten>0)
+        if (charsWritten > 0)
             std::cerr << "Shader info : \n" << infoLog << std::endl;
         delete[] infoLog;
     }

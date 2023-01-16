@@ -15,7 +15,7 @@ static void char_callback(GLFWwindow* /*window*/, unsigned int key)
 
 static void scroll_callback(GLFWwindow* /*window*/, double x, double y)
 {
-    v->mouseScroll(x,y);
+    v->mouseScroll(x, y);
 }
 
 static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int mods)
@@ -24,7 +24,7 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
         glfwSetWindowShouldClose(window, true);
     }
 
-    v->keyPressed(key,action,mods);
+    v->keyPressed(key, action, mods);
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int /*mods*/)
@@ -34,12 +34,12 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int /*mod
 
 void cursorPos_callback(GLFWwindow* /*window*/, double x, double y)
 {
-    v->mouseMoved(x*g_pixel_ratio,y*g_pixel_ratio);
+    v->mouseMoved(x * g_pixel_ratio, y * g_pixel_ratio);
 }
 
 void reshape_callback(GLFWwindow* window, int width, int height)
 {
-    v->reshape(width,height);
+    v->reshape(width, height);
     v->updateAndDrawScene();
     glfwSwapBuffers(window);
 }
@@ -68,8 +68,8 @@ GLFWwindow* initGLFW()
     // Handle retina display:
     int w, h;
     glfwGetFramebufferSize(window, &w, &h);
-    if(w==2*WIDTH)
-      g_pixel_ratio = 2;
+    if (w == 2 * WIDTH)
+        g_pixel_ratio = 2;
 
     // callbacks
     glfwSetKeyCallback(window, key_callback);
@@ -87,8 +87,7 @@ static void error_callback(int /*error*/, const char* description)
     fputs(description, stderr);
 }
 
-
-int main (int /*argc*/, char **/*argv*/)
+int main(int /*argc*/, char** /*argv*/)
 {
     glfwSetErrorCallback(error_callback);
 
@@ -96,15 +95,14 @@ int main (int /*argc*/, char **/*argv*/)
     int w, h;
     glfwGetFramebufferSize(window, &w, &h);
     v = new Viewer();
-    v->init(w,h);
+    v->init(w, h);
 
     double t0 = glfwGetTime();
     double t1 = t0;
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         // render the scene
         t1 = glfwGetTime();
-        if(t1-t0>0.03) {
+        if (t1 - t0 > 0.03) {
             v->updateAndDrawScene();
             glfwSwapBuffers(window);
             t0 = t1;
@@ -118,4 +116,3 @@ int main (int /*argc*/, char **/*argv*/)
     glfwTerminate();
     exit(EXIT_SUCCESS);
 }
-
