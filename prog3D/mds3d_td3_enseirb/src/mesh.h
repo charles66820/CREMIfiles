@@ -20,9 +20,7 @@ class Mesh
     typedef Eigen::Vector3i Vector3i;
 
 public:
-    Mesh()
-    {
-    }
+    Mesh() {}
 
     /** Destructor */
     virtual ~Mesh();
