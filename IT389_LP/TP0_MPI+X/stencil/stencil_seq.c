@@ -104,11 +104,11 @@ int main(int argc, char** argv) {
   printf("time: %g usecs\n", t_usec);
 
   printf("height: %d, width: %d\n", STENCIL_SIZE_X, STENCIL_SIZE_Y);
-  const double nbCells =
+  const long nbCells =
       (STENCIL_SIZE_X - 2) * (STENCIL_SIZE_Y - 2);
-  printf("nbCells: %g\n", nbCells);
+  printf("nbCells: %ld\n", nbCells);
 
-  const double nbOperationsByStep = 17 * nbCells + 3;
+  const double nbOperationsByStep = 10 * nbCells;
   printf("nbOperationsByStep: %g\n", nbOperationsByStep);
 
   const double gigaflops =
@@ -116,7 +116,7 @@ int main(int argc, char** argv) {
   printf("%g gigaflop/s\n", gigaflops);
 
   const double nbCellsByS = nbCells * s / t_usec * 1000000;
-  printf("%d cell/s\n", (long)nbCellsByS);
+  printf("%ld cell/s\n", (long)nbCellsByS);
 
   // stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y - 1);
 
