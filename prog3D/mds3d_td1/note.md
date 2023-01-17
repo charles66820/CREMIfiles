@@ -30,7 +30,7 @@ CATIA est le plus gros logiciel du monde qui modélise des objets en 3D.
 
 standard `OpenEXR` : pour les image HDR <https://fr.wikipedia.org/wiki/Imagerie_%C3%A0_grande_gamme_dynamique>
 
-"ambientColor" = couleur de base de l'objet.
-"diffuseColor" = Indépendante du point de vue (Surfaces lambertiennes). Lumière un peut partout.
+"ambientColor" = couleur pré calculé qui n'as pas d'existence physique (un hack pour mettre des couleur au objets).
+"diffuseColor" = propriété de l'objet (les couleurs qu'il absorbe)... (Surfaces lambertiennes)
 "brdf" = constante, uniforme. Lumière qui vient d'un endroit.
 "reflectivity" = reflection.

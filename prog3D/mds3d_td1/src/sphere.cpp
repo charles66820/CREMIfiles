@@ -28,8 +28,7 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
     // d*d * t^2 + (2 * d.dot(o - c)) * t + (||o - c||^2 - r^2) = 0
     auto a = d.dot(d);
     auto b = 2 * d.dot(o - c);
-    auto v = (o - c).norm();
-    auto c_ = (v * v) - (r * r);
+    auto c_ = (o - c).squaredNorm() -(r * r);
 
     auto delta = (b * b) - 4 * a * c_;
 
@@ -43,11 +42,13 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
             t = -(b / (2 * a));
         }
 
-        Point3f intersectPoint = ray.at(t);
-        hit.setShape(this);
-        hit.setT(t);
-        hit.setNormal((intersectPoint - c).normalized());
-        return true;
+        if (t > 0.f) {
+            Point3f intersectPoint = ray.at(t);
+            hit.setShape(this);
+            hit.setT(t);
+            hit.setNormal((intersectPoint - c).normalized());
+            return true;
+        }
     }
 
     // throw RTException("Sphere::intersect not implemented yet.");

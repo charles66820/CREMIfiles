@@ -1,5 +1,7 @@
 #include "plane.h"
 
+static const float E_4 = 0.0001f;
+
 Plane::Plane()
 {
 }
@@ -28,10 +30,13 @@ bool Plane::intersect(const Ray& ray, Hit& hit) const
     if (n.norm() != 1)
         return false;
 
-    auto t = (D - o.dot(n)) / d.dot(n);
-
+    auto para = d.dot(n);
     // t infini ⟹ le rayon est parallèle et distinct du plan
-    // if (t == infinity) ??
+    if (para > -E_4 && para < E_4)
+        return false;
+
+    auto t = (D - o.dot(n)) / para;
+
     if (n.dot(d) == 0)
         return false;
     // intersection derrière la caméra

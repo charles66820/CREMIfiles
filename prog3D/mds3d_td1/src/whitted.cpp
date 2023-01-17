@@ -3,16 +3,18 @@
 
 static const float E_4 = 0.0001f;
 
-class DirectIntegrator : public Integrator
+class WhittedIntegrator : public Integrator
 {
 public:
-    DirectIntegrator(const PropertyList& props)
+    WhittedIntegrator(const PropertyList& props)
     {
-        /* No parameters this time */
+        m_maxRecursion = props.getInteger("maxRecursion", 4);
     }
 
     Color3f Li(const Scene* scene, const Ray& ray) const
     {
+        if (ray.recursionLevel >= m_maxRecursion) return Color3f();
+
         Hit hit;
         scene->intersect(ray, hit);
 
@@ -24,6 +26,8 @@ public:
             auto n = hit.normal();
             auto v = ray.direction; // ray direction is the view direction
             Vector2f uv;            // material->texture();
+
+            Color3f reflectivity = material->reflectivity();
 
             // The total Reflection (the final color to the view point)
             Color3f R = Color3f();
@@ -42,6 +46,13 @@ public:
 
                 Color3f rho = material->brdf(v, l, n, uv);
                 R += rho * std::max(l.dot(n), 0.f) * I;
+
+                // The vector v reflected about the normal n
+                Vector3f mirrorD = v - 2 * (n.dot(v)) * n;
+
+                Ray bouncyRay = Ray(intersectPoint, mirrorD);
+                bouncyRay.recursionLevel = ray.recursionLevel + 1;
+                R += Li(scene, bouncyRay) * reflectivity;
             }
 
             return R;
@@ -52,8 +63,11 @@ public:
 
     std::string toString() const
     {
-        return "DirectIntegrator[]";
+        return "WhittedIntegrator[]";
     }
+
+protected:
+    int m_maxRecursion;
 };
 
-REGISTER_CLASS(DirectIntegrator, "direct")
+REGISTER_CLASS(WhittedIntegrator, "whitted")
