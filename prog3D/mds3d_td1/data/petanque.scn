@@ -4,7 +4,12 @@
  <color name="background" value="0.2, 0.2, 0.2"/>
 
 <!-- <integrator type="flat"/> -->
-<integrator type="normals" />
+<!-- <integrator type="normals" /> -->
+<integrator type="direct" />
+
+<!-- <integrator type="whitted">
+  <integer name="maxRecursion" value="1" />
+</integrator> -->
 
  <camera type="perspective">
    <float name="fieldOfView" value="45.0" /> 
@@ -14,8 +19,8 @@
    <transform name="toWorld">
      <rotate value="-0.630573, -0.252873, -0.271589, -0.681669"/>
      <translate value="1.34115, -1.64492, 0.5559"/>
-   </transform>
- </camera>
+    </transform>
+  </camera>
 
  <shape type="sphere">
    <float name="radius" value="0.4"/>
@@ -27,9 +32,9 @@
      <string name="texture" value="rayure.exr" />
      <integer name="mode" value="0" />
      <float name="scale" value="0.1" />
-   </material>
+    </material>
    <point name="center" value="-0.4, -0.4, 0.4"/>
- </shape>
+  </shape>
 
 <shape type="sphere">
    <float name="radius" value="0.4"/>
@@ -41,9 +46,9 @@
      <string name="texture" value="rayure.exr" />
      <integer name="mode" value="0" />
      <float name="scale" value="0.25" />
-   </material>
+    </material>
    <point name="center" value="0.1, 0.4, 0.4"/>
- </shape>
+  </shape>
 
   <shape type="sphere">
    <float name="radius" value="0.1"/>
@@ -52,31 +57,31 @@
      <color name="reflectivity" value="0.0, 0.0, 0.0"/>
      <color name="specular" value="0.3, 0.2, 0.1" />
      <float name="exponent" value="2"/>
-   </material>
+    </material>
    <point name="center" value="0.5, -0.5, 0.1"/>
- </shape>
+  </shape>
 
  <shape type="plane">
   <material type="diffuse">
     <color name="diffuse" value="1.0, 0.9, 0.5" />
-  </material>
- </shape>
+    </material>
+  </shape>
 
   <shape type="plane">
     <point name="position" value="0.0, 0.0, 6.0"/>
     <material type="diffuse">
       <color name="diffuse" value="0.5, 0.5, 0.9" />
     </material>
- </shape>
+  </shape>
 
  <light type="directionalLight">
    <vector name="direction" value="0.3, 0.5, -0.1" />
    <color name="intensity" value="0.8, 0.8, 0.8" />
- </light>
+  </light>
 
  <light type="pointLight">
   <point name="position" value="1.0, -0.7, 0.5" />
   <color name="intensity" value="1.0, 1.0, 1.0" />
- </light>
+  </light>
 
 </scene>

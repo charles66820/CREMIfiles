@@ -7,6 +7,9 @@
  <!-- <integrator type="flat"/> -->
  <!-- <integrator type="normals" /> -->
  <integrator type="direct" />
+ <!-- <integrator type="whitted">
+  <integer name="maxRecursion" value="8" />
+ </integrator> -->
 
  <!-- Render the scene as viewed by a perspective camera -->
  <camera type="perspective">

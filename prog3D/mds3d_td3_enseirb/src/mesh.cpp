@@ -81,12 +81,20 @@ void Mesh::draw(const Shader& shd)
         glEnableVertexAttribArray(normal_loc);
     }
 
+    // add color ??
+    int vertex_color = shd.getAttribLocation("vtx_color");
+    glVertexAttribPointer(vertex_color, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    glEnableVertexAttribArray(vertex_color);
+
+    // draw
     glDrawElements(GL_TRIANGLES, 3 * mFaces.size(), GL_UNSIGNED_INT, 0);
 
     // 4 - Désactiver l'attribut vtx_position.
     glDisableVertexAttribArray(vertex_loc);
     if (normal_loc >= 0)
         glDisableVertexAttribArray(normal_loc);
+
+    glDisableVertexAttribArray(vertex_color);
 
     checkError();
 }

@@ -19,7 +19,7 @@ void Viewer::init(int w, int h)
 {
     loadShaders();
 
-    if (!_mesh.load(DATA_DIR "/models/test.off"))
+    if (!_mesh.load(DATA_DIR "/models/lemming.off"))
         exit(1);
     _mesh.initVBA();
 
@@ -40,6 +40,7 @@ void Viewer::reshape(int w, int h)
  */
 void Viewer::drawScene()
 {
+    // glEnable(GL_DEPTH_TEST); // FIXME:
     glClear(GL_COLOR_BUFFER_BIT);
 
     glClearColor(0.5f, 0.5f, 0.5f, 1);
