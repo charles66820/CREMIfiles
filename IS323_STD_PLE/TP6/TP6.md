@@ -101,7 +101,8 @@ res.foreach(println)
 //   .add("Longitude", StringType, true)
 // .schema(schema)
 val dataDf = spark.read.format("csv").option("header", true).load("worldcitiespopHuge.txt")
-val filterDf = dataDf.filter("Population is not null").withColumn("Population", col("Population").cast("Integer"))
+// dataDf.filter("Population is not null")
+val filterDf = dataDf.withColumn("Population", col("Population").cast("Integer"))
 filterDf.printSchema()
 val cityPopDf = filterDf.select("City", "Population")
 cityPopDf.show()
@@ -125,7 +126,7 @@ println("exec in " + ((System.nanoTime - tBegin) / 1e9d))
 ```scala
 cityPopDf.unpersist()
 val tBegin = System.nanoTime
-var res = cityPopDf.orderBy(desc("Population")).show(20)
+var res = cityPopDf.orderBy(desc("Population")).show()
 println("exec in " + ((System.nanoTime - tBegin) / 1e9d))
 ```
 
