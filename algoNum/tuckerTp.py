@@ -30,7 +30,7 @@ def truncatedHOSVD(X, r):
     for k in range(d):
         # la k-matricisation du tenseur X
         Xᵏ = tl.unfold(X, k)
-        
+
         # SVD tronquée à l'ordre rₖ
         # U, Σ, V = np.linalg.svd(Xᵏ, full_matrices=False)
         # U_[k] = U[:,0:r[k]]
@@ -61,8 +61,8 @@ def main():
 
     print("Tensor shape:", X.shape)
     print("Tensor multilinear rank:", r)
-    
-    S, U = truncatedHOSVD(X, r)    
+
+    S, U = truncatedHOSVD(X, r)
     Xref = tl.tucker_to_tensor((S, U))
     checkAndPrintDiff(X, Xref)
 
