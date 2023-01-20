@@ -36,6 +36,8 @@ private:
 
     Camera _cam;
     Shader _shader;
+    Shader _shaderFront;
+    Shader _shaderSide;
     Shader _shaderLine;
     Mesh _mesh;
     float _zoom;

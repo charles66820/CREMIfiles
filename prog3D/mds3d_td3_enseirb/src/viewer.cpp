@@ -39,7 +39,7 @@ void Viewer::reshape(int w, int h)
     _winWidth = w;
     _winHeight = h;
     _cam.setViewport(w, h);
-    glViewport(0, 0, _winWidth, _winHeight);
+    // glViewport(0, 0, _winWidth, _winHeight);
 }
 
 /*!
@@ -51,13 +51,15 @@ void Viewer::drawScene()
 
     glClearColor(0.5f, 0.5f, 0.5f, 1);
 
-    _shader.activate();
-    glUniform1f(_shader.getUniformLocation("zoom"), _zoom);
-    glUniform2fv(_shader.getUniformLocation("translation"), 1, _translation.data());
+    // Main view
+    glViewport(0, 0, _winWidth / 2, _winHeight);
+    _shaderFront.activate();
+    glUniform1f(_shaderFront.getUniformLocation("zoom"), _zoom);
+    glUniform2fv(_shaderFront.getUniformLocation("translation"), 1, _translation.data());
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDepthFunc(GL_LESS);
-    _mesh.draw(_shader);
-    _shader.deactivate();
+    _mesh.draw(_shaderFront);
+    _shaderFront.deactivate();
 
     if (_enableWires) {
         _shaderLine.activate();
@@ -70,6 +72,16 @@ void Viewer::drawScene()
         glDisable(GL_LINE_SMOOTH);
         _shaderLine.deactivate();
     }
+
+    // Side view
+    glViewport(_winWidth / 2, 0, _winWidth / 2, _winHeight);
+    _shaderSide.activate();
+    glUniform1f(_shaderSide.getUniformLocation("zoom"), _zoom);
+    glUniform2fv(_shaderSide.getUniformLocation("translation"), 1, _translation.data());
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glDepthFunc(GL_LESS);
+    _mesh.draw(_shaderSide);
+    _shaderSide.deactivate();
 }
 
 void Viewer::drawScene2D()
@@ -97,6 +109,8 @@ void Viewer::loadShaders()
 {
     // Here we can load as many shaders as we want, currently we have only one:
     _shader.loadFromFiles(DATA_DIR "/shaders/simple.vert", DATA_DIR "/shaders/simple.frag");
+    _shaderFront.loadFromFiles(DATA_DIR "/shaders/simpleFront.vert", DATA_DIR "/shaders/simple.frag");
+    _shaderSide.loadFromFiles(DATA_DIR "/shaders/simpleSide.vert", DATA_DIR "/shaders/simple.frag");
     _shaderLine.loadFromFiles(DATA_DIR "/shaders/line.vert", DATA_DIR "/shaders/line.frag");
     checkError();
 }
