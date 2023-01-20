@@ -71,7 +71,7 @@ void Mesh::draw(const Shader& shd)
                           GL_FALSE,       // for fixed-point number types only
                           sizeof(Vertex), // number of bytes between the x coefficient of two vertices
                                           // (e.g. number of bytes between x_0 and x_1)
-                          0);             // number of bytes to get x_0
+                          0);             // number of bytes to get x_0 NOTE: décalage dans la structure Vertex
     // 3 - activate this stream of vertex attribute
     glEnableVertexAttribArray(vertex_loc);
 
@@ -83,7 +83,8 @@ void Mesh::draw(const Shader& shd)
 
     // add color ??
     int vertex_color = shd.getAttribLocation("vtx_color");
-    glVertexAttribPointer(vertex_color, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    // NOTE: (void*)sizeof(Vector3f)*2 c'est le décalage dans la structure Vertex
+    glVertexAttribPointer(vertex_color, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vector3f)*2));
     glEnableVertexAttribArray(vertex_color);
 
     // draw
