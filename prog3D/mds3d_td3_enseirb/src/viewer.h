@@ -36,9 +36,11 @@ private:
 
     Camera _cam;
     Shader _shader;
+    Shader _shaderLine;
     Mesh _mesh;
     float _zoom;
     Eigen::Vector2f _translation;
+    bool _enableWires;
 
     // Mouse parameters for the trackball
     enum TrackMode { TM_NO_TRACK = 0, TM_ROTATE_AROUND, TM_ZOOM, TM_LOCAL_ROTATE, TM_FLY_Z, TM_FLY_PAN };

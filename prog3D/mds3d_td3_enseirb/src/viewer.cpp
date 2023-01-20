@@ -6,7 +6,8 @@ using namespace Eigen;
 Viewer::Viewer()
     : _winWidth(0),
       _winHeight(0),
-      _zoom(1.5)
+      _zoom(0.5),
+      _enableWires(false)
 {
 }
 
@@ -53,8 +54,22 @@ void Viewer::drawScene()
     _shader.activate();
     glUniform1f(_shader.getUniformLocation("zoom"), _zoom);
     glUniform2fv(_shader.getUniformLocation("translation"), 1, _translation.data());
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glDepthFunc(GL_LESS);
     _mesh.draw(_shader);
     _shader.deactivate();
+
+    if (_enableWires) {
+        _shaderLine.activate();
+        glUniform1f(_shaderLine.getUniformLocation("zoom"), _zoom);
+        glUniform2fv(_shaderLine.getUniformLocation("translation"), 1, _translation.data());
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glDepthFunc(GL_LESS);
+        glEnable(GL_LINE_SMOOTH);
+        _mesh.draw(_shader);
+        glDisable(GL_LINE_SMOOTH);
+        _shaderLine.deactivate();
+    }
 }
 
 void Viewer::drawScene2D()
@@ -82,6 +97,7 @@ void Viewer::loadShaders()
 {
     // Here we can load as many shaders as we want, currently we have only one:
     _shader.loadFromFiles(DATA_DIR "/shaders/simple.vert", DATA_DIR "/shaders/simple.frag");
+    _shaderLine.loadFromFiles(DATA_DIR "/shaders/line.vert", DATA_DIR "/shaders/line.frag");
     checkError();
 }
 
@@ -112,6 +128,8 @@ void Viewer::keyPressed(int key, int action, int /*mods*/)
             _zoom += 0.1;
         } else if (key == GLFW_KEY_PAGE_DOWN || key == GLFW_KEY_KP_ADD) {
             _zoom -= 0.1;
+        } else if (key == GLFW_KEY_L) {
+            _enableWires = !_enableWires;
         }
     }
 }
