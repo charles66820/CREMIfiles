@@ -6,6 +6,7 @@ using namespace Eigen;
 Viewer::Viewer()
     : _winWidth(0),
       _winHeight(0),
+      _scale(1),
       _zoom(0.5),
       _enableWires(false)
 {
@@ -88,14 +89,12 @@ void Viewer::drawScene2D()
     glViewport(0, 0, _winWidth, _winHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _shader.activate();
-    glUniform1f(_shaderSide.getUniformLocation("zoom"), _zoom);
-    glUniform2fv(_shaderSide.getUniformLocation("translation"), 1, _translation.data());
     Matrix4f M;
-    // M << 1, 0, 0, 0, //
-    //     0, 1, 0, 0,  //
-    //     0, 0, 1, 0,  //
-    //     0, 0, 0, 1;  //
-    M.setIdentity();
+    M << _scale, 0, 0, _translation.x(), //
+        0, _scale, 0, _translation.y(),  //
+        0, 0, _scale, _zoom,            //
+        0, 0, 0, 1;
+    // M.setIdentity();
     glUniformMatrix4fv(_shader.getUniformLocation("obj_mat"), 1, GL_FALSE, M.data());
     _mesh.draw(_shader);
     _shader.deactivate();
@@ -144,6 +143,10 @@ void Viewer::keyPressed(int key, int action, int /*mods*/)
             _zoom += 0.1;
         } else if (key == GLFW_KEY_PAGE_DOWN || key == GLFW_KEY_KP_ADD) {
             _zoom -= 0.1;
+        } else if (key == GLFW_KEY_COMMA) {
+            _scale += 0.1;
+        } else if (key == GLFW_KEY_PERIOD) {
+            _scale -= 0.1;
         } else if (key == GLFW_KEY_L) {
             _enableWires = !_enableWires;
         }
