@@ -16,8 +16,8 @@ Viewer::~Viewer() {}
 ////////////////////////////////////////////////////////////////////////////////
 // GL stuff
 
-// #define FILENAME "chair"
-#define FILENAME "lemming"
+#define FILENAME "chair"
+// #define FILENAME "lemming"
 
 // initialize OpenGL context
 void Viewer::init(int w, int h)
@@ -39,7 +39,6 @@ void Viewer::reshape(int w, int h)
     _winWidth = w;
     _winHeight = h;
     _cam.setViewport(w, h);
-    // glViewport(0, 0, _winWidth, _winHeight);
 }
 
 /*!
@@ -86,8 +85,11 @@ void Viewer::drawScene()
 
 void Viewer::drawScene2D()
 {
+    glViewport(0, 0, _winWidth, _winHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _shader.activate();
+    glUniform1f(_shaderSide.getUniformLocation("zoom"), _zoom);
+    glUniform2fv(_shaderSide.getUniformLocation("translation"), 1, _translation.data());
     Matrix4f M;
     // M << 1, 0, 0, 0, //
     //     0, 1, 0, 0,  //
@@ -101,8 +103,8 @@ void Viewer::drawScene2D()
 
 void Viewer::updateAndDrawScene()
 {
-    drawScene();
-    // drawScene2D();
+    // drawScene();
+    drawScene2D();
 }
 
 void Viewer::loadShaders()
