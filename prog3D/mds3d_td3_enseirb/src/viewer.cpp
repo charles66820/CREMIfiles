@@ -5,7 +5,8 @@ using namespace Eigen;
 
 Viewer::Viewer()
     : _winWidth(0),
-      _winHeight(0)
+      _winHeight(0),
+      _zoom(1.5)
 {
 }
 
@@ -14,14 +15,19 @@ Viewer::~Viewer() {}
 ////////////////////////////////////////////////////////////////////////////////
 // GL stuff
 
+// #define FILENAME "chair"
+#define FILENAME "lemming"
+
 // initialize OpenGL context
 void Viewer::init(int w, int h)
 {
     loadShaders();
 
-    if (!_mesh.load(DATA_DIR "/models/lemming.off"))
+    if (!_mesh.load(DATA_DIR "/models/" FILENAME ".off"))
         exit(1);
     _mesh.initVBA();
+
+    glEnable(GL_DEPTH_TEST);
 
     reshape(w, h);
     _trackball.setCamera(&_cam);
@@ -40,12 +46,28 @@ void Viewer::reshape(int w, int h)
  */
 void Viewer::drawScene()
 {
-    // glEnable(GL_DEPTH_TEST); // FIXME:
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glClearColor(0.5f, 0.5f, 0.5f, 1);
 
     _shader.activate();
+    glUniform1f(_shader.getUniformLocation("zoom"), _zoom);
+    glUniform2fv(_shader.getUniformLocation("translation"), 1, _translation.data());
+    _mesh.draw(_shader);
+    _shader.deactivate();
+}
+
+void Viewer::drawScene2D()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    _shader.activate();
+    Matrix4f M;
+    // M << 1, 0, 0, 0, //
+    //     0, 1, 0, 0,  //
+    //     0, 0, 1, 0,  //
+    //     0, 0, 0, 1;  //
+    M.setIdentity();
+    glUniformMatrix4fv(_shader.getUniformLocation("obj_mat"), 1, GL_FALSE, M.data());
     _mesh.draw(_shader);
     _shader.deactivate();
 }
@@ -53,6 +75,7 @@ void Viewer::drawScene()
 void Viewer::updateAndDrawScene()
 {
     drawScene();
+    // drawScene2D();
 }
 
 void Viewer::loadShaders()
@@ -78,11 +101,17 @@ void Viewer::keyPressed(int key, int action, int /*mods*/)
 
     if (action == GLFW_PRESS || action == GLFW_REPEAT) {
         if (key == GLFW_KEY_UP) {
+            _translation[1] += 0.1f;
         } else if (key == GLFW_KEY_DOWN) {
+            _translation[1] -= 0.1f;
         } else if (key == GLFW_KEY_LEFT) {
+            _translation[0] -= 0.1f;
         } else if (key == GLFW_KEY_RIGHT) {
-        } else if (key == GLFW_KEY_PAGE_UP) {
-        } else if (key == GLFW_KEY_PAGE_DOWN) {
+            _translation[0] += 0.1f;
+        } else if (key == GLFW_KEY_PAGE_UP || key == GLFW_KEY_KP_SUBTRACT) {
+            _zoom += 0.1;
+        } else if (key == GLFW_KEY_PAGE_DOWN || key == GLFW_KEY_KP_ADD) {
+            _zoom -= 0.1;
         }
     }
 }

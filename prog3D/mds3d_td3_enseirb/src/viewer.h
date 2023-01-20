@@ -19,6 +19,7 @@ public:
     // gl stuff
     void init(int w, int h);
     void drawScene();
+    void drawScene2D();
     void updateAndDrawScene();
     void reshape(int w, int h);
     void loadShaders();
@@ -36,6 +37,8 @@ private:
     Camera _cam;
     Shader _shader;
     Mesh _mesh;
+    float _zoom;
+    Eigen::Vector2f _translation;
 
     // Mouse parameters for the trackball
     enum TrackMode { TM_NO_TRACK = 0, TM_ROTATE_AROUND, TM_ZOOM, TM_LOCAL_ROTATE, TM_FLY_Z, TM_FLY_PAN };
