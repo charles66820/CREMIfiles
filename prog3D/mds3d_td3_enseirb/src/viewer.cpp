@@ -9,8 +9,9 @@ Viewer::Viewer()
     : _winWidth(0),
       _winHeight(0),
       _scale(1),
-      _zoom(0.5),
-      _rot(45),
+      _zoom(0),
+      _rot(0.),
+      _translation(Vector2f(0.f, 0.f)),
       _enableWires(false)
 {
 }
@@ -57,7 +58,7 @@ void Viewer::drawScene()
     // Main view
     glViewport(0, 0, _winWidth / 2, _winHeight);
     _shaderFront.activate();
-    glUniform1f(_shaderFront.getUniformLocation("zoom"), _zoom);
+    glUniform1f(_shaderFront.getUniformLocation("zoom"), _zoom + 0.5f);
     glUniform2fv(_shaderFront.getUniformLocation("translation"), 1, _translation.data());
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDepthFunc(GL_LESS);
@@ -66,7 +67,7 @@ void Viewer::drawScene()
 
     if (_enableWires) {
         _shaderLine.activate();
-        glUniform1f(_shaderLine.getUniformLocation("zoom"), _zoom);
+        glUniform1f(_shaderLine.getUniformLocation("zoom"), _zoom + 0.5f);
         glUniform2fv(_shaderLine.getUniformLocation("translation"), 1, _translation.data());
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDepthFunc(GL_LESS);
@@ -79,58 +80,7 @@ void Viewer::drawScene()
     // Side view
     glViewport(_winWidth / 2, 0, _winWidth / 2, _winHeight);
     _shaderSide.activate();
-    glUniform1f(_shaderSide.getUniformLocation("zoom"), _zoom);
-    glUniform2fv(_shaderSide.getUniformLocation("translation"), 1, _translation.data());
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glDepthFunc(GL_LESS);
-    _mesh.draw(_shaderSide);
-    _shaderSide.deactivate();
-}
-
-void Viewer::drawSceneTP4()
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glClearColor(0.5f, 0.5f, 0.5f, 1);
-
-    // Main view
-    glViewport(0, 0, _winWidth / 2, _winHeight);
-    _shader.activate();
-
-    _translation(0) = 0.f;
-    _translation(1) = 0.f;
-    // _rot = 0.f;
-    _scale = 2.f;
-
-    Affine3f A = Translation3f(_translation.x(), _translation.y(), _zoom) * Scaling(_scale) *
-                 AngleAxisf(toRadian(_rot), Vector3f(-0.5f, 1.5f, 0.f)) * Translation3f(0.f, 0.f, 0.f);
-    // Affine3f A = Translation3f(0.f, 0.f, 0.f) * Scaling(_scale) * AngleAxisf(toRadian(_rot), Vector3f::UnitY()) *
-    //              Translation3f(0.f, 0.f, 0.f);
-    glUniformMatrix4fv(_shader.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
-
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glDepthFunc(GL_LESS);
-    _mesh.draw(_shader);
-    _shader.deactivate();
-
-    if (_enableWires) {
-        _shaderLineMT.activate();
-        Affine3f A = Translation3f(_translation.x(), _translation.y(), _zoom) * Scaling(_scale) *
-                     AngleAxisf(toRadian(_rot), Vector3f(-0.5f, 1.5f, 0.f)) * Translation3f(0.f, 0.f, 0.f);
-        glUniformMatrix4fv(_shaderLineMT.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
-
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        glDepthFunc(GL_LESS);
-        glEnable(GL_LINE_SMOOTH);
-        _mesh.draw(_shader);
-        glDisable(GL_LINE_SMOOTH);
-        _shaderLineMT.deactivate();
-    }
-
-    // Side view
-    glViewport(_winWidth / 2, 0, _winWidth / 2, _winHeight);
-    _shaderSide.activate();
-    glUniform1f(_shaderSide.getUniformLocation("zoom"), _zoom);
+    glUniform1f(_shaderSide.getUniformLocation("zoom"), _zoom + 0.5f);
     glUniform2fv(_shaderSide.getUniformLocation("translation"), 1, _translation.data());
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDepthFunc(GL_LESS);
@@ -182,11 +132,73 @@ void Viewer::drawScene2D()
     _shader.deactivate();
 }
 
+void Viewer::drawSceneTP4()
+{
+    glViewport(0, 0, _winWidth, _winHeight);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glClearColor(0.5f, 0.5f, 0.5f, 1);
+
+    _shader.activate();
+
+    Affine3f A = Translation3f(_translation.x(), _translation.y(), _zoom) * Scaling(_scale) *
+                 AngleAxisf(toRadian(_rot), Vector3f(-0.5f, 1.5f, 0.f)) * Translation3f(0.f, 0.f, 0.f);
+    // Affine3f A = Translation3f(0.f, 0.f, 0.f) * Scaling(_scale) * AngleAxisf(toRadian(_rot), Vector3f::UnitY()) *
+    //              Translation3f(0.f, 0.f, 0.f);
+    glUniformMatrix4fv(_shader.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glDepthFunc(GL_LESS);
+    _mesh.draw(_shader);
+    _shader.deactivate();
+
+    if (_enableWires) {
+        _shaderLineMT.activate();
+        Affine3f A = Translation3f(_translation.x(), _translation.y(), _zoom) * Scaling(_scale) *
+                     AngleAxisf(toRadian(_rot), Vector3f(-0.5f, 1.5f, 0.f)) * Translation3f(0.f, 0.f, 0.f);
+        glUniformMatrix4fv(_shaderLineMT.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
+
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glDepthFunc(GL_LESS);
+        glEnable(GL_LINE_SMOOTH);
+        _mesh.draw(_shader);
+        glDisable(GL_LINE_SMOOTH);
+        _shaderLineMT.deactivate();
+    }
+}
+
+void Viewer::drawSceneTP4Cam()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.5f, 0.5f, 0.5f, 1);
+    glViewport(0, 0, _winWidth, _winHeight);
+
+    _shaderCam.activate();
+
+    Affine3f A = Scaling(_scale) * AngleAxisf(toRadian(_rot), Vector3f::UnitY()) * Translation3f(0.f, 0.f, 0.f);
+    glUniformMatrix4fv(_shaderCam.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
+
+    _cam.lookAt(Vector3f(_translation.x(), _translation.y(), _zoom), Vector3f(0.f, 2.f, 0.f), Vector3f(2.f, 2.f, 0.f));
+    auto vm = _cam.viewMatrix();
+    glUniformMatrix4fv(_shaderCam.getUniformLocation("camera_view_mat"), 1, GL_FALSE, vm.data());
+
+    std::cout << "x: " << _translation.x() << ", y: " << _translation.y() << ", z: "
+              << _zoom << std::endl;
+
+        auto proj = _cam.projectionMatrix();
+    glUniformMatrix4fv(_shaderCam.getUniformLocation("percpective_mat"), 1, GL_FALSE, proj.data());
+
+    _mesh.draw(_shaderCam);
+    _shaderCam.deactivate();
+
+}
+
 void Viewer::updateAndDrawScene()
 {
     // drawScene();
     // drawScene2D();
-    drawSceneTP4();
+    // drawSceneTP4();
+    drawSceneTP4Cam();
 }
 
 void Viewer::loadShaders()
@@ -197,6 +209,7 @@ void Viewer::loadShaders()
     _shaderSide.loadFromFiles(DATA_DIR "/shaders/simpleSide.vert", DATA_DIR "/shaders/simple.frag");
     _shaderLine.loadFromFiles(DATA_DIR "/shaders/line.vert", DATA_DIR "/shaders/line.frag");
     _shaderLineMT.loadFromFiles(DATA_DIR "/shaders/lineMT.vert", DATA_DIR "/shaders/line.frag");
+    _shaderCam.loadFromFiles(DATA_DIR "/shaders/simpleCam.vert", DATA_DIR "/shaders/simple.frag");
     checkError();
 }
 

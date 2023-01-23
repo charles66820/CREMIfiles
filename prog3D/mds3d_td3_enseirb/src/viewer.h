@@ -21,6 +21,7 @@ public:
     void drawScene();
     void drawScene2D();
     void drawSceneTP4();
+    void drawSceneTP4Cam();
     void updateAndDrawScene();
     void reshape(int w, int h);
     void loadShaders();
@@ -41,6 +42,7 @@ private:
     Shader _shaderSide;
     Shader _shaderLine;
     Shader _shaderLineMT;
+    Shader _shaderCam;
     Mesh _mesh;
     float _scale;
     float _zoom;

@@ -13,8 +13,14 @@ Camera::Camera()
 void Camera::lookAt(const Vector3f& position, const Vector3f& target, const Vector3f& up)
 {
     mTarget = target;
+    Vector3f z = (target - position).normalized(); // vecteur opposé du vecteur de visée
+    Vector3f y = z.cross(up).normalized(); // Crée un vecteur orthogonal à z et up
+    Vector3f x = y.cross(z);
 
-    // TODO:
+    mViewMatrix << y(0), y(1), y(2), -y.dot(position), //
+        x(0), x(1), x(2), -x.dot(position),            //
+        -z(0), -z(1), -z(2), z.dot(position),          //
+        0, 0, 0, 1;
 }
 
 void Camera::setPerspective(float fovY, float near, float far)
