@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<scene>
+  <color name="background" value="0.5, 0.5, 0.5"/>
+
+ <!-- Use the flat color integrator -->
+ <integrator type="flat"/>
+
+ <!-- Render the scene as viewed by a perspective camera -->
+ <camera type="perspective">
+   <float name="fieldOfView" value="45.0" /> 
+   <integer name="width" value="400"/>
+   <integer name="height" value="400"/>
+   <integer name="samples" value="1"/>
+   <transform name="toWorld">
+     <rotate value="-0.623147, -0.270643, -0.246995, -0.690966"/>
+     <translate value="1.26238, -1.63493, 0.557532"/>
+   </transform>
+ </camera>
+
+ <shape type="sphere">
+   <float name="radius" value="0.4"/>
+   <point name="center" value="-0.4, -0.4, 0.4"/>
+   <material type="phong">
+     <color name="diffuse" value="0.9, 0.1, 0.1" />
+     <color name="reflectivity" value="0.4, 0.2, 0.2"/>
+     <color name="specular" value="0.8, 0.6, 0.2" />
+     <float name="exponent" value="2"/>
+     <string name="texture" value="checkboard.exr" />
+     <integer name="mode" value="0" />
+     <float name="scale" value="0.05" />
+   </material>
+ </shape>
+
+ <shape type="sphere">
+   <float name="radius" value="0.3"/>
+   <point name="center" value="0.1, 0.4, 0.3"/>
+   <material type="phong">
+     <color name="diffuse" value="0.1, 0.9, 0.1" />
+     <color name="specular" value="0.6, 0.8, 0.6" />
+     <color name="reflectivity" value="0.4, 0.4, 0.8"/>
+     <float name="exponent" value="4"/>
+   </material>
+ </shape>
+ 
+ <shape type="sphere">
+   <float name="radius" value="0.2"/>
+   <point name="center" value="0.4, -0.6, 0.2"/>
+   <material type="phong">
+     <color name="diffuse" value="0.1, 0.1, 0.9" />
+     <color name="reflectivity" value="0.4, 0.4, 0.8"/>
+     <color name="specular" value="0.6, 0.6, 0.8" />
+     <float name="exponent" value="16"/>
+   </material>
+ </shape>
+
+ <!-- Illuminate using a directional light -->
+ <light type="directionalLight">
+   <vector name="direction" value="0.3, 0.5, -0.3" />
+   <color name="intensity" value="1.2, 1.2, 1.2" />
+ </light>
+
+ <!-- Illuminate using a point light -->
+ <light type="pointLight">
+  <point name="position" value="1.0, -0.7, 0.45" />
+  <color name="intensity" value="1.0, 1.0, 1.0" />
+ </light>
+
+</scene>

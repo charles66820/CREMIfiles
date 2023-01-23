@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<scene>
+	<integrator type="whitted">
+	   <integer name="maxRecursion" value="8"/>
+	</integrator>
+
+	<camera type="perspective">
+		<transform name="toWorld">
+			<lookat target="-0.25, -0.25, -0.15"  origin="1.25, 0.5, -0.25" up="0, 1, 0"/>
+		</transform>
+		<float name="fieldOfView" value="40"/>
+		<integer name="width" value="700"/>
+		<integer name="height" value="600"/>
+		<integer name="samples" value="8" />
+	</camera>
+
+	<shape type="mesh">
+		<string name="filename" value="killeroo.obj"/>
+		<material type="phong">
+     		<color name="diffuse" value="0.0, 0.0, 0.0" />
+     		<color name="specular" value="0.0, 0.0, 0.0" />
+     		<color name="reflectivity" value="0.1, 0.1, 0.1" />
+     		<color name="transmissivness" value="0.9, 0.9, 0.9" />
+     		<float name="etaA" value="1"/>
+     		<float name="etaB" value="1.33"/>
+     		<float name="exponent" value="25"/>
+   		</material>
+	</shape>
+
+	<shape type="plane">
+		<point name="position" value="1.2, -0.38, 0"/>
+  	<vector name="normal" value="0.0, 1.0, 0.0"/>
+	  <material type="diffuse">
+	    <color name="diffuse" value="1.0, 1.0, 1.0" />
+	    <string name="texture" value="lines.exr" />
+	    <integer name="mode" value="1" />
+	    <float name="scale" value="1.0" />
+	  </material>
+	</shape>
+
+	<shape type="plane">
+		<point name="position" value="1.2, 1, 0"/>
+  	<vector name="normal" value="0.0, -1.0, 0.0"/>
+	  <material type="diffuse">
+	    <color name="diffuse" value="1.0, 1.0, 1.0" />
+	    <string name="texture" value="lines.exr" />
+	    <integer name="mode" value="1" />
+	    <float name="scale" value="1.0" />
+	  </material>
+	</shape>
+
+	<shape type="plane">
+		<point name="position" value="-1.5, 0.0, 0.8"/>
+  	<vector name="normal" value="0.0, 0.0, -1.0"/>
+	  <material type="diffuse">
+	    <color name="diffuse" value="1.0, 1.0, 1.0" />
+	    <string name="texture" value="lines.exr" />
+	    <integer name="mode" value="1" />
+	    <float name="scale" value="1.0" />
+	  </material>
+	</shape>
+
+	<shape type="plane">
+		<point name="position" value="-1.6, 0.0, -0.75"/>
+  	<vector name="normal" value="1.0, 0.0, 0.0"/>
+	  <material type="diffuse">
+	    <color name="diffuse" value="1.0, 1.0, 1.0" />
+	    <string name="texture" value="lines.exr" />
+	    <integer name="mode" value="1" />
+	    <float name="scale" value="1.0" />
+	  </material>
+	</shape>
+
+		<shape type="plane">
+		<point name="position" value="-1.5, 0.0, -1.0"/>
+  	<vector name="normal" value="0.0, 0.0, 1.0"/>
+	  <material type="diffuse">
+	    <color name="diffuse" value="1.0, 1.0, 1.0" />
+	    <string name="texture" value="lines.exr" />
+	    <integer name="mode" value="1" />
+	    <float name="scale" value="1.0" />
+	  </material>
+	</shape>
+
+		<shape type="plane">
+		<point name="position" value="1.6, 0.0, -0.75"/>
+  	<vector name="normal" value="-1.0, 0.0, 0.0"/>
+	  <material type="diffuse">
+	    <color name="diffuse" value="1.0, 1.0, 1.0" />
+	    <string name="texture" value="lines.exr" />
+	    <integer name="mode" value="1" />
+	    <float name="scale" value="1.0" />
+	  </material>
+	</shape>
+
+	<light type="pointLight">
+		<point name="position" value = "0.1, 0.8, -0.1"/>
+  		<color name="intensity" value="2, 2, 2" />
+  	</light>
+
+</scene>

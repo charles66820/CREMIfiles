@@ -45,14 +45,14 @@ public:
 
                 Color3f rho = material->brdf(v, l, n, uv);
                 R += rho * std::max(l.dot(n), 0.f) * I;
-
-                // The vector v reflected about the normal n
-                Vector3f mirrorD = v - 2 * (n.dot(v)) * n;
-
-                Ray bouncyRay = Ray(intersectPoint, mirrorD);
-                bouncyRay.recursionLevel = ray.recursionLevel + 1;
-                R += Li(scene, bouncyRay) * reflectivity;
             }
+
+            // The vector v reflected about the normal n
+            Vector3f mirrorD = v - 2 * (n.dot(v)) * n;
+
+            Ray bouncyRay = Ray(intersectPoint, mirrorD);
+            bouncyRay.recursionLevel = ray.recursionLevel + 1;
+            R += Li(scene, bouncyRay) * reflectivity;
 
             return R;
         }
