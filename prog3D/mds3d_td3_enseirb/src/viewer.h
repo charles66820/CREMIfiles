@@ -20,6 +20,7 @@ public:
     void init(int w, int h);
     void drawScene();
     void drawScene2D();
+    void drawSceneTP4();
     void updateAndDrawScene();
     void reshape(int w, int h);
     void loadShaders();
@@ -39,6 +40,7 @@ private:
     Shader _shaderFront;
     Shader _shaderSide;
     Shader _shaderLine;
+    Shader _shaderLineMT;
     Mesh _mesh;
     float _scale;
     float _zoom;

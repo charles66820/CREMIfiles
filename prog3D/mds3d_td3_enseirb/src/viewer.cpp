@@ -20,8 +20,8 @@ Viewer::~Viewer() {}
 ////////////////////////////////////////////////////////////////////////////////
 // GL stuff
 
-#define FILENAME "chair"
-// #define FILENAME "lemming"
+// #define FILENAME "chair"
+#define FILENAME "lemming"
 
 // initialize OpenGL context
 void Viewer::init(int w, int h)
@@ -87,16 +87,67 @@ void Viewer::drawScene()
     _shaderSide.deactivate();
 }
 
+void Viewer::drawSceneTP4()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glClearColor(0.5f, 0.5f, 0.5f, 1);
+
+    // Main view
+    glViewport(0, 0, _winWidth / 2, _winHeight);
+    _shader.activate();
+
+    _translation(0) = 0.f;
+    _translation(1) = 0.f;
+    // _rot = 0.f;
+    _scale = 2.f;
+
+    Affine3f A = Translation3f(_translation.x(), _translation.y(), _zoom) * Scaling(_scale) *
+                 AngleAxisf(toRadian(_rot), Vector3f(-0.5f, 1.5f, 0.f)) * Translation3f(0.f, 0.f, 0.f);
+    glUniformMatrix4fv(_shader.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glDepthFunc(GL_LESS);
+    _mesh.draw(_shader);
+    _shader.deactivate();
+
+    if (_enableWires) {
+        _shaderLineMT.activate();
+        Affine3f A = Translation3f(_translation.x(), _translation.y(), _zoom) * Scaling(_scale) *
+                     AngleAxisf(toRadian(_rot), Vector3f(-0.5f, 1.5f, 0.f)) * Translation3f(0.f, 0.f, 0.f);
+        glUniformMatrix4fv(_shaderLineMT.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
+
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glDepthFunc(GL_LESS);
+        glEnable(GL_LINE_SMOOTH);
+        _mesh.draw(_shader);
+        glDisable(GL_LINE_SMOOTH);
+        _shaderLineMT.deactivate();
+    }
+
+    // Side view
+    glViewport(_winWidth / 2, 0, _winWidth / 2, _winHeight);
+    _shaderSide.activate();
+    glUniform1f(_shaderSide.getUniformLocation("zoom"), _zoom);
+    glUniform2fv(_shaderSide.getUniformLocation("translation"), 1, _translation.data());
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glDepthFunc(GL_LESS);
+    _mesh.draw(_shaderSide);
+    _shaderSide.deactivate();
+}
+
 void Viewer::drawScene2D()
 {
     glViewport(0, 0, _winWidth, _winHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.7f, 0.7f, 0.7f, 1);
+
     _shader.activate();
     Matrix4f M;
     //contrôle au clavier
     // M << _scale, 0, 0, _translation.x(), //
     //     0, _scale, 0, _translation.y(),  //
-    //     0, 0, _scale, _zoom,            //
+    //     0, 0, _scale, _zoom,             //
     //     0, 0, 0, 1;
 
     // chair left
@@ -109,9 +160,9 @@ void Viewer::drawScene2D()
     _mesh.draw(_shader);
 
     // chair right
-    // M << -0.5, 0, -4.37114e-08, 0.5, //
-    //     0, 0.5, 0, -1,               //
-    //     4.37114e-08, 0, -0.5, 0,     //
+    // M << -0.5, 0, 0, 0.5, //
+    //     0, 0.5, 0, -1,    //
+    //     0, 0, -0.5, 0,    //
     //     0, 0, 0, 1;
     // A = Translation3f(Vector3f(0.5, -1, 0)) * AngleAxisf(toRadian(180), Vector3f::UnitY()) * Scaling(.5f);
     A = Scaling(0.5f) * AngleAxisf(toRadian(180), Vector3f::UnitY()) * Translation3f(Vector3f(-1, -2, 0));
@@ -123,7 +174,7 @@ void Viewer::drawScene2D()
     //     0.707107, 0.707107, 0, 0,    //
     //     0, 0, 1, 0,                  //
     //     0, 0, 0, 1;
-    A = Scaling(0.5f, 0.5f, 0.5f) * AngleAxisf(toRadian(_rot), Vector3f::UnitZ()) * Translation3f(-0.5f, -0.5f, 0.0f);
+    A = Translation3f(0.f, 0.5f, 0.f) * AngleAxisf(toRadian(_rot), Vector3f::UnitZ()) * Translation3f(0.f, -0.5f, 0.f);
     glUniformMatrix4fv(_shader.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
     _mesh.draw(_shader);
     _shader.deactivate();
@@ -132,7 +183,8 @@ void Viewer::drawScene2D()
 void Viewer::updateAndDrawScene()
 {
     // drawScene();
-    drawScene2D();
+    // drawScene2D();
+    drawSceneTP4();
 }
 
 void Viewer::loadShaders()
@@ -142,6 +194,7 @@ void Viewer::loadShaders()
     _shaderFront.loadFromFiles(DATA_DIR "/shaders/simpleFront.vert", DATA_DIR "/shaders/simple.frag");
     _shaderSide.loadFromFiles(DATA_DIR "/shaders/simpleSide.vert", DATA_DIR "/shaders/simple.frag");
     _shaderLine.loadFromFiles(DATA_DIR "/shaders/line.vert", DATA_DIR "/shaders/line.frag");
+    _shaderLineMT.loadFromFiles(DATA_DIR "/shaders/lineMT.vert", DATA_DIR "/shaders/line.frag");
     checkError();
 }
 
@@ -178,10 +231,10 @@ void Viewer::keyPressed(int key, int action, int /*mods*/)
             _scale -= 0.1;
         } else if (key == GLFW_KEY_LEFT_BRACKET) {
             auto a = (_rot + 1);
-            _rot = a < 360 ? a - 360 : a;
+            _rot = a > 360 ? a - 360 : a;
         } else if (key == GLFW_KEY_RIGHT_BRACKET) {
             auto a = (_rot - 1);
-            _rot = a < 360 ? a + 360 : a;
+            _rot = a < 0 ? a + 360 : a;
         } else if (key == GLFW_KEY_L) {
             _enableWires = !_enableWires;
         }
