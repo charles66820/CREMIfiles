@@ -211,7 +211,8 @@ void Viewer::drawSceneTP4SolarSystem()
     glViewport(0, 0, _winWidth, _winHeight);
 
     _shaderCam.activate();
-    Affine3f A = Scaling(10.f) * AngleAxisf(toRadian(sunRotation), Vector3f::UnitY()) * Translation3f(0.f, 0.f, 0.f);
+    Affine3f A = AngleAxisf(toRadian(sunRotation), Vector3f::UnitY()) * Translation3f(0.f, 0.f, 0.f) * Scaling(20.f);
+    glUniform4fv(_shaderCam.getUniformLocation("vtx_color2"), 1, Vector4f(1.f, 1.f, 0.f, 1.f).data());
     glUniformMatrix4fv(_shaderCam.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
     glUniformMatrix4fv(_shaderCam.getUniformLocation("camera_view_mat"), 1, GL_FALSE, _cam.viewMatrix().data());
     glUniformMatrix4fv(_shaderCam.getUniformLocation("percpective_mat"), 1, GL_FALSE, _cam.projectionMatrix().data());
@@ -219,9 +220,9 @@ void Viewer::drawSceneTP4SolarSystem()
     _shaderCam.deactivate();
 
     _shaderCam.activate();
-    A = AngleAxisf(toRadian(earthOrbit), Vector3f::UnitY()) * AngleAxisf(toRadian(earthRotation), Vector3f(.25f, .75f, .0f)) *
-        Scaling(4.f) * Translation3f(4.f, 0.f, 4.f);
-    // A = Scaling(4.f) * AngleAxisf(toRadian(earthOrbit), Vector3f::UnitY()) * Translation3f(4.f, 0.f, 4.f);
+    A = AngleAxisf(toRadian(earthOrbit), Vector3f::UnitY()) * Translation3f(24.f, 0.f, 24.f) *
+        AngleAxisf(toRadian(earthRotation), Vector3f(std::sin(25), std::cos(25), .0f)) * Scaling(4.f);
+    glUniform4fv(_shaderCam.getUniformLocation("vtx_color2"), 1, Vector4f(0.f, 1.f, 0.f, 1.f).data());
     glUniformMatrix4fv(_shaderCam.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
     glUniformMatrix4fv(_shaderCam.getUniformLocation("camera_view_mat"), 1, GL_FALSE, _cam.viewMatrix().data());
     glUniformMatrix4fv(_shaderCam.getUniformLocation("percpective_mat"), 1, GL_FALSE, _cam.projectionMatrix().data());
@@ -230,21 +231,24 @@ void Viewer::drawSceneTP4SolarSystem()
 
     Vector4f earthPos = A * Vector4f(0, 0, 0, 1);
 
-    // _shaderCam.activate();
-    // A = Scaling(4.f) * AngleAxisf(toRadian(moonRotation), Vector3f::UnitY()) * Translation3f(5.f, 0.f, 5.f);
-    // glUniformMatrix4fv(_shaderCam.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
-    // glUniformMatrix4fv(_shaderCam.getUniformLocation("camera_view_mat"), 1, GL_FALSE, _cam.viewMatrix().data());
-    // glUniformMatrix4fv(_shaderCam.getUniformLocation("percpective_mat"), 1, GL_FALSE, _cam.projectionMatrix().data());
-    // _mesh.draw(_shaderCam);
-    // _shaderCam.deactivate();
+    _shaderCam.activate();
+    A = Translation3f(earthPos.x(), earthPos.y(), earthPos.z()) *
+        AngleAxisf(toRadian(moonOrbit), Vector3f::UnitY()) * Translation3f(5.f, 0.f, 5.f) *
+        AngleAxisf(toRadian(moonRotation), Vector3f::UnitY()) * Scaling(2.f);
+    glUniform4fv(_shaderCam.getUniformLocation("vtx_color2"), 1, Vector4f(.8f, .8f, .8f, 1.f).data());
+    glUniformMatrix4fv(_shaderCam.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
+    glUniformMatrix4fv(_shaderCam.getUniformLocation("camera_view_mat"), 1, GL_FALSE, _cam.viewMatrix().data());
+    glUniformMatrix4fv(_shaderCam.getUniformLocation("percpective_mat"), 1, GL_FALSE, _cam.projectionMatrix().data());
+    _mesh.draw(_shaderCam);
+    _shaderCam.deactivate();
 
     float tmp = sunRotation + 0.1f;
     sunRotation = tmp > 360 ? tmp - 360 : tmp;
-    tmp = earthOrbit + 0.1f;
+    tmp = earthOrbit + 0.4f;
     earthOrbit = tmp > 360 ? tmp - 360 : tmp;
-    tmp = earthRotation + 0.2f;
+    tmp = earthRotation + 4.0f;
     earthRotation = tmp > 360 ? tmp - 360 : tmp;
-    tmp = moonOrbit + 0.1f;
+    tmp = moonOrbit + 0.8f;
     moonOrbit = tmp > 360 ? tmp - 360 : tmp;
     tmp = moonRotation + 0.2f;
     moonRotation = tmp > 360 ? tmp - 360 : tmp;
