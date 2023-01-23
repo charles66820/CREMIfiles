@@ -36,6 +36,12 @@ void Viewer::init(int w, int h)
     glEnable(GL_DEPTH_TEST);
 
     reshape(w, h);
+
+    Vector3f camPos = Vector3f(-.5f, .3f, 0.25f); //+ Vector3f(_translation.x(), _translation.y(), _zoom)
+    Vector3f camTarget = Vector3f(0.f, .3f, 0.f);
+    Vector3f camUpAnchor = Vector3f(0.f, 1.f, 0.f);
+    _cam.lookAt(camPos, camTarget, camUpAnchor);
+
     _trackball.setCamera(&_cam);
 }
 
@@ -178,14 +184,10 @@ void Viewer::drawSceneTP4Cam()
     Affine3f A = Scaling(_scale) * AngleAxisf(toRadian(_rot), Vector3f::UnitY()) * Translation3f(0.f, 0.f, 0.f);
     glUniformMatrix4fv(_shaderCam.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
 
-    _cam.lookAt(Vector3f(_translation.x(), _translation.y(), _zoom), Vector3f(0.f, 2.f, 0.f), Vector3f(2.f, 2.f, 0.f));
-    auto vm = _cam.viewMatrix();
+    Matrix4f vm = _cam.viewMatrix();
     glUniformMatrix4fv(_shaderCam.getUniformLocation("camera_view_mat"), 1, GL_FALSE, vm.data());
 
-    std::cout << "x: " << _translation.x() << ", y: " << _translation.y() << ", z: "
-              << _zoom << std::endl;
-
-        auto proj = _cam.projectionMatrix();
+    auto proj = _cam.projectionMatrix();
     glUniformMatrix4fv(_shaderCam.getUniformLocation("percpective_mat"), 1, GL_FALSE, proj.data());
 
     _mesh.draw(_shaderCam);

@@ -9,7 +9,7 @@ uniform mat4 percpective_mat; // matrice de perspective
 
 void main()
 {
-  gl_Position = obj_mat * camera_view_mat * vec4(vtx_position, 1);
+  gl_Position = percpective_mat * camera_view_mat * obj_mat * vec4(vtx_position, 1);
 
   var_color = vtx_color;
 }

@@ -44,7 +44,8 @@ void Camera::zoom(float x)
 
 void Camera::rotateAroundTarget(float angle, Vector3f axis)
 {
-    // TODO:
+    Affine3f A = Translation3f(0.f, 0.f, 0.f) * AngleAxisf(angle, axis);
+    mViewMatrix = mViewMatrix * A.matrix();
 }
 
 Camera::~Camera() {}
