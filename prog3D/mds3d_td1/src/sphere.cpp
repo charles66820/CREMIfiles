@@ -44,9 +44,13 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
 
         if (t > 0.f) {
             Point3f intersectPoint = ray.at(t);
+            float x = intersectPoint.x();
+            float y = intersectPoint.y();
+            float z = intersectPoint.z();
             hit.setShape(this);
             hit.setT(t);
             hit.setNormal((intersectPoint - c).normalized());
+            hit.setUV(atan2(z, sqrt(pow(x, 2) + pow(y, 2))), atan2(y, x));
             return true;
         }
     }

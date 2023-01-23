@@ -32,6 +32,11 @@ public:
     void setT(float t) { m_t = t; }
     float t() const { return m_t; }
 
+    void setUV(float u, float v) {
+        m_uv = Vector2f(u, v);
+    }
+    Vector2f uv() const { return m_uv; }
+
     void setShape(const Shape* shape) { m_shape = shape; }
     const Shape* shape() const { return m_shape; }
 
@@ -42,6 +47,7 @@ private:
     Normal3f m_normal;
     const Shape* m_shape;
     float m_t;
+    Vector2f m_uv;
 };
 
 /** Compute the intersection between a ray and an aligned box

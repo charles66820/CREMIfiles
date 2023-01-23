@@ -23,7 +23,7 @@ public:
 
             auto n = hit.normal();
             auto v = ray.direction; // ray direction is the view direction
-            Vector2f uv;            // material->texture();
+            Vector2f uv = hit.uv();  // material->texture();
 
             Color3f reflectivity = material->reflectivity();
 
@@ -36,7 +36,7 @@ public:
                 Color3f I = light->intensity(intersectPoint);                  // intensity
 
                 // drop shadow
-                Point3f xPr = intersectPoint + 1e-4 * l;
+                Point3f xPr = intersectPoint + 1e-4f * l;
                 Ray rayCast = Ray(xPr, l);
                 Hit lightHit;
                 scene->intersect(rayCast, lightHit);

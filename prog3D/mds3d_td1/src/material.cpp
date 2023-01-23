@@ -29,6 +29,15 @@ Color3f Diffuse::diffuseColor(const Vector2f& uv) const
 {
     if (texture() == nullptr)
         return m_diffuseColor;
+
+    Vector2f uvScaled = Vector2f(fmodf(uv.x() * textureScaleU(), 1.f), fmodf(uv.y() * textureScaleV(), 1.f));
+    Color3f textureColor = texture()->coeff(uvScaled.x(), uvScaled.y());
+
+    if (textureMode() == MODULATE) {
+        return m_diffuseColor * textureColor;
+    } else {
+        return textureColor;
+    }
 }
 
 REGISTER_CLASS(Diffuse, "diffuse")

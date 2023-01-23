@@ -84,6 +84,7 @@ set(SRCS
     src/normals.cpp
     src/direct.cpp
     src/whitted.cpp
+    src/texcoords.cpp
 )
 
 add_executable(mds3d_raytracer ${SRCS})

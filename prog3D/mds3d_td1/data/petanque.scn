@@ -10,6 +10,7 @@
 <integrator type="whitted">
   <integer name="maxRecursion" value="8" />
 </integrator>
+ <!-- <integrator type="texcoords" /> -->
 
  <camera type="perspective">
    <float name="fieldOfView" value="45.0" /> 

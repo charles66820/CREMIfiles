@@ -45,9 +45,12 @@ bool Plane::intersect(const Ray& ray, Hit& hit) const
     // t > 0 ⟹ intersection devant la caméra
     if (t >= 0) {
         Point3f intersectPoint = ray.at(t);
+        float x = intersectPoint.x();
+        float y = intersectPoint.y();
         hit.setShape(this);
         hit.setT(t);
         hit.setNormal(n);
+        hit.setUV(x, y);
         return true;
     }
 

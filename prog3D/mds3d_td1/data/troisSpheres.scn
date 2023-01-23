@@ -10,6 +10,7 @@
  <integrator type="whitted">
   <integer name="maxRecursion" value="8" />
  </integrator>
+ <!-- <integrator type="texcoords" /> -->
 
  <!-- Render the scene as viewed by a perspective camera -->
  <camera type="perspective">
