@@ -26,17 +26,17 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
     auto d = ray.direction;
 
     // d*d * t^2 + (2 * d.dot(o - c)) * t + (||o - c||^2 - r^2) = 0
-    auto a = d.dot(d);
+    auto a = 1; // d.dot(d) == 1
     auto b = 2 * d.dot(o - c);
-    auto c_ = (o - c).squaredNorm() -(r * r);
+    auto c_ = (o - c).squaredNorm() - (r * r);
 
     auto delta = (b * b) - 4 * a * c_;
 
     if (delta >= 0) {
         float t;
         if (delta > 0) {
-            float t1 = (-b - sqrt(delta)) / (2 * a);
-            float t2 = (-b + sqrt(delta)) / (2 * a);
+            float t1 = (-(b - sqrt(delta))) / (2 * a);
+            float t2 = (-(b + sqrt(delta))) / (2 * a);
             t = t1 <= t2 ? t1 : t2;
         } else if (delta == 0) {
             t = -(b / (2 * a));

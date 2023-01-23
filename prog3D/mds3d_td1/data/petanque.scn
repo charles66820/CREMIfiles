@@ -5,11 +5,11 @@
 
 <!-- <integrator type="flat"/> -->
 <!-- <integrator type="normals" /> -->
-<integrator type="direct" />
+<!-- <integrator type="direct" /> -->
 
-<!-- <integrator type="whitted">
-  <integer name="maxRecursion" value="1" />
-</integrator> -->
+<integrator type="whitted">
+  <integer name="maxRecursion" value="8" />
+</integrator>
 
  <camera type="perspective">
    <float name="fieldOfView" value="45.0" /> 

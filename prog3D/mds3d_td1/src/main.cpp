@@ -27,23 +27,22 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
     uint height = camera->vpHeight();
     Point3f origin = camera->position() + camF - camX - camY; // axe optique
 
-    std::cout << "width :" << width << std::endl;
-    std::cout << "height :" << height << std::endl;
-    std::cout << "camera pos :" << camera->position().toString() << std::endl;
-    std::cout << "camF :" << camF.toString() << std::endl;
-    std::cout << "camX :" << camX.toString() << std::endl;
-    std::cout << "camY :" << camY.toString() << std::endl;
+    // std::cout << "width :" << width << std::endl;
+    // std::cout << "height :" << height << std::endl;
+    // std::cout << "camera pos :" << camera->position().toString() << std::endl;
+    // std::cout << "camF :" << camF.toString() << std::endl;
+    // std::cout << "camX :" << camX.toString() << std::endl;
+    // std::cout << "camY :" << camY.toString() << std::endl;
     Vector3f C = camX + camY - camF;
-    std::cout << "C (camX + camY - camF) :" << C.toString() << std::endl;
-    std::cout << "origin :" << origin.toString() << std::endl;
+    // std::cout << "C (camX + camY - camF) :" << C.toString() << std::endl;
+    // std::cout << "origin :" << origin.toString() << std::endl;
 
     for (uint i = 0; i < width; i++)
         for (uint j = 0; j < height; j++) {
             Vector3f p;
             p = (camF * camF.norm()) + 2 * (i / (width - 0.5)) * camX + 2 * (j / (height - 0.5)) * camY;
 
-            Vector3f direction = p - C;
-            direction.normalize();
+            Vector3f direction = (p - C).normalized();
 
             /// 2. generate a primary ray
             Ray ray = Ray(origin, direction);

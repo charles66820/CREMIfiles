@@ -33,7 +33,7 @@ Color3f Phong::brdf(const Vector3f& viewDir, const Vector3f& lightDir, const Nor
     // ρ_s = m_s(cos(α))^s = m_s(max(r * v, 0))^s
     Color3f rho_s = ms * pow(std::max(r.dot(v), 0.f), s); // (ρ_s) specular part
 
-    auto rho = rho_d + rho_s; // ρ
+    Color3f rho = rho_d + rho_s; // ρ
 
     return rho;
 }

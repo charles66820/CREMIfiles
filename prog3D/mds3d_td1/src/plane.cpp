@@ -1,6 +1,6 @@
 #include "plane.h"
 
-static const float E_4 = 0.0001f;
+static const float E_4 = 1e-6;
 
 Plane::Plane()
 {
@@ -23,19 +23,19 @@ bool Plane::intersect(const Ray& ray, Hit& hit) const
     auto o = ray.origin;
     auto d = ray.direction;
 
-    // Distance du plan au centre (0, 0, 0)
-    auto D = a.dot(n);
-
     // (o + t * d) * n - D = 0, ||n|| = 1
-    if (n.norm() != 1)
-        return false;
+    // if (n.norm() != 1)
+    //     return false;
 
-    auto para = d.dot(n);
+    float para = d.dot(n);
     // t infini ⟹ le rayon est parallèle et distinct du plan
     if (para > -E_4 && para < E_4)
         return false;
 
+    // Distance du plan au centre (0, 0, 0)
+    float D = a.dot(n);
     auto t = (D - o.dot(n)) / para;
+    // float t = (a - o).dot(n) / para;
 
     if (n.dot(d) == 0)
         return false;
@@ -45,15 +45,13 @@ bool Plane::intersect(const Ray& ray, Hit& hit) const
 
     // t == 0 ⟹ le rayon est confondu avec le plan
     // t > 0 ⟹ intersection devant la caméra
-    if (t == 0 || t > 0) {
+    if (t >= 0) {
         Point3f intersectPoint = ray.at(t);
         hit.setShape(this);
         hit.setT(t);
-        hit.setNormal((intersectPoint - a).normalized());
+        hit.setNormal(n);
         return true;
     }
-
-    // if (OpDxT.norm() == 0) return false;
 
     return false;
 }

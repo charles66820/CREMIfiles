@@ -15,7 +15,7 @@ public:
 
         *dist = (xl - x).norm();
 
-        // (x_l-x)/||x_l-x||^2
+        // (x_l-x)/||x_l-x||  //^2
         return (xl-x)/(xl-x).norm();
     }
 
