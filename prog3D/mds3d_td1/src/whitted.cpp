@@ -1,8 +1,6 @@
 #include "integrator.h"
 #include "scene.h"
 
-static const float E_4 = 0.0001f;
-
 class WhittedIntegrator : public Integrator
 {
 public:
@@ -37,7 +35,8 @@ public:
                 Vector3f l = light->direction(intersectPoint, &lightDistance); // direction
                 Color3f I = light->intensity(intersectPoint);                  // intensity
 
-                Point3f xPr = intersectPoint + E_4 * l;
+                // drop shadow
+                Point3f xPr = intersectPoint + 1e-4 * l;
                 Ray rayCast = Ray(xPr, l);
                 Hit lightHit;
                 scene->intersect(rayCast, lightHit);

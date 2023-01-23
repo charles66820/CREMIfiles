@@ -1,7 +1,5 @@
 #include "plane.h"
 
-static const float E_4 = 1e-6;
-
 Plane::Plane()
 {
 }
@@ -29,7 +27,7 @@ bool Plane::intersect(const Ray& ray, Hit& hit) const
 
     float para = d.dot(n);
     // t infini ⟹ le rayon est parallèle et distinct du plan
-    if (para > -E_4 && para < E_4)
+    if (para > -1e-6 && para < 1e-6)
         return false;
 
     // Distance du plan au centre (0, 0, 0)

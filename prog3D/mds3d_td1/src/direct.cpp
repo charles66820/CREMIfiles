@@ -1,8 +1,6 @@
 #include "integrator.h"
 #include "scene.h"
 
-static const float E_4 = 0.0001f;
-
 class DirectIntegrator : public Integrator
 {
 public:
@@ -26,14 +24,15 @@ public:
             Vector2f uv;            // material->texture();
 
             // The total Reflection (the final color to the view point)
-            Color3f R = Color3f();
+            Color3f R = Color3f::Zero();
             // ∑_i(ρ⋅max(⟨l_i⋅n⟩,0)I_i)
             for (auto light : scene->lightList()) {
                 float lightDistance = 0.f;
                 Vector3f l = light->direction(intersectPoint, &lightDistance); // direction
                 Color3f I = light->intensity(intersectPoint);                  // intensity
 
-                Point3f xPr = intersectPoint + E_4 * l;
+                // drop shadow
+                Point3f xPr = intersectPoint + 1e-6 * l;
                 Ray rayCast = Ray(xPr, l);
                 Hit lightHit;
                 scene->intersect(rayCast, lightHit);
