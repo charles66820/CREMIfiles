@@ -22,6 +22,7 @@ public:
     void drawScene2D();
     void drawSceneTP4();
     void drawSceneTP4Cam();
+    void drawSceneTP4SolarSystem();
     void updateAndDrawScene();
     void reshape(int w, int h);
     void loadShaders();
