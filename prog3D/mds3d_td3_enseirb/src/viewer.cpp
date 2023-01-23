@@ -104,6 +104,8 @@ void Viewer::drawSceneTP4()
 
     Affine3f A = Translation3f(_translation.x(), _translation.y(), _zoom) * Scaling(_scale) *
                  AngleAxisf(toRadian(_rot), Vector3f(-0.5f, 1.5f, 0.f)) * Translation3f(0.f, 0.f, 0.f);
+    // Affine3f A = Translation3f(0.f, 0.f, 0.f) * Scaling(_scale) * AngleAxisf(toRadian(_rot), Vector3f::UnitY()) *
+    //              Translation3f(0.f, 0.f, 0.f);
     glUniformMatrix4fv(_shader.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
