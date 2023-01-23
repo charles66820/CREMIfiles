@@ -3,11 +3,14 @@
 
 using namespace Eigen;
 
+#define toRadian(a) a * (M_PI / 180)
+
 Viewer::Viewer()
     : _winWidth(0),
       _winHeight(0),
       _scale(1),
       _zoom(0.5),
+      _rot(45),
       _enableWires(false)
 {
 }
@@ -90,12 +93,38 @@ void Viewer::drawScene2D()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _shader.activate();
     Matrix4f M;
-    M << _scale, 0, 0, _translation.x(), //
-        0, _scale, 0, _translation.y(),  //
-        0, 0, _scale, _zoom,            //
-        0, 0, 0, 1;
-    // M.setIdentity();
-    glUniformMatrix4fv(_shader.getUniformLocation("obj_mat"), 1, GL_FALSE, M.data());
+    //contrôle au clavier
+    // M << _scale, 0, 0, _translation.x(), //
+    //     0, _scale, 0, _translation.y(),  //
+    //     0, 0, _scale, _zoom,            //
+    //     0, 0, 0, 1;
+
+    // chair left
+    // M << 0.5, 0, 0, -0.5, //
+    //     0, 0.5, 0, -1,    //
+    //     0, 0, 0.5, 0,     //
+    //     0, 0, 0, 1;
+    Affine3f A = Scaling(0.5f) * Translation3f(Vector3f(-1, -2, 0));
+    glUniformMatrix4fv(_shader.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
+    _mesh.draw(_shader);
+
+    // chair right
+    // M << -0.5, 0, -4.37114e-08, 0.5, //
+    //     0, 0.5, 0, -1,               //
+    //     4.37114e-08, 0, -0.5, 0,     //
+    //     0, 0, 0, 1;
+    // A = Translation3f(Vector3f(0.5, -1, 0)) * AngleAxisf(toRadian(180), Vector3f::UnitY()) * Scaling(.5f);
+    A = Scaling(0.5f) * AngleAxisf(toRadian(180), Vector3f::UnitY()) * Translation3f(Vector3f(-1, -2, 0));
+    glUniformMatrix4fv(_shader.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
+    _mesh.draw(_shader);
+
+    // chair center
+    // M << 0.707107, -0.707107, 0, .5, //
+    //     0.707107, 0.707107, 0, 0,    //
+    //     0, 0, 1, 0,                  //
+    //     0, 0, 0, 1;
+    A = Scaling(0.5f, 0.5f, 0.5f) * AngleAxisf(toRadian(_rot), Vector3f::UnitZ()) * Translation3f(-0.5f, -0.5f, 0.0f);
+    glUniformMatrix4fv(_shader.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
     _mesh.draw(_shader);
     _shader.deactivate();
 }
@@ -147,6 +176,12 @@ void Viewer::keyPressed(int key, int action, int /*mods*/)
             _scale += 0.1;
         } else if (key == GLFW_KEY_PERIOD) {
             _scale -= 0.1;
+        } else if (key == GLFW_KEY_LEFT_BRACKET) {
+            auto a = (_rot + 1);
+            _rot = a < 360 ? a - 360 : a;
+        } else if (key == GLFW_KEY_RIGHT_BRACKET) {
+            auto a = (_rot - 1);
+            _rot = a < 360 ? a + 360 : a;
         } else if (key == GLFW_KEY_L) {
             _enableWires = !_enableWires;
         }

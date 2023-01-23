@@ -42,6 +42,7 @@ private:
     Mesh _mesh;
     float _scale;
     float _zoom;
+    float _rot;
     Eigen::Vector2f _translation;
     bool _enableWires;
 
