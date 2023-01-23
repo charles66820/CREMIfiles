@@ -21,17 +21,17 @@ Viewer::~Viewer() {}
 ////////////////////////////////////////////////////////////////////////////////
 // GL stuff
 
-// #define FILENAME "chair"
-#define FILENAME "lemming"
+// #define FILENAME "chair.off"
+// #define FILENAME "lemming.off"
+// #define FILENAME "monkey.obj"
+#define FILENAME "sphere.obj"
 
 // initialize OpenGL context
 void Viewer::init(int w, int h)
 {
     loadShaders();
 
-    // if (!_mesh.load(DATA_DIR "/models/" FILENAME ".off"))
-    //     exit(1);
-    if (!_mesh.load(DATA_DIR "/models/sphere.obj"))
+    if (!_mesh.load(DATA_DIR "/models/" FILENAME))
         exit(1);
     _mesh.initVBA();
 
@@ -210,37 +210,37 @@ void Viewer::drawSceneTP4SolarSystem()
 
     glViewport(0, 0, _winWidth, _winHeight);
 
-    _shaderCam.activate();
+    _shaderSL.activate();
     Affine3f A = AngleAxisf(toRadian(sunRotation), Vector3f::UnitY()) * Translation3f(0.f, 0.f, 0.f) * Scaling(20.f);
-    glUniform4fv(_shaderCam.getUniformLocation("vtx_color2"), 1, Vector4f(1.f, 1.f, 0.f, 1.f).data());
-    glUniformMatrix4fv(_shaderCam.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
-    glUniformMatrix4fv(_shaderCam.getUniformLocation("camera_view_mat"), 1, GL_FALSE, _cam.viewMatrix().data());
-    glUniformMatrix4fv(_shaderCam.getUniformLocation("percpective_mat"), 1, GL_FALSE, _cam.projectionMatrix().data());
-    _mesh.draw(_shaderCam);
-    _shaderCam.deactivate();
+    glUniform4fv(_shaderSL.getUniformLocation("vtx_color2"), 1, Vector4f(1.f, 1.f, 0.f, 1.f).data());
+    glUniformMatrix4fv(_shaderSL.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
+    glUniformMatrix4fv(_shaderSL.getUniformLocation("camera_view_mat"), 1, GL_FALSE, _cam.viewMatrix().data());
+    glUniformMatrix4fv(_shaderSL.getUniformLocation("percpective_mat"), 1, GL_FALSE, _cam.projectionMatrix().data());
+    _mesh.draw(_shaderSL);
+    _shaderSL.deactivate();
 
-    _shaderCam.activate();
+    _shaderSL.activate();
     A = AngleAxisf(toRadian(earthOrbit), Vector3f::UnitY()) * Translation3f(24.f, 0.f, 24.f) *
         AngleAxisf(toRadian(earthRotation), Vector3f(std::sin(25), std::cos(25), .0f)) * Scaling(4.f);
-    glUniform4fv(_shaderCam.getUniformLocation("vtx_color2"), 1, Vector4f(0.f, 1.f, 0.f, 1.f).data());
-    glUniformMatrix4fv(_shaderCam.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
-    glUniformMatrix4fv(_shaderCam.getUniformLocation("camera_view_mat"), 1, GL_FALSE, _cam.viewMatrix().data());
-    glUniformMatrix4fv(_shaderCam.getUniformLocation("percpective_mat"), 1, GL_FALSE, _cam.projectionMatrix().data());
-    _mesh.draw(_shaderCam);
-    _shaderCam.deactivate();
+    glUniform4fv(_shaderSL.getUniformLocation("vtx_color2"), 1, Vector4f(0.f, 1.f, 0.f, 1.f).data());
+    glUniformMatrix4fv(_shaderSL.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
+    glUniformMatrix4fv(_shaderSL.getUniformLocation("camera_view_mat"), 1, GL_FALSE, _cam.viewMatrix().data());
+    glUniformMatrix4fv(_shaderSL.getUniformLocation("percpective_mat"), 1, GL_FALSE, _cam.projectionMatrix().data());
+    _mesh.draw(_shaderSL);
+    _shaderSL.deactivate();
 
     Vector4f earthPos = A * Vector4f(0, 0, 0, 1);
 
-    _shaderCam.activate();
+    _shaderSL.activate();
     A = Translation3f(earthPos.x(), earthPos.y(), earthPos.z()) *
         AngleAxisf(toRadian(moonOrbit), Vector3f::UnitY()) * Translation3f(5.f, 0.f, 5.f) *
         AngleAxisf(toRadian(moonRotation), Vector3f::UnitY()) * Scaling(2.f);
-    glUniform4fv(_shaderCam.getUniformLocation("vtx_color2"), 1, Vector4f(.8f, .8f, .8f, 1.f).data());
-    glUniformMatrix4fv(_shaderCam.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
-    glUniformMatrix4fv(_shaderCam.getUniformLocation("camera_view_mat"), 1, GL_FALSE, _cam.viewMatrix().data());
-    glUniformMatrix4fv(_shaderCam.getUniformLocation("percpective_mat"), 1, GL_FALSE, _cam.projectionMatrix().data());
-    _mesh.draw(_shaderCam);
-    _shaderCam.deactivate();
+    glUniform4fv(_shaderSL.getUniformLocation("vtx_color2"), 1, Vector4f(.8f, .8f, .8f, 1.f).data());
+    glUniformMatrix4fv(_shaderSL.getUniformLocation("obj_mat"), 1, GL_FALSE, A.matrix().data());
+    glUniformMatrix4fv(_shaderSL.getUniformLocation("camera_view_mat"), 1, GL_FALSE, _cam.viewMatrix().data());
+    glUniformMatrix4fv(_shaderSL.getUniformLocation("percpective_mat"), 1, GL_FALSE, _cam.projectionMatrix().data());
+    _mesh.draw(_shaderSL);
+    _shaderSL.deactivate();
 
     float tmp = sunRotation + 0.1f;
     sunRotation = tmp > 360 ? tmp - 360 : tmp;
@@ -272,6 +272,7 @@ void Viewer::loadShaders()
     _shaderLine.loadFromFiles(DATA_DIR "/shaders/line.vert", DATA_DIR "/shaders/line.frag");
     _shaderLineMT.loadFromFiles(DATA_DIR "/shaders/lineMT.vert", DATA_DIR "/shaders/line.frag");
     _shaderCam.loadFromFiles(DATA_DIR "/shaders/simpleCam.vert", DATA_DIR "/shaders/simple.frag");
+    _shaderSL.loadFromFiles(DATA_DIR "/shaders/simpleSL.vert", DATA_DIR "/shaders/simple.frag");
     checkError();
 }
 

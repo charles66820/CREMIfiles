@@ -44,6 +44,7 @@ private:
     Shader _shaderLine;
     Shader _shaderLineMT;
     Shader _shaderCam;
+    Shader _shaderSL;
     Mesh _mesh;
     float _scale;
     float _zoom;
