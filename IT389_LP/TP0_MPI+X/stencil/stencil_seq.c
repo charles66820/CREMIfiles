@@ -98,28 +98,17 @@ int main(int argc, char** argv) {
     }
   }
   clock_gettime(CLOCK_MONOTONIC, &t2);
-  const double t_usec =
-      (t2.tv_sec - t1.tv_sec) * 1000000.0 + (t2.tv_nsec - t1.tv_nsec) / 1000.0;
-  printf("steps: %d\n", s);
-  printf("time: %g usecs\n", t_usec);
+  const double t_usec = (t2.tv_sec - t1.tv_sec) + (t2.tv_nsec - t1.tv_nsec) / 1E3;
+  const long nbCells = (STENCIL_SIZE_X - 2) * (STENCIL_SIZE_Y - 2);
+  const long nbOperationsByStep = 10 * nbCells;
+  const double gigaflops = nbOperationsByStep * s * 1E6 / t_usec / 1E9;
+  const double nbCellsByS = nbCells * s * 1E6 / t_usec;
 
-  printf("height: %d, width: %d\n", STENCIL_SIZE_X, STENCIL_SIZE_Y);
-  const long nbCells =
-      (STENCIL_SIZE_X - 2) * (STENCIL_SIZE_Y - 2);
-  printf("nbCells: %ld\n", nbCells);
+  // fprintf( stderr, "steps,time(µ sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
+  // printf("%d,%g,%d,%d,%ld,%ld,%g,%g\n", s, t_usec, STENCIL_SIZE_X, STENCIL_SIZE_Y,
+  //        nbCells, nbOperationsByStep, gigaflops, nbCellsByS);
 
-  const double nbOperationsByStep = 10 * nbCells;
-  printf("nbOperationsByStep: %g\n", nbOperationsByStep);
-
-  const double gigaflops =
-      nbOperationsByStep * s * 1000000 / t_usec / 1000000000;
-  printf("%g gigaflop/s\n", gigaflops);
-
-  const double nbCellsByS = nbCells * s * 1000000 / t_usec;
-  printf("%g cell/s\n", nbCellsByS);
-  printf("%d_%d;%g\n", STENCIL_SIZE_X, STENCIL_SIZE_Y, nbCellsByS);
-
-  // stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y - 1);
+  stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y - 1);
 
   return 0;
 }

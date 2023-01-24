@@ -24,8 +24,6 @@ static double values[STENCIL_NBUFFERS][STENCIL_SIZE_X][STENCIL_SIZE_Y];
 /** latest computed buffer */
 static int current_buffer = 0;
 
-#pragma region utils
-
 /** init stencil values to 0, borders to non-zero */
 static void stencil_init(void) {
   int b, x, y;
@@ -57,28 +55,65 @@ static void stencil_display(int b, int x0, int x1, int y0, int y1) {
   }
 }
 
-#pragma endregion utils
-
 /** compute the next stencil step, return 1 if computation has converged */
 static int stencil_step(void) {
   int convergence = 1;
   int prev_buffer = current_buffer;
   int next_buffer = (current_buffer + 1) % STENCIL_NBUFFERS;
-  int x, y;
-  for (x = 1; x < STENCIL_SIZE_X - 1; x++) {
-    for (y = 1; y < STENCIL_SIZE_Y - 1; y++) {
-      values[next_buffer][x][y] =
-          alpha * values[prev_buffer][x - 1][y] +
-          alpha * values[prev_buffer][x + 1][y] +
-          alpha * values[prev_buffer][x][y - 1] +
-          alpha * values[prev_buffer][x][y + 1] +
-          (1.0 - 4.0 * alpha) * values[prev_buffer][x][y];
-      if (convergence && (fabs(values[prev_buffer][x][y] -
-                               values[next_buffer][x][y]) > epsilon)) {
-        convergence = 0;
+
+  // for (x = 1; x < STENCIL_SIZE_X - 1; x++) {
+  //   for (y = 1; y < STENCIL_SIZE_Y - 1; y++) {
+  //     values[next_buffer][x][y] =
+  //         alpha * values[prev_buffer][x - 1][y] +
+  //         alpha * values[prev_buffer][x + 1][y] +
+  //         alpha * values[prev_buffer][x][y - 1] +
+  //         alpha * values[prev_buffer][x][y + 1] +
+  //         (1.0 - 4.0 * alpha) * values[prev_buffer][x][y];
+  //     if (convergence && (fabs(values[prev_buffer][x][y] -
+  //                              values[next_buffer][x][y]) > epsilon)) {
+  //       convergence = 0;
+  //     }
+  //   }
+  // }
+
+  int TW = 6;
+  int TH = 6;
+
+  int nbTW = (STENCIL_SIZE_X - 2) / (TW - 2);
+  int nbReminderTW = (STENCIL_SIZE_X - 2) - ((TW - 2) * nbTW);
+  if (nbReminderTW > 0)
+    nbTW += 1;
+
+  int nbTH = (STENCIL_SIZE_Y - 2) / (TH - 2);
+  int nbReminderTH = (STENCIL_SIZE_Y - 2) - ((TH - 2) * nbTH);
+  if (nbReminderTH > 0)
+    nbTH += 1;
+
+  int tw, th;
+  for (tw = 0; tw < nbTW; tw++) {
+    for (th = 0; th < nbTH; th++) {
+      int haloX = (tw * (TW - 2));
+      int haloY = (th * (TH - 2));
+
+      int x, y;
+      for (x = haloX + 1; x < fmin(haloX + TW, STENCIL_SIZE_X) - 1;
+           x++) {
+        for (y = haloY + 1; y < fmin(haloY + TH, STENCIL_SIZE_Y) - 1; y++) {
+          values[next_buffer][x][y] =
+              alpha * values[prev_buffer][x - 1][y] +
+              alpha * values[prev_buffer][x + 1][y] +
+              alpha * values[prev_buffer][x][y - 1] +
+              alpha * values[prev_buffer][x][y + 1] +
+              (1.0 - 4.0 * alpha) * values[prev_buffer][x][y];
+          if (convergence && (fabs(values[prev_buffer][x][y] -
+                                   values[next_buffer][x][y]) > epsilon)) {
+            convergence = 0;
+          }
+        }
       }
     }
   }
+
   current_buffer = next_buffer;
   return convergence;
 }
@@ -99,27 +134,19 @@ int main(int argc, char** argv) {
   }
   clock_gettime(CLOCK_MONOTONIC, &t2);
   const double t_usec =
-      (t2.tv_sec - t1.tv_sec) * 1000000.0 + (t2.tv_nsec - t1.tv_nsec) / 1000.0;
-  printf("steps: %d\n", s);
-  printf("time: %g usecs\n", t_usec);
+      (t2.tv_sec - t1.tv_sec) + (t2.tv_nsec - t1.tv_nsec) / 1E3;
+  const long nbCells = (STENCIL_SIZE_X - 2) * (STENCIL_SIZE_Y - 2);
+  const long nbOperationsByStep = 10 * nbCells;
+  const double gigaflops = nbOperationsByStep * s * 1E6 / t_usec / 1E9;
+  const double nbCellsByS = nbCells * s * 1E6 / t_usec;
 
-  printf("height: %d, width: %d\n", STENCIL_SIZE_X, STENCIL_SIZE_Y);
-  const long nbCells =
-      (STENCIL_SIZE_X - 2) * (STENCIL_SIZE_Y - 2);
-  printf("nbCells: %ld\n", nbCells);
+  fprintf(
+      stderr,
+      "steps,time(µ sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
+  printf("%d,%g,%d,%d,%ld,%ld,%g,%g\n", s, t_usec, STENCIL_SIZE_X,
+         STENCIL_SIZE_Y, nbCells, nbOperationsByStep, gigaflops, nbCellsByS);
 
-  const double nbOperationsByStep = 10 * nbCells;
-  printf("nbOperationsByStep: %g\n", nbOperationsByStep);
-
-  const double gigaflops =
-      nbOperationsByStep * s * 1000000 / t_usec / 1000000000;
-  printf("%g gigaflop/s\n", gigaflops);
-
-  const double nbCellsByS = nbCells * s * 1000000 / t_usec;
-  printf("%g cell/s\n", nbCellsByS);
-  printf("%d_%d;%g\n", STENCIL_SIZE_X, STENCIL_SIZE_Y, nbCellsByS);
-
-  // stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y - 1);
+  stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y - 1);
 
   return 0;
 }

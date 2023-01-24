@@ -1,1 +1,4 @@
 stencil_seq
+stencil_MPI_Pure
+csv/*
+!csv/.gitkeep
