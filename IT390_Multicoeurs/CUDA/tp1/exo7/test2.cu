@@ -51,15 +51,16 @@ int main(void)
   cudaEventCreate(&event1);
   cudaEventCreate(&event2);
 
-  // cudaMemcpy(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice);
-  // cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice);
-  cudaMemcpyAsync(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice, stream1);
-  cudaMemcpyAsync(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice, stream2);
+  // cudaMemcpyAsync(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice, stream1);
+  // cudaMemcpyAsync(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice, stream2);
+  cudaMemcpy(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice);
+  cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice);
+
   for(int i = 0; i < 10; i ++){
     saxpy<<<1, 1, 0, stream1>>>(N, 2.0f, gpu_x, gpu_y);
-    cudaEventRecord(event1);
+    cudaEventRecord(event1, stream1);
     saxpy<<<1, 1, 0, stream2>>>(N, 2.0f, gpu_x, gpu_y);
-    cudaEventRecord(event2);
+    cudaEventRecord(event2, stream2);
     cudaEventSynchronize(event1);
     cudaEventSynchronize(event2);
   }

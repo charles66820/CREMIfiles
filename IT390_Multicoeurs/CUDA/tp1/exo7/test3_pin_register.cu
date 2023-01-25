@@ -29,8 +29,8 @@ int main(void)
 
   /*Allocation de l'espace pour gpu_x et gpu_y qui vont 
     recevoir x et y sur le GPU*/
-  cudaMalloc(&gpu_x, N*sizeof(float)); 
-  cudaMalloc(&gpu_y, N*sizeof(float));
+  cudaMalloc(&gpu_x, N*sizeof(float));
+  cudaMallocHost(&gpu_y, N * sizeof(float));
 
   /* Initialisation de x et y*/
   for (int i = 0; i < N; i++) {
@@ -51,15 +51,18 @@ int main(void)
   // cudaMemcpyAsync(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice, stream2);
   cudaMemcpy(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice);
 
+  cudaHostRegister(y, N*sizeof(float), 0);
+
   for(int i = 0; i < 10; i ++){
     // cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpyAsync(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice, stream2);
     saxpy<<<1, 1, 0, stream1>>>(N, 2.0f, gpu_x, gpu_y);
     cudaDeviceSynchronize();
   }
+  cudaHostUnregister(y);
 
   /* Copie du résultat dans y*/
-  cudaMemcpy(y, gpu_y, N*sizeof(float), cudaMemcpyDeviceToHost);
+  cudaMemcpy(y, gpu_y, N * sizeof(float), cudaMemcpyDeviceToHost);
 
   float maxError = 0.0f;
   for (int i = 0; i < N; i++)

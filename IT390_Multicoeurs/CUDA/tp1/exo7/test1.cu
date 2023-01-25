@@ -1,3 +1,5 @@
+// nvprof -o trace.prof -f ./test1
+// nvvp -import trace.prof
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -43,16 +45,17 @@ int main(void)
   /* Appel au kernel saxpy sur les N éléments */
   //saxpy<<<(N+255)/256, 256>>>(N, 2.0f, gpu_x, gpu_y);
   //  dim3 grid(N,1);
-  cudaStream_t stream1;
+  cudaStream_t stream1, stream2;
   cudaStreamCreate(&stream1);
-  // cudaMemcpy(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice);
-  // cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice);
-  cudaMemcpyAsync(gpu_x, x, N * sizeof(float), cudaMemcpyHostToDevice, stream1);
-  cudaMemcpyAsync(gpu_y, y, N * sizeof(float), cudaMemcpyHostToDevice, stream1);
+  cudaStreamCreate(&stream2);
+  // cudaMemcpyAsync(gpu_x, x, N * sizeof(float), cudaMemcpyHostToDevice, stream1);
+  // cudaMemcpyAsync(gpu_y, y, N * sizeof(float), cudaMemcpyHostToDevice, stream2);
+  cudaMemcpy(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice);
+  cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice);
 
   for(int i = 0; i < 10; i ++){
-    // saxpy<<<1, 1>>>(N, 2.0f, gpu_x, gpu_y);
     saxpy<<<1, 1, 0, stream1>>>(N, 2.0f, gpu_x, gpu_y);
+    saxpy<<<1, 1, 0, stream2>>>(N, 2.0f, gpu_x, gpu_y);
   }
 
   /* Copie du résultat dans y*/

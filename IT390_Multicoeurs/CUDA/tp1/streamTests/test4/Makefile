@@ -1,4 +1,4 @@
-CC=cc
+CC=nvcc
 
 CUDA_HOME=/net/ens/nvhpc/hpc_sdk/21.3/Linux_x86_64/21.3/cuda/
 CUDASDK=/net/ens/nvhpc/hpc_sdk/21.3/Linux_x86_64/21.3/examples/OpenACC/SDK/include/
@@ -9,26 +9,17 @@ NVCFLAGS= -I $(CUDA_HOME)/include -I$(CUDASDK)
 
 CFLAGS= -L $(CUDA_HOME)/lib64 -L $(CUDANVIDIA)
 
-OBJS := ${SRCS:.c=.o}
-OBJS_CUDA := ${SRCS:.cu=.o}
-
-test1: test1.o
+saxpy: saxpy_solution.o
 	$(NVCC) $(CFLAGS)  -o $@ $^
 
-test2: test2.o
+saxpy_stream: saxpy_solution_streams.o
 	$(NVCC) $(CFLAGS)  -o $@ $^
 
-test3: test3.o
-	$(NVCC) $(CFLAGS)  -o $@ $^
-
-test3_pin: test3_pin.o
-	$(NVCC) $(CFLAGS)  -o $@ $^
-
-test3_pin_register: test3_pin_register.o
-	$(NVCC) $(CFLAGS)  -o $@ $^
+saxpy_stream_fix: saxpy_solution_streams_fix.o
+	$(NVCC) $(CFLAGS)  -o $@ $^ 
 
 clean:
-	rm -f *.o *.linkinfo matmul gemm_cublas gemm_omp matmul_tiled gemm_cublas_solution gemm_omp_solution matmul_tiled_solution
+	rm -f *.o *.linkinfo deviceQuery
 
 %.o: %.cu
 	$(NVCC) $(NVCFLAGS) -c -o $@ $<

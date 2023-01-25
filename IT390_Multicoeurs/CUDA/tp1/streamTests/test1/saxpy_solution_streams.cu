@@ -16,7 +16,7 @@ void saxpy(int n, float a, float *x, float *y)
   //if (i < n) y[i] = a*x[i] + y[i];
   if(i < n)
     for(int j = 0; j < n; j++)
-      y[i] = a*x[i] + y[i];
+    	    y[i] = a*x[i] + y[i]; 
 }
 
 /********************** main **************************/
@@ -43,19 +43,16 @@ int main(void)
   /* Appel au kernel saxpy sur les N éléments */
   //saxpy<<<(N+255)/256, 256>>>(N, 2.0f, gpu_x, gpu_y);
   //  dim3 grid(N,1);
-  cudaStream_t stream1, stream2;
+  cudaStream_t stream1;
   cudaStreamCreate(&stream1);
-  cudaStreamCreate(&stream2);
-
-  // cudaMemcpyAsync(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice, stream1);
-  // cudaMemcpyAsync(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice, stream2);
+  //  cudaMemcpy(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice, stream1);
+  //cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice, stream1);
   cudaMemcpy(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice);
-
+  cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice);
+  //cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice);
   for(int i = 0; i < 10; i ++){
-    // cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpyAsync(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice, stream2);
     saxpy<<<1, 1, 0, stream1>>>(N, 2.0f, gpu_x, gpu_y);
-    cudaDeviceSynchronize();
+    saxpy<<<1, 1>>>(N, 2.0f, gpu_x, gpu_y);
   }
 
   /* Copie du résultat dans y*/

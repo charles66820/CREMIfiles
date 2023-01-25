@@ -46,16 +46,14 @@ int main(void)
   cudaStream_t stream1, stream2;
   cudaStreamCreate(&stream1);
   cudaStreamCreate(&stream2);
-
-  // cudaMemcpyAsync(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice, stream1);
-  // cudaMemcpyAsync(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice, stream2);
+  //  cudaMemcpy(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice, stream1);
+  //cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice, stream1);
   cudaMemcpy(gpu_x, x, N*sizeof(float), cudaMemcpyHostToDevice);
-
+  cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice);
+  //cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice);
   for(int i = 0; i < 10; i ++){
-    // cudaMemcpy(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpyAsync(gpu_y, y, N*sizeof(float), cudaMemcpyHostToDevice, stream2);
     saxpy<<<1, 1, 0, stream1>>>(N, 2.0f, gpu_x, gpu_y);
-    cudaDeviceSynchronize();
+    saxpy<<<1, 1, 0, stream2>>>(N, 2.0f, gpu_x, gpu_y);
   }
 
   /* Copie du résultat dans y*/

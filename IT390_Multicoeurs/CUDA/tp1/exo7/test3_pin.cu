@@ -29,8 +29,8 @@ int main(void)
 
   /*Allocation de l'espace pour gpu_x et gpu_y qui vont 
     recevoir x et y sur le GPU*/
-  cudaMalloc(&gpu_x, N*sizeof(float)); 
-  cudaMalloc(&gpu_y, N*sizeof(float));
+  cudaMalloc(&gpu_x, N*sizeof(float));
+  cudaMallocHost(&gpu_y, N * sizeof(float));
 
   /* Initialisation de x et y*/
   for (int i = 0; i < N; i++) {
