@@ -52,7 +52,7 @@ public:
 
             Ray bouncyRay = Ray(intersectPoint, mirrorD);
             bouncyRay.recursionLevel = ray.recursionLevel + 1;
-            R += Li(scene, bouncyRay) * reflectivity;
+            R += Li(scene, bouncyRay) * reflectivity;// * R;
 
             return R;
         }
