@@ -35,6 +35,7 @@ void Scene::intersect(const Ray& ray, Hit& hit) const
             hit.setShape(tmpHit.shape());
             hit.setT(tmpHit.t());
             hit.setNormal(tmpHit.normal());
+            hit.setUV(tmpHit.uv());
         }
     }
 }

@@ -18,6 +18,8 @@ public:
             auto shape = hit.shape();
             auto material = shape->material();
             return material->diffuseColor(hit.uv());
+            // auto uv = hit.uv();
+            // return Color3f(uv.x(), uv.y(), 0.f);
         }
 
         return scene->backgroundColor();

@@ -50,7 +50,12 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
             hit.setShape(this);
             hit.setT(t);
             hit.setNormal((intersectPoint - c).normalized());
-            hit.setUV(atan2(z, sqrt(pow(x, 2) + pow(y, 2))), atan2(y, x));
+            auto longitude = atan2(z, sqrt(pow(x, 2) + pow(y, 2)));
+            auto latitude = atan2(y, x);
+            // [1, -1] => [1, 0]
+            longitude = longitude * 0.5 + 0.5;
+            latitude = latitude * 0.5 + 0.5;
+            hit.setUV(abs(longitude), abs(latitude));
             return true;
         }
     }

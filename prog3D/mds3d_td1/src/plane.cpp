@@ -50,7 +50,8 @@ bool Plane::intersect(const Ray& ray, Hit& hit) const
         hit.setShape(this);
         hit.setT(t);
         hit.setNormal(n);
-        hit.setUV(x, y);
+        // FIXME:[1, -1] => [1, 0]
+        hit.setUV(abs(x / 10 * 0.5 + 0.5), abs(y / 10 * 0.5 + 0.5));
         return true;
     }
 

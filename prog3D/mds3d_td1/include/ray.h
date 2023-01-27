@@ -35,6 +35,7 @@ public:
     void setUV(float u, float v) {
         m_uv = Vector2f(u, v);
     }
+    void setUV(Vector2f uv) { m_uv = uv; }
     Vector2f uv() const { return m_uv; }
 
     void setShape(const Shape* shape) { m_shape = shape; }
