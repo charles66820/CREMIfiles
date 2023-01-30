@@ -73,6 +73,8 @@ static int stencil_step(void) {
   if (nbReminderTH > 0) nbTH += 1;
 
   int tw, th;
+#pragma omp parallel
+#pragma omp for collapse(2)
   for (tw = 0; tw < nbTW; tw++) {
     for (th = 0; th < nbTH; th++) {
       int haloX = (tw * (TILE_WIDTH - 2));
@@ -105,8 +107,7 @@ static int stencil_step(void) {
 int main(int argc, char** argv) {
   stencil_init();
   // printf("# init:\n");
-  // stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y -
-  // 1);
+  // stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y - 1);
 
   struct timespec t1, t2;
   clock_gettime(CLOCK_MONOTONIC, &t1);

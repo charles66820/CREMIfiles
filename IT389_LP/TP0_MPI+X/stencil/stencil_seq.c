@@ -104,9 +104,12 @@ int main(int argc, char** argv) {
   const double gigaflops = nbOperationsByStep * s * 1E6 / t_usec / 1E9;
   const double nbCellsByS = nbCells * s * 1E6 / t_usec;
 
-  // fprintf( stderr, "steps,time(µ sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
-  // printf("%d,%g,%d,%d,%ld,%ld,%g,%g\n", s, t_usec, STENCIL_SIZE_X, STENCIL_SIZE_Y,
-  //        nbCells, nbOperationsByStep, gigaflops, nbCellsByS);
+  fprintf(
+      stderr,
+      "steps,time(µ sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
+  fprintf(stderr, "%d,%g,%d,%d,%ld,%ld,%g,\033[0;32m%g\033[0m\n", s, t_usec,
+          STENCIL_SIZE_X, STENCIL_SIZE_Y, nbCells, nbOperationsByStep,
+          gigaflops, nbCellsByS);
 
   stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y - 1);
 

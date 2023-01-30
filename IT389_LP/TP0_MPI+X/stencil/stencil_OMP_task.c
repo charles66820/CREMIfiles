@@ -72,26 +72,33 @@ static int stencil_step(void) {
   int nbReminderTH = (STENCIL_SIZE_Y - 2) - ((TILE_HEIGHT - 2) * nbTH);
   if (nbReminderTH > 0) nbTH += 1;
 
-  int tw, th;
-  for (tw = 0; tw < nbTW; tw++) {
-    for (th = 0; th < nbTH; th++) {
-      int haloX = (tw * (TILE_WIDTH - 2));
-      int haloY = (th * (TILE_HEIGHT - 2));
+#pragma omp parallel
+#pragma omp single
+  {
+    int tw, th;
+    for (tw = 0; tw < nbTW; tw++) {
+      for (th = 0; th < nbTH; th++) {
+#pragma omp task
+        {
+          int haloX = (tw * (TILE_WIDTH - 2));
+          int haloY = (th * (TILE_HEIGHT - 2));
 
-      int x, y;
-      for (x = haloX + 1; x < fmin(haloX + TILE_WIDTH, STENCIL_SIZE_X) - 1;
-           x++) {
-        for (y = haloY + 1; y < fmin(haloY + TILE_HEIGHT, STENCIL_SIZE_Y) - 1;
-             y++) {
-          values[next_buffer][x][y] =
-              alpha * values[prev_buffer][x - 1][y] +
-              alpha * values[prev_buffer][x + 1][y] +
-              alpha * values[prev_buffer][x][y - 1] +
-              alpha * values[prev_buffer][x][y + 1] +
-              (1.0 - 4.0 * alpha) * values[prev_buffer][x][y];
-          if (convergence && (fabs(values[prev_buffer][x][y] -
-                                   values[next_buffer][x][y]) > epsilon)) {
-            convergence = 0;
+          int x, y;
+          for (x = haloX + 1; x < fmin(haloX + TILE_WIDTH, STENCIL_SIZE_X) - 1;
+               x++) {
+            for (y = haloY + 1;
+                 y < fmin(haloY + TILE_HEIGHT, STENCIL_SIZE_Y) - 1; y++) {
+              values[next_buffer][x][y] =
+                  alpha * values[prev_buffer][x - 1][y] +
+                  alpha * values[prev_buffer][x + 1][y] +
+                  alpha * values[prev_buffer][x][y - 1] +
+                  alpha * values[prev_buffer][x][y + 1] +
+                  (1.0 - 4.0 * alpha) * values[prev_buffer][x][y];
+              if (convergence && (fabs(values[prev_buffer][x][y] -
+                                       values[next_buffer][x][y]) > epsilon)) {
+                convergence = 0;
+              }
+            }
           }
         }
       }
@@ -124,11 +131,12 @@ int main(int argc, char** argv) {
   const double gigaflops = nbOperationsByStep * s * 1E6 / t_usec / 1E9;
   const double nbCellsByS = nbCells * s * 1E6 / t_usec;
 
-  // fprintf(
-  //     stderr,
-  //     "steps,time(µ sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
-  // printf("%d,%g,%d,%d,%ld,%ld,%g,%g\n", s, t_usec, STENCIL_SIZE_X,
-  //        STENCIL_SIZE_Y, nbCells, nbOperationsByStep, gigaflops, nbCellsByS);
+  fprintf(
+      stderr,
+      "steps,time(µ sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
+  fprintf(stderr, "%d,%g,%d,%d,%ld,%ld,%g,\033[0;32m%g\033[0m\n", s, t_usec,
+          STENCIL_SIZE_X, STENCIL_SIZE_Y, nbCells, nbOperationsByStep,
+          gigaflops, nbCellsByS);
 
   stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y - 1);
 
