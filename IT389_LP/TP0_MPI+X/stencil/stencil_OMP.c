@@ -7,6 +7,9 @@
 #define STENCIL_SIZE_X 25
 #define STENCIL_SIZE_Y 30
 
+#define TILE_WIDTH 6
+#define TILE_HEIGHT 6
+
 /** number of buffers for N-buffering; should be at least 2 */
 #define STENCIL_NBUFFERS 2
 
@@ -61,29 +64,25 @@ static int stencil_step(void) {
   int prev_buffer = current_buffer;
   int next_buffer = (current_buffer + 1) % STENCIL_NBUFFERS;
 
-  int TW = 6;
-  int TH = 6;
+  int nbTW = (STENCIL_SIZE_X - 2) / (TILE_WIDTH - 2);
+  int nbReminderTW = (STENCIL_SIZE_X - 2) - ((TILE_WIDTH - 2) * nbTW);
+  if (nbReminderTW > 0) nbTW += 1;
 
-  int nbTW = (STENCIL_SIZE_X - 2) / (TW - 2);
-  int nbReminderTW = (STENCIL_SIZE_X - 2) - ((TW - 2) * nbTW);
-  if (nbReminderTW > 0)
-    nbTW += 1;
-
-  int nbTH = (STENCIL_SIZE_Y - 2) / (TH - 2);
-  int nbReminderTH = (STENCIL_SIZE_Y - 2) - ((TH - 2) * nbTH);
-  if (nbReminderTH > 0)
-    nbTH += 1;
+  int nbTH = (STENCIL_SIZE_Y - 2) / (TILE_HEIGHT - 2);
+  int nbReminderTH = (STENCIL_SIZE_Y - 2) - ((TILE_HEIGHT - 2) * nbTH);
+  if (nbReminderTH > 0) nbTH += 1;
 
   int tw, th;
   for (tw = 0; tw < nbTW; tw++) {
     for (th = 0; th < nbTH; th++) {
-      int haloX = (tw * (TW - 2));
-      int haloY = (th * (TH - 2));
+      int haloX = (tw * (TILE_WIDTH - 2));
+      int haloY = (th * (TILE_HEIGHT - 2));
 
       int x, y;
-      for (x = haloX + 1; x < fmin(haloX + TW, STENCIL_SIZE_X) - 1;
+      for (x = haloX + 1; x < fmin(haloX + TILE_WIDTH, STENCIL_SIZE_X) - 1;
            x++) {
-        for (y = haloY + 1; y < fmin(haloY + TH, STENCIL_SIZE_Y) - 1; y++) {
+        for (y = haloY + 1; y < fmin(haloY + TILE_HEIGHT, STENCIL_SIZE_Y) - 1;
+             y++) {
           values[next_buffer][x][y] =
               alpha * values[prev_buffer][x - 1][y] +
               alpha * values[prev_buffer][x + 1][y] +

@@ -66,11 +66,13 @@ static int stencil_step(void) {
 
   int nbTW = (STENCIL_SIZE_X - 2) / (TILE_WIDTH - 2);
   int nbReminderTW = (STENCIL_SIZE_X - 2) - ((TILE_WIDTH - 2) * nbTW);
-  if (nbReminderTW > 0) nbTW += 1;
+  if (nbReminderTW > 0)
+    nbTW += 1;
 
   int nbTH = (STENCIL_SIZE_Y - 2) / (TILE_HEIGHT - 2);
   int nbReminderTH = (STENCIL_SIZE_Y - 2) - ((TILE_HEIGHT - 2) * nbTH);
-  if (nbReminderTH > 0) nbTH += 1;
+  if (nbReminderTH > 0)
+    nbTH += 1;
 
   int tw, th;
   for (tw = 0; tw < nbTW; tw++) {
@@ -105,8 +107,7 @@ static int stencil_step(void) {
 int main(int argc, char** argv) {
   stencil_init();
   // printf("# init:\n");
-  // stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y -
-  // 1);
+  // stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y - 1);
 
   struct timespec t1, t2;
   clock_gettime(CLOCK_MONOTONIC, &t1);
@@ -127,8 +128,7 @@ int main(int argc, char** argv) {
 
   // fprintf(
   //     stderr,
-  //     "steps,time(µ
-  //     sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
+  //     "steps,time(µ sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
   // printf("%d,%g,%d,%d,%ld,%ld,%g,%g\n", s, t_usec, STENCIL_SIZE_X,
   //        STENCIL_SIZE_Y, nbCells, nbOperationsByStep, gigaflops, nbCellsByS);
 
