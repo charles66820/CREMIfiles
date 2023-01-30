@@ -137,8 +137,7 @@ int main(int argc, char** argv) {
 
   if (printHeader)
     printf(
-        "steps,time(µ "
-        "sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
+        "steps,timeInµSec,height,width,nbCells,fpOpByStep,gigaflops,cellByS\n");
 
   if (printColor)
     fprintf(dataStd, "%d,%g,%d,%d,%ld,%ld,%g,\033[0;32m%g\033[0m\n", s, t_usec,

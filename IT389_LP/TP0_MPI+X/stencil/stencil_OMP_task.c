@@ -169,16 +169,17 @@ int main(int argc, char** argv) {
 
   if (printHeader)
     printf(
-        "steps,time(µ "
-        "sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
+        "steps,timeInµSec,height,width,tiledW,tiledH,nbCells,fpOpByStep,"
+        "gigaflops,cellByS\n");
 
   if (printColor)
-    fprintf(dataStd, "%d,%g,%d,%d,%ld,%ld,%g,\033[0;32m%g\033[0m\n", s, t_usec,
-            STENCIL_SIZE_X, STENCIL_SIZE_Y, nbCells, nbOperationsByStep,
-            gigaflops, nbCellsByS);
+    fprintf(dataStd, "%d,%g,%d,%d,%d,%d,%ld,%ld,%g,\033[0;32m%g\033[0m\n", s,
+            t_usec, STENCIL_SIZE_X, STENCIL_SIZE_Y, TILE_WIDTH, TILE_HEIGHT,
+            nbCells, nbOperationsByStep, gigaflops, nbCellsByS);
   else
-    fprintf(dataStd, "%d,%g,%d,%d,%ld,%ld,%g,%g\n", s, t_usec, STENCIL_SIZE_X,
-            STENCIL_SIZE_Y, nbCells, nbOperationsByStep, gigaflops, nbCellsByS);
+    fprintf(dataStd, "%d,%g,%d,%d,%d,%d,%ld,%ld,%g,%g\n", s, t_usec,
+            STENCIL_SIZE_X, STENCIL_SIZE_Y, TILE_WIDTH, TILE_HEIGHT, nbCells,
+            nbOperationsByStep, gigaflops, nbCellsByS);
 
   if (printStencilDisplay)
     stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0,
