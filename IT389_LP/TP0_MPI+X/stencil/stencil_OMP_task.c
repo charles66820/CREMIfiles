@@ -123,11 +123,12 @@ static int stencil_step(void) {
 
 int main(int argc, char** argv) {
   bool printHeader = false;
+  bool printColor = false;
   bool printStencilDisplay = false;
   FILE* dataStd = stdout;
 
   int opt;
-  while ((opt = getopt(argc, argv, "hpd")) != -1) {
+  while ((opt = getopt(argc, argv, "hpdc")) != -1) {
     switch (opt) {
       case 'h':
         printHeader = true;
@@ -138,8 +139,11 @@ int main(int argc, char** argv) {
       case 'd':
         dataStd = stderr;
         break;
+      case 'c':
+        printColor = true;
+        break;
       default:
-        fprintf(stderr, "Usage: %s [-hpd] \n", argv[0]);
+        fprintf(stderr, "Usage: %s [-hpdc] \n", argv[0]);
         exit(EXIT_FAILURE);
     }
   }
@@ -168,9 +172,13 @@ int main(int argc, char** argv) {
         "steps,time(µ "
         "sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
 
-  fprintf(dataStd, "%d,%g,%d,%d,%ld,%ld,%g,\033[0;32m%g\033[0m\n", s, t_usec,
-          STENCIL_SIZE_X, STENCIL_SIZE_Y, nbCells, nbOperationsByStep,
-          gigaflops, nbCellsByS);
+  if (printColor)
+    fprintf(dataStd, "%d,%g,%d,%d,%ld,%ld,%g,\033[0;32m%g\033[0m\n", s, t_usec,
+            STENCIL_SIZE_X, STENCIL_SIZE_Y, nbCells, nbOperationsByStep,
+            gigaflops, nbCellsByS);
+  else
+    fprintf(dataStd, "%d,%g,%d,%d,%ld,%ld,%g,%g\n", s, t_usec, STENCIL_SIZE_X,
+            STENCIL_SIZE_Y, nbCells, nbOperationsByStep, gigaflops, nbCellsByS);
 
   if (printStencilDisplay)
     stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0,
