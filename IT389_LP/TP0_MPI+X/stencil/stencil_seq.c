@@ -89,8 +89,6 @@ static int stencil_step(void) {
 
 int main(int argc, char** argv) {
   stencil_init();
-  // printf("# init:\n");
-  // stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y - 1);
 
   struct timespec t1, t2;
   clock_gettime(CLOCK_MONOTONIC, &t1);
@@ -102,7 +100,8 @@ int main(int argc, char** argv) {
     }
   }
   clock_gettime(CLOCK_MONOTONIC, &t2);
-  const double t_usec = (t2.tv_sec - t1.tv_sec) + (t2.tv_nsec - t1.tv_nsec) / 1E3;
+  const double t_usec =
+      (t2.tv_sec - t1.tv_sec) + (t2.tv_nsec - t1.tv_nsec) / 1E3;
   const long nbCells = (STENCIL_SIZE_X - 2) * (STENCIL_SIZE_Y - 2);
   const long nbOperationsByStep = 10 * nbCells;
   const double gigaflops = nbOperationsByStep * s * 1E6 / t_usec / 1E9;

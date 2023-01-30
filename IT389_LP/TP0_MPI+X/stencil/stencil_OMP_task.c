@@ -121,8 +121,6 @@ static int stencil_step(void) {
 
 int main(int argc, char** argv) {
   stencil_init();
-  // printf("# init:\n");
-  // stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y - 1);
 
   struct timespec t1, t2;
   clock_gettime(CLOCK_MONOTONIC, &t1);
