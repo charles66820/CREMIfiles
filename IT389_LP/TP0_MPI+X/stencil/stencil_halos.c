@@ -4,11 +4,19 @@
 #include <stdlib.h>
 #include <time.h>
 
+#ifndef STENCIL_SIZE_X
 #define STENCIL_SIZE_X 25
+#endif
+#ifndef STENCIL_SIZE_Y
 #define STENCIL_SIZE_Y 30
+#endif
 
+#ifndef TILE_WIDTH
 #define TILE_WIDTH 6
+#endif
+#ifndef TILE_HEIGHT
 #define TILE_HEIGHT 6
+#endif
 
 /** number of buffers for N-buffering; should be at least 2 */
 #define STENCIL_NBUFFERS 2
