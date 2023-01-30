@@ -1,8 +1,10 @@
 
 #include <math.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "omp.h"
 
@@ -115,6 +117,28 @@ static int stencil_step(void) {
 }
 
 int main(int argc, char** argv) {
+  bool printHeader = false;
+  bool printStencilDisplay = false;
+  FILE* dataStd = stdout;
+
+  int opt;
+  while ((opt = getopt(argc, argv, "hpd")) != -1) {
+    switch (opt) {
+      case 'h':
+        printHeader = true;
+        break;
+      case 'p':
+        printStencilDisplay = true;
+        break;
+      case 'd':
+        dataStd = stderr;
+        break;
+      default:
+        fprintf(stderr, "Usage: %s [-hpd] \n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+  }
+
   stencil_init();
 
   struct timespec t1, t2;
@@ -134,14 +158,18 @@ int main(int argc, char** argv) {
   const double gigaflops = nbOperationsByStep * s * 1E6 / t_usec / 1E9;
   const double nbCellsByS = nbCells * s * 1E6 / t_usec;
 
-  fprintf(
-      stderr,
-      "steps,time(µ sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
-  fprintf(stderr, "%d,%g,%d,%d,%ld,%ld,%g,\033[0;32m%g\033[0m\n", s, t_usec,
+  if (printHeader)
+    printf(
+        "steps,time(µ "
+        "sec),height,width,nbCells,fpOpByStep,gigaflop/s,cell/s\n");
+
+  fprintf(dataStd, "%d,%g,%d,%d,%ld,%ld,%g,\033[0;32m%g\033[0m\n", s, t_usec,
           STENCIL_SIZE_X, STENCIL_SIZE_Y, nbCells, nbOperationsByStep,
           gigaflops, nbCellsByS);
 
-  stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0, STENCIL_SIZE_Y - 1);
+  if (printStencilDisplay)
+    stencil_display(current_buffer, 0, STENCIL_SIZE_X - 1, 0,
+                    STENCIL_SIZE_Y - 1);
 
   return 0;
 }

@@ -16,11 +16,11 @@ clean:
 	-rm -f stencil_seq stencil_halos stencil_OMP_for stencil_OMP_task stencil_MPI_Pure *.out
 
 diff: all
-	./stencil_seq > stencil_seq.out
-	./stencil_halos > stencil_halos.out
-	./stencil_OMP_for > stencil_OMP_for.out
-	./stencil_OMP_task > stencil_OMP_task.out
-	./stencil_MPI_Pure > stencil_MPI_Pure.out
+	./stencil_seq -d > stencil_seq.out
+	./stencil_halos -d > stencil_halos.out
+	./stencil_OMP_for -d > stencil_OMP_for.out
+	./stencil_OMP_task -d > stencil_OMP_task.out
+	./stencil_MPI_Pure -d > stencil_MPI_Pure.out
 	diff stencil_seq.out stencil_halos.out
 	diff stencil_seq.out stencil_OMP_for.out
 	diff stencil_seq.out stencil_OMP_task.out
