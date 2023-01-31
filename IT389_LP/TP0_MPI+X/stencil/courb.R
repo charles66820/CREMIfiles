@@ -70,18 +70,25 @@ data <- ddply(
   interactions=n(),
 )
 
+#SIZE_T <- paste(data$tiledW, data$tiledH, sep="_")
+SIZE_T <- data$tiledW * data$tiledH
+data <- cbind(data, size_t=order(SIZE_T, decreasing = FALSE))
+
+#dataS = apply(data, 2, function(x) quantile(x, probs=seq(0,1, 1/10))) 
+
 # GFlop/s
-g <- ggplot(data, aes(x=nbCells, y=gigaflops_mean))
-g <- g + geom_ribbon(aes(ymin=gigaflops_min, ymax=gigaflops_max),alpha=0.2)
-#g <- g + geom_errorbar(aes(ymin=gigaflops_min, ymax=gigaflops_max))
+g <- ggplot(data, aes(x=size_t, y=gigaflops_mean))
+#g <- g + geom_ribbon(aes(x=factor(size_t), ymin=gigaflops_min, ymax=gigaflops_max),alpha=0.2)
+g <- g + geom_errorbar(aes(ymin=gigaflops_min, ymax=gigaflops_max))
 g <- g + geom_line()
 g <- g + geom_point()
-g <- g + labs("Perfs tiled", x="nbCells", y="GFlop/s")
+g <- g + labs("Perfs tiled", x="size_t", y="GFlop/s")
 plot(g)
 
 # time(µ sec)
-g <- ggplot(data, aes(x=nbCells, y=timeInµSec_mean))
-g <- g + geom_ribbon(aes(ymin=timeInµSec_min, ymax=timeInµSec_max),alpha=0.2)
+g <- ggplot(data, aes(x=size_t, y=timeInµSec_mean))
+#g <- g + geom_ribbon(aes(ymin=timeInµSec_min, ymax=timeInµSec_max),alpha=0.2)
+g <- g + geom_errorbar(aes(ymin=timeInµSec_min, ymax=timeInµSec_max))
 g <- g + geom_line()
 g <- g + geom_point()
 g <- g + labs("Time evolution tiled", x="nbCells", y="time(µ sec)")

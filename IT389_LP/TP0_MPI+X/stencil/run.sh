@@ -39,6 +39,9 @@ do
   for TH in "${BLOCS_SIZEs[@]}";
   do
     make clean -s
-    TILE_WIDTH=$TW TILE_HEIGHT=$TH make stencil_halos && ./stencil_halos >> $CSV_DIR/$CSV_FILENAME
+    TILE_WIDTH=$TW TILE_HEIGHT=$TH make stencil_halos
+    for (( i=1; i <= $ITER; i++ )); do
+      ./stencil_halos >> $CSV_DIR/$CSV_FILENAME
+    done
   done
 done
