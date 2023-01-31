@@ -12,44 +12,82 @@ currentScriptDir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(currentScriptDir)
 
 filename <- "csv/seq.csv"
-data <- read.csv(filename, header=T, sep = ",")
+dataRaw <- read.csv(filename, header=T, sep = ",")
 
-g <- ggplot(data, aes(x=1:nrow(data), y=gigaflops))
-g <- g + geom_line()
-g <- g + geom_point()
-g <- g + labs("Perfs Seq", x="nrow", y="GFlop/s")
-plot(g)
-
-g <- ggplot(data, aes(x=1:nrow(data), y=timeInµSec))
-g <- g + geom_line()
-g <- g + geom_point()
-g <- g + labs("Time evolution Seq", x="nrow", y="time(µ sec)")
-plot(g)
+data <- ddply(
+  dataRaw,
+  c("steps", "height", "width", "nbCells", "fpOpByStep"),
+  summarise,
+  timeInµSec_min=min(timeInµSec),
+  timeInµSec_mean=mean(timeInµSec),
+  timeInµSec_max=max(timeInµSec),
+  gigaflops_min=min(gigaflops),
+  gigaflops_mean=mean(gigaflops),
+  gigaflops_max=max(gigaflops),
+  cellByS_min=min(cellByS),
+  cellByS_mean=mean(cellByS),
+  cellByS_max=max(cellByS),
+  interactions=n(),
+)
 
 SIZE <- paste(data$width, data$height, sep="_")
-dataS <- cbind(data, SIZE)
-g <- ggplot(dataS, aes(x=SIZE, y=gigaflops))
+data <- cbind(data, SIZE)
+
+# GFlop/s
+g <- ggplot(data, aes(x=nbCells, y=gigaflops_mean))
+g <- g + geom_ribbon(aes(ymin=gigaflops_min, ymax=gigaflops_max),alpha=0.2)
+#g <- g + geom_errorbar(aes(ymin=gigaflops_min, ymax=gigaflops_max))
 g <- g + geom_line()
 g <- g + geom_point()
-g <- g + labs(title="Test tiled", x="SIZE", y="gigaflops")
+g <- g + labs("Perfs Seq", x="nbCells", y="GFlop/s")
 plot(g)
 
+# time(µ sec)
+g <- ggplot(data, aes(x=nbCells, y=timeInµSec_mean))
+g <- g + geom_ribbon(aes(ymin=timeInµSec_min, ymax=timeInµSec_max),alpha=0.2)
+g <- g + geom_line()
+g <- g + geom_point()
+g <- g + labs("Time evolution Seq", x="nbCells", y="time(µ sec)")
+plot(g)
+
+## halos
 filename <- "csv/halos.csv"
-data <- read.csv(filename, header=T, sep = ",")
+dataRaw <- read.csv(filename, header=T, sep = ",")
 
-g <- ggplot(data, aes(x=1:nrow(data), y=gigaflops))
+data <- ddply(
+  dataRaw,
+  c("steps", "height", "width", "tiledW", "tiledH", "nbCells", "fpOpByStep"),
+  summarise,
+  timeInµSec_min=min(timeInµSec),
+  timeInµSec_mean=mean(timeInµSec),
+  timeInµSec_max=max(timeInµSec),
+  gigaflops_min=min(gigaflops),
+  gigaflops_mean=mean(gigaflops),
+  gigaflops_max=max(gigaflops),
+  cellByS_min=min(cellByS),
+  cellByS_mean=mean(cellByS),
+  cellByS_max=max(cellByS),
+  interactions=n(),
+)
+
+# GFlop/s
+g <- ggplot(data, aes(x=nbCells, y=gigaflops_mean))
+g <- g + geom_ribbon(aes(ymin=gigaflops_min, ymax=gigaflops_max),alpha=0.2)
+#g <- g + geom_errorbar(aes(ymin=gigaflops_min, ymax=gigaflops_max))
 g <- g + geom_line()
 g <- g + geom_point()
-g <- g + labs("Perfs tiled", x="nrow", y="GFlop/s")
+g <- g + labs("Perfs tiled", x="nbCells", y="GFlop/s")
 plot(g)
 
-g <- ggplot(data, aes(x=1:nrow(data), y=timeInµSec))
+# time(µ sec)
+g <- ggplot(data, aes(x=nbCells, y=timeInµSec_mean))
+g <- g + geom_ribbon(aes(ymin=timeInµSec_min, ymax=timeInµSec_max),alpha=0.2)
 g <- g + geom_line()
 g <- g + geom_point()
-g <- g + labs("Time evolution tiled", x="nrow", y="time(µ sec)")
+g <- g + labs("Time evolution tiled", x="nbCells", y="time(µ sec)")
 plot(g)
 
-g <- ggplot(data, aes(x=factor(tiledW), y=factor(tiledH), fill=gigaflops))
+g <- ggplot(data, aes(x=factor(tiledW), y=factor(tiledH), fill=gigaflops_mean))
 g <- g + geom_tile()
 g <- g + coord_fixed()
 g <- g + scale_fill_viridis(option="inferno", discrete=FALSE)

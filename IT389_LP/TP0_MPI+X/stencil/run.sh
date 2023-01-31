@@ -8,7 +8,7 @@ SCRIPT_NAME=$(basename -s .sh -- "$SCRIPT_PATH")
 # Global vars
 CSV_DIR=$SCRIPT_DIR/csv
 ITER=20
-SIZEs=(25,30 50,60 75,90 100,120 125,150 150,180 175,210 200,240 225,270 250,300 275,330 300,360 325,390 350,420 375,450 400,480 425,510 450,540 475,570 500,600 625,750 750,900 1000,1200)
+SIZEs=(25,30 50,60 75,90 100,120 125,150 150,180 175,210 200,240 225,270 250,300 275,330 300,360 325,390 350,420 375,450 400,480 425,510 450,540 475,570 500,600 625,750 750,900)
 BLOCS_SIZEs=(8 16 32 64 128 512)
 
 # disable the turbo boost
@@ -20,19 +20,16 @@ make -j
 CSV_FILENAME=seq.csv
 echo "steps,timeInµSec,height,width,nbCells,fpOpByStep,gigaflops,cellByS" > $CSV_DIR/$CSV_FILENAME
 
-# ./stencil_seq >> $CSV_DIR/$CSV_FILENAME
-# ./stencil_seq >> $CSV_DIR/$CSV_FILENAME
-# ./stencil_seq >> $CSV_DIR/$CSV_FILENAME
-# ./stencil_seq >> $CSV_DIR/$CSV_FILENAME
-# ./stencil_seq >> $CSV_DIR/$CSV_FILENAME
-# ./stencil_seq >> $CSV_DIR/$CSV_FILENAME
-
 IFS=',';
-for i in "${SIZEs[@]}";
+for s in "${SIZEs[@]}";
 do
-    set -- $i
-    make clean -s
-    STENCIL_SIZE_X=$1 STENCIL_SIZE_Y=$2 make stencil_seq && ./stencil_seq >> $CSV_DIR/$CSV_FILENAME
+  set -- $s
+  make clean -s
+  STENCIL_SIZE_X=$1 STENCIL_SIZE_Y=$2 make stencil_seq || exit 1
+
+  for (( i=1; i <= $ITER; i++ )); do
+    ./stencil_seq >> $CSV_DIR/$CSV_FILENAME
+  done
 done
 
 CSV_FILENAME=halos.csv
