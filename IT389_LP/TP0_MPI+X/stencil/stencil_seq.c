@@ -30,8 +30,6 @@ static double values[STENCIL_NBUFFERS][STENCIL_SIZE_X][STENCIL_SIZE_Y];
 /** latest computed buffer */
 static int current_buffer = 0;
 
-#pragma region utils
-
 /** init stencil values to 0, borders to non-zero */
 static void stencil_init(void) {
   int b, x, y;
@@ -62,8 +60,6 @@ static void stencil_display(int b, int x0, int x1, int y0, int y1) {
     printf("\n");
   }
 }
-
-#pragma endregion utils
 
 /** compute the next stencil step, return 1 if computation has converged */
 static int stencil_step(void) {
