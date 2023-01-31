@@ -128,8 +128,9 @@ int main(int argc, char** argv) {
     }
   }
   clock_gettime(CLOCK_MONOTONIC, &t2);
+
   const double t_usec =
-      (t2.tv_sec - t1.tv_sec) + (t2.tv_nsec - t1.tv_nsec) / 1E3;
+      (t2.tv_sec - t1.tv_sec) * 1E6 + (t2.tv_nsec - t1.tv_nsec) / 1E3;
   const long nbCells = (STENCIL_SIZE_X - 2) * (STENCIL_SIZE_Y - 2);
   const long nbOperationsByStep = 10 * nbCells;
   const double gigaflops = nbOperationsByStep * s * 1E6 / t_usec / 1E9;
